@@ -4,7 +4,8 @@
     "type": "project",
     "require": {
         "php" : "^7.0",
-        "charlottedunois/yasmin": "^0.5.1"
+        "charlottedunois/yasmin": "^0.5.1",
+        "ext-gd": "^7.2"
     },
   "autoload": {
     "psr-4": {
