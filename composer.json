@@ -1,0 +1,14 @@
+{
+    "name": "kolfoxy/ancestor-bot-php",
+    "description": "Ancestor Bot Php Edition",
+    "type": "project",
+    "require": {
+        "php" : "^7.0",
+        "charlottedunois/yasmin": "^0.5.1"
+    },
+  "autoload": {
+    "psr-4": {
+      "Ancestor\\": "ancestor/"
+    }
+  }
+}
