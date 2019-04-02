@@ -22,6 +22,12 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
         $file = $this->addAvatarToStress($this->argsToURL($message, $args));
+        if ($file===false){
+            $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
+            $embedResponse->setImage($this->stressURL);
+            $message->channel->send('', array('embed' => $embedResponse));
+            return;
+        }
         //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data
         $message->channel->send('', array('files' => array(array('data' => $file))));
     }
@@ -46,11 +52,11 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
     function addAvatarToStress(string $avatarUrl) {
         $file = file_get_contents($avatarUrl);
         if ($file === false) {
-            return $this->stressURL;
+            return $file;
         }
         $avatar = imagecreatefromstring($file);
         if ($avatar === false) {
-            return $this->stressURL;
+            return $file;
         }
 
         $canvas = imagecreatetruecolor($this->CSPicX, $this->CSPicY);

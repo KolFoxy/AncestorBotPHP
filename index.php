@@ -25,8 +25,11 @@ $client->on('message', function (CharlotteDunois\Yasmin\Models\Message $message)
         RespondNSFW($message);
     }
 });
-
-$client->login($config['token']);
+$token = getenv('abot_token');
+if ($token===false){
+    $token = $config['token'];
+}
+$client->login($token);
 $loop->run();
 
 function CheckResolveResponse(CharlotteDunois\Yasmin\Models\Message $message, $index, $msgLowered)
