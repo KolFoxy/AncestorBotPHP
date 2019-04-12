@@ -8,7 +8,7 @@
 - remind
 - roll
 - spin
-- stres
+- stress
 - zalgo
 
 ### Chat reactions:
