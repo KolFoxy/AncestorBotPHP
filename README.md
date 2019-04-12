@@ -38,7 +38,7 @@ https://discordapp.com/oauth2/authorize?client_id=406438624473907200&scope=bot&p
 
 - **stress**
 
-![stress](https://i.imgur.com/lecXjSk.png "stress")
+![stress](https://i.imgur.com/KtuTGof.png "stress")
 
 - **roll**
 
