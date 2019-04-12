@@ -70,7 +70,7 @@ class CommandHandler {
         $answer = 'No such command';
         $title = 'Error';
         if (empty($args)) {
-            $title = '**Commands**';
+            $title = '**Commands. Use '.$this->prefix.'help [COMMAND] for more info.**';
             $commandsArray = array();
             foreach ($this->commands->values() as $item) {
                 $commandsArray[$item->getName()] = '``' . $this->prefix . $item->getName() . '``' . PHP_EOL;
