@@ -1,43 +1,24 @@
 {
   "virtues": [
     {
-      "name": "Irrational",
-      "quote": "Reeling, gasping, taken over the edge into madness!"
+      "name": "Courageous",
+      "quote": "A moment of valor shines brightest against a backdrop of despair."
     },
     {
-      "name": "Masochistic",
-      "quote": "Those who covet injury find it in no short supply."
+      "name": "Vigorous",
+      "quote": "Adversity can foster hope, and resilience."
     },
     {
-      "name": "Selfish",
-      "quote": "Self-preservation is paramount - at any cost!"
+      "name": "Focused",
+      "quote": "A moment of clarity in the eye of the storm..."
     },
     {
-      "name": "Hopeless",
-      "quote": "There can be no hope in this hell, no hope at all."
+      "name": "Powerful",
+      "quote": "Anger is power - unleash it!"
     },
     {
-      "name": "Paranoid",
-      "quote": "The walls close in, the shadows whisper of conspiracy!"
-    },
-    {
-      "name": "Fearful",
-      "quote": "Fear and frailty finally claim their due."
-    },
-    {
-      "name": "Abusive",
-      "quote": "Frustration and fury, more destructive than a hundred cannons."
+      "name": "Stalwart",
+      "quote": "Many fall in the face of chaos; but not this one, not today!"
     }
-  ],
-  "quotes":[
-    "The abyss is made manifest!",
-    "The bulwarks of the mind have fallen!",
-    "Madness - sublimity of the intelligence, or so it has been said.",
-    "One can sometimes find clarity in madness, but only rarely...",
-    "Madness, our old friend!",
-    "Even the aged oak will fall to the tempest's winds.",
-    "The mind cannot hope to withstand such an assault.",
-    "Wherefore, heroism?",
-    "The human mind - fragile like a robin's egg."
   ]
 }

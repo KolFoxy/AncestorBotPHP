@@ -35,8 +35,8 @@ $loop->run();
 function CheckResolveResponse(CharlotteDunois\Yasmin\Models\Message $message, $index, $msgLowered) {
     $response = \Ancestor\RandomData\RandomDataProvider::GetRandomResolve();
     $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-    $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL())->
-    addField($response['quote'], '');
+    $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
+    $embedResponse->setDescription('***'.$response['quote'].'***');
     if ($index != 0) {
         if (!empty($message->mentions->users) && count($message->mentions->users) > 0) {
             $message->channel->send('**' . '<@' . $message->mentions->users->last()->id . '>' .
@@ -58,8 +58,8 @@ function RespondNSFW(CharlotteDunois\Yasmin\Models\Message $message) {
         (!empty($message->embeds) && count($message->embeds) > 0) ||
         StringContainsRealURLS($message->content)) {
         $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-        $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL())->
-        addField('\_\_\_\_\_\_\_', \Ancestor\RandomData\RandomDataProvider::GetRandomNSFWQuote());
+        $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
+        $embedResponse->setDescription(\Ancestor\RandomData\RandomDataProvider::GetRandomNSFWQuote());
         $message->channel->send('', array('embed' => $embedResponse));
     }
 }
