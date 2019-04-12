@@ -3,19 +3,8 @@
 namespace Ancestor\RandomData;
 
 class RandomDataProvider {
-    private static $afflictions = array('Paranoid',
-        'Selfish',
-        'Irrational',
-        'Fearful',
-        'Hopeless',
-        'Abusive',
-        'Masochistic');
-    private static $virtues = array('Powerful',
-        'Courageous',
-        'Stalwart',
-        'Vigorous',
-        'Focused',
-        'Heroic');
+    private static $afflictions;
+    private static $virtues;
     private static $NSFWquotes;
     private static $gold;
     private static $trinkets;

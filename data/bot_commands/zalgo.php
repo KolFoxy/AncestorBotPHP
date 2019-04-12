@@ -38,7 +38,7 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         }
         for ($i = 0; $i < $strlen; $i++) {
 
-            $result .= \Ancestor\RandomData\RandomDataProvider::getRandomZalgoString($zalgoPerChar) . mb_substr($input, $i, 1);
+            $result .= \Ancestor\RandomData\RandomDataProvider::GetRandomZalgoString($zalgoPerChar) . mb_substr($input, $i, 1);
         }
         if ($strlen == $this->MAX_ZALGO_CHARACTERS) {
             $result .= '…';
