@@ -20,6 +20,9 @@
 ## Invite URL
 https://discordapp.com/oauth2/authorize?client_id=406438624473907200&scope=bot&permissions=379904
 
+## DiscordBots Page
+https://discordbots.org/bot/406438624473907200
+
 ------------
 
 ### Command examples:
