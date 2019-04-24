@@ -11,9 +11,9 @@ new class($handler) extends Ancestor\CommandHandler\Command {
     private $RDP;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler) {
+        $this->RDP = Ancestor\RandomData\RandomDataProvider::GetInstance();
         parent::__construct($handler, 'zalgo', 'transforms given sentence into something ' .
             $this->ZalgorizeString('like this', 3), array('cursed'));
-        $this->RDP = Ancestor\RandomData\RandomDataProvider::GetInstance();
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
