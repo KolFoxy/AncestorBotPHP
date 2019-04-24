@@ -33,7 +33,7 @@ class RandomDataProvider {
     }
 
     public function GetRandomZalgoCharacter() {
-        return html_entity_decode('&#x' . sprintf('%01x', mt_rand(768, 879)) . ';');
+        return mb_chr(mt_rand(768, 879),'UTF-8');
     }
 
     public function GetRandomZalgoString(int $size) {
