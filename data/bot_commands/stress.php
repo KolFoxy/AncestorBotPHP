@@ -5,6 +5,7 @@
  */
 $stressURL = json_decode(file_get_contents(dirname(__DIR__, 2) . '/config.json', true), true)['stressURL'];
 $croppedStressPic = imagecreatefrompng(dirname(__DIR__, 2) . '/data/images/stress_cropped.png');
+
 return (
 new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandler\Command {
     private $stressURL;
