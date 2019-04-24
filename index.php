@@ -33,7 +33,7 @@ $client->login($token);
 $loop->run();
 
 function CheckResolveResponse(CharlotteDunois\Yasmin\Models\Message $message, $index, $msgLowered) {
-    $response = \Ancestor\RandomData\RandomDataProvider::GetRandomResolve();
+    $response = \Ancestor\RandomData\RandomDataProvider::GetInstance()->GetRandomResolve();
     $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
     $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
     $embedResponse->setDescription('***'.$response['quote'].'***');
@@ -59,7 +59,7 @@ function RespondNSFW(CharlotteDunois\Yasmin\Models\Message $message) {
         StringContainsRealURLS($message->content)) {
         $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
         $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
-        $embedResponse->setDescription(\Ancestor\RandomData\RandomDataProvider::GetRandomNSFWQuote());
+        $embedResponse->setDescription(\Ancestor\RandomData\RandomDataProvider::GetInstance()->GetRandomNSFWQuote());
         $message->channel->send('', array('embed' => $embedResponse));
     }
 }

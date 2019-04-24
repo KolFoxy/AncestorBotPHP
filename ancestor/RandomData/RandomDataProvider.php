@@ -3,75 +3,85 @@
 namespace Ancestor\RandomData;
 
 class RandomDataProvider {
-    private static $afflictions;
-    private static $virtues;
-    private static $NSFWquotes;
-    private static $gold;
-    private static $trinkets;
-    private static $rewardsQuotes;
-    private static $zalgoTitles;
+    private $afflictions;
+    private $virtues;
+    private $NSFWquotes;
+    private $gold;
+    private $trinkets;
+    private $rewardsQuotes;
+    private $zalgoTitles;
+
+    private static $instance = null;
 
     const virtueChance = 25;
     const rewardTrinketChance = 30;
 
-    public static function GetRandomZalgoCharacter() {
+    private function __construct() {
+        $this->PopulateArray($this->rewardsQuotes, '/data/rewards/rewardsQuotes');
+        $this->PopulateArray($this->gold, '/data/rewards/gold');
+        $this->PopulateArray($this->trinkets, '/data/rewards/trinkets');
+        $this->PopulateArray($this->zalgoTitles, '/data/zalgoTitles');
+        $this->PopulateArray($this->virtues, '/data/virtues.json',true);
+        $this->PopulateArray($this->NSFWquotes, '/data/NSFWquotes');
+        $this->PopulateArray($this->afflictions, '/data/afflictions.json',true);
+    }
+    public static function GetInstance(){
+        if (!isset(self::$instance)){
+            self::$instance = new \Ancestor\RandomData\RandomDataProvider();
+        }
+        return self::$instance;
+    }
+
+    public function GetRandomZalgoCharacter() {
         return html_entity_decode('&#x' . sprintf('%01x', mt_rand(768, 879)) . ';');
     }
 
-    public static function GetRandomZalgoString(int $size) {
+    public function GetRandomZalgoString(int $size) {
         $rez = '';
         for ($i = 0; $i < $size; $i++) {
-            $rez .= self::GetRandomZalgoCharacter();
+            $rez .= $this->GetRandomZalgoCharacter();
         }
         return $rez;
     }
 
-    private static function GetRandomData($array) {
+    private function GetRandomData($array) {
         return $array[mt_rand(0, sizeof($array) - 1)];
     }
 
-    private static function GetRandomAffliction() {
-        $affliction = self::GetRandomData(self::$afflictions['afflictions']);
+    private function GetRandomAffliction() {
         if (mt_rand(1,100)<=50){
-            $affliction['quote'] = self::GetRandomData(self::$afflictions['quotes']);
+            $affliction['quote'] = $this->GetRandomData($this->afflictions['quotes']);
         }
         return $affliction;
     }
 
-    public static function GetRandomResolve() {
+    public function GetRandomResolve() {
         if (mt_rand(1, 100) <= self::virtueChance) {
-            self::CheckUpdateArray(self::$virtues, '/data/virtues.json',true);
-            return self::GetRandomData(self::$virtues['virtues']);
+            return $this->GetRandomData($this->virtues['virtues']);
         }
-        self::CheckUpdateArray(self::$afflictions, '/data/afflictions.json',true);
-        return self::GetRandomAffliction();
+        return $this->GetRandomAffliction();
     }
 
-    public static function GetRandomNSFWQuote() {
-        self::CheckUpdateArray(self::$NSFWquotes, '/data/NSFWquotes');
-        return self::GetRandomData(self::$NSFWquotes);
+    public function GetRandomNSFWQuote() {
+        return $this->GetRandomData($this->NSFWquotes);
     }
 
-    public static function GetRandomZalgoTitle() {
-        self::CheckUpdateArray(self::$zalgoTitles, '/data/zalgoTitles');
-        return self::GetRandomData(self::$zalgoTitles);
+    public function GetRandomZalgoTitle() {
+        return $this->GetRandomData($this->zalgoTitles);
     }
 
-    public static function GetRandomReward() {
-        self::CheckUpdateArray(self::$gold, '/data/rewards/gold');
-        self::CheckUpdateArray(self::$trinkets, '/data/rewards/trinkets');
+    public function GetRandomReward() {
         if (mt_rand(1, 100) <= self::rewardTrinketChance) {
-            return self::GetRandomData(self::$trinkets);
+            return $this->GetRandomData($this->trinkets);
         }
-        return self::GetRandomData(self::$gold);
+        return $this->GetRandomData($this->gold);
     }
 
-    public static function GetRandomRewardQuote() {
-        self::CheckUpdateArray(self::$rewardsQuotes, '/data/rewards/rewardsQuotes');
-        return self::GetRandomData(self::$rewardsQuotes);
+    public function GetRandomRewardQuote() {
+        return $this->GetRandomData($this->rewardsQuotes);
     }
 
-    private static function CheckUpdateArray(&$array, $file_path, $isJson = false) {
+    private function PopulateArray(&$array, $file_path, $isJson = false) {
         if (!empty($array)) {
             return;
         }

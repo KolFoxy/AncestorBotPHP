@@ -20,7 +20,8 @@ new class($handler) extends Ancestor\CommandHandler\Command {
 
             if (preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_USERS, $arg) === 1 ||
                 preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_ROLES, $arg) === 1) {
-                $message->channel->send('***Remind yourself, ' . $arg . ' , that overconfidence is a slow and insidious killer.***');
+                $message->channel->send('***Remind yourself, ' . $arg
+                    . ' , that overconfidence is a slow and insidious killer.***');
                 return;
             }
         }

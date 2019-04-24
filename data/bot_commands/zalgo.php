@@ -8,10 +8,12 @@ return (
 new class($handler) extends Ancestor\CommandHandler\Command {
 
     private $MAX_ZALGO_CHARACTERS = 150;
+    private $RDP;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler) {
         parent::__construct($handler, 'zalgo', 'transforms given sentence into something ' .
             $this->ZalgorizeString('like this', 3), array('cursed'));
+        $this->RDP = Ancestor\RandomData\RandomDataProvider::GetInstance();
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
@@ -23,7 +25,7 @@ new class($handler) extends Ancestor\CommandHandler\Command {
             , $this->MAX_ZALGO_CHARACTERS);
         foreach ($strArray as $str) {
             $embedResponse->addField('``' .
-                $this->ZalgorizeString(\Ancestor\RandomData\RandomDataProvider::GetRandomZalgoTitle(), 2) . '``',
+                $this->ZalgorizeString($this->RDP->GetRandomZalgoTitle(), 2) . '``',
                 $this->ZalgorizeString($str, 1));
         };
         $embedResponse->setFooter($this->ZalgorizeString($message->author->username, 1), $message->author->getAvatarURL());
@@ -38,7 +40,7 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         }
         for ($i = 0; $i < $strlen; $i++) {
 
-            $result .= \Ancestor\RandomData\RandomDataProvider::GetRandomZalgoString($zalgoPerChar) . mb_substr($input, $i, 1);
+            $result .= $this->RDP->GetRandomZalgoString($zalgoPerChar) . mb_substr($input, $i, 1);
         }
         if ($strlen == $this->MAX_ZALGO_CHARACTERS) {
             $result .= '…';

@@ -56,7 +56,7 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
         }
         $avatar = imagecreatefromstring($file);
         if ($avatar === false) {
-            return $file;
+            return $avatar;
         }
 
         $canvas = imagecreatetruecolor($this->CSPicX, $this->CSPicY);
