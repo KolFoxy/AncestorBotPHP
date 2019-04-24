@@ -49,6 +49,7 @@ class RandomDataProvider {
     }
 
     private function GetRandomAffliction() {
+        $affliction = $this->GetRandomData($this->afflictions['afflictions']);
         if (mt_rand(1,100)<=50){
             $affliction['quote'] = $this->GetRandomData($this->afflictions['quotes']);
         }
