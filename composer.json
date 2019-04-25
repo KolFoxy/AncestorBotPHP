@@ -6,7 +6,9 @@
         "php" : "^7.0",
         "charlottedunois/yasmin": "0.5.1",
         "charlottedunois/eventemitter": "0.1.5",
-        "ext-gd": "^7.2"
+        "ext-gd": "^7.2",
+        "cakephp/utility" : "3.7.5",
+        "ratchet/rfc6455" : "0.2.4"
     },
   "autoload": {
     "psr-4": {
