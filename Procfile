@@ -1,2 +1,3 @@
 web: vendor/bin/heroku-php-apache2
-release: php index.php
+web: vendor/bin/heroku-php-nginx
+worker: php index.php
