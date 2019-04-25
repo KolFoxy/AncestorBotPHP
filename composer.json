@@ -5,6 +5,7 @@
     "require": {
         "php" : "^7.0",
         "charlottedunois/yasmin": "0.5.1",
+        "charlottedunois/eventemitter": "0.1.5",
         "ext-gd": "^7.2"
     },
   "autoload": {
