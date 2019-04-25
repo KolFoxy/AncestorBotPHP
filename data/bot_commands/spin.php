@@ -62,8 +62,6 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
 
     }
 
-//todo: pretty this shit up
-
     function GetImageRotationsWithAncestor($image, int $rotations = 4, float $rotationAngle = -90) {
         $res = [];
         for ($i = 1; $i < $rotations; $i++) {
