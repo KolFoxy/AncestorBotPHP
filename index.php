@@ -1,14 +1,15 @@
 <?php
 require(__DIR__ . '/vendor/autoload.php');
+
 $config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
 $loop = \React\EventLoop\Factory::create();
 $client = new \CharlotteDunois\Yasmin\Client(array(), $loop);
 $handler = new \Ancestor\CommandHandler\CommandHandler($client, $config['prefix']);
 $handler->registerCommands(glob(__DIR__ . '/data/bot_commands/*.php'));
+
 $client->on('ready', function () use ($client) {
     echo 'Successful login into ' . $client->user->tag . PHP_EOL;
 });
-
 $client->on('message', function (CharlotteDunois\Yasmin\Models\Message $message) use ($config, $handler) {
     if ($message->author->bot) return;
     if ($handler->handleMessage($message)) {
@@ -25,6 +26,7 @@ $client->on('message', function (CharlotteDunois\Yasmin\Models\Message $message)
         RespondNSFW($message);
     }
 });
+
 $token = getenv('abot_token');
 if ($token === false) {
     $token = $config['token'];
