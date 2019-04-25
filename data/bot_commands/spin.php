@@ -17,6 +17,7 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
     private $tideCroppedPNG;
     private $spinPicX;
     private $spinPicY;
+    private $spinGifFrameTime = 11;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler, $args) {
         parent::__construct($handler, 'spin', 'Turns someone`s tide');
@@ -28,12 +29,19 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
-        $file = $this->SpinImage($message->author->getDisplayAvatarURL());
-        $message->channel->send('', array('files' => array(array('data' => $file, 'name' => 'spin.gif'))));
+        $file = \Ancestor\CommandHandler\CommandHelper::ImageUrlFromCommandArgs($args, $message);
+        if ($file === false) {
+            $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
+            $embedResponse->setImage($this->tideURL);
+            $embedResponse->setTitle('How quickly the tide turns?');
+            $message->channel->send('', array('embed' => $embedResponse));
+            return;
+        }
+        $message->channel->send('', array('files' => array(array('data' => $this->SpinImage($file), 'name' => 'spin.gif'))));
     }
 
     function SpinImage(string $imageURL) {
-        $imageToSpin = $this->ImageFromURL($imageURL);
+        $imageToSpin = \Ancestor\CommandHandler\CommandHelper::ImageFromURL($imageURL);
         if ($imageToSpin === false) {
             return $imageToSpin;
         }
@@ -41,7 +49,7 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
         $frames = $this->GetImageRotationsWithAncestor($imageToSpin);
 
         $animation = new GifCreator\AnimGif();
-        $animation->create($frames,[13]);
+        $animation->create($frames, [$this->spinGifFrameTime]);
 
         ob_start();
         echo $animation->get();
@@ -54,15 +62,17 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
 
     }
 
+//todo: pretty this shit up
+
     function GetImageRotationsWithAncestor($image, int $rotations = 4, float $rotationAngle = -90) {
         $res = [];
         for ($i = 1; $i < $rotations; $i++) {
-            $rotated_image = imagerotate($image, $rotationAngle*$i, 0);
+            $rotated_image = imagerotate($image, $rotationAngle * $i, 0);
             imagecopy($rotated_image, $this->ancestorPNG, 0, 0, 0, 0, $this->spinPicX, $this->spinPicY);
             $res[] = $rotated_image;
         }
         imagecopy($image, $this->ancestorPNG, 0, 0, 0, 0, $this->spinPicX, $this->spinPicY);
-        $res[]=$image;
+        $res[] = $image;
         return array_reverse($res);
     }
 
@@ -75,12 +85,6 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
         return $canvas;
     }
 
-    function ImageFromURL($url) {
-        $file = file_get_contents($url);
-        if ($file === false) {
-            return $file;
-        }
-        return imagecreatefromstring($file);
-    }
+
 }
 );
