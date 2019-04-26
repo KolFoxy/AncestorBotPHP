@@ -5,10 +5,10 @@
 ### Commands:
 - help `Lists all commands, or shows command's description if used as "help [COMMAND]"`
 - gold `Gives a random reward.`
-- remind `Teaches the individual the important lesson about life.`
+- remind `Teaches you or a [@user] the important lesson about life.`
 - roll `"roll" or "roll [MIN] [MAX]" or "roll [MAX]" - rolls a random integer (default roll is from 1 to 6)`
-- spin `Spins the Tide™` 
-- stress `Makes you drink wine.`
+- spin `Spins a [@user] inside of Tide™` 
+- stress `Forces you or a [@user] to drink wine.`
 - zalgo `Transforms given sentence into something ̝̺̋l̃̊̕i͈͌͡k̛͉̕e̟̩ͥ ͆̄͐ẗ̥́̓ḧ̸͝i̷͚͘s. Aliases: cursed`
 
 ### Chat reactions:
@@ -49,7 +49,7 @@ https://discordbots.org/bot/406438624473907200
 
 - **spin**
 
-![spin](https://i.imgur.com/Uc4m1nz.png "spin")
+![spin](https://i.imgur.com/CWrfzS5.gif "spin")
 
 ------------
 ### Chat reactions examples:

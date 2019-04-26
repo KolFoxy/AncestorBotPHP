@@ -20,7 +20,7 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
     private $spinGifFrameTime = 11;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler, $args) {
-        parent::__construct($handler, 'spin', 'Turns someone`s tide');
+        parent::__construct($handler, 'spin', 'Spins a [@user] inside of Tide™.');
         $this->tideURL = $args['tideURL'];
         $this->ancestorPNG = $args['ancestorPNG'];
         $this->tideCroppedPNG = $args['tideCroppedPNG'];
