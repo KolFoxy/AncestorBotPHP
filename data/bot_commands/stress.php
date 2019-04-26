@@ -5,6 +5,7 @@
  */
 $stressURL = json_decode(file_get_contents(dirname(__DIR__, 2) . '/config.json', true), true)['stressURL'];
 $croppedStressPic = imagecreatefrompng(dirname(__DIR__, 2) . '/data/images/stress_cropped.png');
+
 return (
 new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandler\Command {
     private $stressURL;
@@ -21,40 +22,19 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
-        $file = $this->addAvatarToStress($this->argsToURL($message, $args));
-        if ($file===false){
+        $file = $this->addAvatarToStress(\Ancestor\CommandHandler\CommandHelper::ImageUrlFromCommandArgs($args, $message));
+        if ($file === false) {
             $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
             $embedResponse->setImage($this->stressURL);
             $message->channel->send('', array('embed' => $embedResponse));
             return;
         }
         //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data
-        $message->channel->send('', array('files' => array(array('data' => $file))));
-    }
-
-    function argsToURL(\CharlotteDunois\Yasmin\Models\Message $message, array $args): string {
-        if (!empty($args)) {
-            if (preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_USERS, $args[0]) === 1) {
-                return $message->mentions->users->first()->getDisplayAvatarURL(null, 'png');
-            }
-            if (filter_var($args[0], FILTER_VALIDATE_URL) && $this->hasImageExtension($args[0])) {
-                return $args[0];
-            }
-        }
-        return $message->author->getDisplayAvatarURL(null, 'png');
-    }
-
-    function hasImageExtension($str): bool {
-        $last4 = mb_substr(mb_strtolower($str), -4);
-        return in_array($last4, ['.jpg', '.png', '.bmp', '.tif', '.gif', 'jpeg']);
+        $message->channel->send('', array('files' => array(array('data' => $file, 'name' => 'stress.png'))));
     }
 
     function addAvatarToStress(string $avatarUrl) {
-        $file = file_get_contents($avatarUrl);
-        if ($file === false) {
-            return $file;
-        }
-        $avatar = imagecreatefromstring($file);
+        $avatar = \Ancestor\CommandHandler\CommandHelper::ImageFromURL($avatarUrl);
         if ($avatar === false) {
             return $avatar;
         }
