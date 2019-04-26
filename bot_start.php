@@ -15,6 +15,7 @@ $client->on('message', function (CharlotteDunois\Yasmin\Models\Message $message)
     if ($handler->handleMessage($message)) {
         return;
     }
+
     $msgLowered = strtolower($message->content);
     $index = strpos($msgLowered, 'resolve is tested');
     if ($index !== false) {
@@ -29,7 +30,14 @@ $client->on('message', function (CharlotteDunois\Yasmin\Models\Message $message)
 
 $token = getenv('abot_token');
 if ($token === false) {
-    $token = $config['token'];
+    echo 'No bot token in the environmental variable, attempting to load one from ".env"...' . PHP_EOL;
+    $dotenv = Dotenv\Dotenv::create(__DIR__);
+    $dotenv->load();
+    $token = getenv('abot_token');
+    if ($token === false) {
+        echo 'Can`t find a bot token. Shutting down.';
+        return;
+    }
 }
 $client->login($token);
 $loop->run();
@@ -38,7 +46,7 @@ function CheckResolveResponse(CharlotteDunois\Yasmin\Models\Message $message, $i
     $response = \Ancestor\RandomData\RandomDataProvider::GetInstance()->GetRandomResolve();
     $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
     $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
-    $embedResponse->setDescription('***'.$response['quote'].'***');
+    $embedResponse->setDescription('***' . $response['quote'] . '***');
     if ($index != 0) {
         if (!empty($message->mentions->users) && count($message->mentions->users) > 0) {
             $message->channel->send('**' . '<@' . $message->mentions->users->last()->id . '>' .
