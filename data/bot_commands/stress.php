@@ -14,7 +14,7 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
     private $CSPicY;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler, $stressURL, $croppedStressPic) {
-        parent::__construct($handler, 'stress', 'Makes you drink wine');
+        parent::__construct($handler, 'stress', 'Forces you or a [@user] to drink wine.');
         $this->stressURL = $stressURL;
         $this->croppedStressPic = $croppedStressPic;
         $this->CSPicX = imagesx($croppedStressPic);

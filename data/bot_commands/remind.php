@@ -9,7 +9,7 @@ new class($handler) extends Ancestor\CommandHandler\Command {
     private $response = '***Remind yourself that overconfidence is a slow and insidious killer.***';
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler) {
-        parent::__construct($handler, 'remind', 'teaches an individual the important lesson about life');
+        parent::__construct($handler, 'remind', 'Teaches you or a *[@user]* the important lesson about life.');
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
