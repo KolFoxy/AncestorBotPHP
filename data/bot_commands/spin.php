@@ -18,6 +18,10 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
     private $spinPicX;
     private $spinPicY;
     private $spinGifFrameTime = 11;
+    /**
+     * @var \Ancestor\ImageDownloader\ImageDownloader
+     */
+    private $imageDl;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler, $args) {
         parent::__construct($handler, 'spin', 'Spins a [@user] inside of Tide™.');
@@ -26,22 +30,21 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
         $this->tideCroppedPNG = $args['tideCroppedPNG'];
         $this->spinPicX = imagesx($this->tideCroppedPNG);
         $this->spinPicY = imagesy($this->tideCroppedPNG);
+        $this->imageDl = new \Ancestor\ImageDownloader\ImageDownloader();
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
-        $file = \Ancestor\CommandHandler\CommandHelper::ImageUrlFromCommandArgs($args, $message);
+        $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
+        $file = $commandHelper->ImageUrlFromCommandArgs($args);
         if ($file === false) {
-            $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-            $embedResponse->setImage($this->tideURL);
-            $embedResponse->setTitle('How quickly the tide turns?');
-            $message->channel->send('', array('embed' => $embedResponse));
+            $commandHelper->RespondWithEmbedImage($this->tideURL,'How quickly the tide turns?');
             return;
         }
-        $message->channel->send('', array('files' => array(array('data' => $this->SpinImage($file), 'name' => 'spin.gif'))));
+        $commandHelper->RespondWithAttachedFile($this->SpinImage($file),'spin.gif');
     }
 
     function SpinImage(string $imageURL) {
-        $imageToSpin = \Ancestor\CommandHandler\CommandHelper::ImageFromURL($imageURL);
+        $imageToSpin = $this->imageDl->GetImageFromURL($imageURL);
         if ($imageToSpin === false) {
             return $imageToSpin;
         }

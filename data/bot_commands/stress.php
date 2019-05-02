@@ -12,6 +12,10 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
     private $croppedStressPic;
     private $CSPicX;
     private $CSPicY;
+    /**
+     * @var \Ancestor\ImageDownloader\ImageDownloader
+     */
+    private $imageDl;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler, $stressURL, $croppedStressPic) {
         parent::__construct($handler, 'stress', 'Forces you or a [@user] to drink wine.');
@@ -19,22 +23,21 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
         $this->croppedStressPic = $croppedStressPic;
         $this->CSPicX = imagesx($croppedStressPic);
         $this->CSPicY = imagesy($croppedStressPic);
+        $this->imageDl = new \Ancestor\ImageDownloader\ImageDownloader();
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
-        $file = $this->addAvatarToStress(\Ancestor\CommandHandler\CommandHelper::ImageUrlFromCommandArgs($args, $message));
+        $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
+        $file = $this->addAvatarToStress($commandHelper->ImageUrlFromCommandArgs($args));
         if ($file === false) {
-            $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-            $embedResponse->setImage($this->stressURL);
-            $message->channel->send('', array('embed' => $embedResponse));
+            $commandHelper->RespondWithEmbedImage($this->stressURL);
             return;
         }
-        //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data
-        $message->channel->send('', array('files' => array(array('data' => $file, 'name' => 'stress.png'))));
+        $commandHelper->RespondWithAttachedFile($file,'stress.png');
     }
 
     function addAvatarToStress(string $avatarUrl) {
-        $avatar = \Ancestor\CommandHandler\CommandHelper::ImageFromURL($avatarUrl);
+        $avatar = $this->imageDl->GetImageFromURL($avatarUrl);
         if ($avatar === false) {
             return $avatar;
         }
