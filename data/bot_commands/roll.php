@@ -12,10 +12,10 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         parent::__construct($handler, 'roll', '``roll`` or ``roll [MIN] [MAX]`` or ``roll [MAX]`` - rolls a random integer (default ``roll`` is from 1 to 6)');
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
+    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
         $embedResponse->setFooter($this->handler->client->user->username, $this->handler->client->user->getAvatarURL());
-        $result = false;
+        $result = null;
         $argsLen = count($args);
         if ($argsLen === 1 && ctype_digit($args[0])) {
             $result = mt_rand(1, intval($args[0]));

@@ -11,7 +11,7 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         parent::__construct($handler, 'gold', 'Gives a random reward.');
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
+    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         $RDP = Ancestor\RandomData\RandomDataProvider::GetInstance();
         $CH = new \Ancestor\CommandHandler\CommandHelper($message);
         $CH->RespondWithEmbedImage($RDP->GetRandomReward(),$RDP->GetRandomRewardQuote());

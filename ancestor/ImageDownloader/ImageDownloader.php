@@ -70,4 +70,8 @@ class ImageDownloader implements ImageDownloaderInterface {
         return $file;
     }
 
+    public function DownloadUrlToStringBuzzle(string $url){
+
+    }
+
 }

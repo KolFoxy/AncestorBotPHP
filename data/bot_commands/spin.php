@@ -33,7 +33,7 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
         $this->imageDl = new \Ancestor\ImageDownloader\ImageDownloader();
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
+    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
         $file = $commandHelper->ImageUrlFromCommandArgs($args);
         if ($file === false) {

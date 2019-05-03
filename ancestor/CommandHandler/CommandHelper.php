@@ -3,7 +3,6 @@
 namespace Ancestor\CommandHandler;
 
 use CharlotteDunois\Yasmin\Models\Message as Message;
-use GuzzleHttp\Exception\RequestException;
 
 class CommandHelper {
 

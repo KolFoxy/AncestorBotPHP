@@ -12,7 +12,7 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         parent::__construct($handler, 'remind', 'Teaches you or a *[@user]* the important lesson about life.');
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
+    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         if (empty($args)) {
             $message->channel->send($this->response);
         }

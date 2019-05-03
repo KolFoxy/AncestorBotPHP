@@ -26,7 +26,7 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
         $this->imageDl = new \Ancestor\ImageDownloader\ImageDownloader();
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
+    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
         $file = $this->addAvatarToStress($commandHelper->ImageUrlFromCommandArgs($args));
         if ($file === false) {
