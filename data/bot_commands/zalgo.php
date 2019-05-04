@@ -16,12 +16,12 @@ new class($handler) extends Ancestor\CommandHandler\Command {
             $this->ZalgorizeString('like this', 3), array('cursed'));
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
+    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         if (empty($args)) {
             return;
         }
         $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-        $strArray = $this->mb_str_split(\CharlotteDunois\Yasmin\Utils\DataHelpers::cleanContent($message, implode(' ', $args))
+        $strArray = $this->mb_str_split(\CharlotteDunois\Yasmin\Utils\MessageHelpers::cleanContent($message, implode(' ', $args))
             , $this->MAX_ZALGO_CHARACTERS);
         foreach ($strArray as $str) {
             $embedResponse->addField('``' .

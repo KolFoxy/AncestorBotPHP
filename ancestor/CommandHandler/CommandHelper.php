@@ -1,31 +1,54 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KolBrony
- * Date: 25.04.2019
- * Time: 14:37
- */
 
 namespace Ancestor\CommandHandler;
+
+use CharlotteDunois\Yasmin\Models\Message as Message;
 
 class CommandHelper {
 
     /**
+     * @var Message
+     */
+    public $message;
+
+    public function __construct(Message $message) {
+        $this->message = $message;
+    }
+
+    /**
+     * Respond to the message with embed image with an option title.
+     * @param string $embedImageUrl
+     * @param string|null $embedTitle
+     */
+    public function RespondWithEmbedImage(string $embedImageUrl, string $embedTitle = null){
+        $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
+        $embedResponse->setImage($embedImageUrl);
+        if (isset($embedTitle)){
+            $embedResponse->setTitle($embedTitle);
+        }
+        $this->message->channel->send('', array('embed' => $embedResponse));
+    }
+
+    public function RespondWithAttachedFile($fileData, string $fileName){
+        //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data (0.5.1)
+        $this->message->channel->send('', array('files' => array(array('data' => $fileData, 'name' => $fileName))));
+    }
+
+    /**
      * Gets either a user's avatar URL from the command arguments or URL to a picture
      * @param array $args
-     * @param \CharlotteDunois\Yasmin\Models\Message $message
      * @return string
-    */
-    public static function ImageUrlFromCommandArgs(array $args, \CharlotteDunois\Yasmin\Models\Message $message) : string {
+     */
+    public function ImageUrlFromCommandArgs(array $args): string {
         if (!empty($args)) {
             if (preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_USERS, $args[0]) === 1) {
-                return $message->mentions->users->first()->getDisplayAvatarURL(null, 'png');
+                return $this->message->mentions->users->first()->getDisplayAvatarURL(null, 'png');
             }
-            if (filter_var($args[0], FILTER_VALIDATE_URL) && self::HasImageExtension($args[0])) {
+            if (filter_var($args[0], FILTER_VALIDATE_URL) && $this->HasImageExtension($args[0])) {
                 return $args[0];
             }
         }
-        return $message->author->getDisplayAvatarURL(null, 'png');
+        return $this->message->author->getDisplayAvatarURL(null, 'png');
     }
 
     /**
@@ -33,25 +56,10 @@ class CommandHelper {
      * @param string $path
      * @return bool
      */
-    public static function HasImageExtension(string $path) : bool{
-        return in_array(pathinfo($path,PATHINFO_EXTENSION),
+    public function HasImageExtension(string $path): bool {
+        return in_array(pathinfo($path, PATHINFO_EXTENSION),
             ['jpg', 'png', 'bmp', 'tif', 'gif', 'jpeg', 'webp']);
     }
-
-    /** Returns either a resource image or FALSE if image is unavailable or unsupported.
-     * @param string $url
-     * @return bool|resource
-     */
-    public static function ImageFromURL(string $url) {
-        $file = file_get_contents($url);
-        if ($file === false) {
-            return $file;
-        }
-        return imagecreatefromstring($file);
-    }
-
-
-
 
 
 }

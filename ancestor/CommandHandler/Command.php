@@ -2,12 +2,11 @@
 
 namespace Ancestor\CommandHandler;
 
-
 abstract class Command {
     /** @var \CharlotteDunois\Yasmin\Client */
     protected $client;
 
-    /** @var \Ancestor\CommandHandler\CommandHandler */
+    /** @var CommandHandler */
     protected $handler;
 
     /** @var string */
@@ -20,7 +19,7 @@ abstract class Command {
 
     protected $description = null;
 
-    function __construct(\Ancestor\CommandHandler\CommandHandler $handler, string $name, string $description, array $aliases = null) {
+    function __construct(CommandHandler $handler, string $name, string $description, array $aliases = null) {
         $this->client = $handler->client;
         $this->handler = $handler;
         $this->name = $name;
@@ -48,8 +47,9 @@ abstract class Command {
 
     /**
      * Runs the command.
-     * @return void
      * @throws \Throwable|\Exception|\Error
+     * @param \CharlotteDunois\Yasmin\Models\Message $message
+     * @param array $args
      */
-    abstract function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) : void;
+    abstract function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args);
 }

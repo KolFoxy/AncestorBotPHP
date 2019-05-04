@@ -18,6 +18,10 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
     private $spinPicX;
     private $spinPicY;
     private $spinGifFrameTime = 11;
+    /**
+     * @var \Ancestor\FileDownloader\FileDownloader
+     */
+    private $imageDl;
 
     function __construct(Ancestor\CommandHandler\CommandHandler $handler, $args) {
         parent::__construct($handler, 'spin', 'Spins a [@user] inside of Tide™.');
@@ -26,25 +30,30 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
         $this->tideCroppedPNG = $args['tideCroppedPNG'];
         $this->spinPicX = imagesx($this->tideCroppedPNG);
         $this->spinPicY = imagesy($this->tideCroppedPNG);
+        $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args): void {
-        $file = \Ancestor\CommandHandler\CommandHelper::ImageUrlFromCommandArgs($args, $message);
-        if ($file === false) {
-            $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-            $embedResponse->setImage($this->tideURL);
-            $embedResponse->setTitle('How quickly the tide turns?');
-            $message->channel->send('', array('embed' => $embedResponse));
-            return;
-        }
-        $message->channel->send('', array('files' => array(array('data' => $this->SpinImage($file), 'name' => 'spin.gif'))));
+    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
+        $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
+        $callbackObj = function ($image) use ($commandHelper) {
+            $file = $this->SpinImage($image);
+            if ($file === false) {
+                $commandHelper->RespondWithEmbedImage($this->tideURL, 'How quickly the tide turns?');
+                return;
+            }
+            $commandHelper->RespondWithAttachedFile($file, 'spin.gif');
+        };
+        $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
     }
 
-    function SpinImage(string $imageURL) {
-        $imageToSpin = \Ancestor\CommandHandler\CommandHelper::ImageFromURL($imageURL);
-        if ($imageToSpin === false) {
-            return $imageToSpin;
+    function SpinImage(string $image) {
+        if ($image === false) {
+            return false;
         }
+        if (($imageToSpin = imagecreatefromstring($image)) === false) {
+            return false;
+        }
+
         $imageToSpin = $this->AddImageToTide($imageToSpin);
         $frames = $this->GetImageRotationsWithAncestor($imageToSpin);
 

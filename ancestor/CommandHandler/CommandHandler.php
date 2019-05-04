@@ -10,7 +10,7 @@ class CommandHandler {
 
     /**
      * Holds all commands mapped by their name.
-     * @var \CharlotteDunois\Yasmin\Utils\Collection
+     * @var \CharlotteDunois\Collect\Collection()
      */
     protected $commands;
 
@@ -20,17 +20,19 @@ class CommandHandler {
     /**
      * Constructor.
      * @param \CharlotteDunois\Yasmin\Client $client
+     * @param string $prefix
      */
     function __construct(\CharlotteDunois\Yasmin\Client $client, string $prefix) {
         $this->client = $client;
         $this->prefix = $prefix;
-        $this->commands = new \CharlotteDunois\Yasmin\Utils\Collection();
+        $this->commands = new \CharlotteDunois\Collect\Collection();
     }
 
 
     /**
-     * Message handler
+     * Message handler. Returns True if message was handled.
      * @param \CharlotteDunois\Yasmin\Models\Message $message
+     * @return bool
      */
     function handleMessage(\CharlotteDunois\Yasmin\Models\Message $message): bool {
         if ($message->author->bot) {
@@ -97,7 +99,6 @@ class CommandHandler {
     /**
      * Register a command by loading its file.
      * @param string $path
-     * @return $this
      * @throws \RuntimeException
      */
     function registerCommand(string $path) {
@@ -123,7 +124,6 @@ class CommandHandler {
     /**
      * Register multiple commands by loading their respective files;
      * @param array $pathes
-     * @return $this
      * @throws \RuntimeException
      */
     function registerCommands(array $pathes) {

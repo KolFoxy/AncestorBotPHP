@@ -28,7 +28,7 @@ class RandomDataProvider {
 
     public static function GetInstance() {
         if (!isset(self::$instance)) {
-            self::$instance = new \Ancestor\RandomData\RandomDataProvider();
+            self::$instance = new RandomDataProvider();
         }
         return self::$instance;
     }
