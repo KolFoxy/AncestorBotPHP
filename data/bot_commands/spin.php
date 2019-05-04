@@ -19,7 +19,7 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
     private $spinPicY;
     private $spinGifFrameTime = 11;
     /**
-     * @var \Ancestor\ImageDownloader\ImageDownloader
+     * @var \Ancestor\FileDownloader\FileDownloader
      */
     private $imageDl;
 
@@ -30,24 +30,30 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
         $this->tideCroppedPNG = $args['tideCroppedPNG'];
         $this->spinPicX = imagesx($this->tideCroppedPNG);
         $this->spinPicY = imagesy($this->tideCroppedPNG);
-        $this->imageDl = new \Ancestor\ImageDownloader\ImageDownloader();
+        $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
-        $file = $commandHelper->ImageUrlFromCommandArgs($args);
-        if ($file === false) {
-            $commandHelper->RespondWithEmbedImage($this->tideURL,'How quickly the tide turns?');
-            return;
-        }
-        $commandHelper->RespondWithAttachedFile($this->SpinImage($file),'spin.gif');
+        $callbackObj = function ($image) use ($commandHelper) {
+            $file = $this->SpinImage($image);
+            if ($file === false) {
+                $commandHelper->RespondWithEmbedImage($this->tideURL, 'How quickly the tide turns?');
+                return;
+            }
+            $commandHelper->RespondWithAttachedFile($file, 'spin.gif');
+        };
+        $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
     }
 
-    function SpinImage(string $imageURL) {
-        $imageToSpin = $this->imageDl->GetImageFromURL($imageURL);
-        if ($imageToSpin === false) {
-            return $imageToSpin;
+    function SpinImage(string $image) {
+        if ($image === false) {
+            return false;
         }
+        if (($imageToSpin = imagecreatefromstring($image)) === false) {
+            return false;
+        }
+
         $imageToSpin = $this->AddImageToTide($imageToSpin);
         $frames = $this->GetImageRotationsWithAncestor($imageToSpin);
 

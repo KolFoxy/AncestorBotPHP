@@ -13,7 +13,7 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
     private $CSPicX;
     private $CSPicY;
     /**
-     * @var \Ancestor\ImageDownloader\ImageDownloader
+     * @var \Ancestor\FileDownloader\FileDownloader
      */
     private $imageDl;
 
@@ -23,29 +23,35 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
         $this->croppedStressPic = $croppedStressPic;
         $this->CSPicX = imagesx($croppedStressPic);
         $this->CSPicY = imagesy($croppedStressPic);
-        $this->imageDl = new \Ancestor\ImageDownloader\ImageDownloader();
+        $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
-        $file = $this->addAvatarToStress($commandHelper->ImageUrlFromCommandArgs($args));
-        if ($file === false) {
-            $commandHelper->RespondWithEmbedImage($this->stressURL);
-            return;
-        }
-        $commandHelper->RespondWithAttachedFile($file,'stress.png');
+        $callbackObj = function ($image) use ($commandHelper) {
+            $file = $this->addImageToStress($image);
+            if ($file === false) {
+                $commandHelper->RespondWithEmbedImage($this->stressURL);
+                return;
+            }
+            $commandHelper->RespondWithAttachedFile($file, 'stress.png');
+        };
+
+        $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
     }
 
-    function addAvatarToStress(string $avatarUrl) {
-        $avatar = $this->imageDl->GetImageFromURL($avatarUrl);
-        if ($avatar === false) {
-            return $avatar;
+    function addImageToStress(string $image) {
+        if ($image === false) {
+            return false;
+        }
+        if (($imageRes = imagecreatefromstring($image)) === false) {
+            return false;
         }
 
         $canvas = imagecreatetruecolor($this->CSPicX, $this->CSPicY);
 
         $rotateAngle = 22;
-        $rotatedAvatar = imagerotate($avatar, $rotateAngle, 0);
+        $rotatedAvatar = imagerotate($imageRes, $rotateAngle, 0);
 
         $rAvatarX = 189;
         $rotatedAvatar = imagescale($rotatedAvatar, $rAvatarX, -1, IMG_NEAREST_NEIGHBOUR);
@@ -59,7 +65,7 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
         $result = ob_get_clean();
 
         imagedestroy($rotatedAvatar);
-        imagedestroy($avatar);
+        imagedestroy($imageRes);
         imagedestroy($canvas);
 
         return $result;
