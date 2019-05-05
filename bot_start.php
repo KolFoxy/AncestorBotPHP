@@ -5,6 +5,9 @@ $config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
 $loop = \React\EventLoop\Factory::create();
 $client = new \CharlotteDunois\Yasmin\Client([
     'ws.disabledEvents' => ['TYPING_START'],
+    'presenceCache' => false,
+    'ws.presenceUpdate.ignoreUnknownUsers' => true,
+    'messageCache' => false,
 ], $loop);
 $handler = new \Ancestor\CommandHandler\CommandHandler($client, $config['prefix']);
 $handler->registerCommands(glob(__DIR__ . '/data/bot_commands/*.php'));
