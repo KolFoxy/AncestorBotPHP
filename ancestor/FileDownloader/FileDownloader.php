@@ -13,23 +13,24 @@ class FileDownloader implements AsyncFileDownloaderInterface {
      */
     public $loop;
 
-    const MAX_RESPONSE_SIZE = 36700160;
+    const MAX_RESPONSE_SIZE = 10485760;
 
     public function __construct(LoopInterface $loop) {
         $this->loop = $loop;
     }
 
     /**
+     * Calls $callback on finish with the single argument, containing either FALSE or a opened file handle.
      * @param string $url
-     * @param $callback
+     * @param callable $callback
      */
-    public function DownloadUrlToStringAsync(string $url,  $callback) {
+    public function DownloadUrlToStringAsync(string $url, $callback) {
         $client = new \React\HttpClient\Client($this->loop);
-        $file = '';
         $request = $client->request('GET', $url);
-
+        $tempFile = null;
+        $fileSize = 0;
         $request->on('response',
-            function (\React\HttpClient\Response $response) use (&$file, $callback) {
+            function (\React\HttpClient\Response $response) use ($callback, &$tempFile, &$fileSize) {
 
                 $response->on('error', function (\Exception $e) use ($callback, $response) {
                     echo $e->getMessage() . PHP_EOL;
@@ -41,15 +42,22 @@ class FileDownloader implements AsyncFileDownloaderInterface {
                     $response->emit('error', [new \Exception('File is too large!')]);
                 }
 
-                $response->on('data', function ($chunk) use (&$file, $response) {
-                    $file .= $chunk;
-                    if (strlen($file) > self::MAX_RESPONSE_SIZE) {
+                $response->on('data', function ($chunk) use (&$tempFile, $response, &$fileSize) {
+                    if ($tempFile === null) {
+                        $tempFile = tmpfile();
+                    }
+                    $fileSize += strlen($chunk);
+                    if ($fileSize > self::MAX_RESPONSE_SIZE) {
+                        fclose($tempFile);
                         $response->emit('error', [new \Exception('File is too large!')]);
                     }
+                    fwrite($tempFile, $chunk);
+
                 });
 
-                $response->on('end', function () use (&$file, $callback) {
-                    $callback($file);
+                $response->on('end', function () use (&$tempFile, $callback) {
+                    fseek($tempFile, 0);
+                    $callback($tempFile);
                 });
 
             });

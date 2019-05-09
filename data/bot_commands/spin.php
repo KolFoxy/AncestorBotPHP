@@ -46,13 +46,19 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
         $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
     }
 
-    function SpinImage(string $image) {
-        if ($image === false) {
+    /**
+     * Spins image from $imageFile handler
+     * @param resource $imageFile
+     * @return bool|string
+     */
+    function SpinImage($imageFile) {
+        if ($imageFile === false) {
             return false;
         }
-        if (($imageToSpin = imagecreatefromstring($image)) === false) {
+        if (($imageToSpin = imagecreatefromstring(fread($imageFile, filesize(stream_get_meta_data($imageFile)['uri'])))) === false) {
             return false;
         }
+        fclose($imageFile);
 
         $imageToSpin = $this->AddImageToTide($imageToSpin);
         $frames = $this->GetImageRotationsWithAncestor($imageToSpin);

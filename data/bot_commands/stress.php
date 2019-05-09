@@ -40,13 +40,19 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
         $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
     }
 
-    function addImageToStress(string $image) {
-        if ($image === false) {
+    /**
+     * Creates stress image from $imageFile handler
+     * @param resource $imageFile
+     * @return bool|string
+     */
+    function addImageToStress($imageFile) {
+        if ($imageFile === false) {
             return false;
         }
-        if (($imageRes = imagecreatefromstring($image)) === false) {
+        if (($imageRes = imagecreatefromstring(fread($imageFile, filesize(stream_get_meta_data($imageFile)['uri'])))) === false) {
             return false;
         }
+        fclose($imageFile);
 
         $canvas = imagecreatetruecolor($this->CSPicX, $this->CSPicY);
 
