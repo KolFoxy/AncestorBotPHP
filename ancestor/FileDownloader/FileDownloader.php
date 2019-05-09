@@ -13,7 +13,7 @@ class FileDownloader implements AsyncFileDownloaderInterface {
      */
     public $loop;
 
-    const MAX_RESPONSE_SIZE = 10485760;
+    const MAX_RESPONSE_SIZE = 3355444;
 
     public function __construct(LoopInterface $loop) {
         $this->loop = $loop;
