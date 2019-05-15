@@ -48,8 +48,8 @@ class AncestorBot {
     private $commandHandler = null;
 
     public function __construct(Client $client, array $config, array $commands = null) {
-        $this->client;
-        $this->config;
+        $this->client = $client;
+        $this->config = $config;
         $this->commandHandler = new CommandHandler\CommandHandler($client, $config[self::ARG_PREFIX]);
         if ($commands != null) {
             $this->commandHandler->registerCommands($commands);
