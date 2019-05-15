@@ -4,14 +4,19 @@
  * Adds special characters to the sentence to make it appear like it was cursed.
  */
 
-return (
-new class($handler) extends Ancestor\CommandHandler\Command {
+namespace Ancestor\Commands;
+
+use Ancestor\CommandHandler\Command as Command;
+use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use Ancestor\RandomData\RandomDataProvider as RandomDataProvider;
+
+class Zalgo extends Command {
 
     private $MAX_ZALGO_CHARACTERS = 150;
     private $RDP;
 
-    function __construct(Ancestor\CommandHandler\CommandHandler $handler) {
-        $this->RDP = Ancestor\RandomData\RandomDataProvider::GetInstance();
+    function __construct(CommandHandler $handler) {
+        $this->RDP = RandomDataProvider::GetInstance();
         parent::__construct($handler, 'zalgo', 'transforms given sentence into something ' .
             $this->ZalgorizeString('like this', 3), array('cursed'));
     }
@@ -38,10 +43,11 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         if ($strlen > $this->MAX_ZALGO_CHARACTERS) {
             $strlen = $this->MAX_ZALGO_CHARACTERS;
         }
-        for ($i = 0; $i < $strlen; $i++) {
 
+        for ($i = 0; $i < $strlen; $i++) {
             $result .= $this->RDP->GetRandomZalgoString($zalgoPerChar) . mb_substr($input, $i, 1);
         }
+
         if ($strlen == $this->MAX_ZALGO_CHARACTERS) {
             $result .= '…';
         }
@@ -57,7 +63,7 @@ new class($handler) extends Ancestor\CommandHandler\Command {
             }
             return $result;
         }
+        return [''];
     }
 
 }
-);

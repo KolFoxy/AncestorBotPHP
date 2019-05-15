@@ -3,11 +3,13 @@
  * Stress command.
  * Makes user drink wine
  */
-$stressURL = json_decode(file_get_contents(dirname(__DIR__, 2) . '/config.json', true), true)['stressURL'];
-$croppedStressPic = imagecreatefrompng(dirname(__DIR__, 2) . '/data/images/stress_cropped.png');
 
-return (
-new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandler\Command {
+namespace Ancestor\Commands;
+
+use Ancestor\CommandHandler\Command as Command;
+use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+
+class Stress extends Command {
     private $stressURL;
     private $croppedStressPic;
     private $CSPicX;
@@ -17,12 +19,12 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
      */
     private $imageDl;
 
-    function __construct(Ancestor\CommandHandler\CommandHandler $handler, $stressURL, $croppedStressPic) {
+    function __construct(CommandHandler $handler, $stressURL, $croppedStressPNG) {
         parent::__construct($handler, 'stress', 'Forces you or a [@user] to drink wine.');
         $this->stressURL = $stressURL;
-        $this->croppedStressPic = $croppedStressPic;
-        $this->CSPicX = imagesx($croppedStressPic);
-        $this->CSPicY = imagesy($croppedStressPic);
+        $this->croppedStressPic = imagecreatefrompng($croppedStressPNG);
+        $this->CSPicX = imagesx($this->croppedStressPic);
+        $this->CSPicY = imagesy($this->croppedStressPic);
         $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
     }
 
@@ -75,9 +77,7 @@ new class($handler, $stressURL, $croppedStressPic) extends Ancestor\CommandHandl
         imagedestroy($canvas);
 
         return $result;
-
     }
 
 
 }
-);

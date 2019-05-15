@@ -4,11 +4,15 @@
  * !roll or !roll [MIN] [MAX] or !roll [MAX]  — rolls a random integer (default !roll is from 1 to 6)
  */
 
-return (
-new class($handler) extends Ancestor\CommandHandler\Command {
+namespace Ancestor\Commands;
+
+use Ancestor\CommandHandler\Command as Command;
+use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+
+class Roll extends Command {
     private $title = '***The dice strikes the ground!***';
 
-    function __construct(Ancestor\CommandHandler\CommandHandler $handler) {
+    function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'roll', '``roll`` or ``roll [MIN] [MAX]`` or ``roll [MAX]`` - rolls a random integer (default ``roll`` is from 1 to 6)');
     }
 
@@ -24,14 +28,11 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         } else {
             $result = mt_rand(1, 6);
         }
-        if (!is_int($result)){
+        if (!is_int($result)) {
             $message->reply('Invalid input');
             return;
         }
         $embedResponse->addField($this->title, '🎲**' . $result . '**');
         $message->channel->send('', array('embed' => $embedResponse));
     }
-
-
 }
-);

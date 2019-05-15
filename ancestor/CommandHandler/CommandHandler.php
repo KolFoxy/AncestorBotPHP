@@ -1,5 +1,4 @@
 <?php
-
 namespace Ancestor\CommandHandler;
 
 class CommandHandler {
@@ -97,38 +96,31 @@ class CommandHandler {
     }
 
     /**
-     * Register a command by loading its file.
-     * @param string $path
+     * Register a command.
+     * @param Command $commandClass
      * @throws \RuntimeException
      */
-    function registerCommand(string $path) {
-        if (!file_exists($path)) {
-            throw new \RuntimeException('Command file doesn\'t exists');
-        }
+    function registerCommand(Command $command) {
         try {
-            $handler = $this;
-            $command = include($path);
-            $command->$path = $path;
             $this->commands->set(mb_strtolower($command->getName()), $command);
             if (!empty($command->aliases)){
                 foreach ($command->aliases as $alias) {
                     $this->commands->set(mb_strtolower($alias), $command);
                 }
             }
-
         } catch (\Throwable $e) {
             throw new \RuntimeException('Unable to load a command. Error: ' . $e->getMessage());
         }
     }
 
     /**
-     * Register multiple commands by loading their respective files;
-     * @param array $pathes
+     * Register multiple commands.
+     * @param array $commands
      * @throws \RuntimeException
      */
-    function registerCommands(array $pathes) {
-        foreach ($pathes as $path) {
-            $this->registerCommand($path);
+    function registerCommands(array $commands) {
+        foreach ($commands as $command) {
+            $this->registerCommand($command);
         }
     }
 }

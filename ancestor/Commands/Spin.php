@@ -4,14 +4,13 @@
  * Spins the Tide
  */
 
-$args = ['tideURL' => json_decode(file_get_contents(dirname(__DIR__, 2) . '/config.json',
-    true), true)['tideURL'],
-    'ancestorPNG' => imagecreatefrompng(dirname(__DIR__, 2) . '/data/images/spin_gif/ancestor.png'),
-    'tideCroppedPNG' => imagecreatefrompng(dirname(__DIR__, 2) . '/data/images/spin_gif/tide_empty.png'),
-];
+namespace Ancestor\Commands;
 
-return (
-new class($handler, $args) extends Ancestor\CommandHandler\Command {
+use Ancestor\CommandHandler\Command as Command;
+use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use GifCreator;
+
+class Spin extends Command {
     private $tideURL;
     private $ancestorPNG;
     private $tideCroppedPNG;
@@ -23,11 +22,11 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
      */
     private $imageDl;
 
-    function __construct(Ancestor\CommandHandler\CommandHandler $handler, $args) {
+    function __construct(CommandHandler $handler, $tideURL, $ancestorPNG, $tideCroppedPNG) {
         parent::__construct($handler, 'spin', 'Spins a [@user] inside of Tide™.');
-        $this->tideURL = $args['tideURL'];
-        $this->ancestorPNG = $args['ancestorPNG'];
-        $this->tideCroppedPNG = $args['tideCroppedPNG'];
+        $this->tideURL = $tideURL;
+        $this->ancestorPNG = imagecreatefrompng($ancestorPNG);
+        $this->tideCroppedPNG = imagecreatefrompng($tideCroppedPNG);
         $this->spinPicX = imagesx($this->tideCroppedPNG);
         $this->spinPicY = imagesy($this->tideCroppedPNG);
         $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
@@ -100,4 +99,3 @@ new class($handler, $args) extends Ancestor\CommandHandler\Command {
 
 
 }
-);

@@ -4,11 +4,15 @@
  * "Remind yourself that overconfidence is a slow and insidious killer."
  */
 
-return (
-new class($handler) extends Ancestor\CommandHandler\Command {
+namespace Ancestor\Commands;
+
+use Ancestor\CommandHandler\Command as Command;
+use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+
+Class Remind extends Command {
     private $response = '***Remind yourself that overconfidence is a slow and insidious killer.***';
 
-    function __construct(Ancestor\CommandHandler\CommandHandler $handler) {
+    function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'remind', 'Teaches you or a *[@user]* the important lesson about life.');
     }
 
@@ -27,4 +31,3 @@ new class($handler) extends Ancestor\CommandHandler\Command {
         }
     }
 }
-);
