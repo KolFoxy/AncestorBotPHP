@@ -1,0 +1,126 @@
+{
+  "curious": [
+    {
+      "name": "Bookshelf",
+      "description": "A bookshelf full of old, leather-bound books.",
+      "effects": [
+        {
+          "name": "Scouting",
+          "description": "A map is found tucked between the volumes."
+        },
+        {
+          "name": "Stress +15",
+          "description": "The hero reads a most unsettling passage.",
+          "stress_value": 15
+        },
+        {
+          "name": "Positive Quirk",
+          "description": "The knowledge forever changes the hero.",
+          "quirk_positive": true
+        },
+        {
+          "name": "Negative Quirk",
+          "description": "The knowledge forever changes the hero.",
+          "quirk_positive": false
+        },
+        {
+          "name": "Nothing",
+          "description": "The volumes are dull and uninteresting."
+        }
+      ]
+    },
+    {
+      "name": "Stack of Books",
+      "description": "A stack of literary treasures in an unlikely location.",
+      "effects": [
+        {
+          "name": "Stress +25",
+          "description": "The hero reads a most unsettling passage.",
+          "stress_value": 15
+        },
+        {
+          "name": "Positive Quirk",
+          "description": "Reading a few pages has a lasting effect on the hero...",
+          "quirk_positive": true
+        },
+        {
+          "name": "Negative Quirk",
+          "description": "Reading a few pages has a lasting effect on the hero...",
+          "quirk_positive": false
+        },
+        {
+          "name": "Nothing",
+          "description": "The volumes are desiccated and unremarkable."
+        },
+        {
+          "name": "Burn the Stack of Books! Stress +100",
+          "description": "The hero destroyed knowledge, and now must bear the guilt of it!",
+          "stress_value": 100
+        },
+        {
+          "name": "Decrease Light Meter by 25",
+          "description": "The hero reads a most unsettling passage."
+        }
+      ]
+    },
+    {
+      "name": "Pile of Scrolls",
+      "description": "A bunch of scrolls. The cursive is sloppy and difficult to read.",
+      "effects": [
+        {
+          "name": "Stress +15",
+          "description": "The scrolls contain hideous portents.",
+          "stress_value": 15
+        },
+        {
+          "name": "Positive Quirk",
+          "description": "The scrolls forever change the hero.",
+          "quirk_positive": true
+        },
+        {
+          "name": "Negative Quirk",
+          "description": "The scrolls forever change the hero.",
+          "quirk_positive": false
+        },
+        {
+          "name": "Nothing",
+          "description": "The scrolls are merely records of dull transactions..."
+        },
+        {
+          "name": "Burn scrolls!",
+          "description": "The scrolls are full of evil writings. Burning them is a weight off the hero's shoulders...",
+          "stress_value": -100
+        }
+      ]
+    },
+    {
+      "name": "Occult Scrawlings",
+      "description": "Scrawlings written on what looks like stretched and tanned human flesh...",
+      "effects": [
+        {
+          "name": "Stress +25",
+          "description": "The sight is too much for the hero to bear.",
+          "stress_value": 25
+        },
+        {
+          "name": "Positive Quirk",
+          "description": "The scrawling forever changes the hero.",
+          "quirk_positive": true
+        },
+        {
+          "name": "Negative Quirk",
+          "description": "The scrawling forever changes the hero.",
+          "quirk_positive": false
+        },
+        {
+          "name": "Nothing",
+          "description": "The scrawlings are dull and uninteresting."
+        },
+        {
+          "name": "You sprayed the scrawling with Holy Water.",
+          "description": "The holy water hisses and the hero feels... wrong."
+        }
+      ]
+    }
+  ]
+}
