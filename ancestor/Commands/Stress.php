@@ -39,7 +39,12 @@ class Stress extends Command {
             $commandHelper->RespondWithAttachedFile($file, 'stress.png');
         };
 
-        $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+        try {
+            $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+        } catch (\Throwable $e) {
+            echo $e->getMessage() . PHP_EOL;
+            $commandHelper->RespondWithEmbedImage($this->stressURL);
+        }
     }
 
     /**

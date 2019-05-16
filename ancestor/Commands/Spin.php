@@ -42,7 +42,12 @@ class Spin extends Command {
             }
             $commandHelper->RespondWithAttachedFile($file, 'spin.gif');
         };
-        $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+        try {
+            $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+        } catch (\Throwable $e) {
+            echo $e->getMessage() . PHP_EOL;
+            $commandHelper->RespondWithEmbedImage($this->tideURL, 'How quickly the tide turns?');
+        }
     }
 
     /**
