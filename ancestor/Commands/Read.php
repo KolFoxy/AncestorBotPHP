@@ -26,9 +26,14 @@ class Read extends Command {
         $this->curios = $mapper->mapArray(
             $json, [], Curio::class
         );
+
+        var_dump($this->curios);
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        $message->reply(RandomDataProvider::GetInstance()->GetRandomData($this->curios)->name);
+        $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
+        $message->reply('',["embed" => $curio->getEmbedResponse($this->handler->prefix . $this->name)]);
     }
+
+
 }
