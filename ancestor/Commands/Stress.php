@@ -65,20 +65,21 @@ class Stress extends Command {
 
         $rotateAngle = 22;
         $rotatedAvatar = imagerotate($imageRes, $rotateAngle, 0);
+        imagedestroy($imageRes);
 
         $rAvatarX = 189;
         $rotatedAvatar = imagescale($rotatedAvatar, $rAvatarX, -1, IMG_NEAREST_NEIGHBOUR);
         $rAvatarY = imagesy($rotatedAvatar);
 
         imagecopy($canvas, $rotatedAvatar, -43, 61, 0, 0, $rAvatarX, $rAvatarY);
+        imagedestroy($rotatedAvatar);
+
         imagecopy($canvas, $this->croppedStressPic, 0, 0, 0, 0, $this->CSPicX, $this->CSPicY);
 
         ob_start();
         imagepng($canvas);
         $result = ob_get_clean();
 
-        imagedestroy($rotatedAvatar);
-        imagedestroy($imageRes);
         imagedestroy($canvas);
 
         return $result;

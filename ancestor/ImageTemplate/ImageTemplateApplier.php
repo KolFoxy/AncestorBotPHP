@@ -1,0 +1,52 @@
+<?php
+
+namespace Ancestor\ImageTemplate;
+
+class ImageTemplateApplier {
+    /**
+     * @var ImageTemplate
+     */
+    public $imgTemplate;
+
+    public function __construct(ImageTemplate $imageTemplate) {
+        $this->imgTemplate = $imageTemplate;
+    }
+
+    /**
+     * Creates new GD image resources with $imageSrc added behind $imageDestination.
+     * @param resource $imageSrc
+     * @param resource $imageDestination
+     * @param bool $destroySourceImages
+     * @return resource
+     */
+    public function applyTemplate($imageSrc, $imageDestination, $destroySourceImages = false) {
+        $canvas = imagecreatetruecolor($this->imgTemplate->templateW, $this->imgTemplate->templateH);
+        imagecopy(
+            $canvas,
+            $imageSrc,
+            $this->imgTemplate->imgPositionX,
+            $this->imgTemplate->imgPositionY,
+            0,
+            0,
+            $this->imgTemplate->imgW,
+            $this->imgTemplate->imgH
+        );
+        if ($destroySourceImages) {
+            imagedestroy($imageSrc);
+        }
+        imagecopy(
+            $canvas,
+            $imageDestination,
+            0,
+            0,
+            0,
+            0,
+            $this->imgTemplate->templateW,
+            $this->imgTemplate->templateH
+        );
+        if ($destroySourceImages) {
+            imagedestroy($imageDestination);
+        }
+        return $canvas;
+    }
+}

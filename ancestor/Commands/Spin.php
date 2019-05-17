@@ -99,6 +99,7 @@ class Spin extends Command {
         imagecopy($canvas, $scaledImage, 129, 174, 0, 0, 128, 128);
         imagecopy($canvas, $this->tideCroppedPNG, 0, 0, 0, 0, $this->spinPicX, $this->spinPicY);
         imagedestroy($scaledImage);
+        imagedestroy($image);
         return $canvas;
     }
 
