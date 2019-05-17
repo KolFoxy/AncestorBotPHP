@@ -26,8 +26,6 @@ class Read extends Command {
         $this->curios = $mapper->mapArray(
             $json, [], Curio::class
         );
-
-        var_dump($this->curios);
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
