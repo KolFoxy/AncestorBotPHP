@@ -8,6 +8,7 @@ namespace Ancestor\Commands;
 
 use Ancestor\CommandHandler\Command as Command;
 use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use Ancestor\CommandHandler\CommandHelper;
 
 class Stress extends Command {
     private $stressURL;
@@ -29,7 +30,7 @@ class Stress extends Command {
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
+        $commandHelper = new CommandHelper($message);
         $callbackObj = function ($image) use ($commandHelper) {
             $file = $this->addImageToStress($image);
             if ($file === false) {
@@ -40,7 +41,7 @@ class Stress extends Command {
         };
 
         try {
-            $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+            $this->imageDl->DownloadUrlAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             $commandHelper->RespondWithEmbedImage($this->stressURL);
@@ -53,13 +54,9 @@ class Stress extends Command {
      * @return bool|string
      */
     function addImageToStress($imageFile) {
-        if ($imageFile === false) {
+        if ($imageFile === false || ($imageRes = CommandHelper::ImageFromFileHandler($imageFile)) === false) {
             return false;
         }
-        if (($imageRes = imagecreatefromstring(fread($imageFile, filesize(stream_get_meta_data($imageFile)['uri'])))) === false) {
-            return false;
-        }
-        fclose($imageFile);
 
         $canvas = imagecreatetruecolor($this->CSPicX, $this->CSPicY);
 

@@ -8,6 +8,7 @@ namespace Ancestor\Commands;
 
 use Ancestor\CommandHandler\Command as Command;
 use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use Ancestor\CommandHandler\CommandHelper;
 use GifCreator;
 
 class Spin extends Command {
@@ -43,7 +44,7 @@ class Spin extends Command {
             $commandHelper->RespondWithAttachedFile($file, 'spin.gif');
         };
         try {
-            $this->imageDl->DownloadUrlToStringAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+            $this->imageDl->DownloadUrlAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             $commandHelper->RespondWithEmbedImage($this->tideURL, 'How quickly the tide turns?');
@@ -56,13 +57,9 @@ class Spin extends Command {
      * @return bool|string
      */
     function SpinImage($imageFile) {
-        if ($imageFile === false) {
+        if ($imageFile === false || ($imageToSpin = CommandHelper::ImageFromFileHandler($imageFile)) === false) {
             return false;
         }
-        if (($imageToSpin = imagecreatefromstring(fread($imageFile, filesize(stream_get_meta_data($imageFile)['uri'])))) === false) {
-            return false;
-        }
-        fclose($imageFile);
 
         $imageToSpin = $this->AddImageToTide($imageToSpin);
         $frames = $this->GetImageRotationsWithAncestor($imageToSpin);

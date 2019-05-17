@@ -92,5 +92,9 @@ class CommandHelper {
         return false;
     }
 
+    public static function ImageFromFileHandler($fileHandler){
+        return imagecreatefromstring(fread($fileHandler, filesize(stream_get_meta_data($fileHandler)['uri'])));
+    }
+
 
 }

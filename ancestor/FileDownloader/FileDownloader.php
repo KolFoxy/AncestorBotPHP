@@ -24,7 +24,7 @@ class FileDownloader implements AsyncFileDownloaderInterface {
      * @param string $url
      * @param callable $callback
      */
-    public function DownloadUrlToStringAsync(string $url, $callback) {
+    public function DownloadUrlAsync(string $url, $callback) {
         $client = new \React\HttpClient\Client($this->loop);
         $request = $client->request('GET', $url);
         $tempFile = null;
@@ -58,6 +58,7 @@ class FileDownloader implements AsyncFileDownloaderInterface {
                 $response->on('end', function () use (&$tempFile, $callback) {
                     fseek($tempFile, 0);
                     $callback($tempFile);
+                    fclose($tempFile);
                 });
 
             });

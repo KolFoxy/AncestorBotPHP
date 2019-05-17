@@ -10,5 +10,5 @@ interface AsyncFileDownloaderInterface {
      * @param string $url
      * @param $callback
      */
-    public function DownloadUrlToStringAsync(string $url,  $callback);
+    public function DownloadUrlAsync(string $url, $callback);
 }
