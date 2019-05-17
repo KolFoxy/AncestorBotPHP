@@ -21,7 +21,7 @@ class ImageTemplateApplier {
      */
     public function applyTemplate($imageSrc, $imageDestination, $destroySourceImages = false) {
         $canvas = imagecreatetruecolor($this->imgTemplate->templateW, $this->imgTemplate->templateH);
-        imagecopy(
+        imagecopyresized(
             $canvas,
             $imageSrc,
             $this->imgTemplate->imgPositionX,
@@ -29,7 +29,9 @@ class ImageTemplateApplier {
             0,
             0,
             $this->imgTemplate->imgW,
-            $this->imgTemplate->imgH
+            $this->imgTemplate->imgH,
+            imagesx($imageSrc),
+            imagesy($imageSrc)
         );
         if ($destroySourceImages) {
             imagedestroy($imageSrc);
