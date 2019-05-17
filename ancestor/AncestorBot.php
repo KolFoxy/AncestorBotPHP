@@ -54,7 +54,6 @@ class AncestorBot {
         $this->config = $config;
         if ($commandHandler != null) {
             $this->commandHandler = $commandHandler;
-            return;
         } else {
 
             $this->commandHandler = new CommandHandler($client, $config[self::ARG_PREFIX]);
