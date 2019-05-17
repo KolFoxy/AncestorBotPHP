@@ -2,6 +2,7 @@
 
 namespace Ancestor;
 
+use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\Commands\Gold;
 use Ancestor\Commands\Read;
@@ -48,14 +49,15 @@ class AncestorBot {
      */
     private $commandHandler = null;
 
-    public function __construct(Client $client, array $config, array $commands = null) {
+    public function __construct(Client $client, array $config, CommandHandler $commandHandler = null) {
         $this->client = $client;
         $this->config = $config;
-        $this->commandHandler = new CommandHandler\CommandHandler($client, $config[self::ARG_PREFIX]);
-        if ($commands != null) {
-            $this->commandHandler->registerCommands($commands);
+        if ($commandHandler != null) {
+            $this->commandHandler = $commandHandler;
             return;
         } else {
+
+            $this->commandHandler = new CommandHandler($client, $config[self::ARG_PREFIX]);
             $this->commandHandler->registerCommands($this->getDefaultCommands());
         }
         $this->setupClient();
