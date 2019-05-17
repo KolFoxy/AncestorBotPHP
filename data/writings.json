@@ -1,5 +1,4 @@
-{
-  "curious": [
+[
     {
       "name": "Bookshelf",
       "description": "A bookshelf full of old, leather-bound books.",
@@ -162,4 +161,3 @@
       ]
     }
   ]
-}

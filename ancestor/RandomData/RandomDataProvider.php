@@ -26,6 +26,9 @@ class RandomDataProvider {
         $this->PopulateArray($this->afflictions, '/data/afflictions.json', true);
     }
 
+    /**
+     * @return RandomDataProvider|null
+     */
     public static function GetInstance() {
         if (!isset(self::$instance)) {
             self::$instance = new RandomDataProvider();
@@ -45,7 +48,7 @@ class RandomDataProvider {
         return $rez;
     }
 
-    private function GetRandomData($array) {
+    public function GetRandomData($array) {
         return $array[mt_rand(0, sizeof($array) - 1)];
     }
 
