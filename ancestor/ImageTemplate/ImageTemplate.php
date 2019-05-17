@@ -34,22 +34,5 @@ class ImageTemplate {
      */
     public $imgPositionY;
 
-    /**
-     * ImageTemplate constructor.
-     * @param int $imgW
-     * @param int $imgH
-     * @param int $templateW
-     * @param int $templateH
-     * @param int $imgPositionX
-     * @param int $imgPositionY
-     */
-    public function __construct(int $imgW, int $imgH, int $templateW, int $templateH, int $imgPositionX, int $imgPositionY) {
-        $this->imgW = $imgW;
-        $this->imgH = $imgH;
-        $this->templateW = $templateW;
-        $this->templateH = $templateH;
-        $this->imgPositionX = $imgPositionX;
-        $this->imgPositionY = $imgPositionY;
-    }
 
 }

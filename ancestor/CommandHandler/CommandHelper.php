@@ -34,9 +34,10 @@ class CommandHelper {
         $this->message->channel->send('', array('embed' => $embedResponse));
     }
 
-    public function RespondWithAttachedFile($fileData, string $fileName) {
+    public function RespondWithAttachedFile($fileData, string $fileName, $embed = null) {
         //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data (0.5.1)
-        $this->message->channel->send('', array('files' => array(array('data' => $fileData, 'name' => $fileName))));
+        $this->message->channel->send('', ['files' => [['data' => $fileData, 'name' => $fileName]],
+            'embed' => $embed]);
     }
 
     /**
@@ -92,7 +93,11 @@ class CommandHelper {
         return false;
     }
 
-    public static function ImageFromFileHandler($fileHandler){
+    /**
+     * @param $fileHandler
+     * @return resource|false
+     */
+    public static function ImageFromFileHandler($fileHandler) {
         return imagecreatefromstring(fread($fileHandler, filesize(stream_get_meta_data($fileHandler)['uri'])));
     }
 

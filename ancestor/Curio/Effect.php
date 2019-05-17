@@ -3,6 +3,7 @@
 namespace Ancestor\Curio;
 
 use Ancestor\ImageTemplate\ImageTemplate;
+use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Effect {
     /**
@@ -72,5 +73,16 @@ class Effect {
 
     public function hasImage(){
         return isset($this->image) && isset($this->imageTemplate);
+    }
+
+    /**
+     * @return MessageEmbed
+     */
+    public function getEmbedResponse(): MessageEmbed {
+        $messageEmbed = new MessageEmbed();
+        $messageEmbed->setColor(DEFAULT_EMBED_COLOR);
+        $messageEmbed->setTitle('***' . $this->name . '***');
+        $messageEmbed->setDescription($this->description);
+        return $messageEmbed;
     }
 }
