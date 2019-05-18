@@ -10,6 +10,7 @@ use Ancestor\Commands\Remind;
 use Ancestor\Commands\Roll;
 use Ancestor\Commands\Spin;
 use Ancestor\Commands\Stress;
+use Ancestor\Commands\Suicide;
 use Ancestor\Commands\Zalgo;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Client as Client;
@@ -44,6 +45,8 @@ class AncestorBot {
      */
     const ARG_NSFW_CHANCE = 'NSFWchance';
 
+    const ARG_OWNER_ID = 'ownerId';
+
     /**
      * @var \Ancestor\CommandHandler\CommandHandler
      */
@@ -77,11 +80,15 @@ class AncestorBot {
                 $this->config[self::ARG_STRESS_URL],
                 dirname(__DIR__, 1) . '/data/images/stress_cropped.png'),
             new Zalgo($this->commandHandler),
-            new Read($this->commandHandler)
+            new Read($this->commandHandler),
         ];
     }
 
     private function setupClient() {
+        $this->client->on('error', function (\Throwable $error) {
+            echo $error->getMessage();
+        });
+
         $this->client->on('ready', function () {
             echo 'Successful login into ' . $this->client->user->tag . PHP_EOL;
         });
@@ -137,7 +144,7 @@ class AncestorBot {
         }
     }
 
-    public function login(string $token){
+    public function login(string $token) {
         $this->client->login($token);
     }
 

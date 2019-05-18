@@ -3,6 +3,7 @@
 namespace Ancestor\Curio;
 
 use Ancestor\ImageTemplate\ImageTemplate;
+use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Effect {
@@ -31,13 +32,13 @@ class Effect {
     public $quirk_positive = null;
 
     /**
-     * ImageTemplate to use with the $image var.
-     * @var ImageTemplate|null
+     * Path to the template.
+     * @var string|null
      */
     public $imageTemplate = null;
 
     /**
-     * Path/URL to the image.
+     * Path to the image.
      * @var string|null
      */
     public $image = null;
@@ -47,42 +48,58 @@ class Effect {
      * @return bool
      */
     public function isPositiveStressEffect(): bool {
-        return isset($this->stress_value) && $this->stress_value > 0;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isNegativeStressEffect(): bool {
         return isset($this->stress_value) && $this->stress_value < 0;
     }
 
     /**
      * @return bool
      */
+    public function isNegativeStressEffect(): bool {
+        return isset($this->stress_value) && $this->stress_value > 0;
+    }
+
+    /**
+     * @return bool
+     */
     public function isPositiveQuirkEffect(): bool {
-        return isset($this->stress_value) && $this->quirk_positive;
+        return isset($this->quirk_positive) && $this->quirk_positive;
     }
 
     /**
      * @return bool
      */
     public function isNegativeQuirkEffect(): bool {
-        return isset($this->stress_value) && !$this->quirk_positive;
+        return isset($this->quirk_positive) && !$this->quirk_positive;
     }
 
-    public function hasImage(){
+    public function hasImage() {
         return isset($this->image) && isset($this->imageTemplate);
     }
 
     /**
+     * @param array|null $extraFields
      * @return MessageEmbed
      */
-    public function getEmbedResponse(): MessageEmbed {
+    public function getEmbedResponse(array $extraFields = null): MessageEmbed {
         $messageEmbed = new MessageEmbed();
         $messageEmbed->setColor(DEFAULT_EMBED_COLOR);
-        $messageEmbed->setTitle('***' . $this->name . '***');
+        $messageEmbed->setTitle('***' . $this->name . $this->getTitleExtra() . '***');
         $messageEmbed->setDescription($this->description);
+        if (!empty($extraFields)) {
+            foreach ($extraFields as $field) {
+                $messageEmbed->addField($field['title'], $field['value']);
+            }
+        }
         return $messageEmbed;
+    }
+
+    private function getTitleExtra(): string {
+        if ($this->isPositiveQuirkEffect()) {
+            return ': ' . RandomDataProvider::GetInstance()->GetRandomPositiveQuirk();
+        }
+        if ($this->isNegativeQuirkEffect()) {
+            return ': ' . RandomDataProvider::GetInstance()->GetRandomNegativeQuirk();
+        }
+        return '';
     }
 }

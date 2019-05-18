@@ -15,6 +15,11 @@ abstract class Command {
     /** @var array */
     public $aliases;
 
+    /**
+     * @var bool Whether or not the command should be seen by other commands, such as Help.
+     */
+    public $hidden = false;
+
     protected $name = null;
 
     protected $description = null;

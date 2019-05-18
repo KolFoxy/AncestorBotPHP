@@ -1,4 +1,5 @@
 <?php
+
 namespace Ancestor\CommandHandler;
 
 class CommandHandler {
@@ -71,25 +72,30 @@ class CommandHandler {
         $answer = 'No such command';
         $title = 'Error';
         if (empty($args)) {
-            $title = '**Commands. Use '.$this->prefix.'help [COMMAND] for more info.**';
+            $title = '**Commands. Use ' . $this->prefix . 'help [COMMAND] for more info.**';
             $commandsArray = array();
             foreach ($this->commands->values() as $item) {
+                if ($item->hidden) {
+                    continue;
+                }
                 $commandsArray[$item->getName()] = '``' . $this->prefix . $item->getName() . '``' . PHP_EOL;
             }
-            $answer=implode($commandsArray);
-        } elseif ($this->commands->has(strtolower($args[0]))) {
+            $answer = implode($commandsArray);
+        } elseif ($this->commands->has(mb_strtolower($args[0]))) {
             $command = mb_strtolower($args[0]);
-            $title = $this->prefix . $command;
             $comm = $this->commands->get($command);
-            $answer = $comm->getDescription();
-            if (!empty($comm->aliases)){
-                $answer .= PHP_EOL.'Aliases: '.implode(', ',$comm->aliases);
+            if ($comm->hidden) {
+                return;
             }
+            $title = $this->prefix . $command;
+            $answer = $comm->getDescription();
+            if (!empty($comm->aliases)) {
+                $answer .= PHP_EOL . 'Aliases: ' . implode(', ', $comm->aliases);
+            }
+        } elseif (mb_strtolower($args[0]) === 'help') {
+            $title = $this->prefix . 'help';
+            $answer = 'Use "' . $this->prefix . 'help [COMMAND]" to get command`s description';
         }
-          elseif (mb_strtolower($args[0])==='help'){
-              $title = $this->prefix . 'help';
-              $answer = 'Use "'.$this->prefix . 'help [COMMAND]" to get command`s description';
-          }
         $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
         $embedResponse->addField($title, $answer);
         $message->channel->send('', array('embed' => $embedResponse));
@@ -103,7 +109,7 @@ class CommandHandler {
     function registerCommand(Command $command) {
         try {
             $this->commands->set(mb_strtolower($command->getName()), $command);
-            if (!empty($command->aliases)){
+            if (!empty($command->aliases)) {
                 foreach ($command->aliases as $alias) {
                     $this->commands->set(mb_strtolower($alias), $command);
                 }

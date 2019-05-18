@@ -10,6 +10,8 @@ class RandomDataProvider {
     private $trinkets;
     private $rewardsQuotes;
     private $zalgoTitles;
+    private $quirksPositive;
+    private $quirksNegative;
 
     private static $instance = null;
 
@@ -24,6 +26,10 @@ class RandomDataProvider {
         $this->PopulateArray($this->virtues, '/data/virtues.json', true);
         $this->PopulateArray($this->NSFWquotes, '/data/NSFWquotes');
         $this->PopulateArray($this->afflictions, '/data/afflictions.json', true);
+
+        $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
+        $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
+
     }
 
     /**
@@ -73,6 +79,14 @@ class RandomDataProvider {
 
     public function GetRandomZalgoTitle() {
         return $this->GetRandomData($this->zalgoTitles);
+    }
+
+    public function GetRandomPositiveQuirk(){
+        return $this->GetRandomData($this->quirksPositive);
+    }
+
+    public function GetRandomNegativeQuirk(){
+        return $this->GetRandomData($this->quirksNegative);
     }
 
     public function GetRandomReward() {

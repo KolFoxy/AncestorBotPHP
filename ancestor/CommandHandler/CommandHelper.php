@@ -34,9 +34,9 @@ class CommandHelper {
         $this->message->channel->send('', array('embed' => $embedResponse));
     }
 
-    public function RespondWithAttachedFile($fileData, string $fileName, $embed = null) {
+    public function RespondWithAttachedFile($fileData, string $fileName, $embed = null, $content = '') {
         //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data (0.5.1)
-        $this->message->channel->send('', ['files' => [['data' => $fileData, 'name' => $fileName]],
+        $this->message->channel->send($content, ['files' => [['data' => $fileData, 'name' => $fileName]],
             'embed' => $embed]);
     }
 

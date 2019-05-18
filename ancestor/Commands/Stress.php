@@ -61,8 +61,11 @@ class Stress extends Command {
         $canvas = imagecreatetruecolor($this->CSPicX, $this->CSPicY);
 
         $rotateAngle = 22;
-        $rotatedAvatar = imagerotate($imageRes, $rotateAngle, 0);
+        $imageScale = imagescale($imageRes, 250, -1, IMG_NEAREST_NEIGHBOUR);
         imagedestroy($imageRes);
+
+        $rotatedAvatar = imagerotate($imageScale, $rotateAngle, 0);
+        imagedestroy($imageScale);
 
         $rAvatarX = 189;
         $rotatedAvatar = imagescale($rotatedAvatar, $rAvatarX, -1, IMG_NEAREST_NEIGHBOUR);

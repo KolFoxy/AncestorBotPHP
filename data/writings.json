@@ -12,22 +12,24 @@
             "description": "A map is found tucked between the volumes."
           },
           {
-            "name": "Stress +15",
+            "name": "Stress",
             "description": "The hero reads a most unsettling passage.",
-            "stress_value": 15
+            "stress_value": 15,
+            "image": "/data/images/effects/iron_crown_stress.png",
+            "imageTemplate": "/data/images/effects/iron_crown_stress.png.json"
           },
           {
-            "name": "Positive Quirk",
+            "name": "New Positive Quirk",
             "description": "The knowledge forever changes the hero.",
             "quirk_positive": true
           },
           {
-            "name": "Negative Quirk",
+            "name": "New Negative Quirk",
             "description": "The knowledge forever changes the hero.",
             "quirk_positive": false
           },
           {
-            "name": "Nothing",
+            "name": "Nothing happened.",
             "description": "The volumes are dull and uninteresting."
           }
         ]
@@ -43,26 +45,28 @@
         "name": "Inspect",
         "effects": [
           {
-            "name": "Stress +25",
+            "name": "Stress",
             "description": "The hero reads a most unsettling passage.",
-            "stress_value": 15
+            "stress_value": 15,
+            "image": "/data/images/effects/iron_crown_stress.png",
+            "imageTemplate": "/data/images/effects/iron_crown_stress.png.json"
           },
           {
-            "name": "Positive Quirk",
+            "name": "New Positive Quirk",
             "description": "Reading a few pages has a lasting effect on the hero...",
             "quirk_positive": true
           },
           {
-            "name": "Negative Quirk",
+            "name": "New Negative Quirk",
             "description": "Reading a few pages has a lasting effect on the hero...",
             "quirk_positive": false
           },
           {
-            "name": "Nothing",
+            "name": "Nothing happened.",
             "description": "The volumes are desiccated and unremarkable."
           },
           {
-            "name": "Decrease Light Meter by 25",
+            "name": "The darkness closes around you...",
             "description": "The hero reads a most unsettling passage."
           }
         ]
@@ -71,9 +75,11 @@
         "name": "Use Torch",
         "effects": [
           {
-            "name": "Stress +100",
+            "name": "Stress",
             "description": "The hero destroyed knowledge, and now must bear the guilt of it!",
-            "stress_value": 100
+            "stress_value": 100,
+            "image": "/data/images/effects/burn_books.png",
+            "imageTemplate": "/data/images/effects/burn_books.png.json"
           }
         ]
       }
@@ -88,9 +94,11 @@
         "name": "Use Torch",
         "effects": [
           {
-            "name": "Stress Heal 100",
+            "name": "You purged a negative side of yourself.",
             "description": "The scrolls are full of evil writings. Burning them is a weight off the hero's shoulders...",
-            "stress_value": -100
+            "stress_value": -100,
+            "image": "/data/images/effects/burn_scrolls.png",
+            "imageTemplate": "/data/images/effects/burn_scrolls.png.json"
           }
         ]
       },
@@ -98,17 +106,19 @@
         "name": "Inspect",
         "effects": [
           {
-            "name": "Stress +15",
+            "name": "Stress",
             "description": "The scrolls contain hideous portents.",
-            "stress_value": 15
+            "stress_value": 15,
+            "image": "/data/images/effects/iron_crown_stress.png",
+            "imageTemplate": "/data/images/effects/iron_crown_stress.png.json"
           },
           {
-            "name": "Positive Quirk",
+            "name": "New Positive Quirk",
             "description": "The scrolls forever change the hero.",
             "quirk_positive": true
           },
           {
-            "name": "Negative Quirk",
+            "name": "New Negative Quirk",
             "description": "The scrolls forever change the hero.",
             "quirk_positive": false
           },
@@ -130,7 +140,9 @@
         "effects": [
           {
             "name": "You sprayed the scrawling with Holy Water.",
-            "description": "The holy water hisses and the hero feels... wrong."
+            "description": "The holy water hisses and the hero feels... wrong.",
+            "image": "/data/images/effects/os_holy_water.png",
+            "imageTemplate": "/data/images/effects/os_holy_water.png.json"
           }
         ]
       },
@@ -138,17 +150,19 @@
         "name": "Inspect",
         "effects": [
           {
-            "name": "Stress +25",
+            "name": "Stress",
             "description": "The sight is too much for the hero to bear.",
-            "stress_value": 25
+            "stress_value": 25,
+            "image": "/data/images/effects/os_stress.png",
+            "imageTemplate": "/data/images/effects/os_stress.png.json"
           },
           {
-            "name": "Positive Quirk",
+            "name": "New Positive Quirk",
             "description": "The scrawling forever changes the hero.",
             "quirk_positive": true
           },
           {
-            "name": "Negative Quirk",
+            "name": "New Negative Quirk",
             "description": "The scrawling forever changes the hero.",
             "quirk_positive": false
           },

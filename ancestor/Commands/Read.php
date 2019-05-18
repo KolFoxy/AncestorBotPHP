@@ -15,7 +15,7 @@ use Ancestor\ImageTemplate\ImageTemplateApplier;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Collect\Collection;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
-use Ratchet\RFC6455\Messaging\Message;
+use CharlotteDunois\Yasmin\Models\Message;
 
 class Read extends Command {
 
@@ -59,9 +59,10 @@ class Read extends Command {
         $this->defaultEffect->description = "You choose to walk away in peace.";
 
         $this->interactingUsers = new Collection();
+        $this->fileDl = new FileDownloader($this->client->getLoop());
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
+    function run(Message $message, array $args) {
         if (empty($args) && !$this->interactingUsers->has($message->author->id)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
             $this->addNewInteraction($curio, $message->author->id, $message->channel->getId());
@@ -85,26 +86,60 @@ class Read extends Command {
             }
 
             $effect = $this->getRandomEffectFromAction($action);
+            $extraEmbedFields = null;
+            if ($effect->isNegativeStressEffect() && $effect->stress_value >= 100) {
+                $resolve = RandomDataProvider::GetInstance()->GetRandomResolve();
+                $extraEmbedFields = [
+                    [
+                        'title' => $message->author->username . '\'s resolve is tested... **' . $resolve['name'] . '**',
+                        'value' => '***' . $resolve['quote'] . '***'
+                    ]
+                ];
+            }
+
             if (!$effect->hasImage()) {
-                $message->reply('', ['embed' => $effect->getEmbedResponse()]);
+                $message->reply('', ['embed' => $effect->getEmbedResponse($extraEmbedFields)]);
                 return;
             }
 
-            $callbackObj = function ($imageHandler) use ($effect, $message) {
-                $file = $this->getImageOnTemplate($imageHandler,
-                    dirname(__DIR__, 2) . $effect->image,
-                    $effect->imageTemplate);
-                if ($file === false) {
-                    $message->reply('', ['embed' => $effect->getEmbedResponse()]);
-                    return;
-                }
-                $ch = new CommandHelper($message);
-                $ch->RespondWithAttachedFile($file, 'book_effect.png', $effect->getEmbedResponse());
+            $callbackObj = function ($imageHandler) use ($effect, $message, $extraEmbedFields) {
+                $this->onImageDownloadResponse($imageHandler, $effect, $message, $extraEmbedFields);
             };
 
             $this->fileDl->DownloadUrlAsync($message->author->getDisplayAvatarURL(null, 'png'), $callbackObj);
 
         }
+    }
+
+    /**
+     * @param $imageHandler
+     * @param Effect $effect
+     * @param Message $message
+     * @param array|null $extraEmbedFields
+     */
+    function onImageDownloadResponse($imageHandler, Effect $effect, Message $message, array $extraEmbedFields = null) {
+        $mapper = new \JsonMapper();
+        $json = json_decode(file_get_contents(dirname(__DIR__, 2) . $effect->imageTemplate));
+        try {
+            $template = $mapper->map($json, new ImageTemplate());
+        } catch (\Throwable $e) {
+            echo $e->getMessage() . PHP_EOL;
+            return;
+        }
+
+        $file = $this->getImageOnTemplate($imageHandler,
+            dirname(__DIR__, 2) . $effect->image,
+            $template);
+
+        if ($file === false) {
+            $message->reply('', ['embed' => $effect->getEmbedResponse($extraEmbedFields)]);
+            return;
+        }
+
+        $ch = new CommandHelper($message);
+        $ch->RespondWithAttachedFile($file, 'book_effect.png', $effect->getEmbedResponse($extraEmbedFields),
+            $message->author->__toString());
+
     }
 
     function getCurioFromUserId(int $userId): Curio {
