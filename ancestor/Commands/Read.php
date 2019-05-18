@@ -64,18 +64,21 @@ class Read extends Command {
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
         if (empty($args) && !$this->interactingUsers->has($message->author->id)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
-            $this->addNewInteraction($curio, $message->author->id);
+            $this->addNewInteraction($curio, $message->author->id, $message->channel->getId());
             $message->reply('', ['embed' => $curio->getEmbedResponse($this->handler->prefix . $this->name)]);
             return;
         }
-        if (!empty($args) && $this->interactingUsers->has($message->author->id)) {
+        if (!empty($args) && $this->interactingUsers->has($message->author->id)
+            && $message->channel->getId() === $this->getChannelIdFromUserId($message->author->id)) {
             $actionName = implode(' ', $args);
             $curio = $this->getCurioFromUserId($message->author->id);
             $action = $curio->getActionIfValid($actionName);
             if ($action === false) {
                 return;
             }
+            $this->client->cancelTimer($this->getTimerFromUserId($message->author->id));
             $this->interactingUsers->delete($message->author->id);
+
             if ($action === true) {
                 $message->reply('', ['embed' => $this->defaultEffect->getEmbedResponse()]);
                 return;
@@ -108,18 +111,32 @@ class Read extends Command {
         return $this->interactingUsers->get($userId)['curio'];
     }
 
+    function getChannelIdFromUserId(int $userId): string {
+        return $this->interactingUsers->get($userId)['channelId'];
+    }
+
+
+    /**
+     * @param int $userId
+     * @return \React\EventLoop\Timer\Timer
+     */
+    function getTimerFromUserId(int $userId) {
+        return $this->interactingUsers->get($userId)['timer'];
+    }
+
     function getRandomEffectFromAction(Action $action): Effect {
         return RandomDataProvider::GetInstance()->GetRandomData($action->effects);
     }
 
-    function addNewInteraction(Curio $curio, int $userId) {
+    function addNewInteraction(Curio $curio, int $userId, string $channelId) {
         $this->interactingUsers->set($userId, [
             'curio' => $curio,
             'timer' => $this->client->addTimer(self::INTERACT_TIMEOUT,
                 function () use ($userId) {
                     $this->interactingUsers->delete($userId);
                 }
-            )
+            ),
+            'channelId' => $channelId
         ]);
     }
 

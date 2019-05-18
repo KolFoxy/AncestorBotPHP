@@ -55,7 +55,7 @@ class Curio {
      * @return Action|bool Returns TRUE if DEFAULT_ACTION
      */
     public function getActionIfValid(string $actionName) {
-        if ($actionName === DEFAULT_ACTION) {
+        if (mb_strtolower($actionName) === mb_strtolower(DEFAULT_ACTION)) {
             return true;
         }
         if (empty($this->actions)) {
