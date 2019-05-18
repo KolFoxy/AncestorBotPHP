@@ -7,6 +7,8 @@ use CharlotteDunois\Yasmin\Models\Message as Message;
 
 class CommandHelper {
 
+    const MAX_IMAGE_SIZE = 2800 * 2800;
+
     /**
      * @var Message
      */
@@ -98,6 +100,11 @@ class CommandHelper {
      * @return resource|false
      */
     public static function ImageFromFileHandler($fileHandler) {
+        $imageSize = getimagesize(stream_get_meta_data($fileHandler)['uri']);
+
+        if ($imageSize === false || $imageSize[0] * $imageSize[1] > self::MAX_IMAGE_SIZE) {
+            return false;
+        }
         return imagecreatefromstring(fread($fileHandler, filesize(stream_get_meta_data($fileHandler)['uri'])));
     }
 
