@@ -10,6 +10,7 @@
 - spin `Spins a [@user] inside of Tide™` 
 - stress `Forces you or a [@user] to drink wine.`
 - zalgo `Transforms given sentence into something ̝̺̋l̃̊̕i͈͌͡k̛͉̕e̟̩ͥ ͆̄͐ẗ̥́̓ḧ̸͝i̷͚͘s. Aliases: cursed`
+- read `Interact with writing curios. Aliases: 'book', 'heckbooks', 'knowledge'` 
 
 ### Chat reactions:
 - `My resolve is tested`  or  `@user resolve is tested`  or  `...resolve is tested...`  — tests one's resolve, with a 25% chance of virtue. Case insensitve.
@@ -50,6 +51,15 @@ https://discordbots.org/bot/406438624473907200
 - **spin**
 
 ![spin](https://i.imgur.com/CWrfzS5.gif "spin")
+
+- **read** (initial action)
+
+![read1](https://i.imgur.com/FVMDYOY.png "read1")
+
+- **read** (subsequent action)
+
+![read2](https://i.imgur.com/8GRPJBH.png "read2")
+
 
 ------------
 ### Chat reactions examples:

@@ -44,8 +44,8 @@ class Read extends Command {
 
     function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'read',
-            'You encounter a peace of writing! The consequences can be unforeseen...',
-            ['book', 'fuckbooks', 'knowledge']);
+            'Interact with writing curios.',
+            ['book', 'heckbooks', 'knowledge']);
 
         $mapper = new \JsonMapper();
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/writings.json'));
