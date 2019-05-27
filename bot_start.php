@@ -6,7 +6,15 @@ $loop = \React\EventLoop\Factory::create();
 
 $ancestorBot = new \Ancestor\AncestorBot(
     new \CharlotteDunois\Yasmin\Client([
-        'ws.disabledEvents' => ['TYPING_START'],
+        'ws.disabledEvents' => [
+            'TYPING_START',
+            'MESSAGE_REACTION_ADD',
+            'MESSAGE_REACTION_REMOVE',
+            'MESSAGE_REACTION_REMOVE_ALL',
+            'VOICE_STATE_UPDATE',
+            'VOICE_SERVER_UPDATE',
+            'GUILD_EMOJIS_UPDATE',
+        ],
         'presenceCache' => false,
         'ws.presenceUpdate.ignoreUnknownUsers' => true,
         'messageCache' => false,], $loop),
