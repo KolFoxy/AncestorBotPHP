@@ -9,28 +9,47 @@ namespace Ancestor\Commands;
 use Ancestor\CommandHandler\Command as Command;
 use Ancestor\CommandHandler\CommandHandler as CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\ImageTemplate\ImageTemplate;
+use Ancestor\ImageTemplate\ImageTemplateApplier;
 use GifCreator;
 
 class Spin extends Command {
+
+    private $tidePath;
+    private $ancestorPath;
     private $tideURL;
-    private $ancestorPNG;
-    private $tideCroppedPNG;
-    private $spinPicX;
-    private $spinPicY;
-    private $spinGifFrameTime = 11;
+    const FRAME_TIME = 11;
     /**
      * @var \Ancestor\FileDownloader\FileDownloader
      */
     private $imageDl;
 
-    function __construct(CommandHandler $handler, $tideURL, $ancestorPNG, $tideCroppedPNG) {
+    /**
+     * @var ImageTemplate
+     */
+    private $tideTemplate;
+    /**
+     * @var ImageTemplateApplier
+     */
+    private $tideTemplateApplier;
+
+
+    function __construct(CommandHandler $handler, $tideURL) {
         parent::__construct($handler, 'spin', 'Spins a [@user] inside of Tide™.');
         $this->tideURL = $tideURL;
-        $this->ancestorPNG = imagecreatefrompng($ancestorPNG);
-        $this->tideCroppedPNG = imagecreatefrompng($tideCroppedPNG);
-        $this->spinPicX = imagesx($this->tideCroppedPNG);
-        $this->spinPicY = imagesy($this->tideCroppedPNG);
+        $this->tidePath = dirname(__DIR__, 2) . '/data/images/spin_gif/tide_empty.png';
+        $this->ancestorPath = dirname(__DIR__, 2) . '/data/images/spin_gif/ancestor.png';
+
         $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
+
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+
+        $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/images/spin_gif/tide_template.json'));
+        $this->tideTemplate = new ImageTemplate();
+        $mapper->map($json, $this->tideTemplate);
+        $this->tideTemplateApplier = new ImageTemplateApplier($this->tideTemplate);
+
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
@@ -61,11 +80,11 @@ class Spin extends Command {
             return false;
         }
 
-        $imageToSpin = $this->AddImageToTide($imageToSpin);
+        $imageToSpin = $this->tideTemplateApplier->applyTemplate($imageToSpin, imagecreatefrompng($this->tidePath), true);
         $frames = $this->GetImageRotationsWithAncestor($imageToSpin);
 
         $animation = new GifCreator\AnimGif();
-        $animation->create($frames, [$this->spinGifFrameTime]);
+        $animation->create($frames, [self::FRAME_TIME]);
 
         ob_start();
         echo $animation->get();
@@ -80,24 +99,20 @@ class Spin extends Command {
 
     function GetImageRotationsWithAncestor($image, int $rotations = 4, float $rotationAngle = 90) {
         $res = [];
+        $ancestorPng = imagecreatefrompng($this->ancestorPath);
         for ($i = 1; $i < $rotations; $i++) {
             $rotated_image = imagerotate($image, $rotationAngle * $i, 0);
-            imagecopy($rotated_image, $this->ancestorPNG, 0, 0, 0, 0, $this->spinPicX, $this->spinPicY);
+            imagecopy($rotated_image, $ancestorPng,
+                0, 0,
+                0, 0,
+                $this->tideTemplate->templateW, $this->tideTemplate->templateH);
             $res[] = $rotated_image;
         }
-        imagecopy($image, $this->ancestorPNG, 0, 0, 0, 0, $this->spinPicX, $this->spinPicY);
+        imagecopy($image, $ancestorPng, 0, 0, 0, 0,
+            $this->tideTemplate->templateW, $this->tideTemplate->templateH);
         $res[] = $image;
+        imagedestroy($ancestorPng);
         return array_reverse($res);
-    }
-
-    function AddImageToTide($image) {
-        $canvas = imagecreatetruecolor($this->spinPicX, $this->spinPicY);
-        $scaledImage = imagescale($image, 128, 128, IMG_NEAREST_NEIGHBOUR);
-        imagecopy($canvas, $scaledImage, 129, 174, 0, 0, 128, 128);
-        imagecopy($canvas, $this->tideCroppedPNG, 0, 0, 0, 0, $this->spinPicX, $this->spinPicY);
-        imagedestroy($scaledImage);
-        imagedestroy($image);
-        return $canvas;
     }
 
 
