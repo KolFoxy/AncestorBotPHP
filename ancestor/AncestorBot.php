@@ -7,6 +7,7 @@ use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\Commands\Gold;
 use Ancestor\Commands\Read;
 use Ancestor\Commands\Remind;
+use Ancestor\Commands\Reveal;
 use Ancestor\Commands\Roll;
 use Ancestor\Commands\Spin;
 use Ancestor\Commands\Stress;
@@ -81,6 +82,7 @@ class AncestorBot {
                 dirname(__DIR__, 1) . '/data/images/stress_cropped.png'),
             new Zalgo($this->commandHandler),
             new Read($this->commandHandler),
+            new Reveal($this->commandHandler),
         ];
     }
 
