@@ -9,24 +9,43 @@ namespace Ancestor\Commands;
 use Ancestor\CommandHandler\Command as Command;
 use Ancestor\CommandHandler\CommandHandler as CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\ImageTemplate\ImageTemplate;
+use Ancestor\ImageTemplate\ImageTemplateApplier;
 
 class Stress extends Command {
     private $stressURL;
-    private $croppedStressPic;
-    private $CSPicX;
-    private $CSPicY;
+    private $stressPicPath;
+    private $CSPicX = 226;
+    private $CSPicY = 223;
+    /**
+     * @var ImageTemplate
+     */
+    private $defaultTemplate;
+
+    /**
+     * @var ImageTemplateApplier
+     */
+    private $templateApplier;
     /**
      * @var \Ancestor\FileDownloader\FileDownloader
      */
     private $imageDl;
 
-    function __construct(CommandHandler $handler, $stressURL, $croppedStressPNG) {
+    const STRESS_ROTATE_ANGLE = 22;
+
+    function __construct(CommandHandler $handler, $stressURL) {
         parent::__construct($handler, 'stress', 'Forces you or a [@user] to drink wine.');
         $this->stressURL = $stressURL;
-        $this->croppedStressPic = imagecreatefrompng($croppedStressPNG);
-        $this->CSPicX = imagesx($this->croppedStressPic);
-        $this->CSPicY = imagesy($this->croppedStressPic);
+        $this->stressPicPath = dirname(__DIR__,2).'/data/images/stress_cropped.png';
         $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
+
+        $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/images/stress_template.json'));
+        $mapper = new \JsonMapper();
+        $this->defaultTemplate = new ImageTemplate();
+        $mapper->bExceptionOnMissingData = true;
+        $mapper->map($json, $this->defaultTemplate);
+        $this->templateApplier = new ImageTemplateApplier($this->defaultTemplate);
+
     }
 
     function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
@@ -58,23 +77,13 @@ class Stress extends Command {
             return false;
         }
 
-        $canvas = imagecreatetruecolor($this->CSPicX, $this->CSPicY);
-
-        $rotateAngle = 22;
-        $imageScale = imagescale($imageRes, 250, -1, IMG_NEAREST_NEIGHBOUR);
+        $imageScale = imagescale($imageRes, 250, 250, IMG_NEAREST_NEIGHBOUR);
         imagedestroy($imageRes);
 
-        $rotatedAvatar = imagerotate($imageScale, $rotateAngle, 0);
+        $rotatedAvatar = imagerotate($imageScale, self::STRESS_ROTATE_ANGLE, 0);
         imagedestroy($imageScale);
 
-        $rAvatarX = 189;
-        $rotatedAvatar = imagescale($rotatedAvatar, $rAvatarX, -1, IMG_NEAREST_NEIGHBOUR);
-        $rAvatarY = imagesy($rotatedAvatar);
-
-        imagecopy($canvas, $rotatedAvatar, -43, 61, 0, 0, $rAvatarX, $rAvatarY);
-        imagedestroy($rotatedAvatar);
-
-        imagecopy($canvas, $this->croppedStressPic, 0, 0, 0, 0, $this->CSPicX, $this->CSPicY);
+        $canvas = $this->templateApplier->applyTemplate($rotatedAvatar, imagecreatefrompng($this->stressPicPath),true);
 
         ob_start();
         imagepng($canvas);

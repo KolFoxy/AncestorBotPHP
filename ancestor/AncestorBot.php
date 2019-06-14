@@ -7,6 +7,7 @@ use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\Commands\Gold;
 use Ancestor\Commands\Read;
 use Ancestor\Commands\Remind;
+use Ancestor\Commands\Reveal;
 use Ancestor\Commands\Roll;
 use Ancestor\Commands\Spin;
 use Ancestor\Commands\Stress;
@@ -71,16 +72,11 @@ class AncestorBot {
             new Gold($this->commandHandler),
             new Remind($this->commandHandler),
             new Roll($this->commandHandler),
-            new Spin($this->commandHandler,
-                $this->config[self::ARG_TIDE_URL],
-                dirname(__DIR__, 1) . '/data/images/spin_gif/ancestor.png',
-                dirname(__DIR__, 1) . '/data/images/spin_gif/tide_empty.png'
-            ),
-            new Stress($this->commandHandler,
-                $this->config[self::ARG_STRESS_URL],
-                dirname(__DIR__, 1) . '/data/images/stress_cropped.png'),
+            new Spin($this->commandHandler, $this->config[self::ARG_TIDE_URL]),
+            new Stress($this->commandHandler, $this->config[self::ARG_STRESS_URL]),
             new Zalgo($this->commandHandler),
             new Read($this->commandHandler),
+            new Reveal($this->commandHandler),
         ];
     }
 
