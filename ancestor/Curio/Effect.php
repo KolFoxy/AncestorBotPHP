@@ -7,6 +7,9 @@ use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Effect {
+
+    const INVALID_EFFECT_DESCRIPTION_MSG = 'Invalid description type for an Effect.';
+
     /**
      * @var string
      * @required
@@ -14,10 +17,9 @@ class Effect {
     public $name;
 
     /**
-     * @var string
-     * @required
+     * @var string|string[]
      */
-    public $description;
+    private $_description;
 
     /**
      * Indicates the amount of stress that effect gives hero.
@@ -84,7 +86,7 @@ class Effect {
         $messageEmbed = new MessageEmbed();
         $messageEmbed->setColor(DEFAULT_EMBED_COLOR);
         $messageEmbed->setTitle('***' . $this->name . $this->getTitleExtra() . '***');
-        $messageEmbed->setDescription($this->description);
+        $messageEmbed->setDescription($this->getDescription());
         if (!empty($extraFields)) {
             foreach ($extraFields as $field) {
                 $messageEmbed->addField($field['title'], $field['value']);
@@ -101,5 +103,33 @@ class Effect {
             return ': ' . RandomDataProvider::GetInstance()->GetRandomNegativeQuirk();
         }
         return '';
+    }
+
+    /**
+     * @return string Returns description param or a random one from its array.
+     */
+    public function getDescription(): string {
+        if (!is_array($this->_description)) {
+            return $this->_description;
+        }
+        return $this->_description[mt_rand(0, sizeof($this->_description) - 1)];
+    }
+
+    /**
+     * @param mixed $description Accepts either an array or a string
+     * @throws \Exception
+     */
+    public function setDescription($description) {
+        if (!is_string($description)) {
+            if (!is_array($description)) {
+                throw new \Exception(self::INVALID_EFFECT_DESCRIPTION_MSG);
+            }
+            foreach ($description as $item) {
+                if (!is_string($item)) {
+                    throw new \Exception(self::INVALID_EFFECT_DESCRIPTION_MSG);
+                }
+            }
+        }
+        $this->_description = $description;
     }
 }

@@ -56,8 +56,7 @@ class Read extends Command {
 
         $this->defaultEffect = new Effect();
         $this->defaultEffect->name = "Nothing happened.";
-        $this->defaultEffect->description = "You choose to walk away in peace.";
-
+        $this->defaultEffect->setDescription("You choose to walk away in peace.");
         $this->interactingUsers = new Collection();
         $this->fileDl = new FileDownloader($this->client->getLoop());
     }
@@ -121,7 +120,8 @@ class Read extends Command {
         $mapper = new \JsonMapper();
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . $effect->imageTemplate));
         try {
-            $template = $mapper->map($json, new ImageTemplate());
+            $template = new ImageTemplate();
+            $mapper->map($json, $template);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             return;
