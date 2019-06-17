@@ -186,7 +186,7 @@ class Read extends Command {
         $imageSrc = CommandHelper::ImageFromFileHandler($imageSrcFileHandler);
         $imageTemplate = imagecreatefrompng($imageTemplatePath);
         $tA = new ImageTemplateApplier($template);
-        $canvas = $tA->applyTemplate($imageSrc, $imageTemplate);
+        $canvas = $tA->applyTemplate($imageSrc, $imageTemplate, true);
 
         ob_start();
         imagepng($canvas);
