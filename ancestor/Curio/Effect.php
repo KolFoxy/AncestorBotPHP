@@ -8,6 +8,9 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Effect {
 
+
+    const RAND_NUM_DESCRIPTION_NEEDLE = '{RAND_NUM}(';
+    const RNUM_NEEDLE_LENGTH = 11;
     const INVALID_EFFECT_DESCRIPTION_MSG = 'Invalid description type for an Effect.';
 
     /**
@@ -86,7 +89,7 @@ class Effect {
         $messageEmbed = new MessageEmbed();
         $messageEmbed->setColor(DEFAULT_EMBED_COLOR);
         $messageEmbed->setTitle('***' . $this->name . $this->getTitleExtra() . '***');
-        $messageEmbed->setDescription($this->getDescription());
+        $messageEmbed->setDescription(self::parseRandomNum($this->getDescription()));
         if (!empty($extraFields)) {
             foreach ($extraFields as $field) {
                 $messageEmbed->addField($field['title'], $field['value']);
@@ -131,5 +134,36 @@ class Effect {
             }
         }
         $this->_description = $description;
+    }
+
+    /**
+     * Replaces {RAND_NUM}(MIN_MAX) with corresponding random number;
+     * @param string $string
+     * @return string
+     */
+    public static function parseRandomNum(string $string) : string {
+        if (($start = mb_strpos($string, self::RAND_NUM_DESCRIPTION_NEEDLE)) === false) {
+            return $string;
+        }
+        $startMin = $start + self::RNUM_NEEDLE_LENGTH;
+        $finishMin = mb_strpos($string, '_', $startMin);
+        if ($finishMin === false) {
+            return $string;
+        }
+
+        $startMax = $finishMin + 1;
+        $finish = mb_strpos($string, ')', $startMax);
+        if ($finish === false) {
+            return $string;
+        }
+
+        $res = mt_rand(
+            intval(mb_substr($string, $startMin, $finishMin - 1)),
+            intval(mb_substr($string, $startMax, $finish - 1))
+        );
+
+        $string = substr_replace($string, $res, $start, $finish - $start + 1);
+
+        return self::parseRandomNum($string);
     }
 }
