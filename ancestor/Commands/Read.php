@@ -5,16 +5,14 @@ namespace Ancestor\Commands;
 use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
-use Ancestor\Curio\Action;
-use Ancestor\Curio\Curio;
-use const Ancestor\Curio\DEFAULT_EMBED_COLOR;
-use Ancestor\Curio\Effect;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
+use Ancestor\Interaction\Action;
+use Ancestor\Interaction\Curio;
+use Ancestor\Interaction\Effect;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Collect\Collection;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use CharlotteDunois\Yasmin\Models\Message;
 
 class Read extends Command {

@@ -1,6 +1,6 @@
 <?php
 
-namespace Ancestor\Curio;
+namespace Ancestor\Interaction;
 
 class Action {
     /**
