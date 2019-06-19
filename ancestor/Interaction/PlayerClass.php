@@ -37,9 +37,14 @@ class PlayerClass extends AbstractLivingInteraction {
             $embedResponse->setColor($this->embedColor);
         }
         $embedResponse->setDescription('*' . $this->description . '*');
-        $footerText = 'Health: *'.$this->getHealthStatus().'* | Stress: *'.$this->stress.'/100*';
+        $footerText = 'Health: *' . $this->getHealthStatus() . '* | Stress: *' . $this->getStressStatus() . '*';
         $embedResponse->setFooter($footerText);
 
         return $embedResponse;
     }
+
+    public function getStressStatus(): string {
+        return $this->stress . '/100';
+    }
+
 }

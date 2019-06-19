@@ -5,6 +5,7 @@ namespace Ancestor\Commands;
 use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\CommandHandler\TimedCommandManager;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
@@ -12,7 +13,6 @@ use Ancestor\Interaction\Action;
 use Ancestor\Interaction\Curio;
 use Ancestor\Interaction\Effect;
 use Ancestor\RandomData\RandomDataProvider;
-use CharlotteDunois\Collect\Collection;
 use CharlotteDunois\Yasmin\Models\Message;
 
 class Read extends Command {
@@ -29,10 +29,9 @@ class Read extends Command {
     private $defaultEffect;
 
     /**
-     * @var Collection
+     * @var TimedCommandManager
      */
-    private $interactingUsers;
-
+    private $timedManager;
     /**
      * @var FileDownloader
      */
@@ -52,31 +51,34 @@ class Read extends Command {
             $json, [], Curio::class
         );
 
+        $this->timedManager = new TimedCommandManager($this->client);
+
         $this->defaultEffect = new Effect();
         $this->defaultEffect->name = "Nothing happened.";
         $this->defaultEffect->setDescription("You choose to walk away in peace.");
-        $this->interactingUsers = new Collection();
         $this->fileDl = new FileDownloader($this->client->getLoop());
     }
 
     function run(Message $message, array $args) {
-        if (empty($args) && !$this->interactingUsers->has($message->author->id)) {
+        if (empty($args) && !$this->timedManager->userIsInteracting($message->author->id)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
-            $this->addNewInteraction($curio, $message->author->id, $message->channel->getId());
+            $this->timedManager->addInteraction($message, self::INTERACT_TIMEOUT, $curio);
             $message->reply('', ['embed' => $curio->getEmbedResponse($this->handler->prefix . $this->name)]);
             return;
         }
-        if (!empty($args) && $this->interactingUsers->has($message->author->id)
-            && $message->channel->getId() === $this->getChannelIdFromUserId($message->author->id)) {
+        if (!empty($args) && $this->timedManager->userIsInteracting($message->author->id) && $this->timedManager->channelIsValid($message)) {
             $actionName = implode(' ', $args);
             $curio = $this->getCurioFromUserId($message->author->id);
             $action = $curio->getActionIfValid($actionName);
+
             if ($action === false) {
                 return;
             }
-            $this->client->cancelTimer($this->getTimerFromUserId($message->author->id));
-            $this->interactingUsers->delete($message->author->id);
 
+            $this->timedManager->deleteInteraction($message->author->id);
+
+            //Action is the default action.
+            //TODO::Make default action and effect available from action or curio class
             if ($action === true) {
                 $message->reply('', ['embed' => $this->defaultEffect->getEmbedResponse()]);
                 return;
@@ -141,36 +143,11 @@ class Read extends Command {
     }
 
     function getCurioFromUserId(int $userId): Curio {
-        return $this->interactingUsers->get($userId)['curio'];
-    }
-
-    function getChannelIdFromUserId(int $userId): string {
-        return $this->interactingUsers->get($userId)['channelId'];
-    }
-
-
-    /**
-     * @param int $userId
-     * @return \React\EventLoop\Timer\Timer
-     */
-    function getTimerFromUserId(int $userId) {
-        return $this->interactingUsers->get($userId)['timer'];
+        return $this->timedManager->getUserData($userId);
     }
 
     function getRandomEffectFromAction(Action $action): Effect {
         return RandomDataProvider::GetInstance()->GetRandomData($action->effects);
-    }
-
-    function addNewInteraction(Curio $curio, int $userId, string $channelId) {
-        $this->interactingUsers->set($userId, [
-            'curio' => $curio,
-            'timer' => $this->client->addTimer(self::INTERACT_TIMEOUT,
-                function () use ($userId) {
-                    $this->interactingUsers->delete($userId);
-                }
-            ),
-            'channelId' => $channelId
-        ]);
     }
 
 
