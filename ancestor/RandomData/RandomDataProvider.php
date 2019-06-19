@@ -9,7 +9,6 @@ class RandomDataProvider {
     private $gold;
     private $trinkets;
     private $rewardsQuotes;
-    private $zalgoTitles;
     private $quirksPositive;
     private $quirksNegative;
 
@@ -22,14 +21,11 @@ class RandomDataProvider {
         $this->PopulateArray($this->rewardsQuotes, '/data/rewards/rewardsQuotes');
         $this->PopulateArray($this->gold, '/data/rewards/gold');
         $this->PopulateArray($this->trinkets, '/data/rewards/trinkets');
-        $this->PopulateArray($this->zalgoTitles, '/data/zalgoTitles');
         $this->PopulateArray($this->virtues, '/data/virtues.json', true);
         $this->PopulateArray($this->NSFWquotes, '/data/NSFWquotes');
         $this->PopulateArray($this->afflictions, '/data/afflictions.json', true);
-
         $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
         $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
-
     }
 
     /**
@@ -40,18 +36,6 @@ class RandomDataProvider {
             self::$instance = new RandomDataProvider();
         }
         return self::$instance;
-    }
-
-    public function GetRandomZalgoCharacter() {
-        return mb_chr(mt_rand(768, 879), 'UTF-8');
-    }
-
-    public function GetRandomZalgoString(int $size) {
-        $rez = '';
-        for ($i = 0; $i < $size; $i++) {
-            $rez .= $this->GetRandomZalgoCharacter();
-        }
-        return $rez;
     }
 
     public function GetRandomData($array) {
@@ -75,10 +59,6 @@ class RandomDataProvider {
 
     public function GetRandomNSFWQuote() {
         return $this->GetRandomData($this->NSFWquotes);
-    }
-
-    public function GetRandomZalgoTitle() {
-        return $this->GetRandomData($this->zalgoTitles);
     }
 
     public function GetRandomPositiveQuirk(){

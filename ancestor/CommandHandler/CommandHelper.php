@@ -108,5 +108,22 @@ class CommandHelper {
         return imagecreatefromstring(fread($fileHandler, filesize(stream_get_meta_data($fileHandler)['uri'])));
     }
 
+    /**
+     * @param string $str
+     * @param int $length
+     * @return string[]
+     */
+    public static function mb_str_split(string $str, int $length = 0): array {
+        if ($length > 0) {
+            $result = [];
+            $strLength = mb_strlen($str);
+            for ($i = 0; $i < $strLength; $i += $length) {
+                $result[] = mb_substr($str, $i, $length);
+            }
+            return $result;
+        }
+        return [''];
+    }
+
 
 }

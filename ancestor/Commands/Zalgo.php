@@ -8,15 +8,25 @@ namespace Ancestor\Commands;
 
 use Ancestor\CommandHandler\Command as Command;
 use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\RandomData\RandomDataProvider as RandomDataProvider;
+use CharlotteDunois\Yasmin\Utils\MessageHelpers;
 
 class Zalgo extends Command {
 
-    private $MAX_ZALGO_CHARACTERS = 150;
-    private $RDP;
+    const MAX_ZALGO_CHARACTERS = 150;
+    const ZALGO_PER_CHAR = 2;
+    const UTF8_ZALGO_FIRST = 768;
+    const UTF8_ZALGO_LAST = 879;
+    private $fieldLength;
+    /**
+     * @var string[]
+     */
+    private $zalgoTitles;
 
     function __construct(CommandHandler $handler) {
-        $this->RDP = RandomDataProvider::GetInstance();
+        $this->zalgoTitles = $array = file(dirname(__DIR__, 2) . '/data/zalgoTitles');
+        $this->fieldLength = self::MAX_ZALGO_CHARACTERS / self::ZALGO_PER_CHAR;
         parent::__construct($handler, 'zalgo', 'transforms given sentence into something ' .
             $this->ZalgorizeString('like this', 3), array('cursed'));
     }
@@ -26,44 +36,47 @@ class Zalgo extends Command {
             return;
         }
         $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-        $strArray = $this->mb_str_split(\CharlotteDunois\Yasmin\Utils\MessageHelpers::cleanContent($message, implode(' ', $args))
-            , $this->MAX_ZALGO_CHARACTERS);
+        $strArray = CommandHelper::mb_str_split(MessageHelpers::cleanContent($message, implode(' ', $args)), $this->fieldLength);
         foreach ($strArray as $str) {
             $embedResponse->addField('``' .
-                $this->ZalgorizeString($this->RDP->GetRandomZalgoTitle(), 2) . '``',
-                $this->ZalgorizeString($str, 1));
+                $this->ZalgorizeString(RandomDataProvider::GetInstance()->GetRandomData($this->zalgoTitles), 2) . '``',
+                $this->ZalgorizeString($str, self::ZALGO_PER_CHAR));
         };
         $embedResponse->setFooter($this->ZalgorizeString($message->author->username, 1), $message->author->getAvatarURL());
-        $message->channel->send('', array('embed' => $embedResponse));
+        $message->channel->send('', ['embed' => $embedResponse]);
     }
 
     function ZalgorizeString(string $input, int $zalgoPerChar): string {
         $result = '';
-        $strlen = mb_strlen($input);
-        if ($strlen > $this->MAX_ZALGO_CHARACTERS) {
-            $strlen = $this->MAX_ZALGO_CHARACTERS;
+        $strLen = mb_strlen($input);
+
+        for ($i = 0; $i < $strLen; $i++) {
+            $result .= $this->GetRandomZalgoString($zalgoPerChar) . mb_substr($input, $i, 1);
         }
 
-        for ($i = 0; $i < $strlen; $i++) {
-            $result .= $this->RDP->GetRandomZalgoString($zalgoPerChar) . mb_substr($input, $i, 1);
-        }
-
-        if ($strlen == $this->MAX_ZALGO_CHARACTERS) {
+        if ($strLen >= $this->fieldLength) {
             $result .= '…';
         }
         return $result;
     }
 
-    function mb_str_split(string $str, int $length = 0): array {
-        if ($length > 0) {
-            $result = array();
-            $strLength = mb_strlen($str);
-            for ($i = 0; $i < $strLength; $i += $length) {
-                $result[] = mb_substr($str, $i, $length);
-            }
-            return $result;
+    /**
+     * @return string
+     */
+    function GetRandomZalgoChar(): string {
+        return mb_chr(mt_rand(self::UTF8_ZALGO_FIRST, self::UTF8_ZALGO_LAST), 'UTF-8');
+    }
+
+    /**
+     * @param int $size
+     * @return string
+     */
+    function GetRandomZalgoString(int $size): string {
+        $rez = '';
+        for ($i = 0; $i < $size; $i++) {
+            $rez .= $this->GetRandomZalgoChar();
         }
-        return [''];
+        return $rez;
     }
 
 }
