@@ -31,6 +31,12 @@ class Effect {
     public $stress_value = null;
 
     /**
+     * Indicates the amount of hp that effect gives or subtracts from hero.
+     * @var string|int|null
+     */
+    public $health_value = null;
+
+    /**
      * Indicates whether or not effect gives hero positive(TRUE) or negative(FALSE) quirk.
      * @var bool|null
      */
@@ -141,7 +147,7 @@ class Effect {
      * @param string $string
      * @return string
      */
-    public static function parseRandomNum(string $string) : string {
+    public static function parseRandomNum(string $string): string {
         if (($start = mb_strpos($string, self::RAND_NUM_DESCRIPTION_NEEDLE)) === false) {
             return $string;
         }
@@ -165,5 +171,13 @@ class Effect {
         $string = substr_replace($string, $res, $start, $finish - $start + 1);
 
         return self::parseRandomNum($string);
+    }
+
+    public function getHealthValue(): int {
+        if ($this->health_value === null)
+            return 0;
+        if (is_string($this->health_value))
+            return self::parseRandomNum($this->health_value);
+        return $this->health_value;
     }
 }

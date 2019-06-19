@@ -25,7 +25,7 @@ abstract class AbstractInteraction {
      */
     public $description;
     /**
-     * URL to the image of the curio.
+     * URL to the image of the interaction.
      * @var string
      * @required
      */
