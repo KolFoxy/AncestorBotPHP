@@ -10,24 +10,7 @@ namespace Ancestor\Interaction;
 
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
-class Monster extends AbstractInteraction {
-
-    /**
-     * @var int
-     * @required
-     */
-    public $healthMax;
-
-    /**
-     * @var int|null
-     */
-    private $currentHealth = null;
-
-    /**
-     * @var bool
-     */
-    public $isStunned = false;
-
+class Monster extends AbstractLivingInteraction {
 
     /**
      * @param string $commandName
@@ -37,7 +20,8 @@ class Monster extends AbstractInteraction {
     public function getEmbedResponse(string $commandName, $userActions = null): MessageEmbed {
         $embedResponse = new MessageEmbed();
         $embedResponse->setThumbnail($this->image);
-        $embedResponse->setTitle('**You encounter ' . $this->name . '**');
+        $embedResponse->setTitle('**You encounter ' . $this->name
+            . '.** Health: **' . $this->getHealthStatus() . '**');
         $embedResponse->setColor(DEFAULT_EMBED_COLOR);
         $embedResponse->setDescription('*' . $this->description . '*');
         if ($userActions != null) {
@@ -59,13 +43,4 @@ class Monster extends AbstractInteraction {
         return $this->actions[mt_rand(0, sizeof($this->actions))];
     }
 
-    /**
-     * @return int
-     */
-    public function getCurrentHealth(): int {
-        if ($this->currentHealth === null) {
-            $this->currentHealth = $this->healthMax;
-        }
-        return $this->currentHealth;
-    }
 }
