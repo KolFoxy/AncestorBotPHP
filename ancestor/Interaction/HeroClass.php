@@ -5,13 +5,15 @@ namespace Ancestor\Interaction;
 use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
-class PlayerClass extends AbstractLivingInteraction {
+class HeroClass extends AbstractInteraction {
 
     const EMBED_COLOR = 13294;
+
     /**
      * @var int
+     * @required
      */
-    public $stress = 0;
+    public $healthMax;
 
     /**
      * Path to the template.
@@ -25,7 +27,12 @@ class PlayerClass extends AbstractLivingInteraction {
      */
     public $embedColor = null;
 
-    public function getEmbedResponse(string $commandName): MessageEmbed {
+    /**
+     * @param string $commandName
+     * @param string|null $status
+     * @return MessageEmbed
+     */
+    public function getEmbedResponse(string $commandName = null, string $status = null): MessageEmbed {
         $embedResponse = new MessageEmbed();
         if ($this->imageTemplate === null) {
             $embedResponse->setThumbnail($this->image);
@@ -37,14 +44,11 @@ class PlayerClass extends AbstractLivingInteraction {
             $embedResponse->setColor($this->embedColor);
         }
         $embedResponse->setDescription('*' . $this->description . '*');
-        $footerText = 'Health: *' . $this->getHealthStatus() . '* | Stress: *' . $this->getStressStatus() . '*';
-        $embedResponse->setFooter($footerText);
-
+        if ($status != null) {
+            $footerText = $status;
+            $embedResponse->setFooter($footerText);
+        }
         return $embedResponse;
-    }
-
-    public function getStressStatus(): string {
-        return $this->stress . '/100';
     }
 
 }

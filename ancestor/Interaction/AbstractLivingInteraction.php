@@ -2,11 +2,10 @@
 
 namespace Ancestor\Interaction;
 
-abstract class AbstractLivingInteraction extends AbstractInteraction {
+abstract class AbstractLivingInteraction {
 
     /**
      * @var int
-     * @required
      */
     public $healthMax;
 
@@ -23,6 +22,12 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
     /**
      * @return int
      */
+
+    /**
+     * @var AbstractInteraction;
+     */
+    public $type;
+
     public function getCurrentHealth(): int {
         if ($this->currentHealth === null) {
             $this->currentHealth = $this->healthMax;
@@ -36,6 +41,14 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
     public function getHealthStatus(): string {
         return $this->getCurrentHealth().'/'.$this->healthMax;
     }
+
+    /**
+     * @return bool
+     */
+    public function isDead(): bool {
+        return $this->getCurrentHealth() <= 0;
+    }
+
 
 
 }
