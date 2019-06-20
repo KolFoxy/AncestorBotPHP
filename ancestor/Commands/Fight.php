@@ -58,7 +58,8 @@ class Fight extends Command {
             $hero = new Hero($this->classes[mt_rand(0, $this->numOfClasses)]);
             $monster = new Monster($this->monsterTypes[mt_rand(0, $this->numOfTypes)]);
             $this->commandManager->addInteraction($message, self::TIMEOUT, [$hero, $monster]);
-
+            $heroFirst = (bool)mt_rand(0, 1);
+            $message->reply('', ['embed' => $this->getEncounterEmbed($hero, $monster, $heroFirst)]);
         }
     }
 
@@ -75,5 +76,6 @@ class Fight extends Command {
         if ($heroFirst) {
             $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix . $this->name));
         }
+        return $embed;
     }
 }
