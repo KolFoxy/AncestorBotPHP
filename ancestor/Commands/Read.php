@@ -22,12 +22,6 @@ class Read extends Command {
      * @var Curio[]
      */
     private $curios;
-
-    /**
-     * @var Effect
-     */
-    private $defaultEffect;
-
     /**
      * @var TimedCommandManager
      */
@@ -37,7 +31,7 @@ class Read extends Command {
      */
     private $fileDl;
 
-    const INTERACT_TIMEOUT = 60.0;
+    const TIMEOUT = 60.0;
 
     function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'read',
@@ -52,17 +46,13 @@ class Read extends Command {
         );
 
         $this->timedManager = new TimedCommandManager($this->client);
-
-        $this->defaultEffect = new Effect();
-        $this->defaultEffect->name = "Nothing happened.";
-        $this->defaultEffect->setDescription("You choose to walk away in peace.");
         $this->fileDl = new FileDownloader($this->client->getLoop());
     }
 
     function run(Message $message, array $args) {
         if (empty($args) && !$this->timedManager->userIsInteracting($message->author->id)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
-            $this->timedManager->addInteraction($message, self::INTERACT_TIMEOUT, $curio);
+            $this->timedManager->addInteraction($message, self::TIMEOUT, $curio);
             $message->reply('', ['embed' => $curio->getEmbedResponse($this->handler->prefix . $this->name)]);
             return;
         }
@@ -78,9 +68,8 @@ class Read extends Command {
             $this->timedManager->deleteInteraction($message->author->id);
 
             //Action is the default action.
-            //TODO::Make default action and effect available from action or curio class
             if ($action === true) {
-                $message->reply('', ['embed' => $this->defaultEffect->getEmbedResponse()]);
+                $message->reply('', ['embed' => Curio::defaultAction()->effects[0]->getEmbedResponse()]);
                 return;
             }
 

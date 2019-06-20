@@ -15,10 +15,11 @@ use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Monster;
 use Ancestor\Interaction\MonsterType;
-use Ancestor\Interaction\PlayerClass;
+use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Fight extends Command {
 
+    const TIMEOUT = 300.0;
 
     /**
      * @var HeroClass[]
@@ -50,9 +51,29 @@ class Fight extends Command {
     }
 
     public function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
+        if (!empty($args) && !$this->commandManager->userIsInteracting($message->author->id)) {
+            return;
+        }
         if (empty($args) && !$this->commandManager->userIsInteracting($message->author->id)) {
             $hero = new Hero($this->classes[mt_rand(0, $this->numOfClasses)]);
             $monster = new Monster($this->monsterTypes[mt_rand(0, $this->numOfTypes)]);
+            $this->commandManager->addInteraction($message, self::TIMEOUT, [$hero, $monster]);
+
+        }
+    }
+
+    function getEncounterEmbed(Hero $hero, Monster $monster, bool $heroFirst): MessageEmbed {
+        $embed = new MessageEmbed();
+        $embed->setTitle('You are a: **' . $hero->type->name . '**');
+        $embed->setThumbnail($hero->type->image);
+        $embed->setDescription($hero->type->description);
+        $embed->addField(
+            '``You encounter a vile`` **' . $monster->type->name . '**',
+            '*' . $monster->type->description . '*'
+        );
+        $embed->setImage($monster->type->image);
+        if ($heroFirst) {
+            $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix . $this->name));
         }
     }
 }

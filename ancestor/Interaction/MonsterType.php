@@ -20,11 +20,11 @@ class MonsterType extends AbstractInteraction {
 
     /**
      * @param string $commandName
-     * @param Action[]|null $userActions
+     * @param HeroClass|null $attacker
      * @param string $healthStatus
      * @return MessageEmbed
      */
-    public function getEmbedResponse(string $commandName, $userActions = null, string $healthStatus = ''): MessageEmbed {
+    public function getEmbedResponse(string $commandName, HeroClass $attacker = null, string $healthStatus = ''): MessageEmbed {
         $embedResponse = new MessageEmbed();
         $embedResponse->setThumbnail($this->image);
         if ($healthStatus != '') {
@@ -34,14 +34,8 @@ class MonsterType extends AbstractInteraction {
             . '.**' . $healthStatus);
         $embedResponse->setColor(DEFAULT_EMBED_COLOR);
         $embedResponse->setDescription('*' . $this->description . '*');
-        if ($userActions != null) {
-            $footerText = 'Respond with "' . $commandName . ' [ACTION]" to perform the corresponding action. ' . PHP_EOL
-                . 'Available actions: ';
-            foreach ($userActions as $action) {
-                $footerText .= mb_strtolower($action->name) . ', ';
-            }
-            $footerText .= self::DEFAULT_ACTION;
-            $embedResponse->setFooter($footerText);
+        if ($attacker != null) {
+            $embedResponse->setFooter($attacker->getDefaultFooterText($commandName));
         }
         return $embedResponse;
     }
@@ -53,4 +47,14 @@ class MonsterType extends AbstractInteraction {
         return $this->actions[mt_rand(0, sizeof($this->actions))];
     }
 
+    public static function defaultAction(): Action {
+        $action = new Action();
+        $action->name = 'attack';
+        $effect = new Effect();
+        $effect->name = 'Attack!';
+        $effect->setDescription('Monster attacks the hero!');
+        $effect->health_value = mt_rand(3, 10);
+        $action->effects = [$effect];
+        return $action;
+    }
 }

@@ -16,12 +16,6 @@ class HeroClass extends AbstractInteraction {
     public $healthMax;
 
     /**
-     * Path to the template.
-     * @var string|null
-     */
-    public $imageTemplate = null;
-
-    /**
      * Color of the embedResponse
      * @var null|integer
      */
@@ -34,9 +28,7 @@ class HeroClass extends AbstractInteraction {
      */
     public function getEmbedResponse(string $commandName = null, string $status = null): MessageEmbed {
         $embedResponse = new MessageEmbed();
-        if ($this->imageTemplate === null) {
-            $embedResponse->setThumbnail($this->image);
-        }
+        $embedResponse->setThumbnail($this->image);
         $embedResponse->setTitle('Your class is **' . $this->name . '**');
         if ($this->embedColor === null) {
             $embedResponse->setColor(self::EMBED_COLOR);
@@ -51,4 +43,14 @@ class HeroClass extends AbstractInteraction {
         return $embedResponse;
     }
 
+    public static function defaultAction(): Action {
+        $action = new Action();
+        $action->name = 'pass turn';
+        $effect = new Effect();
+        $effect->name = 'Do nothing.';
+        $effect->setDescription('Hero passed the turn and suffered stress.');
+        $effect->stress_value = mt_rand(6, 10);
+        $action->effects = [$effect];
+        return $action;
+    }
 }

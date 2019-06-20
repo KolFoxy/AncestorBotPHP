@@ -36,9 +36,16 @@ class Hero extends AbstractLivingInteraction {
         return parent::isDead();
     }
 
-    public function getEmbedResponse(string $commandName) {
-        return $this->type->getEmbedResponse($commandName,
-            'Health: *' . $this->getHealthStatus() . '* | Stress: *' . $this->getStressStatus() . '*');
+    /**
+     * @param string $commandName
+     * @return \CharlotteDunois\Yasmin\Models\MessageEmbed
+     */
+    public function getEmbedResponse(string $commandName = null) : \CharlotteDunois\Yasmin\Models\MessageEmbed {
+        return $this->type->getEmbedResponse($commandName, $this->getStatus());
+    }
+
+    public function getStatus(): string {
+        return 'Health: *' . $this->getHealthStatus() . '* | Stress: *' . $this->getStressStatus() . '*';
     }
 
 }

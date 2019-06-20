@@ -12,8 +12,6 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 abstract class AbstractInteraction {
 
-    const DEFAULT_ACTION = 'nothing';
-
     /**
      * @var string
      * @required
@@ -41,7 +39,7 @@ abstract class AbstractInteraction {
      */
     public function getActionIfValid(string $actionName) {
         $actionL = mb_strtolower($actionName);
-        if ($actionL === mb_strtolower(self::DEFAULT_ACTION)) {
+        if ($actionL === mb_strtolower(self::defaultAction()->name)) {
             return true;
         }
         if (empty($this->actions)) {
@@ -60,5 +58,24 @@ abstract class AbstractInteraction {
      * @return MessageEmbed
      */
     abstract public function getEmbedResponse(string $commandName): MessageEmbed;
+
+    /**
+     * @param string $commandName
+     * @return string returnsActionList
+     */
+    public function getDefaultFooterText(string $commandName): string {
+        if ($this->actions === null){
+            return '';
+        }
+        $footerText = 'Respond with "' . $commandName . ' [ACTION]" to perform the corresponding action. ' . PHP_EOL
+            . 'Available actions: ';
+        foreach ($this->actions as $action) {
+            $footerText .= mb_strtolower($action->name) . ', ';
+        }
+        $footerText .= self::defaultAction()->name;
+        return $footerText;
+    }
+
+    abstract public static function defaultAction(): Action;
 
 }
