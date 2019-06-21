@@ -48,35 +48,41 @@ class Fight extends Command {
     private $numOfTypes;
 
     public function __construct(CommandHandler $handler, string $name, string $description, array $aliases = null) {
-        //TODO all the construction
-
+        //TODO: all the construction
+        //TODO: endless mode
         parent::__construct($handler, $name, $description, $aliases);
     }
 
     public function run(Message $message, array $args) {
-        if (!empty($args) && !$this->manager->userIsInteracting($message)) {
-            return;
-        }
-        if (empty($args) && !$this->manager->userIsInteracting($message)) {
-            //TODO: endless mode
+        if (!$this->manager->userIsInteracting($message)) {
             $endless = false;
+            if (!empty($args)) {
+                if ($args[0] === 'endless') {
+                    $endless = true;
+                } else {
+                    return;
+                }
+            }
+
             $hero = new Hero($this->classes[mt_rand(0, $this->numOfClasses)], $message->author->username);
             $monster = new Monster($this->monsterTypes[mt_rand(0, $this->numOfTypes)]);
             $heroFirst = (bool)mt_rand(0, 1);
             $message->reply('', ['embed' => $this->getEncounterEmbed($hero, $monster, $heroFirst)]);
             $this->manager->addInteraction($message, self::TIMEOUT, [$hero, $monster, $endless]);
+            return;
+        }
+        if (empty($args)) {
+            return;
         }
 
-        if (!empty($args) && $this->manager->userIsInteracting($message)) {
-            $actionName = implode(' ', $args);
-            $hero = $this->getHero($message);
-            $action = $hero->type->getActionIfValid($actionName);
-            if ($action === null) {
-                return;
-            }
-            $monster = $this->getMonster($message);
-            $hit = $hero->rollWillHit($monster);
+        $actionName = implode(' ', $args);
+        $hero = $this->getHero($message);
+        $action = $hero->type->getActionIfValid($actionName);
+        if ($action === null) {
+            return;
         }
+        $monster = $this->getMonster($message);
+        $hit = $hero->rollWillHit($monster);
 
     }
 

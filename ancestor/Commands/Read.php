@@ -50,6 +50,7 @@ class Read extends Command {
     }
 
     function run(Message $message, array $args) {
+        //TODO: Make this shit somewhat readable
         if (empty($args) && !$this->manager->userIsInteracting($message)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
             $this->manager->addInteraction($message, self::TIMEOUT, $curio);
