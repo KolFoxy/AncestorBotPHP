@@ -7,6 +7,11 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class HeroClass extends AbstractLivingInteraction {
 
+    /**
+     * @var Action|null
+     */
+    private $defAction = null;
+
     const EMBED_COLOR = 13294;
 
     /**
@@ -38,13 +43,16 @@ class HeroClass extends AbstractLivingInteraction {
     }
 
     public function defaultAction(): Action {
-        $action = new Action();
-        $action->name = 'pass turn';
-        $effect = new Effect();
-        $effect->name = 'Do nothing.';
-        $effect->setDescription('Hero passed the turn and suffered stress.');
-        $effect->stress_value = mt_rand(6, 10);
-        $action->effects = [$effect];
-        return $action;
+        if ($this->defAction === null) {
+            $action = new Action();
+            $action->name = 'pass turn';
+            $effect = new Effect();
+            $effect->name = 'Do nothing.';
+            $effect->setDescription('Hero passed the turn and suffered stress.');
+            $effect->stress_value = mt_rand(6, 10);
+            $action->effects = [$effect];
+            $this->defAction = $action;
+        }
+        return $this->defAction;
     }
 }

@@ -8,7 +8,10 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Curio extends AbstractInteraction {
 
-    private static $defAction = null;
+    /**
+     * @var Action|null
+     */
+    private $defAction = null;
 
     /**
      * @param string $commandName
@@ -25,16 +28,16 @@ class Curio extends AbstractInteraction {
     }
 
     public function defaultAction(): Action {
-        if (self::$defAction === null) {
+        if ($this->defAction === null) {
             $action = new Action();
             $action->name = 'nothing';
             $effect = new Effect();
             $effect->name = 'Nothing happened.';
             $effect->setDescription('You choose to walk away in peace.');
             $action->effects = [$effect];
-            self::$defAction = $action;
+            $this->defAction = $action;
         }
-        return self::$defAction;
+        return $this->defAction;
     }
 
 }

@@ -13,6 +13,11 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 class MonsterType extends AbstractLivingInteraction {
 
     /**
+     * @var Action|null
+     */
+    private $defAction = null;
+
+    /**
      * @param string $commandName
      * @param HeroClass|null $attacker
      * @param string $healthStatus
@@ -42,13 +47,16 @@ class MonsterType extends AbstractLivingInteraction {
     }
 
     public function defaultAction(): Action {
-        $action = new Action();
-        $action->name = 'attack';
-        $effect = new Effect();
-        $effect->name = 'Attack!';
-        $effect->setDescription('Monster attacks the hero!');
-        $effect->health_value = (-1) * mt_rand(3, 10);
-        $action->effects = [$effect];
-        return $action;
+        if ($this->defAction === null) {
+            $action = new Action();
+            $action->name = 'attack';
+            $effect = new Effect();
+            $effect->name = 'Attack!';
+            $effect->setDescription('Monster attacks the hero!');
+            $effect->health_value = (-1) * mt_rand(3, 10);
+            $action->effects = [$effect];
+            $this->defAction = $action;
+        }
+        return $this->defAction;
     }
 }
