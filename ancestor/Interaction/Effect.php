@@ -5,6 +5,7 @@ namespace Ancestor\Interaction;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use function GuzzleHttp\Psr7\str;
 
 class Effect {
 
@@ -26,7 +27,7 @@ class Effect {
 
     /**
      * Indicates the amount of stress that effect gives hero.
-     * @var int|null
+     * @var string|int|null
      */
     public $stress_value = null;
 
@@ -54,19 +55,25 @@ class Effect {
      */
     public $image = null;
 
+    /**
+     * Chance of crit for the effect. NULL = can't crit.
+     * @var int|null
+     */
+    public $critChance = null;
+
 
     /**
      * @return bool
      */
     public function isPositiveStressEffect(): bool {
-        return isset($this->stress_value) && $this->stress_value < 0;
+        return isset($this->stress_value) && $this->getStressValue() < 0;
     }
 
     /**
      * @return bool
      */
     public function isNegativeStressEffect(): bool {
-        return isset($this->stress_value) && $this->stress_value > 0;
+        return isset($this->stress_value) && $this->getStressValue() > 0;
     }
 
     /**
@@ -85,6 +92,10 @@ class Effect {
 
     public function hasImage() {
         return isset($this->image) && isset($this->imageTemplate);
+    }
+
+    public function canCrit(): bool {
+        return isset($this->critChance);
     }
 
     /**
@@ -174,10 +185,18 @@ class Effect {
     }
 
     public function getHealthValue(): int {
-        if ($this->health_value === null)
+        return $this->parseRandomInt($this->health_value);
+    }
+
+    public function getStressValue(): int {
+        return $this->parseRandomInt($this->stress_value);
+    }
+
+    private function parseRandomInt($data): int {
+        if ($data === null)
             return 0;
-        if (is_string($this->health_value))
-            return self::parseRandomNum($this->health_value);
-        return $this->health_value;
+        if (is_string($this->$data))
+            return self::parseRandomNum($data);
+        return $data;
     }
 }

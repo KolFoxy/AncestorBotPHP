@@ -67,7 +67,7 @@ class Read extends Command {
             $this->manager->deleteInteraction($message);
             $effect = $action->getRandomEffect();
             $extraEmbedFields = null;
-            if ($effect->isNegativeStressEffect() && $effect->stress_value >= 100) {
+            if ($effect->isNegativeStressEffect() && $effect->getStressValue() >= 100) {
                 $resolve = RandomDataProvider::GetInstance()->GetRandomResolve();
                 $extraEmbedFields = [
                     [

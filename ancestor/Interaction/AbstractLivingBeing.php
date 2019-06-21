@@ -20,8 +20,9 @@ abstract class AbstractLivingBeing {
     public $isStunned = false;
 
     /**
-     * @return int
+     * @var int
      */
+    public $bonusCritChance = 5;
 
     /**
      * @var AbstractLivingInteraction;
@@ -39,7 +40,7 @@ abstract class AbstractLivingBeing {
      * @return string Format: "currentHealth/healthMax"
      */
     public function getHealthStatus(): string {
-        return $this->getCurrentHealth().'/'.$this->healthMax;
+        return $this->getCurrentHealth() . '/' . $this->healthMax;
     }
 
     /**
@@ -49,6 +50,25 @@ abstract class AbstractLivingBeing {
         return $this->getCurrentHealth() <= 0;
     }
 
+    /**
+     * @param AbstractLivingBeing $target
+     * @return bool
+     */
+    public function rollWillHit(AbstractLivingBeing $target): bool {
+        if (mt_rand(1, $this->type->accuracy) <= $target->type->dodge) {
+            return false;
+        }
+        return true;
+    }
+
+    public function rollWillCrit(Effect $effect): bool {
+        return $effect->canCrit() && mt_rand(0, 100) < ($effect->critChance + $this->bonusCritChance);
+    }
+
+    public function __construct(AbstractLivingInteraction $type) {
+        $this->type = $type;
+        $this->healthMax = $type->healthMax;
+    }
 
 
 }

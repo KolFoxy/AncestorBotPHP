@@ -11,6 +11,7 @@ class RandomDataProvider {
     private $rewardsQuotes;
     private $quirksPositive;
     private $quirksNegative;
+    private $heroDiesQuotes;
 
     private static $instance = null;
 
@@ -26,10 +27,11 @@ class RandomDataProvider {
         $this->PopulateArray($this->afflictions, '/data/afflictions.json', true);
         $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
         $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
+        $this->PopulateArray($this->heroDiesQuotes, '/data/heroDiesQuotes');
     }
 
     /**
-     * @return RandomDataProvider|null
+     * @return RandomDataProvider
      */
     public static function GetInstance() {
         if (!isset(self::$instance)) {
@@ -48,6 +50,10 @@ class RandomDataProvider {
             $affliction['quote'] = $this->GetRandomData($this->afflictions['quotes']);
         }
         return $affliction;
+    }
+
+    public function GetRandomHeroDeathQuote() : string {
+        return $this->GetRandomData($this->heroDiesQuotes);
     }
 
     public function GetRandomResolve() {

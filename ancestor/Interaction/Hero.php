@@ -3,6 +3,12 @@
 namespace Ancestor\Interaction;
 
 class Hero extends AbstractLivingBeing {
+
+    /**
+     * @var string
+     */
+    public $name;
+
     /**
      * @var int
      */
@@ -13,14 +19,26 @@ class Hero extends AbstractLivingBeing {
      */
     public $type;
 
+    public function addStress(int $value) {
+        //TODO:Implement the hecking method.
+    }
+
+    public function addHealth(int $value) {
+        //TODO:Implement the hecking method.
+    }
+
+    public function addStressAndHealth(int $stressValue, int $healthValue) {
+        $this->addStress($stressValue);
+        $this->addHealth($healthValue);
+    }
 
     public function getStressStatus(): string {
         return $this->stress . '/100';
     }
 
-    public function __construct(HeroClass $class) {
-        $this->type = $class;
-        $this->healthMax = $class->healthMax;
+    public function __construct(HeroClass $class, string $name) {
+        parent::__construct($class);
+        $this->name = $name . ' the ' . $class->name;
     }
 
     public function isDead(): bool {
@@ -34,7 +52,7 @@ class Hero extends AbstractLivingBeing {
      * @param string $commandName
      * @return \CharlotteDunois\Yasmin\Models\MessageEmbed
      */
-    public function getEmbedResponse(string $commandName = null) : \CharlotteDunois\Yasmin\Models\MessageEmbed {
+    public function getEmbedResponse(string $commandName = null): \CharlotteDunois\Yasmin\Models\MessageEmbed {
         return $this->type->getEmbedResponse($commandName, $this->getStatus());
     }
 

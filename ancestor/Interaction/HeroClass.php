@@ -8,7 +8,7 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 class HeroClass extends AbstractLivingInteraction {
 
     /**
-     * @var Action|null
+     * @var HeroAction|null
      */
     private $defAction = null;
 
@@ -19,6 +19,11 @@ class HeroClass extends AbstractLivingInteraction {
      * @var null|integer
      */
     public $embedColor = null;
+
+    /**
+     * @var HeroAction
+     */
+    public $actions;
 
     /**
      * @param string $commandName
@@ -42,9 +47,12 @@ class HeroClass extends AbstractLivingInteraction {
         return $embedResponse;
     }
 
+    /**
+     * @return Action|HeroAction
+     */
     public function defaultAction(): Action {
         if ($this->defAction === null) {
-            $action = new Action();
+            $action = new HeroAction();
             $action->name = 'pass turn';
             $effect = new Effect();
             $effect->name = 'Do nothing.';
@@ -54,5 +62,21 @@ class HeroClass extends AbstractLivingInteraction {
             $this->defAction = $action;
         }
         return $this->defAction;
+    }
+
+    /**
+     * @param string $actionName
+     * @return HeroAction
+     */
+    public function getActionIfValid(string $actionName) : HeroAction {
+        if ($actionName === $this->defaultAction()->name) {
+            return $this->defaultAction();
+        }
+        foreach ($this->actions as $action) {
+            if (mb_strpos($action->name, $actionName) === 0) {
+                return $action;
+            }
+        }
+        return null;
     }
 }
