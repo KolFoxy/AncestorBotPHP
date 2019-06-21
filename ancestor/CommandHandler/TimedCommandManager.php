@@ -5,6 +5,7 @@ namespace Ancestor\CommandHandler;
 use CharlotteDunois\Collect\Collection;
 use CharlotteDunois\Yasmin\Client;
 use CharlotteDunois\Yasmin\Models\Message;
+use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use React\EventLoop\Timer\Timer;
 
 class TimedCommandManager {
@@ -22,8 +23,13 @@ class TimedCommandManager {
         $this->client = $client;
     }
 
-    public function userIsInteracting(int $userId){
-        return $this->interactingUsers->has($userId);
+    /**
+     * @param Message $message
+     * @param int|null $userId
+     * @return bool
+     */
+    public function userIsInteracting(Message $message, int $userId = null) {
+        return $this->interactingUsers->has($this->generateId($message, $userId));
     }
 
     /**
@@ -32,15 +38,13 @@ class TimedCommandManager {
      * @param $data
      * @param int|null $userId
      */
-    public function addInteraction(Message $message, int $timeout, $data, int $userId = null){
-        if ($userId === null){
-           $userId = $message->author->id;
-        }
-        $this->interactingUsers->set($userId, [
+    public function addInteraction(Message $message, int $timeout, $data, int $userId = null) {
+        $id = $this->generateId($message, $userId);
+        $this->interactingUsers->set($id, [
             'data' => $data,
             'timer' => $this->client->addTimer($timeout,
-                function () use ($userId) {
-                    $this->interactingUsers->delete($userId);
+                function () use ($id) {
+                    $this->interactingUsers->delete($id);
                 }
             ),
             'channelId' => $message->channel->getId()
@@ -48,39 +52,48 @@ class TimedCommandManager {
     }
 
     /**
-     * @param int $userId
+     * @param Message $message
+     * @param int|null $userId ;
      * @return mixed
      */
-    public function getUserData(int $userId){
-        return $this->interactingUsers->get($userId)['data'];
+    public function getUserData(Message $message, int $userId = null) {
+        return $this->interactingUsers->get($this->generateId($message, $userId))['data'];
     }
 
-    /**
-     * @param int $userId
-     * @return string
-     */
-    public function getUserChannelId(int $userId) : string {
-        return $this->interactingUsers->get($userId)['channelId'];
-    }
-
-    public function deleteInteraction(int $userId){
-        $this->client->cancelTimer($this->getTimerFromUserId($userId));
-        $this->interactingUsers->delete($userId);
-    }
-
-    /**
-     * @param int $userId
-     * @return Timer
-     */
-    function getTimerFromUserId(int $userId) {
-        return $this->interactingUsers->get($userId)['timer'];
-    }
 
     /**
      * @param Message $message
-     * @return bool
+     * @param int|null $userId
+     * @return string
      */
-    public function channelIsValid(Message $message){
-        return $this->getUserChannelId($message->author->id) === $message->channel->getId();
+    public function getUserChannelId(Message $message, int $userId = null): string {
+        return $this->interactingUsers->get($this->generateId($message, $userId))['channelId'];
+    }
+
+    public function deleteInteraction(Message $message, int $userId = null) {
+        $id = $this->generateId($message, $userId);
+        $this->client->cancelTimer($this->getTimer($id));
+        $this->interactingUsers->delete($id);
+    }
+
+    /**
+     * @param string $id
+     * @return Timer
+     */
+    function getTimer(string $id) {
+        return $this->interactingUsers->get($id)['timer'];
+    }
+
+    /**
+     * Generates id string from channel id and user id.
+     * @param Message $message
+     * @param int|null $userId
+     * @return string
+     */
+    private function generateId(Message $message, int $userId = null): string {
+        if ($userId === null) {
+            $userId = $message->author->id;
+        }
+        return $message->channel->getId() . $userId;
     }
 }

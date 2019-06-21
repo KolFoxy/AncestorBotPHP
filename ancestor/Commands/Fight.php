@@ -34,7 +34,7 @@ class Fight extends Command {
     /**
      * @var TimedCommandManager
      */
-    private $commandManager;
+    private $manager;
 
     /**
      * @var MonsterType[]
@@ -51,16 +51,26 @@ class Fight extends Command {
     }
 
     public function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        if (!empty($args) && !$this->commandManager->userIsInteracting($message->author->id)) {
+        if (!empty($args) && !$this->manager->userIsInteracting($message)) {
             return;
         }
-        if (empty($args) && !$this->commandManager->userIsInteracting($message->author->id)) {
+        if (empty($args) && !$this->manager->userIsInteracting($message)) {
             $hero = new Hero($this->classes[mt_rand(0, $this->numOfClasses)]);
             $monster = new Monster($this->monsterTypes[mt_rand(0, $this->numOfTypes)]);
-            $this->commandManager->addInteraction($message, self::TIMEOUT, [$hero, $monster]);
             $heroFirst = (bool)mt_rand(0, 1);
             $message->reply('', ['embed' => $this->getEncounterEmbed($hero, $monster, $heroFirst)]);
+
+            $this->manager->addInteraction($message, self::TIMEOUT, [$hero, $monster]);
+
+            if ($heroFirst) {
+                return;
+            }
         }
+
+        if (!empty($args) && $this->manager->userIsInteracting($message)) {
+
+        }
+
     }
 
     function getEncounterEmbed(Hero $hero, Monster $monster, bool $heroFirst): MessageEmbed {
@@ -77,5 +87,13 @@ class Fight extends Command {
             $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix . $this->name));
         }
         return $embed;
+    }
+
+    function getHero(int $userId): Hero {
+        return $this->manager->getUserData($userId)[0];
+    }
+
+    function getMonster(int $userId): Monster {
+        return $this->manager->getUserData($userId)[1];
     }
 }

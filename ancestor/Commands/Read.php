@@ -25,7 +25,7 @@ class Read extends Command {
     /**
      * @var TimedCommandManager
      */
-    private $timedManager;
+    private $manager;
     /**
      * @var FileDownloader
      */
@@ -45,31 +45,31 @@ class Read extends Command {
             $json, [], Curio::class
         );
 
-        $this->timedManager = new TimedCommandManager($this->client);
+        $this->manager = new TimedCommandManager($this->client);
         $this->fileDl = new FileDownloader($this->client->getLoop());
     }
 
     function run(Message $message, array $args) {
-        if (empty($args) && !$this->timedManager->userIsInteracting($message->author->id)) {
+        if (empty($args) && !$this->manager->userIsInteracting($message)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
-            $this->timedManager->addInteraction($message, self::TIMEOUT, $curio);
+            $this->manager->addInteraction($message, self::TIMEOUT, $curio);
             $message->reply('', ['embed' => $curio->getEmbedResponse($this->handler->prefix . $this->name)]);
             return;
         }
-        if (!empty($args) && $this->timedManager->userIsInteracting($message->author->id) && $this->timedManager->channelIsValid($message)) {
+        if (!empty($args) && $this->manager->userIsInteracting($message)) {
             $actionName = implode(' ', $args);
-            $curio = $this->getCurioFromUserId($message->author->id);
+            $curio = $this->getCurio($message);
             $action = $curio->getActionIfValid($actionName);
 
             if ($action === false) {
                 return;
             }
 
-            $this->timedManager->deleteInteraction($message->author->id);
+            $this->manager->deleteInteraction($message);
 
             //Action is the default action.
             if ($action === true) {
-                $message->reply('', ['embed' => Curio::defaultAction()->effects[0]->getEmbedResponse()]);
+                $message->reply('', ['embed' => $curio->defaultAction()->effects[0]->getEmbedResponse()]);
                 return;
             }
 
@@ -131,8 +131,8 @@ class Read extends Command {
 
     }
 
-    function getCurioFromUserId(int $userId): Curio {
-        return $this->timedManager->getUserData($userId);
+    function getCurio(Message $message): Curio {
+        return $this->manager->getUserData($message);
     }
 
     function getRandomEffectFromAction(Action $action): Effect {

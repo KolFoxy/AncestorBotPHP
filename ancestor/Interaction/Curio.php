@@ -24,7 +24,7 @@ class Curio extends AbstractInteraction {
         return $embedResponse;
     }
 
-    public static function defaultAction(): Action {
+    public function defaultAction(): Action {
         if (self::$defAction === null) {
             $action = new Action();
             $action->name = 'nothing';

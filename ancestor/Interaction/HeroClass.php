@@ -37,7 +37,7 @@ class HeroClass extends AbstractLivingInteraction {
         return $embedResponse;
     }
 
-    public static function defaultAction(): Action {
+    public function defaultAction(): Action {
         $action = new Action();
         $action->name = 'pass turn';
         $effect = new Effect();

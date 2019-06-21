@@ -41,7 +41,7 @@ class MonsterType extends AbstractLivingInteraction {
         return $this->actions[mt_rand(0, sizeof($this->actions))];
     }
 
-    public static function defaultAction(): Action {
+    public function defaultAction(): Action {
         $action = new Action();
         $action->name = 'attack';
         $effect = new Effect();

@@ -33,7 +33,7 @@ abstract class AbstractInteraction {
      */
     public function getActionIfValid(string $actionName) {
         $actionL = mb_strtolower($actionName);
-        if ($actionL === mb_strtolower(self::defaultAction()->name)) {
+        if ($actionL === mb_strtolower($this->defaultAction()->name)) {
             return true;
         }
         if (empty($this->actions)) {
@@ -66,10 +66,10 @@ abstract class AbstractInteraction {
         foreach ($this->actions as $action) {
             $footerText .= mb_strtolower($action->name) . ', ';
         }
-        $footerText .= self::defaultAction()->name;
+        $footerText .= $this->defaultAction()->name;
         return $footerText;
     }
 
-    abstract public static function defaultAction(): Action;
+    abstract public function defaultAction(): Action;
 
 }
