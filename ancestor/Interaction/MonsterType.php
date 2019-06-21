@@ -19,6 +19,11 @@ class MonsterType extends AbstractInteraction {
     public $healthMax;
 
     /**
+     * @var int
+     */
+    public $dodge = 25;
+
+    /**
      * @param string $commandName
      * @param HeroClass|null $attacker
      * @param string $healthStatus
@@ -53,7 +58,7 @@ class MonsterType extends AbstractInteraction {
         $effect = new Effect();
         $effect->name = 'Attack!';
         $effect->setDescription('Monster attacks the hero!');
-        $effect->health_value = mt_rand(3, 10);
+        $effect->health_value = (-1) * mt_rand(3, 10);
         $action->effects = [$effect];
         return $action;
     }

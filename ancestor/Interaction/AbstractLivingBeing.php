@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction;
 
-abstract class AbstractLivingInteraction {
+abstract class AbstractLivingBeing {
 
     /**
      * @var int

@@ -1,14 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KolBrony
- * Date: 20.06.2019
- * Time: 15:18
- */
 
 namespace Ancestor\Interaction;
 
-class Hero extends AbstractLivingInteraction {
+class Hero extends AbstractLivingBeing {
     /**
      * @var int
      */

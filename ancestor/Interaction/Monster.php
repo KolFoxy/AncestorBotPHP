@@ -4,7 +4,7 @@ namespace Ancestor\Interaction;
 
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
-class Monster extends AbstractLivingInteraction {
+class Monster extends AbstractLivingBeing {
 
     /**
      * @var MonsterType
