@@ -68,6 +68,7 @@ class Fight extends Command {
         }
 
         if (!empty($args) && $this->manager->userIsInteracting($message)) {
+            $actionName = implode(' ', $args);
 
         }
 

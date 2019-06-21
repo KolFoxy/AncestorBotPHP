@@ -29,22 +29,20 @@ abstract class AbstractInteraction {
 
     /**
      * @param string $actionName
-     * @return Action|bool Returns TRUE if DEFAULT_ACTION
+     * @return Action|null
      */
     public function getActionIfValid(string $actionName) {
+        $defAction = $this->defaultAction();
         $actionL = mb_strtolower($actionName);
-        if ($actionL === mb_strtolower($this->defaultAction()->name)) {
-            return true;
-        }
-        if (empty($this->actions)) {
-            return false;
+        if ($actionL === mb_strtolower($defAction->name)) {
+           return $defAction;
         }
         foreach ($this->actions as $action) {
             if (mb_strtolower($action->name) === $actionL) {
                 return $action;
             }
         }
-        return false;
+        return null;
     }
 
     /**

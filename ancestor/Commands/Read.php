@@ -60,20 +60,12 @@ class Read extends Command {
             $actionName = implode(' ', $args);
             $curio = $this->getCurio($message);
             $action = $curio->getActionIfValid($actionName);
-
-            if ($action === false) {
+            if ($action === null) {
                 return;
             }
 
             $this->manager->deleteInteraction($message);
-
-            //Action is the default action.
-            if ($action === true) {
-                $message->reply('', ['embed' => $curio->defaultAction()->effects[0]->getEmbedResponse()]);
-                return;
-            }
-
-            $effect = $this->getRandomEffectFromAction($action);
+            $effect = $action->getRandomEffect();
             $extraEmbedFields = null;
             if ($effect->isNegativeStressEffect() && $effect->stress_value >= 100) {
                 $resolve = RandomDataProvider::GetInstance()->GetRandomResolve();
@@ -133,10 +125,6 @@ class Read extends Command {
 
     function getCurio(Message $message): Curio {
         return $this->manager->getUserData($message);
-    }
-
-    function getRandomEffectFromAction(Action $action): Effect {
-        return RandomDataProvider::GetInstance()->GetRandomData($action->effects);
     }
 
 
