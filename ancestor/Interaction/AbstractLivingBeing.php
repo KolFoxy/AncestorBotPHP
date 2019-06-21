@@ -24,7 +24,7 @@ abstract class AbstractLivingBeing {
      */
 
     /**
-     * @var AbstractInteraction;
+     * @var AbstractLivingInteraction;
      */
     public $type;
 

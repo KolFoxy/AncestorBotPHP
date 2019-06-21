@@ -5,15 +5,9 @@ namespace Ancestor\Interaction;
 use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
-class HeroClass extends AbstractInteraction {
+class HeroClass extends AbstractLivingInteraction {
 
     const EMBED_COLOR = 13294;
-
-    /**
-     * @var int
-     * @required
-     */
-    public $healthMax;
 
     /**
      * Color of the embedResponse

@@ -10,18 +10,7 @@ namespace Ancestor\Interaction;
 
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
-class MonsterType extends AbstractInteraction {
-
-    /**
-     * @var int
-     * @required
-     */
-    public $healthMax;
-
-    /**
-     * @var int
-     */
-    public $dodge = 25;
+class MonsterType extends AbstractLivingInteraction {
 
     /**
      * @param string $commandName
