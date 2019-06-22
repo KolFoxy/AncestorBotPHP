@@ -10,9 +10,9 @@ abstract class AbstractLivingBeing {
     public $healthMax;
 
     /**
-     * @var int|null
+     * @var int
      */
-    protected $currentHealth = null;
+    protected $currentHealth;
 
     /**
      * @var bool
@@ -29,25 +29,18 @@ abstract class AbstractLivingBeing {
      */
     public $type;
 
-    public function getCurrentHealth(): int {
-        if ($this->currentHealth === null) {
-            $this->currentHealth = $this->healthMax;
-        }
-        return $this->currentHealth;
-    }
-
     /**
      * @return string Format: "currentHealth/healthMax"
      */
     public function getHealthStatus(): string {
-        return $this->getCurrentHealth() . '/' . $this->healthMax;
+        return $this->currentHealth . '/' . $this->healthMax;
     }
 
     /**
      * @return bool
      */
     public function isDead(): bool {
-        return $this->getCurrentHealth() <= 0;
+        return $this->currentHealth <= 0;
     }
 
     /**
@@ -67,8 +60,13 @@ abstract class AbstractLivingBeing {
 
     public function __construct(AbstractLivingInteraction $type) {
         $this->type = $type;
-        $this->healthMax = $type->healthMax;
+        $this->currentHealth = $this->healthMax = $type->healthMax;
     }
+
+    /**
+     * @param int $value
+     */
+    abstract public function addHealth(int $value);
 
 
 }

@@ -12,6 +12,7 @@ class RandomDataProvider {
     private $quirksPositive;
     private $quirksNegative;
     private $heroDiesQuotes;
+    private $monsterDiesQuotes;
 
     private static $instance = null;
 
@@ -28,6 +29,7 @@ class RandomDataProvider {
         $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
         $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
         $this->PopulateArray($this->heroDiesQuotes, '/data/heroDiesQuotes');
+        $this->PopulateArray($this->monsterDiesQuotes,'/data/monsterDiesQuotes');
     }
 
     /**
@@ -54,6 +56,10 @@ class RandomDataProvider {
 
     public function GetRandomHeroDeathQuote() : string {
         return $this->GetRandomData($this->heroDiesQuotes);
+    }
+
+    public function GetRandomMonsterDeathQuote() : string {
+        return $this->GetRandomData($this->monsterDiesQuotes);
     }
 
     public function GetRandomResolve() {

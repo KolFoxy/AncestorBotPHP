@@ -27,15 +27,30 @@ class Effect {
 
     /**
      * Indicates the amount of stress that effect gives hero.
-     * @var string|int|null
+     * @var int|null
      */
     public $stress_value = null;
 
     /**
+     * @var int Indicates how much stress value should deviate UP from the base.
+     */
+    public $stressDeviation = 0;
+
+    /**
      * Indicates the amount of hp that effect gives or subtracts from hero.
-     * @var string|int|null
+     * @var int|null
      */
     public $health_value = null;
+
+    /**
+     * @var int Indicates how much health value should deviate UP from the base.
+     */
+    public $healthDeviation = 0;
+
+    /**
+     * @var bool Indicates whether or not the effect is supposed to be a healing one.
+     */
+    public $isHeal = false;
 
     /**
      * Indicates whether or not effect gives hero positive(TRUE) or negative(FALSE) quirk.
@@ -66,14 +81,21 @@ class Effect {
      * @return bool
      */
     public function isPositiveStressEffect(): bool {
-        return isset($this->stress_value) && $this->getStressValue() < 0;
+        return isset($this->stress_value) && $this->stress_value < 0;
     }
 
     /**
      * @return bool
      */
     public function isNegativeStressEffect(): bool {
-        return isset($this->stress_value) && $this->getStressValue() > 0;
+        return isset($this->stress_value) && $this->stress_value > 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isNegativeHealthEffect(): bool {
+        return isset($this->health_value) && $this->health_value < 0;
     }
 
     /**
@@ -185,11 +207,17 @@ class Effect {
     }
 
     public function getHealthValue(): int {
-        return $this->parseRandomInt($this->health_value);
+        if (!isset($this->health_value)) {
+            return 0;
+        }
+        return mt_rand($this->health_value, $this->health_value + $this->healthDeviation);
     }
 
     public function getStressValue(): int {
-        return $this->parseRandomInt($this->stress_value);
+        if (!isset($this->stress_value)) {
+            return 0;
+        }
+        return mt_rand($this->stress_value, $this->stress_value + $this->stressDeviation);
     }
 
     private function parseRandomInt($data): int {

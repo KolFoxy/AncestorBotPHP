@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KolBrony
- * Date: 19.06.2019
- * Time: 14:38
- */
 
 namespace Ancestor\Commands;
 
@@ -17,7 +11,6 @@ use Ancestor\Interaction\Monster;
 use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
-use function Sodium\add;
 
 class Fight extends Command {
 
@@ -82,7 +75,10 @@ class Fight extends Command {
             return;
         }
         $monster = $this->getMonster($message);
-        $hit = $hero->rollWillHit($monster);
+
+        $message->reply('', ['embed' => $hero->getHeroTurn($action, $monster)]);
+
+        //TODO: Monster turn
 
     }
 

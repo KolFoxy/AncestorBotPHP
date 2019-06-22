@@ -33,15 +33,15 @@ class Monster extends AbstractLivingBeing {
         $res->setFooter($this->type->name . '\'s health: ' . $this->getHealthStatus());
 
         if (!$this->rollWillHit($heroTarget)) {
-            $res->setDescription('*and misses!');
+            $res->setDescription('...and misses!');
             return $res;
         }
 
         $effect = $action->getRandomEffect();
         $description = $effect->getDescription();
         $isCrit = $this->rollWillCrit($effect);
-        $stressEffect = 0 + $effect->getStressValue();
-        $healthEffect = 0 + $effect->getHealthValue();
+        $stressEffect = $effect->getStressValue();
+        $healthEffect = $effect->getHealthValue();
         if ($isCrit) {
             $description .= ' ***CRITICAL STRIKE!***';
             $stressEffect += 10;
@@ -60,9 +60,17 @@ class Monster extends AbstractLivingBeing {
         }
 
         if ($heroTarget->isDead()) {
-            $res->addField('***DEATHBLOW***', RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote());
+            $res->addField('***DEATHBLOW***', '***' . RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote() . '***');
         }
 
         return $res;
     }
+
+    public function addHealth(int $value) {
+        $this->currentHealth += $value;
+        if ($this->currentHealth > $this->healthMax) {
+            $this->currentHealth = $this->healthMax;
+        }
+    }
+
 }
