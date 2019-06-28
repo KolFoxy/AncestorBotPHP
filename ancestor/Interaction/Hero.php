@@ -126,17 +126,16 @@ class Hero extends AbstractLivingBeing {
     }
 
     /**
-     * @param Action $action
+     * @param DirectAction $action
      * @param AbstractLivingBeing|Hero $target
      * @param Effect|null $forcedEffect
      * @return MessageEmbed
      */
-    public function getHeroTurn(Action $action, AbstractLivingBeing $target, Effect $forcedEffect = null): MessageEmbed {
+    public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
         $res = new MessageEmbed();
         $res->setTitle('**' . $this->name . '** uses **' . $action->name . '!**');
-        $effect = is_null($forcedEffect) ? $action->getRandomEffect() : $forcedEffect;
+        $effect = $action->effect;
         $res->setThumbnail($effect->image);
-        $res->setFooter($this->getStatus());
         if (!$effect->isHeal && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target)) {
             $res->setDescription('...and misses!');
             return $res;
@@ -150,7 +149,7 @@ class Hero extends AbstractLivingBeing {
         $res->setDescription($description);
 
         $stressEffect = $effect->getStressValue();
-        $healthEffect = $effect->getHealthValue();
+        $healthEffect = $isCrit ? $effect->getHealthValue() * 2 : $effect->getHealthValue();
         $targetIsHero = is_a($target, Hero::class);
         $targetName = $targetIsHero ? $target->name : $target->type->name;
 

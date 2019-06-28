@@ -29,7 +29,7 @@ abstract class AbstractInteraction {
 
     /**
      * @param string $actionName
-     * @return Action|null
+     * @return mixed|null
      */
     public function getActionIfValid(string $actionName) {
         $defAction = $this->defaultAction();
@@ -68,6 +68,9 @@ abstract class AbstractInteraction {
         return $footerText;
     }
 
-    abstract public function defaultAction(): Action;
+    /**
+     * @return mixed
+     */
+    abstract public function defaultAction();
 
 }

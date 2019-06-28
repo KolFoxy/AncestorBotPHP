@@ -13,9 +13,14 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 class MonsterType extends AbstractLivingInteraction {
 
     /**
-     * @var Action|null
+     * @var DirectAction|null
      */
     private $defAction = null;
+
+    /**
+     * @var DirectAction
+     */
+    public $actions;
 
     /**
      * @param string $commandName
@@ -40,23 +45,27 @@ class MonsterType extends AbstractLivingInteraction {
     }
 
     /**
-     * @return Action
+     * @return DirectAction
      */
-    public function getRandomAction(): Action {
+    public function getRandomAction(): DirectAction {
         return $this->actions[mt_rand(0, sizeof($this->actions))];
     }
 
-    public function defaultAction(): Action {
+    public function defaultAction(): DirectAction {
         if ($this->defAction === null) {
-            $action = new Action();
+            $action = new DirectAction();
             $action->name = 'attack';
             $effect = new Effect();
             $effect->name = 'Attack!';
             $effect->setDescription('Monster attacks the hero!');
             $effect->health_value = (-1) * mt_rand(3, 10);
-            $action->effects = [$effect];
+            $action->effect = $effect;
             $this->defAction = $action;
         }
         return $this->defAction;
+    }
+
+    public function getActionIfValid(string $actionName) : DirectAction {
+        return parent::getActionIfValid($actionName);
     }
 }

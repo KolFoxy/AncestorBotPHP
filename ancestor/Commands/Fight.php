@@ -4,7 +4,9 @@ namespace Ancestor\Commands;
 
 use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
+use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\CommandHandler\TimedCommandManager;
+use Ancestor\Interaction\Action;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Monster;
@@ -40,10 +42,16 @@ class Fight extends Command {
      */
     private $numOfTypes;
 
-    public function __construct(CommandHandler $handler, string $name, string $description, array $aliases = null) {
-        //TODO: all the construction
-        //TODO: endless mode
-        parent::__construct($handler, $name, $description, $aliases);
+    public function __construct(CommandHandler $handler) {
+        parent::__construct($handler, 'fight', 'Fight a random monster or type "'
+            . $handler->prefix
+            . 'f endless" in order to start in endless mode, in which more and more monsters will come after defeating previous ones!'
+            , ['f', 'df', 'dfight']);
+        $this->manager = new TimedCommandManager($this->client);
+        //TODO: JSON data import
+        $this->numOfClasses = sizeof($this->classes);
+        $this->numOfTypes = sizeof($this->monsterTypes);
+
     }
 
     public function run(Message $message, array $args) {
@@ -58,7 +66,7 @@ class Fight extends Command {
             }
 
             $hero = new Hero($this->classes[mt_rand(0, $this->numOfClasses)], $message->author->username);
-            $monster = new Monster($this->monsterTypes[mt_rand(0, $this->numOfTypes)]);
+            $monster = $this->getRandomMonster();
             $heroFirst = (bool)mt_rand(0, 1);
             $message->reply('', ['embed' => $this->getEncounterEmbed($hero, $monster, $heroFirst)]);
             $this->manager->addInteraction($message, self::TIMEOUT, [$hero, $monster, $endless]);
@@ -69,17 +77,51 @@ class Fight extends Command {
         }
 
         $actionName = implode(' ', $args);
+        $embed = $this->processAction($message, $actionName);
+        if ($embed === null) {
+            return;
+        }
+        $message->reply('', ['embed' => $embed]);
+        //TODO: Monster turn via command with no args
+
+    }
+
+    function processAction(Message $message, string $actionName): MessageEmbed {
         $hero = $this->getHero($message);
         $action = $hero->type->getActionIfValid($actionName);
         if ($action === null) {
-            return;
+            return null;
         }
         $monster = $this->getMonster($message);
+        $target = $action->effect->isHeal ? $hero : $monster;
+        $embed = $hero->getHeroTurn($action, $target);
+        if (!$monster->isDead()) {
+            $extraEmbed = $monster->getMonsterTurn($hero);
+            $embed->addField('Monster turn!', $monster->getHealthString());
+            CommandHelper::mergeEmbed($embed, $extraEmbed);
+            $embed->setImage($extraEmbed->thumbnail['url']);
+        } else {
+            if ($this->getEndless($message)) {
+                $monster = $this->getRandomMonster();
+                $embed->addField($monster->type->name . ' emerges from the darkness!', $monster->getHealthString());
+                CommandHelper::mergeEmbed($embed, $monster->getMonsterTurn($hero));
+            } else {
+                $embed->setFooter($hero->name . ' is victorious!', $message->author->getAvatarURL());
+                $this->manager->deleteInteraction($message);
+                return $embed;
+            }
+        }
+        if ($hero->isDead()) {
+            $embed->setFooter('R.I.P. ' . $hero->name, $message->author->getAvatarURL());
+            $this->manager->deleteInteraction($message);
+        }
+        $this->manager->refreshTimer($message, self::TIMEOUT);
+        $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix));
+        return $embed;
+    }
 
-        $message->reply('', ['embed' => $hero->getHeroTurn($action, $monster)]);
-
-        //TODO: Monster turn
-
+    function getRandomMonster(): Monster {
+        return new Monster($this->monsterTypes[mt_rand(0, $this->numOfTypes)]);
     }
 
     function getEncounterEmbed(Hero $hero, Monster $monster, bool $heroFirst): MessageEmbed {
@@ -96,14 +138,12 @@ class Fight extends Command {
 
         if (!$heroFirst) {
             $additionalEmbed = $monster->getMonsterTurn($hero);
-            $embed->addField($additionalEmbed->title, $additionalEmbed->description);
-            foreach ($additionalEmbed->fields as $field) {
-                $embed->addField($field['name'], $field['value']);
-            }
+            CommandHelper::mergeEmbed($embed, $additionalEmbed);
         }
 
         return $embed;
     }
+
 
     function getHero(Message $message): Hero {
         return $this->manager->getUserData($message)[0];
@@ -116,4 +156,5 @@ class Fight extends Command {
     function getEndless(Message $message): bool {
         return $this->manager->getUserData($message)[2];
     }
+
 }

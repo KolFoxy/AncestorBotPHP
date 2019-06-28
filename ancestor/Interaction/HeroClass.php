@@ -8,7 +8,7 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 class HeroClass extends AbstractLivingInteraction {
 
     /**
-     * @var HeroAction|null
+     * @var DirectAction|null
      */
     private $defAction = null;
 
@@ -21,7 +21,7 @@ class HeroClass extends AbstractLivingInteraction {
     public $embedColor = null;
 
     /**
-     * @var HeroAction
+     * @var DirectAction[]
      */
     public $actions;
 
@@ -48,17 +48,17 @@ class HeroClass extends AbstractLivingInteraction {
     }
 
     /**
-     * @return Action|HeroAction
+     * @return DirectAction
      */
-    public function defaultAction(): Action {
+    public function defaultAction(): DirectAction {
         if ($this->defAction === null) {
-            $action = new HeroAction();
+            $action = new DirectAction();
             $action->name = 'pass turn';
             $effect = new Effect();
             $effect->name = 'Do nothing.';
             $effect->setDescription('Hero passed the turn and suffered stress.');
             $effect->stress_value = mt_rand(6, 10);
-            $action->effects = [$effect];
+            $action->effect = $effect;
             $this->defAction = $action;
         }
         return $this->defAction;
@@ -66,9 +66,9 @@ class HeroClass extends AbstractLivingInteraction {
 
     /**
      * @param string $actionName
-     * @return HeroAction
+     * @return DirectAction
      */
-    public function getActionIfValid(string $actionName) : HeroAction {
+    public function getActionIfValid(string $actionName) : DirectAction {
         if ($actionName === $this->defaultAction()->name) {
             return $this->defaultAction();
         }

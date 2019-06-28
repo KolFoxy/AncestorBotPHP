@@ -4,6 +4,7 @@ namespace Ancestor\CommandHandler;
 
 use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
 use CharlotteDunois\Yasmin\Models\Message as Message;
+use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class CommandHelper {
 
@@ -123,6 +124,19 @@ class CommandHelper {
             return $result;
         }
         return [''];
+    }
+
+    /**
+     * @param MessageEmbed $mergeInto
+     * @param MessageEmbed $mergeFrom
+     */
+    public static function mergeEmbed(MessageEmbed $mergeInto, MessageEmbed $mergeFrom) {
+        if ($mergeFrom->title != null && $mergeFrom->description != null) {
+            $mergeInto->addField($mergeFrom->title, $mergeFrom->description);
+        }
+        foreach ($mergeFrom->fields as $field) {
+            $mergeInto->addField($field['name'], $field['value'], $field['inline']);
+        }
     }
 
 

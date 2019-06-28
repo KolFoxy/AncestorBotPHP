@@ -36,6 +36,10 @@ abstract class AbstractLivingBeing {
         return $this->currentHealth . '/' . $this->healthMax;
     }
 
+    public function getHealthString(): string {
+        return 'Health: ' . $this->getHealthStatus();
+    }
+
     /**
      * @return bool
      */

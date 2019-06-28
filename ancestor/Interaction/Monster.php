@@ -25,9 +25,9 @@ class Monster extends AbstractLivingBeing {
         return $this->type->getEmbedResponse($commandName, $userActions, $this->getHealthStatus());
     }
 
-    function getMonsterTurn(Hero $heroTarget): MessageEmbed {
+    function getMonsterTurn(Hero $heroTarget, DirectAction $forcedAction = null): MessageEmbed {
         $res = new MessageEmbed();
-        $action = $this->type->getRandomAction();
+        $action = is_null($forcedAction) ? $this->type->getRandomAction() : $forcedAction;
         $res->setTitle('***' . $this->type->name . ' uses ' . $action->name . '!***');
         $res->setThumbnail($this->type->image);
         $res->setFooter($this->type->name . '\'s health: ' . $this->getHealthStatus());
@@ -37,7 +37,7 @@ class Monster extends AbstractLivingBeing {
             return $res;
         }
 
-        $effect = $action->getRandomEffect();
+        $effect = $action->effect;
         $description = $effect->getDescription();
         $isCrit = $this->rollWillCrit($effect);
         $stressEffect = $effect->getStressValue();
@@ -62,9 +62,9 @@ class Monster extends AbstractLivingBeing {
         if ($heroTarget->isDead()) {
             $res->addField('***DEATHBLOW***', '***' . RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote() . '***');
         }
-
         return $res;
     }
+
 
     public function addHealth(int $value) {
         $this->currentHealth += $value;
