@@ -58,20 +58,4 @@ class HeroClass extends AbstractLivingInteraction {
         }
         return $this->defAction;
     }
-
-    /**
-     * @param string $actionName
-     * @return DirectAction
-     */
-    public function getActionIfValid(string $actionName) : DirectAction {
-        if ($actionName === $this->defaultAction()->name) {
-            return $this->defaultAction();
-        }
-        foreach ($this->actions as $action) {
-            if (mb_strpos($action->name, $actionName) === 0) {
-                return $action;
-            }
-        }
-        return null;
-    }
 }

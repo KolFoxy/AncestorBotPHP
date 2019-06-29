@@ -4,6 +4,7 @@ namespace Ancestor;
 
 use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\Commands\Fight;
 use Ancestor\Commands\Gold;
 use Ancestor\Commands\Read;
 use Ancestor\Commands\Remind;
@@ -77,6 +78,7 @@ class AncestorBot {
             new Zalgo($this->commandHandler),
             new Read($this->commandHandler),
             new Reveal($this->commandHandler),
+            new Fight($this->commandHandler)
         ];
     }
 

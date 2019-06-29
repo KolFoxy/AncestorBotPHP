@@ -20,7 +20,7 @@ class Fight extends Command {
     /**
      * @var HeroClass[]
      */
-    private $classes;
+    private $classes = [];
 
     /**
      * @var int
@@ -35,7 +35,7 @@ class Fight extends Command {
     /**
      * @var MonsterType[]
      */
-    private $monsterTypes;
+    private $monsterTypes = [];
     /**
      * @var int
      */
@@ -61,8 +61,8 @@ class Fight extends Command {
             $this->monsterTypes = array_merge($this->monsterTypes,$arrayOfMonsterTypes);
         }
 
-        $this->numOfClasses = sizeof($this->classes);
-        $this->numOfTypes = sizeof($this->monsterTypes);
+        $this->numOfClasses = sizeof($this->classes) - 1;
+        $this->numOfTypes = sizeof($this->monsterTypes) - 1;
 
     }
 
