@@ -41,9 +41,7 @@ class Read extends Command {
         $mapper = new \JsonMapper();
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/writings.json'));
         $mapper->bExceptionOnMissingData = true;
-        $this->curios = $mapper->mapArray(
-            $json, [], Curio::class
-        );
+        $this->curios = $mapper->mapArray($json, [], Curio::class);
 
         $this->manager = new TimedCommandManager($this->client);
         $this->fileDl = new FileDownloader($this->client->getLoop());
@@ -68,7 +66,7 @@ class Read extends Command {
             $this->manager->deleteInteraction($message);
             $effect = $action->getRandomEffect();
             $extraEmbedFields = null;
-            if ($effect->isNegativeStressEffect() && $effect->getStressValue() >= 100) {
+            if ($effect->isNegativeStressEffect() && $effect->stress_value >= 100) {
                 $resolve = RandomDataProvider::GetInstance()->GetRandomResolve();
                 $extraEmbedFields = [
                     [
@@ -131,13 +129,13 @@ class Read extends Command {
 
     /**
      * @param resource $imageSrcFileHandler
-     * @param string $imageTemplatePath
+     * @param string $imageForTemplatePath
      * @param ImageTemplate $template
      * @return string
      */
-    function getImageOnTemplate($imageSrcFileHandler, string $imageTemplatePath, ImageTemplate $template): string {
+    function getImageOnTemplate($imageSrcFileHandler, string $imageForTemplatePath, ImageTemplate $template): string {
         $imageSrc = CommandHelper::ImageFromFileHandler($imageSrcFileHandler);
-        $imageTemplate = imagecreatefrompng($imageTemplatePath);
+        $imageTemplate = imagecreatefrompng($imageForTemplatePath);
         $tA = new ImageTemplateApplier($template);
         $canvas = $tA->applyTemplate($imageSrc, $imageTemplate, true);
 

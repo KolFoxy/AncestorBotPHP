@@ -1,0 +1,41 @@
+{
+  "name": "Crusader",
+  "description": "A mighty sword arm anchored by holy purpose - a zealous warrior!",
+  "image": "https://i.imgur.com/Cggaoo7.png",
+  "healthMax": 60,
+  "dodge": 25,
+  "bonusCritChance": 7,
+  "embedColor": 16777215,
+  "actions": [
+    {
+      "name": "Smite",
+      "effect": {
+        "description": "Smites the opponent with righteous fury.",
+        "health_value": -10,
+        "healthDeviation": -9,
+        "hitChance": 85,
+        "image": "https://i.imgur.com/PGDc7lb.png"
+      }
+    },
+    {
+      "name": "Battle Heal",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Heals the target for a small amount.",
+        "health_value": 2,
+        "healthDeviation": 1,
+        "image": "https://i.imgur.com/DB3BRs3.png"
+      }
+    },
+    {
+      "name": "Inspiring Cry",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Inspire the target and ease some of their stress.",
+        "health_value": 1,
+        "stress_value": -5,
+        "image": "https://i.imgur.com/P1cprP7.png"
+      }
+    }
+  ]
+}

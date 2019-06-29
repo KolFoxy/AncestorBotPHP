@@ -108,7 +108,7 @@ class Hero extends AbstractLivingBeing {
      * @param string $commandName
      * @return \CharlotteDunois\Yasmin\Models\MessageEmbed
      */
-    public function getEmbedResponse(string $commandName = null): \CharlotteDunois\Yasmin\Models\MessageEmbed {
+    public function getEmbedResponse(string $commandName = null): MessageEmbed {
         return $this->type->getEmbedResponse($commandName, $this->getStatus());
     }
 
@@ -136,7 +136,7 @@ class Hero extends AbstractLivingBeing {
         $res->setTitle('**' . $this->name . '** uses **' . $action->name . '!**');
         $effect = $action->effect;
         $res->setThumbnail($effect->image);
-        if (!$effect->isHeal && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target)) {
+        if (!$effect->isHeal && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target, $effect)) {
             $res->setDescription('...and misses!');
             return $res;
         }
@@ -144,7 +144,7 @@ class Hero extends AbstractLivingBeing {
         $description = $effect->getDescription();
         $isCrit = $this->rollWillCrit($effect);
         if ($isCrit) {
-            $description .= ' ***CRITICAL STRIKE!***';
+            $description .= ' ***CRIT!***';
         }
         $res->setDescription($description);
 
@@ -154,13 +154,13 @@ class Hero extends AbstractLivingBeing {
         $targetName = $targetIsHero ? $target->name : $target->type->name;
 
         $target->addHealth($healthEffect);
-        if ($effect->isHeal) {
+        if ($effect->isHealEffect()) {
             $res->addField('``' . $targetName . ' is healed for ' . $healthEffect . '!``'
                 , '*Health: ' . $target->getStressStatus() . '*');
             if ($isCrit) {
                 $stressEffect -= 10;
             }
-        } elseif ($effect->isNegativeHealthEffect()) {
+        } elseif ($effect->isDamageEffect()) {
             $res->addField('``' . $targetName . ' gets hit for ' . $healthEffect . ' HP!``'
                 , '*Health: ' . $target->getHealthStatus() . '*');
             if ($isCrit && $this->stress != 0) {

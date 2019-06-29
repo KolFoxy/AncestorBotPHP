@@ -9,9 +9,6 @@ abstract class Command {
     /** @var CommandHandler */
     protected $handler;
 
-    /** @var string */
-    public $path;
-
     /** @var array */
     public $aliases;
 

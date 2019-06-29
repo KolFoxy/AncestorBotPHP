@@ -15,10 +15,9 @@ class Effect {
     const INVALID_EFFECT_DESCRIPTION_MSG = 'Invalid description type for an Effect.';
 
     /**
-     * @var string
-     * @required
+     * @var string|null
      */
-    public $name;
+    public $name = null;
 
     /**
      * @var string|string[]
@@ -48,11 +47,6 @@ class Effect {
     public $healthDeviation = 0;
 
     /**
-     * @var bool Indicates whether or not the effect is supposed to be a healing one.
-     */
-    public $isHeal = false;
-
-    /**
      * Indicates whether or not effect gives hero positive(TRUE) or negative(FALSE) quirk.
      * @var bool|null
      */
@@ -76,6 +70,11 @@ class Effect {
      */
     public $critChance = null;
 
+    /**
+     * @var int
+     */
+    public $hitChance = 100;
+
 
     /**
      * @return bool
@@ -94,8 +93,15 @@ class Effect {
     /**
      * @return bool
      */
-    public function isNegativeHealthEffect(): bool {
+    public function isDamageEffect(): bool {
         return isset($this->health_value) && $this->health_value < 0;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isHealEffect(): bool {
+        return isset($this->health_value) && $this->health_value > 0;
     }
 
     /**
@@ -111,6 +117,7 @@ class Effect {
     public function isNegativeQuirkEffect(): bool {
         return isset($this->quirk_positive) && !$this->quirk_positive;
     }
+
 
     public function hasImage() {
         return isset($this->image) && isset($this->imageTemplate);
@@ -207,17 +214,21 @@ class Effect {
     }
 
     public function getHealthValue(): int {
-        if (!isset($this->health_value)) {
-            return 0;
-        }
-        return mt_rand($this->health_value, $this->health_value + $this->healthDeviation);
+        return $this->getDeviatingValue($this->health_value, $this->healthDeviation);
     }
 
     public function getStressValue(): int {
-        if (!isset($this->stress_value)) {
+        return $this->getDeviatingValue($this->stress_value, $this->stressDeviation);
+    }
+
+    protected function getDeviatingValue(int $value, int $deviation) {
+        if ($value === null) {
             return 0;
         }
-        return mt_rand($this->stress_value, $this->stress_value + $this->stressDeviation);
+        $valueMax = $value + $deviation;
+        $valueMin = $value < $valueMax ? $value : $valueMax;
+        $valueMax = $valueMax < $value ? $value : $valueMax;
+        return mt_rand($valueMin, $valueMax);
     }
 
     private function parseRandomInt($data): int {

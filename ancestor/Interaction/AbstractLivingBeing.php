@@ -19,10 +19,6 @@ abstract class AbstractLivingBeing {
      */
     public $isStunned = false;
 
-    /**
-     * @var int
-     */
-    public $bonusCritChance = 5;
 
     /**
      * @var AbstractLivingInteraction;
@@ -49,17 +45,18 @@ abstract class AbstractLivingBeing {
 
     /**
      * @param AbstractLivingBeing $target
+     * @param Effect $effect
      * @return bool
      */
-    public function rollWillHit(AbstractLivingBeing $target): bool {
-        if (mt_rand(1, $this->type->accuracy) <= $target->type->dodge) {
+    public function rollWillHit(AbstractLivingBeing $target, Effect $effect): bool {
+        if (mt_rand(1, $this->type->accuracyMod + $effect->hitChance) <= $target->type->dodge) {
             return false;
         }
         return true;
     }
 
     public function rollWillCrit(Effect $effect): bool {
-        return $effect->canCrit() && mt_rand(0, 100) < ($effect->critChance + $this->bonusCritChance);
+        return $effect->canCrit() && mt_rand(0, 100) < ($effect->critChance + $this->type->bonusCritChance);
     }
 
     public function __construct(AbstractLivingInteraction $type) {

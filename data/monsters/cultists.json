@@ -1,0 +1,30 @@
+[
+  {
+    "name": "Cultist Witch",
+    "description": "Human servant of the eldritch powers, assaults their enemy's minds with evil incantations.",
+    "image": "https://i.imgur.com/0agOsfn.png",
+    "healthMax": 25,
+    "dodge": 33,
+    "actions": [
+      {
+        "name": "Stressful Incantation",
+        "effect": {
+          "description": "Inflicts high stress damage to the opponent.",
+          "stress_value": 20,
+          "health_value": -1,
+          "healthDeviation": -2
+        }
+      },
+      {
+        "name": "Eldritch Push",
+        "effect": {
+          "description": "Pushes the enemy and inflicts small stress damage.",
+          "stress_value": 8,
+          "health_value": -1,
+          "healthDeviation": -2,
+          "critChance": 14
+        }
+      }
+    ]
+  }
+]

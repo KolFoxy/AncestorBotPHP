@@ -16,6 +16,16 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
     /**
      * @var int
      */
-    public $accuracy = 100;
+    public $accuracyMod = 0;
+
+    /**
+     * @var DirectAction[]
+     */
+    public $actions;
+
+    /**
+     * @var int
+     */
+    public $bonusCritChance = 3;
 
 }

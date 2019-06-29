@@ -31,19 +31,18 @@ class Monster extends AbstractLivingBeing {
         $res->setTitle('***' . $this->type->name . ' uses ' . $action->name . '!***');
         $res->setThumbnail($this->type->image);
         $res->setFooter($this->type->name . '\'s health: ' . $this->getHealthStatus());
-
-        if (!$this->rollWillHit($heroTarget)) {
+        $effect = $action->effect;
+        if (!$this->rollWillHit($heroTarget,$effect)) {
             $res->setDescription('...and misses!');
             return $res;
         }
 
-        $effect = $action->effect;
         $description = $effect->getDescription();
         $isCrit = $this->rollWillCrit($effect);
         $stressEffect = $effect->getStressValue();
         $healthEffect = $effect->getHealthValue();
         if ($isCrit) {
-            $description .= ' ***CRITICAL STRIKE!***';
+            $description .= ' ***CRIT***';
             $stressEffect += 10;
         }
         $res->setDescription($description);

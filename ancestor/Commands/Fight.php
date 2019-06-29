@@ -6,7 +6,6 @@ use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\CommandHandler\TimedCommandManager;
-use Ancestor\Interaction\Action;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Monster;
@@ -48,7 +47,20 @@ class Fight extends Command {
             . 'f endless" in order to start in endless mode, in which more and more monsters will come after defeating previous ones!'
             , ['f', 'df', 'dfight']);
         $this->manager = new TimedCommandManager($this->client);
-        //TODO: JSON data import
+
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+
+        foreach (glob(dirname(__DIR__, 2) . '/data/heroes/*.json') as $path) {
+            $json = json_decode(file_get_contents($path));
+            $this->classes[] = $mapper->map($json, new HeroClass());
+        }
+        foreach (glob(dirname(__DIR__, 2) . '/data/monsters/*.json') as $path) {
+            $json = json_decode(file_get_contents($path));
+            $arrayOfMonsterTypes = $mapper->mapArray($json, [], MonsterType::class);
+            $this->monsterTypes = array_merge($this->monsterTypes,$arrayOfMonsterTypes);
+        }
+
         $this->numOfClasses = sizeof($this->classes);
         $this->numOfTypes = sizeof($this->monsterTypes);
 
@@ -93,11 +105,11 @@ class Fight extends Command {
             return null;
         }
         $monster = $this->getMonster($message);
-        $target = $action->effect->isHeal ? $hero : $monster;
+        $target = $action->requiresTarget ? $hero : $monster;
         $embed = $hero->getHeroTurn($action, $target);
         if (!$monster->isDead()) {
             $extraEmbed = $monster->getMonsterTurn($hero);
-            $embed->addField('Monster turn!', $monster->getHealthString());
+            $embed->addField($monster->type->name . '\'s turn!', $monster->getHealthString());
             CommandHelper::mergeEmbed($embed, $extraEmbed);
             $embed->setImage($extraEmbed->thumbnail['url']);
         } else {

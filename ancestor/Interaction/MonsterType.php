@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KolBrony
- * Date: 19.06.2019
- * Time: 14:41
- */
+
 
 namespace Ancestor\Interaction;
 
@@ -17,10 +12,6 @@ class MonsterType extends AbstractLivingInteraction {
      */
     private $defAction = null;
 
-    /**
-     * @var DirectAction
-     */
-    public $actions;
 
     /**
      * @param string $commandName

@@ -21,11 +21,6 @@ class HeroClass extends AbstractLivingInteraction {
     public $embedColor = null;
 
     /**
-     * @var DirectAction[]
-     */
-    public $actions;
-
-    /**
      * @param string $commandName
      * @param string|null $status
      * @return MessageEmbed
