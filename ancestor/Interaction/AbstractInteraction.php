@@ -29,7 +29,7 @@ abstract class AbstractInteraction {
 
     /**
      * @param string $actionName
-     * @return Action|DirectAction
+     * @return Action|DirectAction|null
      */
     public function getActionIfValid(string $actionName) {
         $defAction = $this->defaultAction();

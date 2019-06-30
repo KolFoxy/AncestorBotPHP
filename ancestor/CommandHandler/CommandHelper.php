@@ -128,13 +128,18 @@ class CommandHelper {
 
     /**
      * @param MessageEmbed $mergeInto
-     * @param MessageEmbed $mergeFrom
+     * @param MessageEmbed|array $mergeFrom
      */
-    public static function mergeEmbed(MessageEmbed $mergeInto, MessageEmbed $mergeFrom) {
-        if ($mergeFrom->title != null && $mergeFrom->description != null) {
-            $mergeInto->addField($mergeFrom->title, $mergeFrom->description);
+    public static function mergeEmbed(MessageEmbed $mergeInto, $mergeFrom) {
+        if (is_a($mergeFrom, MessageEmbed::class)) {
+            if ($mergeFrom->title != null && $mergeFrom->description != null) {
+                $mergeInto->addField($mergeFrom->title, $mergeFrom->description);
+            }
+            $fields = $mergeFrom->fields;
+        } else {
+            $fields = $mergeFrom;
         }
-        foreach ($mergeFrom->fields as $field) {
+        foreach ($fields as $field) {
             $mergeInto->addField($field['name'], $field['value'], $field['inline']);
         }
     }

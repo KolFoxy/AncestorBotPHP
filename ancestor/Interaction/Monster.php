@@ -27,13 +27,13 @@ class Monster extends AbstractLivingBeing {
 
     function getMonsterTurn(Hero $heroTarget, DirectAction $forcedAction = null): MessageEmbed {
         $res = new MessageEmbed();
+
         $action = is_null($forcedAction) ? $this->type->getRandomAction() : $forcedAction;
-        $res->setTitle('***' . $this->type->name . ' uses ' . $action->name . '!***');
-        $res->setThumbnail($this->type->image);
-        $res->setFooter($this->type->name . '\'s health: ' . $this->getHealthStatus());
         $effect = $action->effect;
+
+        $title = ('**' . $this->type->name . '** uses **' . $action->name . '**!');
         if (!$this->rollWillHit($heroTarget,$effect)) {
-            $res->setDescription('...and misses!');
+            $res->setDescription(self::MISS_MESSAGE);
             return $res;
         }
 

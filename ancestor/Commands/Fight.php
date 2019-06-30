@@ -58,7 +58,7 @@ class Fight extends Command {
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             $arrayOfMonsterTypes = $mapper->mapArray($json, [], MonsterType::class);
-            $this->monsterTypes = array_merge($this->monsterTypes,$arrayOfMonsterTypes);
+            $this->monsterTypes = array_merge($this->monsterTypes, $arrayOfMonsterTypes);
         }
 
         $this->numOfClasses = sizeof($this->classes) - 1;
@@ -91,6 +91,7 @@ class Fight extends Command {
         $actionName = implode(' ', $args);
         $embed = $this->processAction($message, $actionName);
         if ($embed === null) {
+            $message->reply('Invalid action.');
             return;
         }
         $message->reply('', ['embed' => $embed]);
@@ -98,7 +99,12 @@ class Fight extends Command {
 
     }
 
-    function processAction(Message $message, string $actionName): MessageEmbed {
+    /**
+     * @param Message $message
+     * @param string $actionName
+     * @return MessageEmbed|null
+     */
+    function processAction(Message $message, string $actionName) {
         $hero = $this->getHero($message);
         $action = $hero->type->getActionIfValid($actionName);
         if ($action === null) {
@@ -111,7 +117,6 @@ class Fight extends Command {
             $extraEmbed = $monster->getMonsterTurn($hero);
             $embed->addField($monster->type->name . '\'s turn!', $monster->getHealthString());
             CommandHelper::mergeEmbed($embed, $extraEmbed);
-            $embed->setImage($extraEmbed->thumbnail['url']);
         } else {
             if ($this->getEndless($message)) {
                 $monster = $this->getRandomMonster();
@@ -138,12 +143,12 @@ class Fight extends Command {
 
     function getEncounterEmbed(Hero $hero, Monster $monster, bool $heroFirst): MessageEmbed {
         $embed = new MessageEmbed();
-        $embed->setTitle($hero->name);
+        $embed->setTitle('**' . $hero->name . '**');
         $embed->setThumbnail($hero->type->image);
-        $embed->setDescription($hero->type->description);
+        $embed->setDescription('*``' . $hero->type->description . '```*' . PHP_EOL . '``' . $hero->getStatus() . '``');
         $embed->addField(
-            '``You encounter a vile`` **' . $monster->type->name . '**',
-            '*' . $monster->type->description . '*' . PHP_EOL . 'Health: ' . $monster->getHealthStatus()
+            'You encounter a vile **' . $monster->type->name . '**',
+            '*``' . $monster->type->description . '```*' . PHP_EOL . '``Health: ' . $monster->getHealthStatus() . '``'
         );
         $embed->setImage($monster->type->image);
         $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix . $this->name));

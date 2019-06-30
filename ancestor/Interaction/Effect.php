@@ -28,7 +28,7 @@ class Effect {
      * Indicates the amount of stress that effect gives hero.
      * @var int|null
      */
-    public $stress_value = null;
+    public $stress_value = 0;
 
     /**
      * @var int Indicates how much stress value should deviate UP from the base.
@@ -39,7 +39,7 @@ class Effect {
      * Indicates the amount of hp that effect gives or subtracts from hero.
      * @var int|null
      */
-    public $health_value = null;
+    public $health_value = 0;
 
     /**
      * @var int Indicates how much health value should deviate UP from the base.
@@ -80,28 +80,28 @@ class Effect {
      * @return bool
      */
     public function isPositiveStressEffect(): bool {
-        return isset($this->stress_value) && $this->stress_value < 0;
+        return $this->stress_value < 0;
     }
 
     /**
      * @return bool
      */
     public function isNegativeStressEffect(): bool {
-        return isset($this->stress_value) && $this->stress_value > 0;
+        return $this->stress_value > 0;
     }
 
     /**
      * @return bool
      */
     public function isDamageEffect(): bool {
-        return isset($this->health_value) && $this->health_value < 0;
+        return $this->health_value < 0;
     }
 
     /**
      * @return bool
      */
     public function isHealEffect(): bool {
-        return isset($this->health_value) && $this->health_value > 0;
+        return $this->health_value > 0;
     }
 
     /**

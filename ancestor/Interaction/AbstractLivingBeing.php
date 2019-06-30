@@ -4,6 +4,9 @@ namespace Ancestor\Interaction;
 
 abstract class AbstractLivingBeing {
 
+    const MISS_MESSAGE = '``...and misses!``';
+    const CRIT_MESSAGE = ' ***CRIT!***';
+
     /**
      * @var int
      */

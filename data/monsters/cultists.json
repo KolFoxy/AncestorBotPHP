@@ -1,7 +1,7 @@
 [
   {
     "name": "Cultist Witch",
-    "description": "Human servant of the eldritch powers, assaults their enemy's minds with evil incantations.",
+    "description": "Human servant of the eldritch powers, assaults opponents' minds with evil incantations.",
     "image": "https://i.imgur.com/0agOsfn.png",
     "healthMax": 25,
     "dodge": 33,

@@ -5,6 +5,7 @@ namespace Ancestor\Interaction;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use function GuzzleHttp\Psr7\str;
+use function MongoDB\BSON\toJSON;
 
 class Hero extends AbstractLivingBeing {
 
@@ -35,9 +36,9 @@ class Hero extends AbstractLivingBeing {
     private $isActuallyDead = false;
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $bonusStressMessage = null;
+    private $bonusStressMessage = '';
 
     /**
      * @var string|null
@@ -117,11 +118,11 @@ class Hero extends AbstractLivingBeing {
     }
 
     private function getBonusMessage(string &$bonusString): string {
-        if ($bonusString === null) {
+        if ($bonusString === '') {
             return '';
         }
         $res = $bonusString;
-        $bonusString = null;
+        $bonusString = '';
         return $res;
     }
 
@@ -133,20 +134,25 @@ class Hero extends AbstractLivingBeing {
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
         $res = new MessageEmbed();
-        $res->setTitle('**' . $this->name . '** uses **' . $action->name . '!**');
+
+        if ($action === $this->type->defaultAction()) {
+            $target = $this;
+        }
+
+        $title = ('**' . $this->name . '** uses **' . $action->name . '**!');
         $effect = $action->effect;
         $res->setThumbnail($effect->image);
-        if (!$effect->isHeal && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target, $effect)) {
-            $res->setDescription('...and misses!');
+        if ($action !== $this->type->defaultAction() && !$effect->isHealEffect() && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target, $effect)) {
+            $res->setDescription(self::MISS_MESSAGE);
+            $res->setTitle($title);
             return $res;
         }
 
-        $description = $effect->getDescription();
+        $res->setDescription('*``' . $effect->getDescription() . '```*');
         $isCrit = $this->rollWillCrit($effect);
         if ($isCrit) {
-            $description .= ' ***CRIT!***';
+            $res->setTitle($title . self::CRIT_MESSAGE);
         }
-        $res->setDescription($description);
 
         $stressEffect = $effect->getStressValue();
         $healthEffect = $isCrit ? $effect->getHealthValue() * 2 : $effect->getHealthValue();
@@ -181,12 +187,12 @@ class Hero extends AbstractLivingBeing {
             }
         }
 
-
         if ($target->isDead() && !$targetIsHero) {
             $res->addField('***DEATHBLOW***', '***' . RandomDataProvider::GetInstance()->GetRandomMonsterDeathQuote() . '***');
         }
 
-
+        return $res;
     }
+
 
 }

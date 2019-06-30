@@ -49,13 +49,32 @@ class HeroClass extends AbstractLivingInteraction {
         if ($this->defAction === null) {
             $action = new DirectAction();
             $action->name = 'pass turn';
+            $action->requiresTarget = true;
             $effect = new Effect();
             $effect->name = 'Do nothing.';
             $effect->setDescription('Hero passed the turn and suffered stress.');
-            $effect->stress_value = mt_rand(6, 10);
+            $effect->stress_value = 6;
+            $effect->stressDeviation = 4;
             $action->effect = $effect;
             $this->defAction = $action;
         }
         return $this->defAction;
+    }
+
+    /**
+     * @param string $actionName
+     * @return Action|DirectAction|null
+     */
+    public function getActionIfValid(string $actionName) {
+        $actionL = mb_strtolower($actionName);
+        if ($actionL === mb_strtolower($this->defaultAction()->name)) {
+            return $this->defaultAction();
+        }
+        foreach ($this->actions as $action) {
+            if (mb_strpos($actionL, mb_strtolower($action->name)) === 0) {
+                return $action;
+            }
+        }
+        return null;
     }
 }

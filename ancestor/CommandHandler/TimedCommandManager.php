@@ -101,7 +101,7 @@ class TimedCommandManager {
         $id = $this->generateId($message);
         $this->client->cancelTimer($this->getTimer($id));
         $value = $this->interactingUsers->get($id);
-        $value['timer'] = new $this->client->addTimer($timerTimeout,
+        $value['timer'] = $this->client->addTimer($timerTimeout,
             function () use ($id) {
                 $this->interactingUsers->delete($id);
             }
