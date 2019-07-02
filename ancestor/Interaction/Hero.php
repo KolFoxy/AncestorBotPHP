@@ -7,13 +7,18 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use function GuzzleHttp\Psr7\str;
 use function MongoDB\BSON\toJSON;
 
-class Hero extends AbstractLivingBeing {
+class Hero extends AbstractLivingBeing
+{
 
     const MAX_STRESS = 199;
 
     const STRESS_ROLLBACK = 170;
 
     const DEATH_DOOR_RESIST = 67;
+
+    const CRIT_STRESS_HEAL = -3;
+
+    const AT_DEATH_S_DOOR_MESSAGE = ' At Death\'s Door!';
 
     /**
      * @var string
@@ -46,9 +51,11 @@ class Hero extends AbstractLivingBeing {
     private $bonusHealthMessage = null;
 
 
-    const CRIT_STRESS_HEAL = -3;
-
-    public function addStress(int $value) {
+    public function addStress(int $value)
+    {
+        if ($this->isActuallyDead) {
+            return;
+        }
         $this->stress += $value;
         if ($this->stress < 0) {
             $this->stress = 0;
@@ -60,12 +67,17 @@ class Hero extends AbstractLivingBeing {
                 $this->isActuallyDead = true;
                 return;
             }
-            $this->addHealth(-$this->currentHealth);
+            $this->currentHealth = 0;
             $this->stress = self::STRESS_ROLLBACK;
+            $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
         }
     }
 
-    public function addHealth(int $value) {
+    public function addHealth(int $value)
+    {
+        if ($this->isActuallyDead) {
+            return;
+        }
         if ($this->currentHealth === 0 && ($this->currentHealth += $value) < 0) {
             if (mt_rand(1, 100) > self::DEATH_DOOR_RESIST) {
                 $this->isActuallyDead = true;
@@ -78,30 +90,44 @@ class Hero extends AbstractLivingBeing {
         }
         if ($this->currentHealth <= 0) {
             $this->currentHealth = 0;
-            $this->bonusHealthMessage = ' At Death\'s Door!';
+            $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
             return;
         }
     }
 
-    public function addStressAndHealth(int $stressValue, int $healthValue) {
+    public function addStressAndHealth(int $stressValue, int $healthValue)
+    {
         $this->addHealth($healthValue);
         $this->addStress($stressValue);
     }
 
-    public function getStressStatus(): string {
-        return $this->stress . '/100' . $this->getBonusMessage($this->bonusStressMessage);
+    public function getStressStatus(): string
+    {
+        return 'Stress: ' . $this->stress . '/100' . $this->getBonusMessage($this->bonusStressMessage);
     }
 
-    public function getHealthStatus(): string {
+    public function getHealthStatus(): string
+    {
         return parent::getHealthStatus() . $this->getBonusMessage($this->bonusHealthMessage);
     }
 
-    public function __construct(HeroClass $class, string $name) {
+
+    public function getStatus(): string
+    {
+        return $this->getHealthStatus() . ' | ' . $this->getStressStatus();
+    }
+
+
+    public function __construct(HeroClass $class, string $name)
+    {
         parent::__construct($class);
         $this->name = $name . ' the ' . $class->name;
     }
 
-    public function isDead(): bool {
+    public function isDead(): bool
+    {
+        $this->addHealth(0);
+        $this->addStress(0);
         return $this->isActuallyDead;
     }
 
@@ -109,15 +135,13 @@ class Hero extends AbstractLivingBeing {
      * @param string $commandName
      * @return \CharlotteDunois\Yasmin\Models\MessageEmbed
      */
-    public function getEmbedResponse(string $commandName = null): MessageEmbed {
+    public function getEmbedResponse(string $commandName = null): MessageEmbed
+    {
         return $this->type->getEmbedResponse($commandName, $this->getStatus());
     }
 
-    public function getStatus(): string {
-        return 'Health: *' . $this->getHealthStatus() . '* | Stress: *' . $this->getStressStatus() . '*';
-    }
-
-    private function getBonusMessage(string &$bonusString): string {
+    private function getBonusMessage(string &$bonusString): string
+    {
         if ($bonusString === '') {
             return '';
         }
@@ -129,65 +153,67 @@ class Hero extends AbstractLivingBeing {
     /**
      * @param DirectAction $action
      * @param AbstractLivingBeing|Hero $target
-     * @param Effect|null $forcedEffect
      * @return MessageEmbed
      */
-    public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
+    public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed
+    {
         $res = new MessageEmbed();
+        $isDefaultAction = $action === $this->type->defaultAction();
 
-        if ($action === $this->type->defaultAction()) {
+        if ($isDefaultAction) {
             $target = $this;
         }
 
         $title = ('**' . $this->name . '** uses **' . $action->name . '**!');
         $effect = $action->effect;
         $res->setThumbnail($effect->image);
-        if ($action !== $this->type->defaultAction() && !$effect->isHealEffect() && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target, $effect)) {
+        if (!$isDefaultAction && !$effect->isHealEffect() && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target, $effect)) {
             $res->setDescription(self::MISS_MESSAGE);
             $res->setTitle($title);
             return $res;
         }
 
-        $res->setDescription('*``' . $effect->getDescription() . '```*');
-        $isCrit = $this->rollWillCrit($effect);
-        if ($isCrit) {
-            $res->setTitle($title . self::CRIT_MESSAGE);
-        }
-
+        $isCrit = !$isDefaultAction && $this->rollWillCrit($effect);
         $stressEffect = $effect->getStressValue();
-        $healthEffect = $isCrit ? $effect->getHealthValue() * 2 : $effect->getHealthValue();
+        $healthEffect = $effect->getHealthValue();
+        if ($isCrit) {
+            $title .= self::CRIT_MESSAGE;
+            $healthEffect *= 2;
+        }
         $targetIsHero = is_a($target, Hero::class);
         $targetName = $targetIsHero ? $target->name : $target->type->name;
+        $res->setDescription('*``' . $effect->getDescription() . '``*');
+        $res->setTitle($title);
 
         $target->addHealth($healthEffect);
         if ($effect->isHealEffect()) {
-            $res->addField('``' . $targetName . ' is healed for ' . $healthEffect . '!``'
-                , '*Health: ' . $target->getStressStatus() . '*');
+            $res->addField('**' . $targetName . '** is healed for **' . abs($healthEffect) . 'HP**!'
+                , '*``' . $target->getHealthStatus() . '``*');
             if ($isCrit) {
                 $stressEffect -= 10;
             }
         } elseif ($effect->isDamageEffect()) {
-            $res->addField('``' . $targetName . ' gets hit for ' . $healthEffect . ' HP!``'
-                , '*Health: ' . $target->getHealthStatus() . '*');
+            $res->addField('**' . $targetName . '** gets hit for **' . abs($healthEffect) . 'HP**!``'
+                , '*``' . $target->getHealthStatus() . '``*');
             if ($isCrit && $this->stress != 0) {
                 $this->addStress(self::CRIT_STRESS_HEAL);
-                $res->addField('``' . $this->name . ' feels confident! ' . self::CRIT_STRESS_HEAL . ' Stress!``'
-                    , '*Stress: ' . $target->getStressStatus() . '*');
+                $res->addField('**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_HEAL . ' stress**!``'
+                    , '*``' . $this->getStressStatus() . '``*');
             }
         }
 
-        if ($targetIsHero) {
+        if ($targetIsHero && $stressEffect !== 0) {
             $target->addStress($stressEffect);
             if ($stressEffect < 0) {
-                $res->addField('``' . $targetName . ' feels less tense. ' . $stressEffect . ' Stress!``'
-                    , '*Stress: ' . $target->getStressStatus() . '*');
+                $res->addField('**' . $targetName . '** feels less tense. **' . $stressEffect . ' stress**!``'
+                    , '*``' . $target->getStressStatus() . '``*');
             } elseif ($stressEffect > 0) {
-                $res->addField('``' . $targetName . ' suffers ' . $stressEffect . ' stress!``'
-                    , '*Stress: ' . $target->getStressStatus() . '*');
+                $res->addField('**' . $targetName . '** suffers **' . $stressEffect . ' stress**!``'
+                    , '*``' . $target->getStressStatus() . '``*');
             }
         }
 
-        if ($target->isDead() && !$targetIsHero) {
+        if ($target->isDead()) {
             $res->addField('***DEATHBLOW***', '***' . RandomDataProvider::GetInstance()->GetRandomMonsterDeathQuote() . '***');
         }
 
