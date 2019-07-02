@@ -9,6 +9,9 @@ use function MongoDB\BSON\toJSON;
 
 class Hero extends AbstractLivingBeing {
 
+
+    const HEART_ATTACK_MESSAGE = ' HEART ATTACK!';
+
     const MAX_STRESS = 199;
 
     const STRESS_ROLLBACK = 170;
@@ -17,7 +20,7 @@ class Hero extends AbstractLivingBeing {
 
     const CRIT_STRESS_HEAL = -3;
 
-    const AT_DEATH_S_DOOR_MESSAGE = ' At Death\'s Door!';
+    const AT_DEATH_S_DOOR_MESSAGE = ' AT DEATH\'S DOOR!';
 
     /**
      * @var string
@@ -60,7 +63,7 @@ class Hero extends AbstractLivingBeing {
             return;
         }
         if ($this->stress > self::MAX_STRESS) {
-            $this->bonusStressMessage = ' Heart attack!';
+            $this->bonusStressMessage = self::HEART_ATTACK_MESSAGE;
             if ($this->currentHealth === 0) {
                 $this->isActuallyDead = true;
                 return;
@@ -95,6 +98,7 @@ class Hero extends AbstractLivingBeing {
     }
 
     public function addStressAndHealth(int $stressValue, int $healthValue) {
+        //TODO: Fix Death Door message when a hero dies from stress.
         $this->addHealth($healthValue);
         $this->addStress($stressValue);
     }

@@ -131,6 +131,7 @@ class Fight extends Command {
         if ($hero->isDead()) {
             $embed->setFooter('R.I.P. ' . $hero->name, $message->author->getAvatarURL());
             $this->manager->deleteInteraction($message);
+            return $embed;
         }
         $this->manager->refreshTimer($message, self::TIMEOUT);
         $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix));
