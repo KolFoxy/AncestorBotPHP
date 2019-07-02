@@ -25,6 +25,7 @@ class Monster extends AbstractLivingBeing {
         return $this->type->getEmbedResponse($commandName, $userActions, $this->getHealthStatus());
     }
 
+//TODO: Change return value to Field Array
     function getMonsterTurn(Hero $heroTarget, DirectAction $forcedAction = null): MessageEmbed {
         $res = new MessageEmbed();
         $action = is_null($forcedAction) ? $this->type->getRandomAction() : $forcedAction;

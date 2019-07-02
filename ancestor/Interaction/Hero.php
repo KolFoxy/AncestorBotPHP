@@ -144,7 +144,7 @@ class Hero extends AbstractLivingBeing {
         $bonusString = '';
         return $res;
     }
-
+//TODO: Change return value to Field Array
     /**
      * @param DirectAction $action
      * @param AbstractLivingBeing|Hero $target

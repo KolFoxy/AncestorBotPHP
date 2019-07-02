@@ -95,7 +95,7 @@ class Fight extends Command {
             return;
         }
         $message->reply('', ['embed' => $embed]);
-        //TODO: Monster turn via command with no args
+        // TODO: Monster turn via command with no args
 
     }
 
