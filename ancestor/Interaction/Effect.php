@@ -221,6 +221,11 @@ class Effect {
         return $this->getDeviatingValue($this->stress_value, $this->stressDeviation);
     }
 
+    /**
+     * @param int|null $value
+     * @param int $deviation
+     * @return int
+     */
     protected function getDeviatingValue(int $value, int $deviation) {
         if ($value === null) {
             return 0;

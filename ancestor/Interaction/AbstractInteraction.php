@@ -35,7 +35,7 @@ abstract class AbstractInteraction {
         $defAction = $this->defaultAction();
         $actionL = mb_strtolower($actionName);
         if ($actionL === mb_strtolower($defAction->name)) {
-           return $defAction;
+            return $defAction;
         }
         foreach ($this->actions as $action) {
             if (mb_strtolower($action->name) === $actionL) {
@@ -56,7 +56,7 @@ abstract class AbstractInteraction {
      * @return string returnsActionList
      */
     public function getDefaultFooterText(string $commandName): string {
-        if ($this->actions === null){
+        if ($this->actions === null) {
             return '';
         }
         $footerText = 'Respond with "' . $commandName . ' [ACTION]" to perform the corresponding action. ' . PHP_EOL

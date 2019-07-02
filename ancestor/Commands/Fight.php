@@ -115,12 +115,12 @@ class Fight extends Command {
         $embed = $hero->getHeroTurn($action, $target);
         if (!$monster->isDead()) {
             $extraEmbed = $monster->getMonsterTurn($hero);
-            $embed->addField($monster->type->name . '\'s turn!', $monster->getHealthString());
+            $embed->addField($monster->type->name . '\'s turn!', '*``' . $monster->getHealthStatus() . '``*');
             CommandHelper::mergeEmbed($embed, $extraEmbed);
         } else {
             if ($this->getEndless($message)) {
                 $monster = $this->getRandomMonster();
-                $embed->addField($monster->type->name . ' emerges from the darkness!', $monster->getHealthString());
+                $embed->addField($monster->type->name . ' emerges from the darkness!', '*``' . $monster->getHealthStatus() . '``*');
                 CommandHelper::mergeEmbed($embed, $monster->getMonsterTurn($hero));
             } else {
                 $embed->setFooter($hero->name . ' is victorious!', $message->author->getAvatarURL());
@@ -145,10 +145,10 @@ class Fight extends Command {
         $embed = new MessageEmbed();
         $embed->setTitle('**' . $hero->name . '**');
         $embed->setThumbnail($hero->type->image);
-        $embed->setDescription('*``' . $hero->type->description . '```*' . PHP_EOL . '``' . $hero->getStatus() . '``');
+        $embed->setDescription('*``' . $hero->type->description . '``*' . PHP_EOL . '``' . $hero->getStatus() . '``');
         $embed->addField(
             'You encounter a vile **' . $monster->type->name . '**',
-            '*``' . $monster->type->description . '```*' . PHP_EOL . '``Health: ' . $monster->getHealthStatus() . '``'
+            '*``' . $monster->type->description . '``*' . PHP_EOL . '*``' . $monster->getHealthStatus() . '``*'
         );
         $embed->setImage($monster->type->image);
         $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix . $this->name));

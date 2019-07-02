@@ -47,7 +47,7 @@ class TimedCommandManager {
                     $this->interactingUsers->delete($id);
                 }
             ),
-            'channelId' => $message->channel->getId()
+            'channelId' => $message->channel->getId(),
         ]);
     }
 

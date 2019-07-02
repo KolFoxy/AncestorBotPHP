@@ -7,8 +7,7 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use function GuzzleHttp\Psr7\str;
 use function MongoDB\BSON\toJSON;
 
-class Hero extends AbstractLivingBeing
-{
+class Hero extends AbstractLivingBeing {
 
     const MAX_STRESS = 199;
 
@@ -46,13 +45,12 @@ class Hero extends AbstractLivingBeing
     private $bonusStressMessage = '';
 
     /**
-     * @var string|null
+     * @var string
      */
-    private $bonusHealthMessage = null;
+    private $bonusHealthMessage = '';
 
 
-    public function addStress(int $value)
-    {
+    public function addStress(int $value) {
         if ($this->isActuallyDead) {
             return;
         }
@@ -73,12 +71,13 @@ class Hero extends AbstractLivingBeing
         }
     }
 
-    public function addHealth(int $value)
-    {
+    public function addHealth(int $value) {
         if ($this->isActuallyDead) {
             return;
         }
-        if ($this->currentHealth === 0 && ($this->currentHealth += $value) < 0) {
+        $atDeathDoor = $this->currentHealth === 0;
+        $this->currentHealth += $value;
+        if ($atDeathDoor && $this->currentHealth < 0) {
             if (mt_rand(1, 100) > self::DEATH_DOOR_RESIST) {
                 $this->isActuallyDead = true;
                 return;
@@ -95,37 +94,31 @@ class Hero extends AbstractLivingBeing
         }
     }
 
-    public function addStressAndHealth(int $stressValue, int $healthValue)
-    {
+    public function addStressAndHealth(int $stressValue, int $healthValue) {
         $this->addHealth($healthValue);
         $this->addStress($stressValue);
     }
 
-    public function getStressStatus(): string
-    {
+    public function getStressStatus(): string {
         return 'Stress: ' . $this->stress . '/100' . $this->getBonusMessage($this->bonusStressMessage);
     }
 
-    public function getHealthStatus(): string
-    {
+    public function getHealthStatus(): string {
         return parent::getHealthStatus() . $this->getBonusMessage($this->bonusHealthMessage);
     }
 
 
-    public function getStatus(): string
-    {
+    public function getStatus(): string {
         return $this->getHealthStatus() . ' | ' . $this->getStressStatus();
     }
 
 
-    public function __construct(HeroClass $class, string $name)
-    {
+    public function __construct(HeroClass $class, string $name) {
         parent::__construct($class);
         $this->name = $name . ' the ' . $class->name;
     }
 
-    public function isDead(): bool
-    {
+    public function isDead(): bool {
         $this->addHealth(0);
         $this->addStress(0);
         return $this->isActuallyDead;
@@ -135,13 +128,11 @@ class Hero extends AbstractLivingBeing
      * @param string $commandName
      * @return \CharlotteDunois\Yasmin\Models\MessageEmbed
      */
-    public function getEmbedResponse(string $commandName = null): MessageEmbed
-    {
+    public function getEmbedResponse(string $commandName = null): MessageEmbed {
         return $this->type->getEmbedResponse($commandName, $this->getStatus());
     }
 
-    private function getBonusMessage(string &$bonusString): string
-    {
+    private function getBonusMessage(string &$bonusString): string {
         if ($bonusString === '') {
             return '';
         }
@@ -155,8 +146,7 @@ class Hero extends AbstractLivingBeing
      * @param AbstractLivingBeing|Hero $target
      * @return MessageEmbed
      */
-    public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed
-    {
+    public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
         $res = new MessageEmbed();
         $isDefaultAction = $action === $this->type->defaultAction();
 
@@ -193,11 +183,11 @@ class Hero extends AbstractLivingBeing
                 $stressEffect -= 10;
             }
         } elseif ($effect->isDamageEffect()) {
-            $res->addField('**' . $targetName . '** gets hit for **' . abs($healthEffect) . 'HP**!``'
+            $res->addField('**' . $targetName . '** gets hit for **' . abs($healthEffect) . 'HP**!'
                 , '*``' . $target->getHealthStatus() . '``*');
             if ($isCrit && $this->stress != 0) {
                 $this->addStress(self::CRIT_STRESS_HEAL);
-                $res->addField('**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_HEAL . ' stress**!``'
+                $res->addField('**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_HEAL . ' stress**!'
                     , '*``' . $this->getStressStatus() . '``*');
             }
         }
@@ -205,10 +195,10 @@ class Hero extends AbstractLivingBeing
         if ($targetIsHero && $stressEffect !== 0) {
             $target->addStress($stressEffect);
             if ($stressEffect < 0) {
-                $res->addField('**' . $targetName . '** feels less tense. **' . $stressEffect . ' stress**!``'
+                $res->addField('**' . $targetName . '** feels less tense. **' . $stressEffect . ' stress**!'
                     , '*``' . $target->getStressStatus() . '``*');
             } elseif ($stressEffect > 0) {
-                $res->addField('**' . $targetName . '** suffers **' . $stressEffect . ' stress**!``'
+                $res->addField('**' . $targetName . '** suffers **' . $stressEffect . ' stress**!'
                     , '*``' . $target->getStressStatus() . '``*');
             }
         }

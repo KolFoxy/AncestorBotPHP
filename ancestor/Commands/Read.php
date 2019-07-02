@@ -71,8 +71,8 @@ class Read extends Command {
                 $extraEmbedFields = [
                     [
                         'title' => $message->author->username . '\'s resolve is tested... **' . $resolve['name'] . '**',
-                        'value' => '***' . $resolve['quote'] . '***'
-                    ]
+                        'value' => '***' . $resolve['quote'] . '***',
+                    ],
                 ];
             }
 
