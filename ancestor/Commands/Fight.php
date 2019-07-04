@@ -95,8 +95,6 @@ class Fight extends Command {
             return;
         }
         $message->reply('', ['embed' => $embed]);
-        // TODO: Monster turn via command with no args
-
     }
 
     /**
@@ -113,6 +111,7 @@ class Fight extends Command {
         $monster = $this->getMonster($message);
         $target = $action->requiresTarget ? $hero : $monster;
         $embed = $hero->getHeroTurn($action, $target);
+
         if (!$monster->isDead()) {
             $extraEmbed = $monster->getMonsterTurn($hero);
             $embed->addField($monster->type->name . '\'s turn!', '*``' . $monster->getHealthStatus() . '``*');
@@ -122,6 +121,7 @@ class Fight extends Command {
                 $monster = $this->getRandomMonster();
                 $embed->addField($monster->type->name . ' emerges from the darkness!', '*``' . $monster->getHealthStatus() . '``*');
                 CommandHelper::mergeEmbed($embed, $monster->getMonsterTurn($hero));
+                $this->updateMonster($message, $monster);
             } else {
                 $embed->setFooter($hero->name . ' is victorious!', $message->author->getAvatarURL());
                 $this->manager->deleteInteraction($message);
@@ -173,6 +173,12 @@ class Fight extends Command {
 
     function getEndless(Message $message): bool {
         return $this->manager->getUserData($message)[2];
+    }
+
+    function updateMonster(Message $message, Monster $monster) {
+        $newData = $this->manager->getUserData($message);
+        $newData[1] = $monster;
+        $this->manager->updateData($message, $newData);
     }
 
 }

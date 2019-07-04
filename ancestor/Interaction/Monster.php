@@ -25,15 +25,18 @@ class Monster extends AbstractLivingBeing {
         return $this->type->getEmbedResponse($commandName, $userActions, $this->getHealthStatus());
     }
 
-//TODO: Change return value to Field Array
-    function getMonsterTurn(Hero $heroTarget, DirectAction $forcedAction = null): MessageEmbed {
-        $res = new MessageEmbed();
+    /**
+     * @param Hero $heroTarget
+     * @param DirectAction|null $forcedAction
+     * @return array Array of embed fields [ 'name' => string, 'value' => string, 'inline' => bool ]
+     */
+    function getMonsterTurn(Hero $heroTarget, DirectAction $forcedAction = null): array {
+        $res = [];
         $action = is_null($forcedAction) ? $this->type->getRandomAction() : $forcedAction;
         $effect = $action->effect;
         $title = ('**' . $this->type->name . '** uses **' . $action->name . '**!');
         if (!$this->rollWillHit($heroTarget, $effect)) {
-            $res->setDescription(self::MISS_MESSAGE);
-            $res->setTitle($title);
+            $res[] = ['name' => $title, 'value' => self::MISS_MESSAGE, 'inline' => false];
             return $res;
         }
 
@@ -46,23 +49,31 @@ class Monster extends AbstractLivingBeing {
             $healthEffect *= 2;
         }
 
-        $res->setTitle($title);
-        $res->setDescription('*``' . $effect->getDescription() . '``*');
+        $res[] = ['name' => $title, 'value' => '*``' . $effect->getDescription() . '``*', 'inline' => false];
 
-        $heroTarget->addStressAndHealth($stressEffect, $healthEffect);
-
-        if ($stressEffect !== 0) {
-            $res->addField('**' . $heroTarget->name . '** suffers **' . $stressEffect . ' stress**!'
-                , '*``' . $heroTarget->getStressStatus() . '``*');
-        }
-
+        $heroTarget->addHealth($healthEffect);
         if ($healthEffect !== 0) {
-            $res->addField('**' . $heroTarget->name . '** gets hit for **' . abs($healthEffect) . 'HP**!'
-                , '*``' . $heroTarget->getHealthStatus() . '``*');
+            $res[] = [
+                'name' => '**' . $heroTarget->name . '** gets hit for **' . abs($healthEffect) . 'HP**!',
+                'value' => '*``' . $heroTarget->getHealthStatus() . '``*',
+                'inline' => false,
+            ];
+        }
+        $heroTarget->addStress($stressEffect);
+        if ($stressEffect !== 0) {
+            $res[] = [
+                'name' => '**' . $heroTarget->name . '** suffers **' . $stressEffect . ' stress**!',
+                'value' => '*``' . $heroTarget->getStressStatus() . '``*',
+                'inline' => false,
+            ];
         }
 
         if ($heroTarget->isDead()) {
-            $res->addField('***DEATHBLOW***', '***' . RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote() . '***');
+            $res[] = [
+                'name' => '***DEATHBLOW***',
+                'value' => '***' . RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote() . '***',
+                'inline' => false,
+            ];
         }
         return $res;
     }

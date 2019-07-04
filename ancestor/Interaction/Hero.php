@@ -97,12 +97,6 @@ class Hero extends AbstractLivingBeing {
         }
     }
 
-    public function addStressAndHealth(int $stressValue, int $healthValue) {
-        //TODO: Fix Death Door message when a hero dies from stress.
-        $this->addHealth($healthValue);
-        $this->addStress($stressValue);
-    }
-
     public function getStressStatus(): string {
         return 'Stress: ' . $this->stress . '/100' . $this->getBonusMessage($this->bonusStressMessage);
     }
@@ -144,7 +138,7 @@ class Hero extends AbstractLivingBeing {
         $bonusString = '';
         return $res;
     }
-//TODO: Change return value to Field Array
+
     /**
      * @param DirectAction $action
      * @param AbstractLivingBeing|Hero $target

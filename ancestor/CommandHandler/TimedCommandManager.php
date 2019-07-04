@@ -6,7 +6,7 @@ use CharlotteDunois\Collect\Collection;
 use CharlotteDunois\Yasmin\Client;
 use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
-use React\EventLoop\Timer\Timer;
+use React\EventLoop\TimerInterface;
 
 class TimedCommandManager {
     /**
@@ -47,7 +47,6 @@ class TimedCommandManager {
                     $this->interactingUsers->delete($id);
                 }
             ),
-            'channelId' => $message->channel->getId(),
         ]);
     }
 
@@ -60,16 +59,6 @@ class TimedCommandManager {
         return $this->interactingUsers->get($this->generateId($message, $userId))['data'];
     }
 
-
-    /**
-     * @param Message $message
-     * @param int|null $userId
-     * @return string
-     */
-    public function getUserChannelId(Message $message, int $userId = null): string {
-        return $this->interactingUsers->get($this->generateId($message, $userId))['channelId'];
-    }
-
     public function deleteInteraction(Message $message, int $userId = null) {
         $id = $this->generateId($message, $userId);
         $this->client->cancelTimer($this->getTimer($id));
@@ -78,7 +67,7 @@ class TimedCommandManager {
 
     /**
      * @param string $id
-     * @return Timer
+     * @return TimerInterface
      */
     function getTimer(string $id) {
         return $this->interactingUsers->get($id)['timer'];
@@ -109,4 +98,12 @@ class TimedCommandManager {
         $this->interactingUsers->set($id, $value);
 
     }
+
+    public function updateData(Message $message, $data) {
+        $id = $this->generateId($message);
+        $value = $this->interactingUsers->get($id);
+        $value['data'] = $data;
+        $this->interactingUsers->set($id, $value);
+    }
+
 }

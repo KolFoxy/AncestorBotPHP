@@ -34,7 +34,7 @@ class CommandHelper {
         if (isset($embedTitle)) {
             $embedResponse->setTitle($embedTitle);
         }
-        $this->message->channel->send('', array('embed' => $embedResponse));
+        $this->message->channel->send('', ['embed' => $embedResponse]);
     }
 
     public function RespondWithAttachedFile($fileData, string $fileName, $embed = null, $content = '') {
@@ -88,7 +88,7 @@ class CommandHelper {
      * @return bool
      */
     public static function StringContainsURLs(string $str) {
-        foreach (explode(' ', str_replace(array("\r", "\n"), ' ', $str)) as $item) {
+        foreach (explode(' ', str_replace(["\r", "\n"], ' ', $str)) as $item) {
             if (filter_var($item, FILTER_VALIDATE_URL)) {
                 return true;
             }
