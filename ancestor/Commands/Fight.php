@@ -177,6 +177,7 @@ class Fight extends Command {
 
     function updateMonster(Message $message, Monster $monster) {
         $newData = $this->manager->getUserData($message);
+        unset($newData[1]);
         $newData[1] = $monster;
         $this->manager->updateData($message, $newData);
     }
