@@ -2,13 +2,14 @@
 
 namespace Ancestor\Interaction\Stats;
 
-class StatusEffect {
+class StatusEffect implements TimedEffectInterface {
 
     const TYPE_BLEED = "bleed";
     const TYPE_BLIGHT = "bleed";
     const TYPE_HORROR = "horror";
     const TYPE_STUN = "stun";
     const TYPE_RESTORATION = "restoration";
+    const TYPE_RIPOSTE = "riposte";
 
     /**
      * @var string
@@ -17,9 +18,8 @@ class StatusEffect {
 
     /**
      * @var int
-     * @required
      */
-    public $duration;
+    public $duration = 3;
 
     /**
      * @var int
@@ -40,7 +40,8 @@ class StatusEffect {
             || $type === self::TYPE_BLIGHT
             || $type === self::TYPE_STUN
             || $type === self::TYPE_HORROR
-            || $type === self::TYPE_RESTORATION) {
+            || $type === self::TYPE_RESTORATION
+            || $type === self::TYPE_RIPOSTE) {
             $this->type = $type;
             return;
         }
@@ -51,9 +52,33 @@ class StatusEffect {
     /**
      * @return string
      */
-    public function getType() : string {
+    public function getType(): string {
         return $this->type;
     }
 
+    /**
+     * @inheritdoc
+     */
+    public function processTurn(): bool {
+        $this->duration--;
+        return $this->isDone();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isDone(): bool {
+        if ($this->duration <= 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public function isPositive(): bool {
+        if ($this->type === self::TYPE_RIPOSTE || $this->type === self::TYPE_RESTORATION) {
+            return true;
+        }
+        return false;
+    }
 
 }

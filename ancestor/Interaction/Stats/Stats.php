@@ -4,6 +4,8 @@ namespace Ancestor\Interaction\Stats;
 
 class Stats {
 
+    const RESIST_SUFFIX = 'Resist';
+
     const STUN_RESIST = 'stunResist';
     const BLEED_RESIST = 'bleedResist';
     const BLIGHT_RESIST = 'blightResist';
@@ -37,6 +39,35 @@ class Stats {
             self::STRESS_MOD => 0,
             self::STRESS_HEAL_MOD => 0,
         ];
+    }
+
+    /**
+     * @return string[] Array of stats' names
+     */
+    public static function getStatNamesArray(): array {
+        return [
+            self::STUN_RESIST,
+            self::BLEED_RESIST,
+            self::BLIGHT_RESIST,
+            self::DEBUFF_RESIST,
+            self::DEATHBLOW_RESIST,
+            self::DAMAGE_MOD,
+            self::ACC_MOD,
+            self::DODGE,
+            self::PROT,
+            self::CRIT_CHANCE,
+            self::STRESS_MOD,
+            self::STRESS_HEAL_MOD,
+        ];
+    }
+
+    public static function statIsValid(string $stat): bool {
+        foreach (self::getStatNamesArray() as $str) {
+            if ($stat === $str) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
