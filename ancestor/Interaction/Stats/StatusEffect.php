@@ -5,10 +5,10 @@ namespace Ancestor\Interaction\Stats;
 class StatusEffect implements TimedEffectInterface {
 
     const TYPE_BLEED = "bleed";
-    const TYPE_BLIGHT = "bleed";
+    const TYPE_BLIGHT = "blight";
     const TYPE_HORROR = "horror";
-    const TYPE_STUN = "stun";
     const TYPE_RESTORATION = "restoration";
+    const TYPE_STUN = "stun";
     const TYPE_RIPOSTE = "riposte";
 
     /**
@@ -27,9 +27,9 @@ class StatusEffect implements TimedEffectInterface {
     public $chance = 100;
 
     /**
-     * @var int
+     * @var int|null
      */
-    public $value;
+    public $value = null;
 
     /**
      * @param string $type
@@ -81,4 +81,10 @@ class StatusEffect implements TimedEffectInterface {
         return false;
     }
 
+    /**
+     * @return int
+     */
+    public function getChance(): int {
+        return $this->chance;
+    }
 }

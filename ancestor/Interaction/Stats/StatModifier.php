@@ -81,7 +81,7 @@ class StatModifier implements TimedEffectInterface {
 
     public static function getDefaultStunResistBuff(): StatModifier {
         $statMod = new StatModifier();
-        $statMod->duration = 1;
+        $statMod->duration = 2;
         $statMod->chance = self::DEF_STUN_RESIST_CHANCE;
         $statMod->setStat(Stats::STUN_RESIST);
         $statMod->value = 50;
@@ -92,4 +92,18 @@ class StatModifier implements TimedEffectInterface {
         return $this->stat === Stats::STUN_RESIST && $this->chance === self::DEF_STUN_RESIST_CHANCE;
     }
 
+    /**
+     * @return string Return the type of the StatModifier (buff/debuff).
+     */
+    public function getType(): string {
+        return $this->isPositive() ? 'buff' : 'debuff';
+    }
+
+
+    /**
+     * @return int
+     */
+    public function getChance(): int {
+        return $this->chance;
+    }
 }

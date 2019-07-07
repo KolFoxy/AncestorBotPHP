@@ -19,4 +19,14 @@ interface TimedEffectInterface {
      */
     public function isPositive() : bool;
 
+    /**
+     * @return string Return the type of the effect.
+     */
+    public function getType() : string;
+
+    /**
+     * @return int
+     */
+    public function getChance() : int;
+
 }
