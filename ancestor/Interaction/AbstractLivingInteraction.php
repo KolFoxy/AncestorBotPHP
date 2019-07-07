@@ -3,6 +3,7 @@
 namespace Ancestor\Interaction;
 
 abstract class AbstractLivingInteraction extends AbstractInteraction {
+    // TODO : PUSH stats to stats array
     /**
      * @var int
      */
@@ -27,5 +28,10 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
      * @var int
      */
     public $bonusCritChance = 3;
+
+    /**
+     * @var array
+     */
+    public $stats = [];
 
 }

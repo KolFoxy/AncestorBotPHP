@@ -2,6 +2,9 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\Stats\StatsManager;
+use function PHPSTORM_META\type;
+
 abstract class AbstractLivingBeing {
 
     const MISS_MESSAGE = '``...and misses!``';
@@ -27,6 +30,10 @@ abstract class AbstractLivingBeing {
      */
     public $isStunned = false;
 
+    /**
+     * @var StatsManager;
+     */
+    public $statManager;
 
     /**
      * @var AbstractLivingInteraction;
@@ -67,6 +74,7 @@ abstract class AbstractLivingBeing {
         $this->name = $type->name;
         $this->type = $type;
         $this->currentHealth = $this->healthMax = $type->healthMax;
+        $this->statManager = new StatsManager($type->stats);
     }
 
     /**

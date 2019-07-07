@@ -22,20 +22,20 @@ class Stats {
     const STRESS_HEAL_MOD = 'stressHealMod';
 
     /**
-     * @return array Format: ['stat1' => 0, 'stat2' => 0]
+     * @return array Format: ['stat1' => int, 'stat2' => int, ...]
      */
     public static function getStatsArray(): array {
         return [
-            self::STUN_RESIST => 0,
-            self::BLEED_RESIST => 0,
-            self::BLIGHT_RESIST => 0,
-            self::DEBUFF_RESIST => 0,
-            self::DEATHBLOW_RESIST => 0,
+            self::STUN_RESIST => 40,
+            self::BLEED_RESIST => 30,
+            self::BLIGHT_RESIST => 30,
+            self::DEBUFF_RESIST => 30,
+            self::DEATHBLOW_RESIST => 67,
             self::DAMAGE_MOD => 0,
             self::ACC_MOD => 0,
-            self::DODGE => 0,
+            self::DODGE => 25,
             self::PROT => 0,
-            self::CRIT_CHANCE => 0,
+            self::CRIT_CHANCE => 2,
             self::STRESS_MOD => 0,
             self::STRESS_HEAL_MOD => 0,
         ];

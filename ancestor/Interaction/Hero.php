@@ -2,6 +2,7 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
@@ -49,6 +50,14 @@ class Hero extends AbstractLivingBeing {
      * @var string
      */
     private $bonusHealthMessage = '';
+
+    /**
+     * @var Trinket[]
+     */
+    public $artifacts = [
+        0 => null,
+        1 => null
+    ];
 
 
     public function addStress(int $value) {
