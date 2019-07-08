@@ -71,13 +71,16 @@ class Monster extends AbstractLivingBeing {
         if ($heroTarget->isDead()) {
             $res[] = [
                 'name' => '***DEATHBLOW***',
-                'value' => '***' . RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote() . '***',
+                'value' => '***' . $heroTarget->getDeathQuote() . '***',
                 'inline' => false,
             ];
         }
         return $res;
     }
 
+    public function getDeathQuote(): string {
+        return RandomDataProvider::GetInstance()->GetRandomMonsterDeathQuote();
+    }
 
     public function addHealth(int $value) {
         $this->currentHealth += $value;

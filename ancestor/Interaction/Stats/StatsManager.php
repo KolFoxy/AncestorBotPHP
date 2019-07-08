@@ -60,12 +60,11 @@ class StatsManager {
         return $value;
     }
 
-    public function processTurn(): array {
+    public function getProcessTurn(): array {
         $values = $this->getEmptyValuesArray();
 
         foreach ($this->statusEffects as $key => $effect) {
             $type = $effect->getType();
-
             if ($type === StatusEffect::TYPE_STUN) {
                 unset($this->statusEffects[$key]);
                 $values[$type] = 1;
@@ -74,11 +73,6 @@ class StatsManager {
             }
 
             if ($effect->value !== null) {
-                if ($type === StatusEffect::TYPE_HORROR && is_a($this->host, Hero::class)) {
-                    $this->host->addStress($effect->value);
-                } else {
-                    $this->host->addHealth($effect->value);
-                }
                 $values[$type] += $effect->value;
             }
 
@@ -113,6 +107,7 @@ class StatsManager {
         $valueRestoration = $values[StatusEffect::TYPE_RESTORATION];
         $value = $valueRestoration + $valueBleed + $valueBlight;
         if ($value !== 0) {
+            $this->host->addHealth($value);
             $effect = $value < 0 ? 'suffered' : 'restored';
             $body = '``' . $this->host->getHealthStatus();
             $body .= $valueBleed !== 0 ? 'Bleed: ' . $valueBleed . PHP_EOL : '';
@@ -131,6 +126,7 @@ class StatsManager {
                 'inline' => true];
         }
         if ($values[StatusEffect::TYPE_HORROR]) {
+            $this->host->addStress($values[StatusEffect::TYPE_HORROR]);
             $res[] = [
                 'name' => $this->host->name . ' has suffered ' . $values[StatusEffect::TYPE_HORROR] . ' stress',
                 'value' => '``' . $this->host->getStressStatus() . '``',
@@ -202,7 +198,16 @@ class StatsManager {
     }
 
     public function getEffectsStatus() {
-        // TODO: Implement addModifier the method.
+        // TODO: Implement the method.
+    }
+
+    public function isStunned(): bool {
+        foreach ($this->statusEffects as $effect) {
+            if ($effect->getType() === StatusEffect::TYPE_STUN && !$effect->isDone()) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

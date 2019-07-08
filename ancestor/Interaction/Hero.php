@@ -209,10 +209,15 @@ class Hero extends AbstractLivingBeing {
         }
 
         if ($target->isDead()) {
-            $res->addField('***DEATHBLOW***', '***' . RandomDataProvider::GetInstance()->GetRandomMonsterDeathQuote() . '***');
+            $res->addField('***DEATHBLOW***', '***' . $target->getDeathQuote() . '***');
         }
 
         return $res;
+
+
+    }
+    public function getDeathQuote(): string {
+        return RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote();
     }
 
 

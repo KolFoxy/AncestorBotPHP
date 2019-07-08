@@ -71,7 +71,7 @@ class Effect {
     public $critChance = null;
 
     /**
-     * @var int
+     * @var int Negative for guarantee hit
      */
     public $hitChance = 100;
 
