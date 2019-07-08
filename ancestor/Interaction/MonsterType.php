@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Ancestor\Interaction;
 
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
@@ -48,7 +47,7 @@ class MonsterType extends AbstractLivingInteraction {
             $action->name = 'attack';
             $effect = new Effect();
             $effect->name = 'Attack!';
-            $effect->setDescription('Monster attacks the hero!');
+            $effect->setDescription($this->name . ' attacks the hero!');
             $effect->health_value = (-1) * mt_rand(3, 10);
             $action->effect = $effect;
             $this->defAction = $action;
@@ -56,7 +55,7 @@ class MonsterType extends AbstractLivingInteraction {
         return $this->defAction;
     }
 
-    public function getActionIfValid(string $actionName) : DirectAction {
+    public function getActionIfValid(string $actionName): DirectAction {
         return parent::getActionIfValid($actionName);
     }
 }

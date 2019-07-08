@@ -15,12 +15,12 @@ class StatsManager {
     /**
      * @var StatModifier[]
      */
-    public $modifiers;
+    public $modifiers = [];
 
     /**
      * @var StatusEffect[]
      */
-    public $statusEffects;
+    public $statusEffects = [];
 
     /**
      * @var AbstractLivingBeing|Hero

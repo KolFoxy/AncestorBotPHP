@@ -235,12 +235,4 @@ class Effect {
         $valueMax = $valueMax < $value ? $value : $valueMax;
         return mt_rand($valueMin, $valueMax);
     }
-
-    private function parseRandomInt($data): int {
-        if ($data === null)
-            return 0;
-        if (is_string($this->$data))
-            return self::parseRandomNum($data);
-        return $data;
-    }
 }

@@ -3,8 +3,10 @@
   "description": "A mighty sword arm anchored by holy purpose - a zealous warrior!",
   "image": "https://i.imgur.com/Cggaoo7.png",
   "healthMax": 60,
-  "dodge": 25,
-  "bonusCritChance": 7,
+  "stats": {
+    "dodge": 25,
+    "critChance": 7
+  },
   "embedColor": 16777215,
   "actions": [
     {

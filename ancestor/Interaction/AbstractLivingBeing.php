@@ -2,8 +2,8 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
-use function PHPSTORM_META\type;
 
 abstract class AbstractLivingBeing {
 
@@ -60,14 +60,15 @@ abstract class AbstractLivingBeing {
      * @return bool
      */
     public function rollWillHit(AbstractLivingBeing $target, Effect $effect): bool {
-        if (mt_rand(1, $this->type->accuracyMod + $effect->hitChance) <= $target->type->dodge) {
+        if (mt_rand(1, $this->statManager->getStatValue(Stats::ACC_MOD) + $effect->hitChance)
+            <= $target->statManager->getStatValue(Stats::DODGE)) {
             return false;
         }
         return true;
     }
 
     public function rollWillCrit(Effect $effect): bool {
-        return $effect->canCrit() && mt_rand(0, 100) < ($effect->critChance + $this->type->bonusCritChance);
+        return $effect->canCrit() && mt_rand(1, 100) <= ($effect->critChance + $this->statManager->getStatValue(Stats::CRIT_CHANCE));
     }
 
     public function __construct(AbstractLivingInteraction $type) {
