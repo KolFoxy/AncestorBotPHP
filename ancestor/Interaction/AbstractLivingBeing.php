@@ -4,6 +4,7 @@ namespace Ancestor\Interaction;
 
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
+use Ancestor\Interaction\Stats\StatusEffect;
 
 abstract class AbstractLivingBeing {
 
@@ -138,7 +139,7 @@ abstract class AbstractLivingBeing {
             return $this->getStunnedTurn();
         }
         $res = $this->statManager->getProcessTurn();
-        if ($this->isDead()){
+        if ($this->isDead()) {
             $res[] = $this->getDeathFromDotField();
             return $res;
         }
@@ -206,10 +207,34 @@ abstract class AbstractLivingBeing {
                 'value' => '***' . $this->getDeathQuote() . '***',
                 'inline' => false,
             ];
+            return $res;
         }
-
+        if ($action->statusEffects !== null) {
+            foreach ($action->statusEffects as $statusEffect) {
+                $effectTarget = $statusEffect->targetSelf ? $this : $target;
+                if ($effectTarget->statManager->addStatusEffect($statusEffect)) {
+                    $nameString = $statusEffect->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $statusEffect->getType() . '``**';
+                    $res[] = [
+                        'name' => $effectTarget->name . $nameString,
+                        'value' => $effectTarget->statManager->getAllEffectsState(),
+                        'inline' => true,
+                    ];
+                }
+            }
+        }
+        if ($action->statModifiers !== null) {
+            foreach ($action->statModifiers as $statModifier) {
+                $effectTarget = $statModifier->targetSelf ? $this : $target;
+                if ($effectTarget->statManager->addModifier($statModifier)) {
+                    $res[] = [
+                        'name' => $effectTarget->name . ' now has a **``' . $statModifier->getType() . '``**',
+                        'value' => $effectTarget->statManager->getAllModifiersState(),
+                        'inline' => true,
+                    ];
+                }
+            }
+        }
         return $res;
-
     }
 
 

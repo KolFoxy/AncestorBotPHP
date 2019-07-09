@@ -32,6 +32,11 @@ class StatusEffect implements TimedEffectInterface {
     public $value = null;
 
     /**
+     * @var bool Indicates whether or not the effect is applied to the caster no matter the target.
+     */
+    public $targetSelf = false;
+
+    /**
      * @param string $type
      * @throws \Exception
      */
@@ -86,5 +91,19 @@ class StatusEffect implements TimedEffectInterface {
      */
     public function getChance(): int {
         return $this->chance;
+    }
+
+    public function __toString() {
+        if ($this->type === self::TYPE_STUN) {
+            return 'Stunned for one turn, unable to perform actions.';
+        }
+        if ($this->type === self::TYPE_RIPOSTE) {
+            return 'Will respond to attacks with a counterattack.';
+        }
+        if ($this->type === self::TYPE_HORROR) {
+            return abs($this->value) . ' stress for ' . $this->duration . 'rds';
+        }
+        return abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
+
     }
 }

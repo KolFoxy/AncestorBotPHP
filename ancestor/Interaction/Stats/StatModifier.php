@@ -28,10 +28,15 @@ class StatModifier implements TimedEffectInterface {
     public $value = 0;
 
     /**
-     * @var int 0 means its done, negative value means its eternal.
+     * @var int 0 means it's done, negative value means it's eternal.
      * @required
      */
     public $duration = 3;
+
+    /**
+     * @var bool Indicates whether or not the modifier is applied to the caster no matter the target.
+     */
+    public $targetSelf = false;
 
     /**
      * @param string $stat Set the stat that is modified by this StatModifier

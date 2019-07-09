@@ -155,6 +155,7 @@ class Hero extends AbstractLivingBeing {
         if ($action === $this->type->defaultAction()) {
             $target = $this;
         }
+        $res->setThumbnail($action->effect->image);
         CommandHelper::mergeEmbed($res, $this->getTurn($target, $action));
         return $res;
     }

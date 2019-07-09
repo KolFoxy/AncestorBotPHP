@@ -2,6 +2,9 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\Stats\StatModifier;
+use Ancestor\Interaction\Stats\StatusEffect;
+
 class DirectAction {
     /**
      * @var bool
@@ -19,5 +22,15 @@ class DirectAction {
      * @required
      */
     public $effect;
+
+    /**
+     * @var StatusEffect[]|null
+     */
+    public $statusEffects = null;
+
+    /**
+     * @var StatModifier[]|null
+     */
+    public $statModifiers = null;
 
 }

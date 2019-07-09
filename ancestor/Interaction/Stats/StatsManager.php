@@ -197,8 +197,34 @@ class StatsManager {
         return true;
     }
 
-    public function getEffectsStatus() {
+    public function getAllEffectsState() : string {
         // TODO: Implement the method.
+    }
+
+    public function getAllModifiersState() : string {
+        //TODO: Implement the method
+    }
+
+    public function getStatusEffectState(string $statusEffectType): string {
+        $statusEffect = new StatusEffect();
+        $value = 0;
+        $duration = 0;
+        foreach ($this->statusEffects as $effect) {
+            if ($effect->getType() === $statusEffectType) {
+                $value += $effect->value;
+                if ($effect->duration > $duration) {
+                    $duration = $effect->duration;
+                }
+            }
+        }
+        if ($duration === 0) {
+            return '';
+        }
+        $statusEffect->duration = $duration;
+        $statusEffect->value = $value;
+        $statusEffect->setType($statusEffectType);
+        return $statusEffect->__toString();
+
     }
 
     public function isStunned(): bool {
