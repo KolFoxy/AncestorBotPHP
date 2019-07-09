@@ -4,9 +4,11 @@ namespace Ancestor\Interaction;
 
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
-use function Composer\Autoload\includeFile;
 
 abstract class AbstractLivingBeing {
+
+    const CRIT_STRESS_HEAL = -3;
+
 
     const MISS_MESSAGE = '``...and misses!``';
     const CRIT_MESSAGE = ' ***CRIT!***';
@@ -49,7 +51,7 @@ abstract class AbstractLivingBeing {
         return 'Health: ' . $this->currentHealth . '/' . $this->healthMax;
     }
 
-    public function addStress($value) {
+    public function addStress(int $value) {
         if ($this->hasStress()) {
             $this->stress += $value;
         }
@@ -106,27 +108,41 @@ abstract class AbstractLivingBeing {
 
     public function getStunnedTurn(): array {
         $res = array_merge(
-            ['name' => '**' . $this->name . '** has skipped their turn due to stun.',
+            ['name' => '**' . $this->name . '** was stunned!',
                 'value' => '...and did nothing.',
                 'inline' => false,],
             $this->statManager->getProcessTurn()
         );
 
         if ($this->isDead()) {
-            $res[] = [
-                'name' => '***' . $this->name . ' has deceased.***',
-                'value' => '***' . $this->getDeathQuote() . '***',
-                'inline' => false,
-            ];
+            $res[] = $this->getDeathFromDotField();
         }
         return $res;
     }
 
+    private function getDeathFromDotField(): array {
+        return [
+            'name' => '***' . $this->name . ' has deceased.***',
+            'value' => '***' . $this->getDeathQuote() . '***',
+            'inline' => false,
+        ];
+    }
+
+    /**
+     * @param AbstractLivingBeing $target
+     * @param DirectAction $action
+     * @return array Array of fields representing results of the turn Format: [['name' => string, 'value' => string, 'inline' => bool]]
+     */
     public function getTurn(AbstractLivingBeing $target, DirectAction $action): array {
         if ($this->statManager->isStunned()) {
             return $this->getStunnedTurn();
         }
-        $res = [];
+        $res = $this->statManager->getProcessTurn();
+        if ($this->isDead()){
+            $res[] = $this->getDeathFromDotField();
+            return $res;
+        }
+
         $title = ('**' . $this->name . '** uses **' . $action->name . '**!');
         $effect = $action->effect;
 
@@ -134,7 +150,66 @@ abstract class AbstractLivingBeing {
             $res[] = ['name' => $title, 'value' => self::MISS_MESSAGE, 'inline' => false];
             return $res;
         }
-        // TODO finish the method
+
+        $isCrit = $this->rollWillCrit($effect);
+        $stressValue = $effect->getStressValue();
+        $healthValue = $effect->getHealthValue();
+        if ($isCrit) {
+            $title .= self::CRIT_MESSAGE;
+            $healthValue *= 2;
+        }
+
+        $res[] = [
+            'name' => $title,
+            'value' => $effect->getDescription(),
+            'inline' => false,
+        ];
+
+        if ($healthValue !== 0) {
+            $target->addHealth($healthValue);
+            $effectString = $effect->isHealEffect() ? '** is healed for **' : '** gets hit for **';
+            $res[] = [
+                'name' => '**' . $target->name . $effectString . abs($healthValue) . 'HP**!',
+                'value' => '*``' . $target->getHealthStatus() . '``*',
+                'inline' => false,
+            ];
+            if ($isCrit) {
+                if ($effect->isHealEffect()) {
+                    $stressValue -= 10;
+                } elseif ($this->hasStress()) {
+                    $this->addStress(self::CRIT_STRESS_HEAL);
+                    $res[] = [
+                        'name' => '**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_HEAL . ' stress**!',
+                        'value' => '*``' . $this->getStressStatus() . '``*',
+                        'inline' => false,
+                    ];
+                }
+            }
+        }
+
+        if ($stressValue !== 0 && $target->hasStress()) {
+            $target->addStress($stressValue);
+            $effectString = '** suffers **';
+            if ($stressValue < 0) {
+                $effectString = '** feels less tense. **';
+            }
+            $res[] = [
+                'name' => '**' . $target->name . $effectString . $stressValue . ' stress**!',
+                'value' => '*``' . $target->getStressStatus() . '``*',
+                'inline' => false,
+            ];
+        }
+
+        if ($target->isDead()) {
+            $res[] = [
+                'name' => '***DEATHBLOW***',
+                'value' => '***' . $this->getDeathQuote() . '***',
+                'inline' => false,
+            ];
+        }
+
+        return $res;
+
     }
 
 

@@ -113,14 +113,14 @@ class Fight extends Command {
         $embed = $hero->getHeroTurn($action, $target);
 
         if (!$monster->isDead()) {
-            $extraEmbed = $monster->getMonsterTurn($hero);
+            $extraEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
             $embed->addField($monster->type->name . '\'s turn!', '*``' . $monster->getHealthStatus() . '``*');
             CommandHelper::mergeEmbed($embed, $extraEmbed);
         } else {
             if ($this->getEndless($message)) {
                 $monster = $this->getRandomMonster();
                 $embed->addField($monster->type->name . ' emerges from the darkness!', '*``' . $monster->getHealthStatus() . '``*');
-                CommandHelper::mergeEmbed($embed, $monster->getMonsterTurn($hero));
+                CommandHelper::mergeEmbed($embed, $monster->getTurn($hero, $monster->type->getRandomAction()));
                 $this->updateMonster($message, $monster);
             } else {
                 $embed->setFooter($hero->name . ' is victorious!', $message->author->getAvatarURL());
@@ -155,7 +155,7 @@ class Fight extends Command {
         $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix . $this->name));
 
         if (!$heroFirst) {
-            $additionalEmbed = $monster->getMonsterTurn($hero);
+            $additionalEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
             CommandHelper::mergeEmbed($embed, $additionalEmbed);
         }
 

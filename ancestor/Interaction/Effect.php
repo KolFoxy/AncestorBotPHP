@@ -65,10 +65,10 @@ class Effect {
     public $image = null;
 
     /**
-     * Chance of crit for the effect. NULL = can't crit.
-     * @var int|null
+     * Chance of crit for the effect. negative - can't crit.
+     * @var int
      */
-    public $critChance = null;
+    public $critChance = 0;
 
     /**
      * @var int Negative for guarantee hit

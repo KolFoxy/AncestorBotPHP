@@ -2,6 +2,7 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
@@ -16,8 +17,6 @@ class Hero extends AbstractLivingBeing {
     const STRESS_ROLLBACK = 170;
 
     const DEATH_DOOR_RESIST = 67;
-
-    const CRIT_STRESS_HEAL = -3;
 
     const AT_DEATH_S_DOOR_MESSAGE = ' AT DEATH\'S DOOR!';
 
@@ -56,7 +55,7 @@ class Hero extends AbstractLivingBeing {
      */
     public $artifacts = [
         0 => null,
-        1 => null
+        1 => null,
     ];
 
 
@@ -153,69 +152,13 @@ class Hero extends AbstractLivingBeing {
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
         $res = new MessageEmbed();
-        $isDefaultAction = $action === $this->type->defaultAction();
-
-        if ($isDefaultAction) {
+        if ($action === $this->type->defaultAction()) {
             $target = $this;
         }
-
-        $title = ('**' . $this->name . '** uses **' . $action->name . '**!');
-        $effect = $action->effect;
-        $res->setThumbnail($effect->image);
-        if (!$isDefaultAction && !$effect->isHealEffect() && !$effect->isPositiveStressEffect() && !$this->rollWillHit($target, $effect)) {
-            $res->setDescription(self::MISS_MESSAGE);
-            $res->setTitle($title);
-            return $res;
-        }
-
-        $isCrit = !$isDefaultAction && $this->rollWillCrit($effect);
-        $stressEffect = $effect->getStressValue();
-        $healthEffect = $effect->getHealthValue();
-        if ($isCrit) {
-            $title .= self::CRIT_MESSAGE;
-            $healthEffect *= 2;
-        }
-        $targetIsHero = is_a($target, Hero::class);
-        $targetName = $targetIsHero ? $target->name : $target->type->name;
-        $res->setDescription('*``' . $effect->getDescription() . '``*');
-        $res->setTitle($title);
-
-        $target->addHealth($healthEffect);
-        if ($effect->isHealEffect()) {
-            $res->addField('**' . $targetName . '** is healed for **' . abs($healthEffect) . 'HP**!'
-                , '*``' . $target->getHealthStatus() . '``*');
-            if ($isCrit) {
-                $stressEffect -= 10;
-            }
-        } elseif ($effect->isDamageEffect()) {
-            $res->addField('**' . $targetName . '** gets hit for **' . abs($healthEffect) . 'HP**!'
-                , '*``' . $target->getHealthStatus() . '``*');
-            if ($isCrit && $this->stress != 0) {
-                $this->addStress(self::CRIT_STRESS_HEAL);
-                $res->addField('**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_HEAL . ' stress**!'
-                    , '*``' . $this->getStressStatus() . '``*');
-            }
-        }
-
-        if ($targetIsHero && $stressEffect !== 0) {
-            $target->addStress($stressEffect);
-            if ($stressEffect < 0) {
-                $res->addField('**' . $targetName . '** feels less tense. **' . $stressEffect . ' stress**!'
-                    , '*``' . $target->getStressStatus() . '``*');
-            } elseif ($stressEffect > 0) {
-                $res->addField('**' . $targetName . '** suffers **' . $stressEffect . ' stress**!'
-                    , '*``' . $target->getStressStatus() . '``*');
-            }
-        }
-
-        if ($target->isDead()) {
-            $res->addField('***DEATHBLOW***', '***' . $target->getDeathQuote() . '***');
-        }
-
+        CommandHelper::mergeEmbed($res, $this->getTurn($target, $action));
         return $res;
-
-
     }
+
     public function getDeathQuote(): string {
         return RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote();
     }

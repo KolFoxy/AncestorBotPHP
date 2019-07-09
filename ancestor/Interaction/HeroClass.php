@@ -55,6 +55,8 @@ class HeroClass extends AbstractLivingInteraction {
             $effect->setDescription('Hero passed the turn and suffered stress.');
             $effect->stress_value = 6;
             $effect->stressDeviation = 4;
+            $effect->hitChance = -1;
+            $effect->critChance = -1;
             $action->effect = $effect;
             $this->defAction = $action;
         }
