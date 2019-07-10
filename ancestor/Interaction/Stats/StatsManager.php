@@ -208,15 +208,6 @@ class StatsManager {
         // TODO: Implement the method.
     }
 
-    public function getAllModifiersState(): string {
-        $res = [];
-        foreach ($this->modifiers as $modifier) {
-            if (isset($res[$modifier->getStat()])) {
-                $res[$modifier->getStat()] += $modifier->value;
-            }
-        }
-    }
-
     public function getStatusEffectState(string $statusEffectType): string {
         $combinedEffect = new StatusEffect();
         $combinedEffect->value = 0;

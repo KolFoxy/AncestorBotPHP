@@ -5,6 +5,8 @@ namespace Ancestor\Interaction;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
 use Ancestor\Interaction\Stats\StatusEffect;
+use Ancestor\Interaction\Stats\TimedEffectInterface;
+use function MongoDB\BSON\toJSON;
 
 abstract class AbstractLivingBeing {
 
@@ -108,11 +110,16 @@ abstract class AbstractLivingBeing {
     abstract public function getDeathQuote(): string;
 
     public function getStunnedTurn(): array {
-        $res = array_merge(
-            ['name' => '**' . $this->name . '** was stunned!',
+        $res = $this->statManager->getProcessTurn();
+        if ($res === null) {
+            $res = [];
+        }
+        array_push($res,
+            [
+                'name' => '**' . $this->name . '** was stunned!',
                 'value' => '...and did nothing.',
-                'inline' => false,],
-            $this->statManager->getProcessTurn()
+                'inline' => false,
+            ]
         );
 
         if ($this->isDead()) {
@@ -220,9 +227,11 @@ abstract class AbstractLivingBeing {
                     $nameString = $toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType() . '``**';
                     $res[] = [
                         'name' => $effectTarget->name . $nameString,
-                        'value' => $effectTarget->statManager->getStatusEffectState($toAdd->getType()),
+                        'value' => '``' . $effectTarget->statManager->getStatusEffectState($toAdd->getType()) . '``',
                         'inline' => true,
                     ];
+                } else {
+                    $res[] = $this->getFailedApplicationField($toAdd, $effectTarget);
                 }
             }
         }
@@ -233,14 +242,25 @@ abstract class AbstractLivingBeing {
                 if ($effectTarget->statManager->addModifier($toAdd)) {
                     $res[] = [
                         'name' => $effectTarget->name . ' now has a **``' . $toAdd->getType() . '``**',
-                        'value' => 'Current ' . $toAdd->getStat() . ': '
-                            . $effectTarget->statManager->getStatValue($toAdd->getStat()),
+                        'value' => '``Current``**`` ' . $toAdd->getStat() . '``**``: '
+                            . $effectTarget->statManager->getStatValue($toAdd->getStat()) . '``',
                         'inline' => true,
                     ];
+                } else {
+                    $res[] = $this->getFailedApplicationField($toAdd, $effectTarget);
                 }
             }
         }
         return $res;
+    }
+
+    protected function getFailedApplicationField(TimedEffectInterface $timedEffect, AbstractLivingBeing $effectTarget): array {
+        return [
+            'name' => $effectTarget->name . ' has resisted **``' . $timedEffect->getType() . '``**',
+            'value' => '**``' . $timedEffect->getType() . '``**`` resist: '
+                . $effectTarget->statManager->getStatValue($timedEffect->getType() . Stats::RESIST_SUFFIX) . '%``',
+            'inline' => true,
+        ];
     }
 
 

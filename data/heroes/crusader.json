@@ -26,7 +26,8 @@
         "description": "Heals the target for a small amount.",
         "health_value": 2,
         "healthDeviation": 1,
-        "image": "https://i.imgur.com/DB3BRs3.png"
+        "image": "https://i.imgur.com/DB3BRs3.png",
+        "hitChance": -1
       }
     },
     {
@@ -36,7 +37,8 @@
         "description": "Inspire the target and ease some of their stress.",
         "health_value": 1,
         "stress_value": -5,
-        "image": "https://i.imgur.com/P1cprP7.png"
+        "image": "https://i.imgur.com/P1cprP7.png",
+        "hitChance": -1
       }
     }
   ]
