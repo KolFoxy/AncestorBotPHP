@@ -207,7 +207,7 @@ abstract class AbstractLivingBeing {
         if ($target->isDead()) {
             $res[] = [
                 'name' => '***DEATHBLOW***',
-                'value' => '***' . $this->getDeathQuote() . '***',
+                'value' => '***' . $target->getDeathQuote() . '***',
                 'inline' => false,
             ];
             return $res;

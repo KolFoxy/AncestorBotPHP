@@ -116,7 +116,7 @@ class StatsManager {
         if ($value !== 0) {
             $this->host->addHealth($value);
             $effect = $value < 0 ? 'suffered' : 'restored';
-            $body = '``' . $this->host->getHealthStatus();
+            $body = '``' . $this->host->getHealthStatus() . PHP_EOL;
             $body .= $valueBleed !== 0 ? 'Bleed: ' . $valueBleed . PHP_EOL : '';
             $body .= $valueBlight !== 0 ? 'Blight: ' . $valueBlight . PHP_EOL : '';
             $body .= $valueRestoration !== 0 ? 'Restoration: ' . $valueRestoration : '';

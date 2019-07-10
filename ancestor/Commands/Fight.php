@@ -112,27 +112,31 @@ class Fight extends Command {
         $target = $action->requiresTarget ? $hero : $monster;
         $embed = $hero->getHeroTurn($action, $target);
 
-        if (!$monster->isDead() && !$hero->isDead()) {
-            $extraEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
-            $embed->addField($monster->type->name . '\'s turn!', '*``' . $monster->getHealthStatus() . '``*');
-            CommandHelper::mergeEmbed($embed, $extraEmbed);
-        } else {
-            if ($this->getEndless($message)) {
-                $monster = $this->getRandomMonster();
-                $embed->addField($monster->type->name . ' emerges from the darkness!', '*``' . $monster->getHealthStatus() . '``*');
-                CommandHelper::mergeEmbed($embed, $monster->getTurn($hero, $monster->type->getRandomAction()));
-                $this->updateMonster($message, $monster);
+        if (!$hero->isDead()) {
+            if (!$monster->isDead()) {
+                $extraEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
+                $embed->addField($monster->type->name . '\'s turn!', '*``' . $monster->getHealthStatus() . '``*');
+                CommandHelper::mergeEmbed($embed, $extraEmbed);
             } else {
-                $embed->setFooter($hero->name . ' is victorious!', $message->author->getAvatarURL());
-                $this->manager->deleteInteraction($message);
-                return $embed;
+                if ($this->getEndless($message)) {
+                    $monster = $this->getRandomMonster();
+                    $embed->addField('***' . $monster->type->name . ' emerges from the darkness!***', '*``' . $monster->getHealthStatus() . '``*');
+                    CommandHelper::mergeEmbed($embed, $monster->getTurn($hero, $monster->type->getRandomAction()));
+                    $this->updateMonster($message, $monster);
+                } else {
+                    $embed->setFooter($hero->name . ' is victorious!', $message->author->getAvatarURL());
+                    $this->manager->deleteInteraction($message);
+                    return $embed;
+                }
             }
         }
+
         if ($hero->isDead()) {
             $embed->setFooter('R.I.P. ' . $hero->name, $message->author->getAvatarURL());
             $this->manager->deleteInteraction($message);
             return $embed;
         }
+
         $this->manager->refreshTimer($message, self::TIMEOUT);
         $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix));
         return $embed;

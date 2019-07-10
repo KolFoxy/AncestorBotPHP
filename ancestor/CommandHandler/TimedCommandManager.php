@@ -5,7 +5,6 @@ namespace Ancestor\CommandHandler;
 use CharlotteDunois\Collect\Collection;
 use CharlotteDunois\Yasmin\Client;
 use CharlotteDunois\Yasmin\Models\Message;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use React\EventLoop\TimerInterface;
 
 class TimedCommandManager {

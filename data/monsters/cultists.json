@@ -18,8 +18,8 @@
         },
         "statusEffects": [
           {
-            "type": "horror",
-            "value": 6
+            "type": "bleed",
+            "value": -6
           }
         ]
       },
@@ -34,8 +34,8 @@
         },
         "statusEffects": [
           {
-            "type": "horror",
-            "value": 6
+            "type": "blight",
+            "value": -6
           }
         ]
       }

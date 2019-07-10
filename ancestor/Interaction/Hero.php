@@ -59,6 +59,8 @@ class Hero extends AbstractLivingBeing {
     ];
 
 
+    const DEAD_MESSAGE = ' DEAD';
+
     public function addStress(int $value) {
         if ($this->isActuallyDead) {
             return;
@@ -72,6 +74,7 @@ class Hero extends AbstractLivingBeing {
             $this->bonusStressMessage = self::HEART_ATTACK_MESSAGE;
             if ($this->currentHealth === 0) {
                 $this->isActuallyDead = true;
+                $this->bonusHealthMessage = '';
                 return;
             }
             $this->currentHealth = 0;
@@ -88,6 +91,8 @@ class Hero extends AbstractLivingBeing {
         $this->currentHealth += $value;
         if ($atDeathDoor && $this->currentHealth < 0) {
             if (mt_rand(1, 100) > self::DEATH_DOOR_RESIST) {
+                $this->bonusHealthMessage = self::DEAD_MESSAGE;
+                $this->bonusStressMessage = '';
                 $this->isActuallyDead = true;
                 return;
             }
@@ -101,6 +106,7 @@ class Hero extends AbstractLivingBeing {
             $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
             return;
         }
+        $this->bonusHealthMessage = '';
     }
 
     public function getStressStatus(): string {
