@@ -15,7 +15,13 @@
           "stress_value": 20,
           "health_value": -1,
           "healthDeviation": -2
-        }
+        },
+        "statusEffects": [
+          {
+            "type": "horror",
+            "value": 6
+          }
+        ]
       },
       {
         "name": "Eldritch Push",
@@ -25,7 +31,13 @@
           "health_value": -1,
           "healthDeviation": -2,
           "critChance": 14
-        }
+        },
+        "statusEffects": [
+          {
+            "type": "horror",
+            "value": 6
+          }
+        ]
       }
     ]
   }

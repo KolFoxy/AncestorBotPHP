@@ -93,7 +93,7 @@ class StatusEffect implements TimedEffectInterface {
         return $this->chance;
     }
 
-    public function __toString() {
+    public function __toString() : string {
         if ($this->type === self::TYPE_STUN) {
             return 'Stunned for one turn, unable to perform actions.';
         }
@@ -105,5 +105,15 @@ class StatusEffect implements TimedEffectInterface {
         }
         return abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
 
+    }
+
+    public function clone() : StatusEffect {
+        $clone = new StatusEffect();
+        $clone->duration = $this->duration;
+        $clone->value = $this->value;
+        $clone->chance = $this->chance;
+        $clone->type = $this->type;
+        $clone->targetSelf = $this->targetSelf;
+        return $clone;
     }
 }

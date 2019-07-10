@@ -147,7 +147,7 @@ class Hero extends AbstractLivingBeing {
 
     /**
      * @param DirectAction $action
-     * @param AbstractLivingBeing|Hero $target
+     * @param AbstractLivingBeing $target
      * @return MessageEmbed
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
@@ -156,7 +156,11 @@ class Hero extends AbstractLivingBeing {
             $target = $this;
         }
         $res->setThumbnail($action->effect->image);
-        CommandHelper::mergeEmbed($res, $this->getTurn($target, $action));
+        $fields = $this->getTurn($target, $action);
+        $topField = array_shift($fields);
+        $res->setTitle($topField['name']);
+        $res->setDescription($topField['value']);
+        CommandHelper::mergeEmbed($res, $fields);
         return $res;
     }
 

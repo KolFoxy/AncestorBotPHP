@@ -111,4 +111,18 @@ class StatModifier implements TimedEffectInterface {
     public function getChance(): int {
         return $this->chance;
     }
+
+    public function clone(): StatModifier {
+        $clone = new StatModifier();
+        $clone->duration = $this->duration;
+        $clone->value = $this->value;
+        $clone->chance = $this->chance;
+        $clone->stat = $this->stat;
+        $clone->targetSelf = $this->targetSelf;
+        return $clone;
+    }
+
+    public function __toString(): string {
+        return $this->stat . ': ' . $this->value < 0 ? '' : '+' . $this->value;
+    }
 }

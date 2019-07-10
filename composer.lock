@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c7ca041df719d3a723650f9193a2d976",
+    "content-hash": "cb4cf3718d860160c2fd0b9420a033ca",
     "packages": [
         {
             "name": "cakephp/core",
@@ -237,16 +237,16 @@
         },
         {
             "name": "charlottedunois/yasmin",
-            "version": "v0.6.0",
+            "version": "v0.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/CharlotteDunois/Yasmin.git",
-                "reference": "ddbe97c33675b3f1ebc99064dda4e15f77937a6f"
+                "reference": "c09ee8e773cbfe6bbc100970169104d66bbb8fa5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/CharlotteDunois/Yasmin/zipball/ddbe97c33675b3f1ebc99064dda4e15f77937a6f",
-                "reference": "ddbe97c33675b3f1ebc99064dda4e15f77937a6f",
+                "url": "https://api.github.com/repos/CharlotteDunois/Yasmin/zipball/c09ee8e773cbfe6bbc100970169104d66bbb8fa5",
+                "reference": "c09ee8e773cbfe6bbc100970169104d66bbb8fa5",
                 "shasum": ""
             },
             "require": {
@@ -292,7 +292,7 @@
                 }
             ],
             "description": "Yasmin is a Discord API library for PHP.",
-            "time": "2019-04-13T10:30:49+00:00"
+            "time": "2019-05-24T14:59:24+00:00"
         },
         {
             "name": "clue/buzz-react",

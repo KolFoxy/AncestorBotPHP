@@ -112,7 +112,7 @@ class Fight extends Command {
         $target = $action->requiresTarget ? $hero : $monster;
         $embed = $hero->getHeroTurn($action, $target);
 
-        if (!$monster->isDead()) {
+        if (!$monster->isDead() && !$hero->isDead()) {
             $extraEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
             $embed->addField($monster->type->name . '\'s turn!', '*``' . $monster->getHealthStatus() . '``*');
             CommandHelper::mergeEmbed($embed, $extraEmbed);

@@ -29,4 +29,14 @@ interface TimedEffectInterface {
      */
     public function getChance() : int;
 
+    /**
+     * @return mixed Copy of the object.
+     */
+    public function clone();
+
+    /**
+     * @return string
+     */
+    public function __toString() : string;
+
 }

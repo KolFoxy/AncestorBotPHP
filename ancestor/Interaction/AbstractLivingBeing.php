@@ -97,7 +97,7 @@ abstract class AbstractLivingBeing {
         $this->name = $type->name;
         $this->type = $type;
         $this->currentHealth = $this->healthMax = $type->healthMax;
-        $this->statManager = new StatsManager($type->stats);
+        $this->statManager = new StatsManager($this, $type->stats);
     }
 
     /**
@@ -139,6 +139,9 @@ abstract class AbstractLivingBeing {
             return $this->getStunnedTurn();
         }
         $res = $this->statManager->getProcessTurn();
+        if ($res === null) {
+            $res = [];
+        }
         if ($this->isDead()) {
             $res[] = $this->getDeathFromDotField();
             return $res;
@@ -211,12 +214,13 @@ abstract class AbstractLivingBeing {
         }
         if ($action->statusEffects !== null) {
             foreach ($action->statusEffects as $statusEffect) {
-                $effectTarget = $statusEffect->targetSelf ? $this : $target;
-                if ($effectTarget->statManager->addStatusEffect($statusEffect)) {
-                    $nameString = $statusEffect->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $statusEffect->getType() . '``**';
+                $toAdd = $statusEffect->clone();
+                $effectTarget = $toAdd->targetSelf ? $this : $target;
+                if ($effectTarget->statManager->addStatusEffect($toAdd)) {
+                    $nameString = $toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType() . '``**';
                     $res[] = [
                         'name' => $effectTarget->name . $nameString,
-                        'value' => $effectTarget->statManager->getAllEffectsState(),
+                        'value' => $effectTarget->statManager->getStatusEffectState($toAdd->getType()),
                         'inline' => true,
                     ];
                 }
@@ -224,11 +228,13 @@ abstract class AbstractLivingBeing {
         }
         if ($action->statModifiers !== null) {
             foreach ($action->statModifiers as $statModifier) {
-                $effectTarget = $statModifier->targetSelf ? $this : $target;
-                if ($effectTarget->statManager->addModifier($statModifier)) {
+                $toAdd = $statModifier->clone();
+                $effectTarget = $toAdd->targetSelf ? $this : $target;
+                if ($effectTarget->statManager->addModifier($toAdd)) {
                     $res[] = [
-                        'name' => $effectTarget->name . ' now has a **``' . $statModifier->getType() . '``**',
-                        'value' => $effectTarget->statManager->getAllModifiersState(),
+                        'name' => $effectTarget->name . ' now has a **``' . $toAdd->getType() . '``**',
+                        'value' => 'Current ' . $toAdd->getStat() . ': '
+                            . $effectTarget->statManager->getStatValue($toAdd->getStat()),
                         'inline' => true,
                     ];
                 }

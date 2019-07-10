@@ -3,7 +3,6 @@
 namespace Ancestor\Interaction\Stats;
 
 use Ancestor\Interaction\AbstractLivingBeing;
-use Ancestor\Interaction\Hero;
 
 class StatsManager {
 
@@ -23,11 +22,12 @@ class StatsManager {
     public $statusEffects = [];
 
     /**
-     * @var AbstractLivingBeing|Hero
+     * @var AbstractLivingBeing
      */
     public $host;
 
-    public function __construct(array $statsArray = null) {
+    public function __construct(AbstractLivingBeing $host, array $statsArray = null) {
+        $this->host = $host;
         $this->stats = Stats::getStatsArray();
         if ($statsArray === null) {
             return;
@@ -60,7 +60,10 @@ class StatsManager {
         return $value;
     }
 
-    public function getProcessTurn(): array {
+    /**
+     * @return array|null
+     */
+    public function getProcessTurn() {
         $values = $this->getEmptyValuesArray();
 
         foreach ($this->statusEffects as $key => $effect) {
@@ -100,7 +103,11 @@ class StatsManager {
         ];
     }
 
-    function valuesToFields(array $values): array {
+    /**
+     * @param array $values
+     * @return array|null
+     */
+    function valuesToFields(array $values) {
         $res = [];
         $valueBleed = $values[StatusEffect::TYPE_BLEED];
         $valueBlight = $values[StatusEffect::TYPE_BLIGHT];
@@ -133,7 +140,7 @@ class StatsManager {
                 'inline' => true];
         }
 
-        return $res;
+        return $res === [] ? null : $res;
     }
 
     /**
@@ -197,33 +204,36 @@ class StatsManager {
         return true;
     }
 
-    public function getAllEffectsState() : string {
+    public function getAllEffectsState(): string {
         // TODO: Implement the method.
     }
 
-    public function getAllModifiersState() : string {
-        //TODO: Implement the method
+    public function getAllModifiersState(): string {
+        $res = [];
+        foreach ($this->modifiers as $modifier) {
+            if (isset($res[$modifier->getStat()])) {
+                $res[$modifier->getStat()] += $modifier->value;
+            }
+        }
     }
 
     public function getStatusEffectState(string $statusEffectType): string {
-        $statusEffect = new StatusEffect();
-        $value = 0;
-        $duration = 0;
+        $combinedEffect = new StatusEffect();
+        $combinedEffect->value = 0;
+        $combinedEffect->duration = 0;
         foreach ($this->statusEffects as $effect) {
             if ($effect->getType() === $statusEffectType) {
-                $value += $effect->value;
-                if ($effect->duration > $duration) {
-                    $duration = $effect->duration;
+                $combinedEffect->value += $effect->value;
+                if ($effect->duration > $combinedEffect->duration) {
+                    $combinedEffect->duration = $effect->duration;
                 }
             }
         }
-        if ($duration === 0) {
+        if ($combinedEffect->duration === 0) {
             return '';
         }
-        $statusEffect->duration = $duration;
-        $statusEffect->value = $value;
-        $statusEffect->setType($statusEffectType);
-        return $statusEffect->__toString();
+        $combinedEffect->setType($statusEffectType);
+        return $combinedEffect->__toString();
 
     }
 
