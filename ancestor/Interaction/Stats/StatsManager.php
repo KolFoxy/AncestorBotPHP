@@ -41,13 +41,28 @@ class StatsManager {
 
     /**
      * @param string $statName
-     * @return int|bool Stat value or FALSE if $statName doesn't exists;
+     * @return int|null Stat value or NULL if $statName doesn't exists;
      */
     public function getStatValue(string $statName): int {
         if (key_exists($statName, $this->stats)) {
             return $this->stats[$statName] + $this->getStatMod($statName);
         }
-        return false;
+        return null;
+    }
+
+    /**
+     * @param string $statName
+     * @return float
+     */
+    public function getValueMod(string $statName): float {
+        $value = $this->getStatValue($statName);
+        if ($statName === Stats::PROT) {
+            if ($value < 0) {
+                return 1.00;
+            }
+            return 1.00 - $this->getStatValue($statName) / 100.00;
+        }
+        return 1.00 + ($this->getStatValue($statName) ?? 0) / 100.00;
     }
 
     private function getStatMod(string $statName): int {
@@ -192,7 +207,7 @@ class StatsManager {
      * @return bool
      */
     private function checkResists(TimedEffectInterface $effectToAdd): bool {
-        if (!$effectToAdd->isPositive()) {
+        if (!$effectToAdd->guaranteedApplication()) {
             $resist = $effectToAdd->getType() . Stats::RESIST_SUFFIX;
             if (key_exists($resist, $this->stats)) {
                 $resistValue = $this->stats[$resist] + $this->getStatMod($resist);
@@ -202,10 +217,6 @@ class StatsManager {
             }
         }
         return true;
-    }
-
-    public function getAllEffectsState(): string {
-        // TODO: Implement the method.
     }
 
     public function getStatusEffectState(string $statusEffectType): string {

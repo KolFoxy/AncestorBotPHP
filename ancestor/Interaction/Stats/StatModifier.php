@@ -2,6 +2,8 @@
 
 namespace Ancestor\Interaction\Stats;
 
+use function WyriHaximus\validate_array;
+
 class StatModifier implements TimedEffectInterface {
 
     /**
@@ -11,7 +13,7 @@ class StatModifier implements TimedEffectInterface {
 
 
     /**
-     * @var int Chance to hit. Negative value indicates positive effects (buffs).
+     * @var int Chance to hit. Negative value indicates guaranteed application.
      * @required
      */
     public $chance = 100;
@@ -81,7 +83,10 @@ class StatModifier implements TimedEffectInterface {
     }
 
     public function isPositive(): bool {
-        return $this->chance < 0;
+        if ($this->stat === Stats::STRESS_MOD) {
+            return $this->value < 0;
+        }
+        return $this->value > 0;
     }
 
     public static function getDefaultStunResistBuff(): StatModifier {
@@ -124,5 +129,9 @@ class StatModifier implements TimedEffectInterface {
 
     public function __toString(): string {
         return $this->stat . ': ' . $this->value < 0 ? '' : '+' . $this->value;
+    }
+
+    public function guaranteedApplication(): bool {
+        return $this->chance < 0;
     }
 }

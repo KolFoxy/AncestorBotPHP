@@ -20,6 +20,10 @@ class Stats {
 
     const STRESS_MOD = 'stressMod';
     const STRESS_HEAL_MOD = 'stressHealMod';
+    const STRESS_SKILL_MOD = 'stressSkillMod';
+
+    const HEAL_SKILL_MOD = 'healSkillMod';
+    const HEAL_RECEIVED_MOD = 'healReceivedMod';
 
     /**
      * @return array Format: ['stat1' => int, 'stat2' => int, ...]
@@ -38,6 +42,9 @@ class Stats {
             self::CRIT_CHANCE => 2,
             self::STRESS_MOD => 0,
             self::STRESS_HEAL_MOD => 0,
+            self::STRESS_SKILL_MOD => 0,
+            self::HEAL_SKILL_MOD => 0,
+            self::HEAL_RECEIVED_MOD => 0,
         ];
     }
 
@@ -58,6 +65,9 @@ class Stats {
             self::CRIT_CHANCE,
             self::STRESS_MOD,
             self::STRESS_HEAL_MOD,
+            self::STRESS_SKILL_MOD,
+            self::HEAL_SKILL_MOD,
+            self::HEAL_RECEIVED_MOD,
         ];
     }
 

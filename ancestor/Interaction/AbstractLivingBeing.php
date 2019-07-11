@@ -6,7 +6,6 @@ use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
 use Ancestor\Interaction\Stats\StatusEffect;
 use Ancestor\Interaction\Stats\TimedEffectInterface;
-use function MongoDB\BSON\toJSON;
 
 abstract class AbstractLivingBeing {
 
@@ -163,8 +162,8 @@ abstract class AbstractLivingBeing {
         }
 
         $isCrit = $this->rollWillCrit($effect);
-        $stressValue = $effect->getStressValue();
-        $healthValue = $effect->getHealthValue();
+        $stressValue = (int)($effect->getStressValue() * $this->statManager->getValueMod(Stats::STRESS_SKILL_MOD));
+        $healthValue = (int)($effect->getHealthValue());
         if ($isCrit) {
             $title .= self::CRIT_MESSAGE;
             $healthValue *= 2;
@@ -177,6 +176,9 @@ abstract class AbstractLivingBeing {
         ];
 
         if ($healthValue !== 0) {
+            $healthValue *= $healthValue < 0
+                ? $this->statManager->getValueMod(Stats::DAMAGE_MOD) * $target->statManager->getValueMod(Stats::PROT)
+                : $this->statManager->getValueMod(Stats::HEAL_SKILL_MOD) * $target->statManager->getValueMod(Stats::HEAL_RECEIVED_MOD);
             $target->addHealth($healthValue);
             $effectString = $effect->isHealEffect() ? '** is healed for **' : '** gets hit for **';
             $res[] = [
@@ -199,7 +201,9 @@ abstract class AbstractLivingBeing {
         }
 
         if ($stressValue !== 0 && $target->hasStress()) {
-            $target->addStress($stressValue);
+            $target->addStress($stressValue
+                * $this->statManager->getValueMod($stressValue < 0 ? Stats::STRESS_HEAL_MOD : Stats::STRESS_MOD)
+            );
             $effectString = '** suffers **';
             if ($stressValue < 0) {
                 $effectString = '** feels less tense. **';

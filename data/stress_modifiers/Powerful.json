@@ -1,0 +1,9 @@
+[
+  {
+    "chance": -1,
+    "stat": "damageMod",
+    "value": 25,
+    "duration": -1,
+    "targetSelf": true
+  }
+]

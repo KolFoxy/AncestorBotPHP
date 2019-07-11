@@ -1,0 +1,23 @@
+[
+  {
+    "chance": -1,
+    "stat": "accMod",
+    "value": -5,
+    "duration": -1,
+    "targetSelf": true
+  },
+  {
+    "chance": -1,
+    "stat": "damageMod",
+    "value": 20,
+    "duration": -1,
+    "targetSelf": true
+  },
+  {
+    "chance": -1,
+    "stat": "dodge",
+    "value": -15,
+    "duration": -1,
+    "targetSelf": true
+  }
+]

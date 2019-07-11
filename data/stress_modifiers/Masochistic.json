@@ -1,0 +1,9 @@
+[
+  {
+    "chance": -1,
+    "stat": "dodge",
+    "value": -15,
+    "duration": -1,
+    "targetSelf": true
+  }
+]

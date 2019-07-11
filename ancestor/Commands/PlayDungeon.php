@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: KolBrony
- * Date: 19.06.2019
- * Time: 12:14
- */
 
 namespace Ancestor\Commands;
 

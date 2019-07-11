@@ -1,0 +1,9 @@
+[
+  {
+    "chance": -1,
+    "stat": "stressMod",
+    "value": -33,
+    "duration": -1,
+    "targetSelf": true
+  }
+]

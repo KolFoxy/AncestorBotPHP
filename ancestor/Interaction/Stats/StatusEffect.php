@@ -22,7 +22,7 @@ class StatusEffect implements TimedEffectInterface {
     public $duration = 3;
 
     /**
-     * @var int
+     * @var int Negative for guaranteed application.
      */
     public $chance = 100;
 
@@ -93,7 +93,7 @@ class StatusEffect implements TimedEffectInterface {
         return $this->chance;
     }
 
-    public function __toString() : string {
+    public function __toString(): string {
         if ($this->type === self::TYPE_STUN) {
             return 'Stunned for one turn, unable to perform actions.';
         }
@@ -107,7 +107,11 @@ class StatusEffect implements TimedEffectInterface {
 
     }
 
-    public function clone() : StatusEffect {
+    public function guaranteedApplication(): bool {
+        return $this->isPositive() || $this->chance < 0;
+    }
+
+    public function clone(): StatusEffect {
         $clone = new StatusEffect();
         $clone->duration = $this->duration;
         $clone->value = $this->value;

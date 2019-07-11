@@ -15,7 +15,7 @@ interface TimedEffectInterface {
     public function isDone() : bool;
 
     /**
-     * @return bool Whether or not the effect is positive and should be resisted.
+     * @return bool Whether or not the effect is positive
      */
     public function isPositive() : bool;
 
@@ -33,6 +33,11 @@ interface TimedEffectInterface {
      * @return mixed Copy of the object.
      */
     public function clone();
+
+    /**
+     * @return bool Whether or not resists should be checked.
+     */
+    public function guaranteedApplication() : bool;
 
     /**
      * @return string

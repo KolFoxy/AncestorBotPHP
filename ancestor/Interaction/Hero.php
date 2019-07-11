@@ -3,6 +3,7 @@
 namespace Ancestor\Interaction;
 
 use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
@@ -15,8 +16,6 @@ class Hero extends AbstractLivingBeing {
     const MAX_STRESS = 199;
 
     const STRESS_ROLLBACK = 170;
-
-    const DEATH_DOOR_RESIST = 67;
 
     const AT_DEATH_S_DOOR_MESSAGE = ' AT DEATH\'S DOOR!';
 
@@ -65,7 +64,7 @@ class Hero extends AbstractLivingBeing {
         if ($this->isActuallyDead) {
             return;
         }
-        $this->stress += $value;
+        $this->stress += (int)($value * $this->statManager->getValueMod(Stats::STRESS_MOD));
         if ($this->stress < 0) {
             $this->stress = 0;
             return;
@@ -90,7 +89,7 @@ class Hero extends AbstractLivingBeing {
         $atDeathDoor = $this->currentHealth === 0;
         $this->currentHealth += $value;
         if ($atDeathDoor && $this->currentHealth < 0) {
-            if (mt_rand(1, 100) > self::DEATH_DOOR_RESIST) {
+            if (mt_rand(1, 100) > $this->statManager->getStatValue(Stats::DEATHBLOW_RESIST)) {
                 $this->bonusHealthMessage = self::DEAD_MESSAGE;
                 $this->bonusStressMessage = '';
                 $this->isActuallyDead = true;
@@ -161,7 +160,9 @@ class Hero extends AbstractLivingBeing {
         if ($action === $this->type->defaultAction()) {
             $target = $this;
         }
-        $res->setThumbnail($action->effect->image);
+        if (!$this->statManager->isStunned()) {
+            $res->setThumbnail($action->effect->image);
+        }
         $fields = $this->getTurn($target, $action);
         $topField = array_shift($fields);
         $res->setTitle($topField['name']);

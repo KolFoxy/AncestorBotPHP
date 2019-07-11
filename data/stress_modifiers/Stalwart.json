@@ -1,0 +1,16 @@
+[
+  {
+    "chance": -1,
+    "stat": "prot",
+    "value": 15,
+    "duration": -1,
+    "targetSelf": true
+  },
+  {
+    "chance": -1,
+    "stat": "deathblowResist",
+    "value": 8,
+    "duration": -1,
+    "targetSelf": true
+  }
+]
