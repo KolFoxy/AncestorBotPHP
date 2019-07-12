@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction\Stats;
 
-class Stats {
+final class Stats {
 
     const RESIST_SUFFIX = 'Resist';
 
@@ -21,6 +21,7 @@ class Stats {
     const STRESS_MOD = 'stressMod';
     const STRESS_HEAL_MOD = 'stressHealMod';
     const STRESS_SKILL_MOD = 'stressSkillMod';
+    const VIRTUE_CHANCE = 'virtueChance';
 
     const HEAL_SKILL_MOD = 'healSkillMod';
     const HEAL_RECEIVED_MOD = 'healReceivedMod';
@@ -45,6 +46,7 @@ class Stats {
             self::STRESS_SKILL_MOD => 0,
             self::HEAL_SKILL_MOD => 0,
             self::HEAL_RECEIVED_MOD => 0,
+            self::VIRTUE_CHANCE => 25,
         ];
     }
 
@@ -52,23 +54,7 @@ class Stats {
      * @return string[] Array of stats' names
      */
     public static function getStatNamesArray(): array {
-        return [
-            self::STUN_RESIST,
-            self::BLEED_RESIST,
-            self::BLIGHT_RESIST,
-            self::DEBUFF_RESIST,
-            self::DEATHBLOW_RESIST,
-            self::DAMAGE_MOD,
-            self::ACC_MOD,
-            self::DODGE,
-            self::PROT,
-            self::CRIT_CHANCE,
-            self::STRESS_MOD,
-            self::STRESS_HEAL_MOD,
-            self::STRESS_SKILL_MOD,
-            self::HEAL_SKILL_MOD,
-            self::HEAL_RECEIVED_MOD,
-        ];
+        return array_keys(self::getStatsArray());
     }
 
     public static function statIsValid(string $stat): bool {
@@ -78,6 +64,24 @@ class Stats {
             }
         }
         return false;
+    }
+
+
+    /**
+     * @param int $value
+     * @param string $statName
+     * @return int Validated stat value. Same as the $value param if everything is OK
+     */
+    public static function validateStatValue(int $value, string $statName): int {
+        if ($statName === self::PROT) {
+            return $value < 0 ? 0 : $value;
+        }
+        if ($statName === self::VIRTUE_CHANCE) {
+            return $value < 1 ? 1 : $value > 95 ? 95 : $value;
+        }
+        if ($statName === self::DEATHBLOW_RESIST) {
+            return $value > 87 ? 87 : $value;
+        }
     }
 
 }

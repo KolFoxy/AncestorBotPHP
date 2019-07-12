@@ -29,7 +29,7 @@ class RandomDataProvider {
         $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
         $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
         $this->PopulateArray($this->heroDiesQuotes, '/data/heroDiesQuotes');
-        $this->PopulateArray($this->monsterDiesQuotes,'/data/monsterDiesQuotes');
+        $this->PopulateArray($this->monsterDiesQuotes, '/data/monsterDiesQuotes');
     }
 
     /**
@@ -46,7 +46,11 @@ class RandomDataProvider {
         return $array[mt_rand(0, sizeof($array) - 1)];
     }
 
-    private function GetRandomAffliction() {
+
+    /**
+     * @return array
+     */
+    private function GetRandomAffliction(): array {
         $affliction = $this->GetRandomData($this->afflictions['afflictions']);
         if (mt_rand(1, 100) <= 50) {
             $affliction['quote'] = $this->GetRandomData($this->afflictions['quotes']);
@@ -54,16 +58,19 @@ class RandomDataProvider {
         return $affliction;
     }
 
-    public function GetRandomHeroDeathQuote() : string {
+    public function GetRandomHeroDeathQuote(): string {
         return $this->GetRandomData($this->heroDiesQuotes);
     }
 
-    public function GetRandomMonsterDeathQuote() : string {
+    public function GetRandomMonsterDeathQuote(): string {
         return $this->GetRandomData($this->monsterDiesQuotes);
     }
 
-    public function GetRandomResolve() {
-        if (mt_rand(1, 100) <= self::virtueChance) {
+    public function GetRandomResolve($virtueChance = null) {
+        if ($virtueChance === null) {
+            $virtueChance = self::virtueChance;
+        }
+        if (mt_rand(1, 100) <= $virtueChance) {
             return $this->GetRandomData($this->virtues['virtues']);
         }
         return $this->GetRandomAffliction();
@@ -73,11 +80,11 @@ class RandomDataProvider {
         return $this->GetRandomData($this->NSFWquotes);
     }
 
-    public function GetRandomPositiveQuirk(){
+    public function GetRandomPositiveQuirk() {
         return $this->GetRandomData($this->quirksPositive);
     }
 
-    public function GetRandomNegativeQuirk(){
+    public function GetRandomNegativeQuirk() {
         return $this->GetRandomData($this->quirksNegative);
     }
 

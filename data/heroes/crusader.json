@@ -34,12 +34,29 @@
       "name": "Inspiring Cry",
       "requiresTarget": true,
       "effect": {
-        "description": "Inspire the target and ease some of their stress.",
+        "description": "Inspires the target and eases some of their stress.",
         "health_value": 1,
         "stress_value": -5,
         "image": "https://i.imgur.com/P1cprP7.png",
         "hitChance": -1
       }
+    },
+    {
+      "name": "Stunning Blow",
+      "effect": {
+        "description": "Stuns the opponent with a precise blow!",
+        "health_value": -5,
+        "healthDeviation": -4,
+        "hitChance": 110,
+        "critChance": 4
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
     }
   ]
 }

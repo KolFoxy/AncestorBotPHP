@@ -45,24 +45,9 @@ class StatsManager {
      */
     public function getStatValue(string $statName): int {
         if (key_exists($statName, $this->stats)) {
-            return $this->stats[$statName] + $this->getStatMod($statName);
+            return Stats::validateStatValue($this->stats[$statName] + $this->getStatMod($statName), $statName);
         }
         return null;
-    }
-
-    /**
-     * @param string $statName
-     * @return float
-     */
-    public function getValueMod(string $statName): float {
-        $value = $this->getStatValue($statName);
-        if ($statName === Stats::PROT) {
-            if ($value < 0) {
-                return 1.00;
-            }
-            return 1.00 - $this->getStatValue($statName) / 100.00;
-        }
-        return 1.00 + ($this->getStatValue($statName) ?? 0) / 100.00;
     }
 
     private function getStatMod(string $statName): int {
@@ -73,6 +58,17 @@ class StatsManager {
             }
         }
         return $value;
+    }
+
+    /**
+     * @param string $statName
+     * @return float
+     */
+    public function getValueMod(string $statName): float {
+        if ($statName === Stats::PROT) {
+            return 1.00 - $this->getStatValue($statName) / 100.00;
+        }
+        return 1.00 + ($this->getStatValue($statName) ?? 0) / 100.00;
     }
 
     /**

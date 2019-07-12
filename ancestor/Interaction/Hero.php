@@ -4,12 +4,15 @@ namespace Ancestor\Interaction;
 
 use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\Interaction\Stats\Stats;
+use Ancestor\Interaction\Stats\StressState;
+use Ancestor\Interaction\Stats\StressStateFactory;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use function GuzzleHttp\Psr7\str;
 
 class Hero extends AbstractLivingBeing {
-
+    const DEAD_MESSAGE = ' DEAD';
 
     const HEART_ATTACK_MESSAGE = ' HEART ATTACK!';
 
@@ -57,8 +60,11 @@ class Hero extends AbstractLivingBeing {
         1 => null,
     ];
 
+    /**
+     * @var null|StressState
+     */
+    protected $stressState = null;
 
-    const DEAD_MESSAGE = ' DEAD';
 
     public function addStress(int $value) {
         if ($this->isActuallyDead) {
@@ -80,6 +86,33 @@ class Hero extends AbstractLivingBeing {
             $this->stress = self::STRESS_ROLLBACK;
             $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
         }
+    }
+
+    /**
+     * @return StressState
+     */
+    public function addStressState(): StressState {
+        if ($this->stressState !== null) {
+            return $this->stressState;
+        }
+        $this->stressState = StressStateFactory::create($this);
+        $this->stressState->apply();
+        return $this->stressState;
+    }
+
+    /**
+     * @return StressState|null
+     */
+    public function getStressState(): StressState{
+        return $this->stressState;
+    }
+
+    public function removeStressState() {
+        if ($this->stressState === null){
+            return;
+        }
+        $this->stressState->remove();
+        $this->stressState = null;
     }
 
     public function addHealth(int $value) {
