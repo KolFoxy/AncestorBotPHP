@@ -33,16 +33,16 @@ final class Stats {
      */
     public static function getStatsArray(): array {
         return [
-            self::STUN_RESIST => 40,
-            self::BLEED_RESIST => 30,
-            self::BLIGHT_RESIST => 30,
-            self::DEBUFF_RESIST => 30,
+            self::STUN_RESIST => 90,
+            self::BLEED_RESIST => 80,
+            self::BLIGHT_RESIST => 80,
+            self::DEBUFF_RESIST => 80,
             self::DEATHBLOW_RESIST => 67,
             self::DAMAGE_MOD => 0,
             self::ACC_MOD => 0,
             self::DODGE => 25,
             self::PROT => 0,
-            self::CRIT_CHANCE => 2,
+            self::CRIT_CHANCE => 4,
             self::STRESS_MOD => 0,
             self::STRESS_HEAL_MOD => 0,
             self::STRESS_SKILL_MOD => 0,
