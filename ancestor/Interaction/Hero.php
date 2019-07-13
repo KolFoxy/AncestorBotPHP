@@ -73,18 +73,35 @@ class Hero extends AbstractLivingBeing {
         $this->stress += (int)($value * $this->statManager->getValueMod(Stats::STRESS_MOD));
         if ($this->stress < 0) {
             $this->stress = 0;
+            if ($this->stressState !== null && !$this->stressState->isVirtue) {
+                $this->removeStressState();
+            }
             return;
         }
-        if ($this->stress > self::MAX_STRESS) {
-            $this->bonusStressMessage = self::HEART_ATTACK_MESSAGE;
-            if ($this->currentHealth === 0) {
-                $this->isActuallyDead = true;
-                $this->bonusHealthMessage = '';
-                return;
+        if ($this->stress > 100) {
+            if ($this->stressState === null) {
+                if ($this->addStressState()->isVirtue) {
+                    $this->stress = 45;
+                    return;
+                }
             }
-            $this->currentHealth = 0;
-            $this->stress = self::STRESS_ROLLBACK;
-            $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
+            if ($this->stress > self::MAX_STRESS) {
+                if ($this->stressState !== null && $this->stressState->isVirtue) {
+                    $this->stress = 0;
+                    $this->bonusStressMessage = ' ' . $this->name . ' is no longer ``' . $this->stressState->name . '``';
+                    $this->removeStressState();
+                    return;
+                }
+                $this->bonusStressMessage = self::HEART_ATTACK_MESSAGE;
+                if ($this->currentHealth === 0) {
+                    $this->isActuallyDead = true;
+                    $this->bonusHealthMessage = '';
+                    return;
+                }
+                $this->currentHealth = 0;
+                $this->stress = self::STRESS_ROLLBACK;
+                $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
+            }
         }
     }
 
@@ -103,12 +120,12 @@ class Hero extends AbstractLivingBeing {
     /**
      * @return StressState|null
      */
-    public function getStressState(): StressState{
+    public function getStressState() {
         return $this->stressState;
     }
 
     public function removeStressState() {
-        if ($this->stressState === null){
+        if ($this->stressState === null) {
             return;
         }
         $this->stressState->remove();
@@ -185,7 +202,7 @@ class Hero extends AbstractLivingBeing {
 
     /**
      * @param DirectAction $action
-     * @param AbstractLivingBeing $target
+     * @param AbstractLivingBeing|Hero $target
      * @return MessageEmbed
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
@@ -196,7 +213,11 @@ class Hero extends AbstractLivingBeing {
         if (!$this->statManager->isStunned()) {
             $res->setThumbnail($action->effect->image);
         }
+        $heroStressStateChecker = is_a($target, Hero::class) && is_null($target->getStressState());
         $fields = $this->getTurn($target, $action);
+        if ($heroStressStateChecker && !is_null($target->getStressState())) {
+            $fields[] = $target->getStressState()->toField();
+        }
         $topField = array_shift($fields);
         $res->setTitle($topField['name']);
         $res->setDescription($topField['value']);
@@ -207,6 +228,5 @@ class Hero extends AbstractLivingBeing {
     public function getDeathQuote(): string {
         return RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote();
     }
-
 
 }

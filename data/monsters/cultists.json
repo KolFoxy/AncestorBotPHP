@@ -12,13 +12,13 @@
         "name": "Stressful Incantation",
         "effect": {
           "description": "Inflicts high stress damage to the opponent.",
-          "stress_value": 20,
+          "stress_value": 80,
           "health_value": -1,
           "healthDeviation": -2
         },
         "statusEffects": [
           {
-            "type": "stun",
+            "type": "bleed",
             "duration": 1
           }
         ]
@@ -27,14 +27,14 @@
         "name": "Eldritch Push",
         "effect": {
           "description": "Pushes the enemy and inflicts small stress damage.",
-          "stress_value": 8,
+          "stress_value": 80,
           "health_value": -1,
           "healthDeviation": -2,
           "critChance": 14
         },
         "statusEffects": [
           {
-            "type": "stun",
+            "type": "blight",
             "duration": 1
           }
         ]

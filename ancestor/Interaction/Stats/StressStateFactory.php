@@ -10,6 +10,7 @@ final class StressStateFactory {
     public static function create(Hero $host): StressState {
         $resolve = RandomDataProvider::GetInstance()->GetRandomResolve($host->statManager->getStatValue(Stats::VIRTUE_CHANCE));
         $res = new StressState($host, $resolve['name'], $resolve['quote']);
+        $res->isVirtue = $resolve['isVirtue'];
         $modsFilename = dirname(__DIR__, 3) . '/data/stress_modifiers/' . $res->name . '.json';
         if (file_exists($modsFilename)) {
             $mapper = new \JsonMapper();

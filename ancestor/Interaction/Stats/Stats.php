@@ -4,6 +4,8 @@ namespace Ancestor\Interaction\Stats;
 
 final class Stats {
 
+    const DEFAULT_STATS_NUM = 10;
+
     const RESIST_SUFFIX = 'Resist';
 
     const STUN_RESIST = 'stunResist';
@@ -66,6 +68,19 @@ final class Stats {
         return false;
     }
 
+    public static function formatName(string $str): string {
+        $rez = mb_strtoupper(mb_substr($str, 0, 1));
+        $len = mb_strlen($str);
+        for ($i = 1; $i < $len; $i++) {
+            $buff = mb_substr($str, $i, 1);
+            if (ctype_upper($buff)) {
+                $rez .= ' ';
+            }
+            $rez .= $buff;
+        }
+        return $rez;
+    }
+
 
     /**
      * @param int $value
@@ -82,6 +97,7 @@ final class Stats {
         if ($statName === self::DEATHBLOW_RESIST) {
             return $value > 87 ? 87 : $value;
         }
+        return $value;
     }
 
 }

@@ -128,7 +128,7 @@ class StatModifier implements TimedEffectInterface {
     }
 
     public function __toString(): string {
-        return $this->stat . ': ' . $this->value < 0 ? '' : '+' . $this->value;
+        return Stats::formatName($this->stat) . ': ' . ($this->value < 0 ? '' : '+') . $this->value;
     }
 
     public function guaranteedApplication(): bool {

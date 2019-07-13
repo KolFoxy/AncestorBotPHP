@@ -17,6 +17,8 @@ class Fight extends Command {
 
     const TIMEOUT = 300.0;
 
+    const CHAR_INFO_COMMAND = 'charinfo';
+
     /**
      * @var HeroClass[]
      */
@@ -40,6 +42,7 @@ class Fight extends Command {
      * @var int
      */
     private $numOfTypes;
+
 
     public function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'fight', 'Fight a random monster or type "'
@@ -89,6 +92,10 @@ class Fight extends Command {
         }
 
         $actionName = implode(' ', $args);
+        if ($actionName === self::CHAR_INFO_COMMAND) {
+            $message->reply('', ['embed' => $this->getHero($message)->getStatsAndEffectsEmbed()]);
+            return;
+        }
         $embed = $this->processAction($message, $actionName);
         if ($embed === null) {
             $message->reply('Invalid action.');

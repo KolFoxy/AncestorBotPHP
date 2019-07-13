@@ -60,8 +60,20 @@ class StressState {
     /**
      * @return StatModifier[]
      */
-    public function getStatModifiers() : array {
+    public function getStatModifiers(): array {
         return $this->statModifiers;
+    }
+
+    public function toField(): array {
+        $statMods = PHP_EOL;
+        foreach ($this->statModifiers as $statModifier) {
+            $statMods .= '*``' . $statModifier->__toString() . '``*' . PHP_EOL;
+        }
+        return [
+            'name' => '**' . $this->host->name . '\'s resolve is tested...** ***' . $this->name . '***',
+            'value' => '***' . $this->quote . '***' . $statMods,
+            'inline' => false
+        ];
     }
 
 

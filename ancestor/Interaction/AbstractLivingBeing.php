@@ -6,6 +6,7 @@ use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
 use Ancestor\Interaction\Stats\StatusEffect;
 use Ancestor\Interaction\Stats\TimedEffectInterface;
+use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 abstract class AbstractLivingBeing {
 
@@ -246,7 +247,7 @@ abstract class AbstractLivingBeing {
                 if ($effectTarget->statManager->addModifier($toAdd)) {
                     $res[] = [
                         'name' => $effectTarget->name . ' now has a **``' . $toAdd->getType() . '``**',
-                        'value' => '``Current``**`` ' . $toAdd->getStat() . '``**``: '
+                        'value' => '``Current``**`` ' . Stats::formatName($toAdd->getStat()) . '``**``: '
                             . $effectTarget->statManager->getStatValue($toAdd->getStat()) . '``',
                         'inline' => true,
                     ];
@@ -267,5 +268,17 @@ abstract class AbstractLivingBeing {
         ];
     }
 
+    public function getStatsAndEffectsEmbed(): MessageEmbed {
+        $res = new MessageEmbed();
+        $res->setTitle('**' . $this->name . '**');
+        $res->setDescription('*``' . $this->type->description . '``*');
+        $res->addField('**Stats:**', $this->statManager->getCurrentStatsString(), true);
+        $res->setThumbnail($this->type->image);
+        $effects = $this->statManager->getAllCurrentEffectsString();
+        if ($effects !== '') {
+            $res->addField('**Effects:**', $effects, true);
+        }
+        return $res;
+    }
 
 }

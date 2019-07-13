@@ -71,9 +71,13 @@ class RandomDataProvider {
             $virtueChance = self::virtueChance;
         }
         if (mt_rand(1, 100) <= $virtueChance) {
-            return $this->GetRandomData($this->virtues['virtues']);
+            $res = $this->GetRandomData($this->virtues['virtues']);
+            $res['isVirtue'] = true;
+        } else {
+            $res = $this->GetRandomAffliction();
+            $res['isVirtue'] = false;
         }
-        return $this->GetRandomAffliction();
+        return $res;
     }
 
     public function GetRandomNSFWQuote() {

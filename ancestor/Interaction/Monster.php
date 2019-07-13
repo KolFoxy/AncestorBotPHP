@@ -36,4 +36,18 @@ class Monster extends AbstractLivingBeing {
         }
     }
 
+    /**
+     * @param AbstractLivingBeing|Hero $target
+     * @param DirectAction $action
+     * @return array
+     */
+    public function getTurn(AbstractLivingBeing $target, DirectAction $action): array {
+        $heroStressStateChecker = is_a($target, Hero::class) && is_null($target->getStressState());
+        $res = parent::getTurn($target, $action);
+        if ($heroStressStateChecker && !is_null($target->getStressState())) {
+            $res[] = $target->getStressState()->toField();
+        }
+        return $res;
+    }
+
 }

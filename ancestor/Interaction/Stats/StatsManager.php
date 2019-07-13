@@ -235,6 +235,25 @@ class StatsManager {
 
     }
 
+    public function getCurrentStatsString(): string {
+        $res = '';
+        foreach (array_slice($this->stats, 0, Stats::DEFAULT_STATS_NUM) as $key => $value) {
+            $res .= '``' . Stats::formatName($key) . ': ' . $value . '``' . PHP_EOL;
+        }
+        return $res;
+    }
+
+    public function getAllCurrentEffectsString(): string {
+        $res = '';
+        foreach ($this->statusEffects as $statusEffect) {
+            $res .= '``' . Stats::formatName($statusEffect->getType()) . ': ' . $statusEffect->__toString() . '``' . PHP_EOL;
+        }
+        foreach ($this->modifiers as $modifier) {
+            $res .= '``' . $modifier->__toString() . '``' . PHP_EOL;
+        }
+        return $res;
+    }
+
     public function isStunned(): bool {
         foreach ($this->statusEffects as $effect) {
             if ($effect->getType() === StatusEffect::TYPE_STUN && !$effect->isDone()) {
