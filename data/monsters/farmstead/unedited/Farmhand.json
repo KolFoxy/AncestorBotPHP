@@ -1,0 +1,51 @@
+{
+  "name": "Farmhand",
+  "description": "Someone needs to take this sh** out.",
+  "healthMax": 22,
+  "stats": {
+    "stunResist": 60,
+    "bleedResist": 60,
+    "blightResist": 90,
+    "debuffResist": 60,
+    "dodge": 28,
+    "prot": 0
+  },
+  "actions": [
+    {
+      "name": "Sow the Seeds",
+      "effect": {
+        "description": "Work is hard.",
+        "health_value": -2,
+        "healthDeviation": -1,
+        "stress_value": 15,
+        "hitChance": 103
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 140,
+          "value": -4
+        }
+      ]
+    },
+    {
+      "name": "Pause from Labor",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Heals the target for a small amount.",
+        "health_value": 7,
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Ceaseless Labor ",
+      "effect": {
+        "description": "Poke, poke, POKE!",
+        "health_value": -5,
+        "healthDeviation": -4,
+        "critChance": 9,
+        "hitChance": 95
+      }
+    }
+  ]
+}

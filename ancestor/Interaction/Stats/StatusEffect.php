@@ -10,6 +10,8 @@ class StatusEffect implements TimedEffectInterface {
     const TYPE_RESTORATION = "restoration";
     const TYPE_STUN = "stun";
     const TYPE_RIPOSTE = "riposte";
+    const TYPE_STEALTH = "stealth";
+    const TYPE_MARKED = "marked";
 
     /**
      * @var string
@@ -46,7 +48,9 @@ class StatusEffect implements TimedEffectInterface {
             || $type === self::TYPE_STUN
             || $type === self::TYPE_HORROR
             || $type === self::TYPE_RESTORATION
-            || $type === self::TYPE_RIPOSTE) {
+            || $type === self::TYPE_RIPOSTE
+            || $type === self::TYPE_MARKED
+            || $type === self::TYPE_STEALTH) {
             $this->type = $type;
             return;
         }
@@ -108,7 +112,7 @@ class StatusEffect implements TimedEffectInterface {
     }
 
     public function guaranteedApplication(): bool {
-        return $this->isPositive() || $this->chance < 0;
+        return $this->isPositive() || $this->chance < 0 || $this->type === self::TYPE_MARKED;
     }
 
     public function clone(): StatusEffect {

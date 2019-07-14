@@ -75,6 +75,19 @@ class Effect {
      */
     public $hitChance = 100;
 
+    /**
+     * @var bool
+     */
+    public $removesBlight = false;
+    /**
+     * @var bool
+     */
+    public $removesBleed = false;
+    /**
+     * @var bool
+     */
+    public $removesDebuff = false;
+
 
     /**
      * @return bool

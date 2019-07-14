@@ -42,7 +42,7 @@ final class Stats {
             self::ACC_MOD => 0,
             self::DODGE => 25,
             self::PROT => 0,
-            self::CRIT_CHANCE => 4,
+            self::CRIT_CHANCE => 0,
             self::STRESS_MOD => 0,
             self::STRESS_HEAL_MOD => 0,
             self::STRESS_SKILL_MOD => 0,
