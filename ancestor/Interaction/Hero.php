@@ -9,7 +9,6 @@ use Ancestor\Interaction\Stats\StressStateFactory;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
-use function GuzzleHttp\Psr7\str;
 
 class Hero extends AbstractLivingBeing {
     const DEAD_MESSAGE = ' DEAD';
@@ -55,9 +54,9 @@ class Hero extends AbstractLivingBeing {
     /**
      * @var Trinket[]
      */
-    public $artifacts = [
-        0 => null,
+    public $trinkets = [
         1 => null,
+        2 => null,
     ];
 
     /**
@@ -181,6 +180,33 @@ class Hero extends AbstractLivingBeing {
         $this->addHealth(0);
         $this->addStress(0);
         return $this->isActuallyDead;
+    }
+
+    public function equipTrinket(Trinket $trinket, int $slot = 0): string {
+        if ($trinket->classRestriction !== null && $trinket->classRestriction !== $this->type->name) {
+            return 'Can\'t equip ' . $trinket->name . ' since ' . $this->name . ' is not a ' . $trinket->classRestriction;
+        }
+        $res = 'Equipped ' . $trinket->name . ' in slot ';
+        if ($slot < 1 && $slot > 2) {
+            foreach ($this->trinkets as $key => $item) {
+                if ($item === null) {
+                    $slot = $key;
+                    break;
+                }
+            }
+            if ($slot < 1 && $slot > 2) {
+                $slot = mt_rand(1, 2);
+            }
+        }
+        $res .= $slot;
+        if ($this->trinkets[$slot] !== null) {
+            $res .= ', replacing ' . $this->trinkets[$slot]->name;
+            $this->trinkets[$slot]->remove();
+        }
+        $res .= '.';
+        $this->trinkets[$slot] = $trinket;
+        $trinket->apply();
+        return $res;
     }
 
     /**

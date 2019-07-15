@@ -21,8 +21,8 @@ class RandomDataProvider {
 
     private function __construct() {
         $this->PopulateArray($this->rewardsQuotes, '/data/rewards/rewardsQuotes');
-        $this->PopulateArray($this->gold, '/data/rewards/gold');
-        $this->PopulateArray($this->trinkets, '/data/rewards/trinkets');
+        $this->PopulateArray($this->gold, '/data/gold');
+        $this->PopulateArray($this->trinkets, '/data/trinkets');
         $this->PopulateArray($this->virtues, '/data/virtues.json', true);
         $this->PopulateArray($this->NSFWquotes, '/data/NSFWquotes');
         $this->PopulateArray($this->afflictions, '/data/afflictions.json', true);

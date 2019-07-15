@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction\Stats;
 
-class Trinket {
+class Trinket extends AbstractPermanentState {
 
     const RARITY_VERY_COMMON = 0;
     const RARITY_COMMON = 1;
@@ -18,19 +18,17 @@ class Trinket {
      * @var string
      * @required
      */
-    public $name;
-    /**
-     * @var string
-     * @required
-     */
     public $image;
     /**
      * @var int
      */
     public $rarity = 1;
+
     /**
-     * @var StatModifier[]
-     * @required
+     * @var string|null Name of the class that this trinket is restricted to. NULL for no restrictions.
      */
-    public $modifiers;
+    public $classRestriction = null;
+
+
+
 }

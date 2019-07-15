@@ -17,7 +17,7 @@ class Fight extends Command {
 
     const TIMEOUT = 300.0;
 
-    const CHAR_INFO_COMMAND = 'charinfo';
+    const CHAR_INFO_COMMAND = 'stats';
 
     /**
      * @var HeroClass[]
@@ -48,6 +48,7 @@ class Fight extends Command {
         parent::__construct($handler, 'fight', 'Fight a random monster or type "'
             . $handler->prefix
             . 'f endless" in order to start in endless mode, in which more and more monsters will come after defeating previous ones!'
+            . PHP_EOL . 'typing "' . $handler->prefix . 'f stats" while fighting will show all of your character\'s stats'
             , ['f', 'df', 'dfight']);
         $this->manager = new TimedCommandManager($this->client);
 
@@ -93,7 +94,8 @@ class Fight extends Command {
 
         $actionName = implode(' ', $args);
         if ($actionName === self::CHAR_INFO_COMMAND) {
-            $message->reply('', ['embed' => $this->getHero($message)->getStatsAndEffectsEmbed()]);
+            $hero = $this->getHero($message);
+            $message->reply('', ['embed' => $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->name))]);
             return;
         }
         $embed = $this->processAction($message, $actionName);
