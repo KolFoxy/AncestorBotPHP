@@ -2,6 +2,8 @@
 
 namespace Ancestor\Interaction\Stats;
 
+use Ancestor\Interaction\Hero;
+
 class Trinket extends AbstractPermanentState {
 
     const RARITY_VERY_COMMON = 0;
@@ -13,7 +15,6 @@ class Trinket extends AbstractPermanentState {
     const RARITY_CRYSTALLINE = 6;
     const RARITY_TROPHY = 7;
 
-
     /**
      * @var string
      * @required
@@ -21,14 +22,14 @@ class Trinket extends AbstractPermanentState {
     public $image;
     /**
      * @var int
+     * @required
      */
-    public $rarity = 1;
+    public $rarity;
 
     /**
      * @var string|null Name of the class that this trinket is restricted to. NULL for no restrictions.
      */
     public $classRestriction = null;
-
 
 
 }

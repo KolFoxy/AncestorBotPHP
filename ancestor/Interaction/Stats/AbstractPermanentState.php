@@ -35,10 +35,10 @@ abstract class AbstractPermanentState {
     }
 
     /**
-     * @param StatModifier[] $statMods
+     * @param StatModifier[] $statModifiers
      */
-    public function setStatModifiers(array $statMods) {
-        foreach ($statMods as $key => $statModifier) {
+    public function setStatModifiers(array $statModifiers) {
+        foreach ($statModifiers as $key => $statModifier) {
             $modKey = $this->name . $key;
             $this->statModifiers[$modKey] = $statModifier;
         }

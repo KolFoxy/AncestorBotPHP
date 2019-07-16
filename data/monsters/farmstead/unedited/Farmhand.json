@@ -2,6 +2,10 @@
   "name": "Farmhand",
   "description": "Someone needs to take this sh** out.",
   "healthMax": 22,
+  "types": [
+    "husk",
+    "human"
+  ],
   "stats": {
     "stunResist": 60,
     "bleedResist": 60,
