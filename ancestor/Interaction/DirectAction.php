@@ -16,7 +16,7 @@ class DirectAction {
     public $name;
 
     /**
-     * @var Effect
+     * @var DirectActionEffect
      * @required
      */
     public $effect;
@@ -30,5 +30,13 @@ class DirectAction {
      * @var \Ancestor\Interaction\Stats\StatModifier[]|null
      */
     public $statModifiers = null;
+
+    /**
+     * @var DirectActionEffect|null
+     */
+    public $selfEffect = null;
+
+
+
 
 }

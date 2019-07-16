@@ -80,10 +80,10 @@ abstract class AbstractLivingBeing {
 
     /**
      * @param AbstractLivingBeing $target
-     * @param Effect $effect
+     * @param DirectActionEffect $effect
      * @return bool
      */
-    public function rollWillHit(AbstractLivingBeing $target, Effect $effect): bool {
+    public function rollWillHit(AbstractLivingBeing $target, DirectActionEffect $effect): bool {
         if ($effect->hitChance >= 0 && mt_rand(1, $this->statManager->getStatValue(Stats::ACC_MOD) + $effect->hitChance)
             <= $target->statManager->getStatValue(Stats::DODGE)) {
             return false;
@@ -91,7 +91,7 @@ abstract class AbstractLivingBeing {
         return true;
     }
 
-    public function rollWillCrit(Effect $effect): bool {
+    public function rollWillCrit(DirectActionEffect $effect): bool {
         return $effect->canCrit() && mt_rand(1, 100) <= ($effect->critChance + $this->statManager->getStatValue(Stats::CRIT_CHANCE));
     }
 

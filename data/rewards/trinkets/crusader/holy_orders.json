@@ -1,0 +1,37 @@
+{
+  "name": "Holy Orders",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e5/Inv_trinket-holy_orders.png",
+  "rarity": 4,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -20,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": 15,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "deathblowResist",
+      "value": 12,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "blightResist",
+      "value": -20,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": -20,
+      "duration": -1
+    }
+  ]
+}

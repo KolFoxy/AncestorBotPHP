@@ -12,6 +12,7 @@ class StatusEffect implements TimedEffectInterface {
     const TYPE_RIPOSTE = "riposte";
     const TYPE_STEALTH = "stealth";
     const TYPE_MARKED = "marked";
+    const TYPE_BLOCK = "block";
 
     /**
      * @var string
@@ -84,7 +85,9 @@ class StatusEffect implements TimedEffectInterface {
     }
 
     public function isPositive(): bool {
-        if ($this->type === self::TYPE_RIPOSTE || $this->type === self::TYPE_RESTORATION) {
+        if ($this->type === self::TYPE_RIPOSTE
+            || $this->type === self::TYPE_RESTORATION
+            || $this->type === self::TYPE_BLOCK) {
             return true;
         }
         return false;
