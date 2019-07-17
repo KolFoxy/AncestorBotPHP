@@ -16,6 +16,8 @@ final class TrinketFactory {
      */
     private static $trinketPaths = null;
 
+    const DEFAULT_TRINKET_PATH = '/data/rewards/trinkets/shared/book_of_sanity.json';
+
     private static function setTrinketPaths() {
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
@@ -45,11 +47,14 @@ final class TrinketFactory {
         } else {
             $group = self::GROUP_SECOND;
         }
+
         $possibleTrinkets = array_merge(
             self::$trinketPaths[self::SHARED_KEY][$group],
             self::$trinketPaths[mb_strtolower($host->type->name)][$group]
         );
-        $json = json_decode(file_get_contents($possibleTrinkets[mt_rand(0, count($possibleTrinkets) - 1)]));
+        $size = count($possibleTrinkets);
+        $json = $size === 0 ? json_decode(file_get_contents(dirname(__DIR__, 3) . self::DEFAULT_TRINKET_PATH))
+            : json_decode(file_get_contents($possibleTrinkets[mt_rand(0, $size - 1)]));
 
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
