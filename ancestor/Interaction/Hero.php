@@ -69,7 +69,7 @@ class Hero extends AbstractLivingBeing {
         if ($this->isActuallyDead) {
             return;
         }
-        $this->stress += (int)($value * $this->statManager->getValueMod(Stats::STRESS_MOD));
+        $this->stress += $value;
         if ($this->stress < 0) {
             $this->stress = 0;
             if ($this->stressState !== null && !$this->stressState->isVirtue) {

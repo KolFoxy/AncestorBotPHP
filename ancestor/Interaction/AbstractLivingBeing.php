@@ -92,7 +92,8 @@ abstract class AbstractLivingBeing {
     }
 
     public function rollWillCrit(DirectActionEffect $effect): bool {
-        return $effect->canCrit() && mt_rand(1, 100) <= ($effect->critChance + $this->statManager->getStatValue(Stats::CRIT_CHANCE));
+        return $effect->canCrit() && mt_rand(1, 100) <=
+            ($effect->critChance + $this->statManager->getStatValue(Stats::CRIT_CHANCE));
     }
 
     public function __construct(AbstractLivingInteraction $type) {
@@ -279,6 +280,13 @@ abstract class AbstractLivingBeing {
             $res->addField('**Effects:**', $effects, true);
         }
         return $res;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getAllTypes() {
+        return array_merge($this->type->types, $this->statManager->getStatusesNames());
     }
 
 }

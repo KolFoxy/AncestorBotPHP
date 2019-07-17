@@ -22,6 +22,11 @@ class StatsManager {
     public $statusEffects = [];
 
     /**
+     * @var TypeBonus[]
+     */
+    public $typeBonuses = [];
+
+    /**
      * @var AbstractLivingBeing
      */
     public $host;
@@ -261,6 +266,40 @@ class StatsManager {
             }
         }
         return false;
+    }
+
+    public function getBonusesVsTarget(AbstractLivingBeing $target): TypeBonus {
+        $targetTypes = $target->getAllTypes();
+        $res = new TypeBonus();
+        foreach ($this->typeBonuses as $typeBonus) {
+            if (in_array($typeBonus->type, $targetTypes)) {
+                $res->combineWith($typeBonus);
+            }
+        }
+        return $res;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getStatusesNames(): array {
+        $res = [];
+        foreach ($this->statusEffects as $statusEffect) {
+            if (!in_array($statusEffect->getType(), $res)) {
+                $res[] = $statusEffect->getType();
+            }
+        }
+        return $res;
+    }
+
+    public function getHealModifier(AbstractLivingBeing $target): int {
+        return Stats::validateStatValue(
+            $this->getStatValue(Stats::HEAL_SKILL_MOD) + $target->statManager->getStatValue(Stats::HEAL_RECEIVED_MOD),
+            Stats::HEAL_SKILL_MOD);
+    }
+
+    public function getStressHealModifier(AbstractLivingBeing $target): int {
+        return $this->getStatValue(Stats::STRESS_SKILL_MOD) + $target->statManager->getStatValue(Stats::STRESS_HEAL_MOD);
     }
 
 }

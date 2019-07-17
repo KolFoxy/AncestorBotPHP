@@ -97,6 +97,9 @@ final class Stats {
         if ($statName === self::DEATHBLOW_RESIST) {
             return $value > 87 ? 87 : $value;
         }
+        if ($statName === self::HEAL_RECEIVED_MOD || $statName === self::HEAL_SKILL_MOD) {
+            return $value > 100 ? 100 : $value;
+        }
         return $value;
     }
 
