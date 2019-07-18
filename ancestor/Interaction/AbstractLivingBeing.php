@@ -2,15 +2,19 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
 use Ancestor\Interaction\Stats\StatusEffect;
 use Ancestor\Interaction\Stats\TimedEffectInterface;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use Ancestor\CommandHandler\CommandHelper as Helper;
 
 abstract class AbstractLivingBeing {
 
-    const CRIT_STRESS_HEAL = -3;
+    const CRIT_STRESS_SELF_HEAL = -3;
+    const CRIT_STRESS = 10;
+    const CRIT_HEAL_STRESS_RELIEF = -4;
 
 
     const MISS_MESSAGE = '``...and misses!``';
@@ -50,6 +54,7 @@ abstract class AbstractLivingBeing {
     /**
      * @return string Format: "Health: currentHealth/healthMax"
      */
+
     public function getHealthStatus(): string {
         return 'Health: ' . $this->currentHealth . '/' . $this->healthMax;
     }
@@ -157,107 +162,79 @@ abstract class AbstractLivingBeing {
 
         $title = ('**' . $this->name . '** uses **' . $action->name . '**!');
         $effect = $action->effect;
+        list('hit' => $isHit, 'crit' => $isCrit, 'healthValue' => $healthValue, 'stressValue' => $stressValue)
+            = $effect->getApplicationResult($this, $target);
 
-        if (!$this->rollWillHit($target, $effect)) {
-            $res[] = ['name' => $title, 'value' => self::MISS_MESSAGE, 'inline' => false];
+        if (!$isHit) {
+            $res[] = Helper::getEmbedField($title, self::MISS_MESSAGE);
             return $res;
         }
-
-        $isCrit = $this->rollWillCrit($effect);
-        $stressValue = (int)($effect->getStressValue() * $this->statManager->getValueMod(Stats::STRESS_SKILL_MOD));
-        $healthValue = (int)($effect->getHealthValue());
+        $critField = null;
         if ($isCrit) {
             $title .= self::CRIT_MESSAGE;
-            $healthValue *= 2;
+            $critField = $this->getCritStressResult($effect, $stressValue);
         }
-
-        $res[] = [
-            'name' => $title,
-            'value' => $effect->getDescription(),
-            'inline' => false,
-        ];
-
+        $res[] = Helper::getEmbedField($title, $effect->getDescription());
         if ($healthValue !== 0) {
-            $healthValue *= $healthValue < 0
-                ? $this->statManager->getValueMod(Stats::DAMAGE_MOD) * $target->statManager->getValueMod(Stats::PROT)
-                : $this->statManager->getValueMod(Stats::HEAL_SKILL_MOD) * $target->statManager->getValueMod(Stats::HEAL_RECEIVED_MOD);
             $target->addHealth($healthValue);
-            $effectString = $effect->isHealEffect() ? '** is healed for **' : '** gets hit for **';
-            $res[] = [
-                'name' => '**' . $target->name . $effectString . abs($healthValue) . 'HP**!',
-                'value' => '*``' . $target->getHealthStatus() . '``*',
-                'inline' => false,
-            ];
-            if ($isCrit) {
-                if ($effect->isHealEffect()) {
-                    $stressValue -= 10;
-                } elseif ($this->hasStress()) {
-                    $this->addStress(self::CRIT_STRESS_HEAL);
-                    $res[] = [
-                        'name' => '**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_HEAL . ' stress**!',
-                        'value' => '*``' . $this->getStressStatus() . '``*',
-                        'inline' => false,
-                    ];
-                }
-            }
+            $res[] = Helper::getEmbedField(
+                '**' . $target->name . ($effect->isHealEffect() ? '** is healed for **' : '** gets hit for **') . abs($healthValue) . 'HP**!',
+                '*``' . $target->getHealthStatus() . '``*');
         }
-
+        if ($critField !== null) {
+            $res[] = $critField;
+        }
         if ($stressValue !== 0 && $target->hasStress()) {
-            $target->addStress($stressValue
-                * $this->statManager->getValueMod($stressValue < 0 ? Stats::STRESS_HEAL_MOD : Stats::STRESS_MOD)
-            );
-            $effectString = '** suffers **';
-            if ($stressValue < 0) {
-                $effectString = '** feels less tense. **';
-            }
-            $res[] = [
-                'name' => '**' . $target->name . $effectString . $stressValue . ' stress**!',
-                'value' => '*``' . $target->getStressStatus() . '``*',
-                'inline' => false,
-            ];
+            $target->addStress($stressValue);
+            $res[] = Helper::getEmbedField(
+                '**' . $target->name . ($stressValue > 0 ? '** suffers **' : '** feels less tense. **') . $stressValue . ' stress**!',
+                '*``' . $target->getStressStatus() . '``*');
         }
-
         if ($target->isDead()) {
-            $res[] = [
-                'name' => '***DEATHBLOW***',
-                'value' => '***' . $target->getDeathQuote() . '***',
-                'inline' => false,
-            ];
+            $res[] = Helper::getEmbedField('***DEATHBLOW***', '***' . $target->getDeathQuote() . '***');
             return $res;
         }
-        if ($action->statusEffects !== null) {
-            foreach ($action->statusEffects as $statusEffect) {
-                $toAdd = $statusEffect->clone();
-                $effectTarget = $toAdd->targetSelf ? $this : $target;
-                if ($effectTarget->statManager->addStatusEffect($toAdd)) {
-                    $nameString = $toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType() . '``**';
-                    $res[] = [
-                        'name' => $effectTarget->name . $nameString,
-                        'value' => '``' . $effectTarget->statManager->getStatusEffectState($toAdd->getType()) . '``',
-                        'inline' => true,
-                    ];
-                } else {
-                    $res[] = $this->getFailedApplicationField($toAdd, $effectTarget);
-                }
-            }
-        }
-        if ($action->statModifiers !== null) {
-            foreach ($action->statModifiers as $statModifier) {
-                $toAdd = $statModifier->clone();
-                $effectTarget = $toAdd->targetSelf ? $this : $target;
-                if ($effectTarget->statManager->addModifier($toAdd)) {
-                    $res[] = [
-                        'name' => $effectTarget->name . ' now has a **``' . $toAdd->getType() . '``**',
-                        'value' => '``Current``**`` ' . Stats::formatName($toAdd->getStat()) . '``**``: '
-                            . $effectTarget->statManager->getStatValue($toAdd->getStat()) . '``',
-                        'inline' => true,
-                    ];
-                } else {
-                    $res[] = $this->getFailedApplicationField($toAdd, $effectTarget);
-                }
-            }
-        }
+
+        $this->applyEffectsGetResults($action->statusEffects, $target, $res);
+        $this->applyEffectsGetResults($action->statModifiers, $target, $res);
+
         return $res;
+    }
+
+    /**
+     * @param StatusEffect[]|StatModifier[]|null $timedEffects
+     * @param AbstractLivingBeing $target
+     * @param array $result
+     */
+    protected function applyEffectsGetResults($timedEffects, AbstractLivingBeing $target, array &$result) {
+        if ($timedEffects === null) {
+            return;
+        }
+        foreach ($timedEffects as $timedEffect) {
+            $result[] = $this->getEffectApplicationField($timedEffect, $target);
+        }
+    }
+
+    /**
+     * @param StatusEffect|StatModifier $timedEffect
+     * @param AbstractLivingBeing $target
+     * @return array
+     */
+    protected function getEffectApplicationField($timedEffect, AbstractLivingBeing $target): array {
+        $toAdd = $timedEffect->clone();
+        $effectTarget = $toAdd->targetSelf ? $this : $target;
+        $isSE = is_a($toAdd, StatusEffect::class);
+        if (!($isSE ? $effectTarget->statManager->addStatusEffect($toAdd) : $effectTarget->statManager->addModifier($toAdd))) {
+            return $this->getFailedApplicationField($toAdd, $effectTarget);
+        }
+
+        $value = $isSE ? '``' . $effectTarget->statManager->getStatusEffectState($toAdd->getType()) . '``' :
+            '``' . $toAdd->__toString() . '``' . PHP_EOL
+            . '``Current``**`` ' . Stats::formatName($toAdd->getStat()) . '``**``: '
+            . $effectTarget->statManager->getStatValue($toAdd->getStat()) . '``';
+        return Helper::getEmbedField($effectTarget->name
+        . $toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType() . '``**'
+            , $value);
     }
 
     protected function getFailedApplicationField(TimedEffectInterface $timedEffect, AbstractLivingBeing $effectTarget): array {
@@ -267,6 +244,26 @@ abstract class AbstractLivingBeing {
                 . $effectTarget->statManager->getStatValue($timedEffect->getType() . Stats::RESIST_SUFFIX) . '%``',
             'inline' => true,
         ];
+    }
+
+    /**
+     * @param $criticalEffect
+     * @param int $stressValue
+     * @return array|null
+     */
+    protected function getCritStressResult(DirectActionEffect $criticalEffect, int &$stressValue) {
+        if ($criticalEffect->isHealEffect()) {
+            $stressValue += self::CRIT_HEAL_STRESS_RELIEF;
+            return null;
+        }
+        $stressValue += self::CRIT_STRESS;
+        if (!$this->hasStress()) {
+            return null;
+        }
+        $this->addStress(self::CRIT_STRESS_SELF_HEAL);
+        return Helper::getEmbedField('**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_SELF_HEAL . ' stress**!',
+            '*``' . $this->getStressStatus() . '``*');
+
     }
 
     public function getStatsAndEffectsEmbed(): MessageEmbed {
@@ -288,5 +285,6 @@ abstract class AbstractLivingBeing {
     public function getAllTypes() {
         return array_merge($this->type->types, $this->statManager->getStatusesNames());
     }
+
 
 }

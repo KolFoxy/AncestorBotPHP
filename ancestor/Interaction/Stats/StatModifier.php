@@ -134,4 +134,8 @@ class StatModifier implements TimedEffectInterface {
     public function guaranteedApplication(): bool {
         return $this->chance < 0;
     }
+
+    public function targetsSelf(): bool {
+        return $this->targetSelf;
+    }
 }

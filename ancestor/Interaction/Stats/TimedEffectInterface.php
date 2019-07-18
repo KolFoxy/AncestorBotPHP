@@ -44,4 +44,9 @@ interface TimedEffectInterface {
      */
     public function __toString() : string;
 
+    /**
+     * @return bool
+     */
+    public function targetsSelf() : bool;
+
 }

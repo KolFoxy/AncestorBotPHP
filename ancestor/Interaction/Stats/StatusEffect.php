@@ -127,4 +127,12 @@ class StatusEffect implements TimedEffectInterface {
         $clone->targetSelf = $this->targetSelf;
         return $clone;
     }
+
+    public function isStun(): bool {
+        return $this->type === self::TYPE_STUN;
+    }
+
+    public function targetsSelf(): bool {
+        return $this->targetSelf;
+    }
 }

@@ -43,7 +43,7 @@ class DirectActionEffect extends AbstractEffect {
      * @param AbstractLivingBeing $target The object of the effect.
      * @return array [ 'hit' => bool, 'crit' => bool, 'healthValue' => int, 'stressValue' => int ]
      */
-    public function applyToTarget(AbstractLivingBeing $caster, AbstractLivingBeing $target): array {
+    public function getApplicationResult(AbstractLivingBeing $caster, AbstractLivingBeing $target): array {
         $res = [
             'hit' => false,
             'crit' => false,
@@ -57,7 +57,7 @@ class DirectActionEffect extends AbstractEffect {
         }
         $res['crit'] = $this->rollWillCrit($caster, $typeBonus->critChanceMod);
 
-        $critValueMod = $res['crit'] ? 1.5 : 1.00;
+        $critValueMod = $res['crit'] ? ($this->isHealEffect() ? 2.00 : 1.5) : 1.00;
         $value = $this->getHealthValue() * $critValueMod;
         if ($this->isHealEffect()) {
             $res['healthValue'] = (int)($value * ((100.00 + $caster->statManager->getHealModifier($target)) / 100.00));
@@ -70,6 +70,8 @@ class DirectActionEffect extends AbstractEffect {
         } elseif ($this->isPositiveStressEffect()) {
             $res['stressValue'] = (int)($this->getStressValue() * (1.00 + $caster->statManager->getStressHealModifier($target) / 100.00));
         }
+
+        return $res;
     }
 
     protected function getDamageModifier(AbstractLivingBeing $caster, AbstractLivingBeing $target, int $modifier): float {
@@ -81,6 +83,9 @@ class DirectActionEffect extends AbstractEffect {
     public function getTotalTypeBonus(AbstractLivingBeing $caster, AbstractLivingBeing $target): TypeBonus {
         $res = $caster->statManager->getBonusesVsTarget($target);
         $targetTypes = $target->getAllTypes();
+        if ($this->typeBonuses === null) {
+            return $res;
+        }
         foreach ($this->typeBonuses as $bonus) {
             if (in_array($bonus->type, $targetTypes)) {
                 $res->combineWith($bonus);

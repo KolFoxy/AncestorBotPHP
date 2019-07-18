@@ -144,5 +144,19 @@ class CommandHelper {
         }
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     * @param bool $inline
+     * @return array ['name' => string, 'value' => string, 'inline' => bool]
+     */
+    public static function getEmbedField(string $name, string $value, bool $inline = false) {
+        return [
+            'name' => $name,
+            'value' => $value,
+            'inline' => $inline,
+        ];
+    }
+
 
 }
