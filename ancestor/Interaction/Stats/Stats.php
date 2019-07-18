@@ -19,6 +19,7 @@ final class Stats {
     const DODGE = 'dodge';
     const PROT = 'prot';
     const CRIT_CHANCE = 'critChance';
+    const CRIT_RECEIVED_CHANCE = 'critReceivedChance';
 
     const STRESS_MOD = 'stressMod';
     const STRESS_HEAL_MOD = 'stressHealMod';
@@ -49,6 +50,7 @@ final class Stats {
             self::HEAL_SKILL_MOD => 0,
             self::HEAL_RECEIVED_MOD => 0,
             self::VIRTUE_CHANCE => 25,
+            self::CRIT_RECEIVED_CHANCE => 0,
         ];
     }
 

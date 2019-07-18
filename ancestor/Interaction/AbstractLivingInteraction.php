@@ -24,4 +24,9 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
      */
     public $stats = [];
 
+    /**
+     * @var DirectAction|null
+     */
+    public $riposteAction = null;
+
 }

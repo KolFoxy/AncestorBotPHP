@@ -7,6 +7,7 @@ use Ancestor\Interaction\Stats\TypeBonus;
 
 class DirectActionEffect extends AbstractEffect {
 
+    const DEFAULT_ACC_BONUS = 5;
 
     /**
      * Chance of crit for the effect. negative - can't crit.
@@ -55,7 +56,7 @@ class DirectActionEffect extends AbstractEffect {
         if (($res['hit'] = $this->rollWillHit($caster, $target, $typeBonus->accMod)) === false) {
             return $res;
         }
-        $res['crit'] = $this->rollWillCrit($caster, $typeBonus->critChanceMod);
+        $res['crit'] = $this->rollWillCrit($caster, $target, $typeBonus->critChanceMod);
 
         $critValueMod = $res['crit'] ? ($this->isHealEffect() ? 2.00 : 1.5) : 1.00;
         $value = $this->getHealthValue() * $critValueMod;
@@ -94,14 +95,15 @@ class DirectActionEffect extends AbstractEffect {
         return $res;
     }
 
-    protected function rollWillCrit(AbstractLivingBeing $caster, int $modifier): bool {
+    protected function rollWillCrit(AbstractLivingBeing $caster, AbstractLivingBeing $target, int $modifier): bool {
         return $this->canCrit() && mt_rand(1, 100) <=
-            ($this->critChance + $modifier + $caster->statManager->getStatValue(Stats::CRIT_CHANCE));
+            ($this->critChance + $modifier + $caster->statManager->getStatValue(Stats::CRIT_CHANCE)
+                + $target->statManager->getStatValue(Stats::CRIT_RECEIVED_CHANCE));
     }
 
     protected function rollWillHit(AbstractLivingBeing $caster, AbstractLivingBeing $target, int $modifier): bool {
-        $accuracy = 5 + $this->hitChance + $caster->statManager->getStatValue(Stats::ACC_MOD) + $modifier
-            - $target->statManager->getStatValue(Stats::DODGE);
+        $accuracy = self::DEFAULT_ACC_BONUS + $this->hitChance + $caster->statManager->getStatValue(Stats::ACC_MOD)
+            + $modifier - $target->statManager->getStatValue(Stats::DODGE);
         if (mt_rand(1, 100) <= $accuracy) {
             return true;
         }
