@@ -5,6 +5,7 @@ namespace Ancestor\Interaction\Stats;
 use Ancestor\Interaction\AbstractLivingBeing;
 
 class StatsManager {
+    const MAX_BLOCKS = 2;
 
     /**
      * @var array
@@ -30,6 +31,7 @@ class StatsManager {
      * @var AbstractLivingBeing
      */
     public $host;
+
 
     public function __construct(AbstractLivingBeing $host, array $statsArray = null) {
         $this->host = $host;
@@ -199,6 +201,18 @@ class StatsManager {
             }
         }
 
+        if ($effectToAdd->getType() === StatusEffect::TYPE_BLOCK) {
+            foreach ($this->statusEffects as $statusEffect) {
+                if ($statusEffect->getType() === StatusEffect::TYPE_BLOCK && $statusEffect->value < self::MAX_BLOCKS) {
+                    $statusEffect->value += $effectToAdd->value;
+                    if ($statusEffect->value > self::MAX_BLOCKS) {
+                        $statusEffect->value = self::MAX_BLOCKS;
+                    }
+                    return true;
+                }
+            }
+        }
+
         $this->statusEffects[] = $effectToAdd;
         return true;
     }
@@ -220,7 +234,11 @@ class StatsManager {
         return true;
     }
 
-    public function getStatusEffectState(string $statusEffectType): string {
+    /**
+     * @param string $statusEffectType
+     * @return null|string
+     */
+    public function getStatusEffectState(string $statusEffectType) {
         $combinedEffect = new StatusEffect();
         $combinedEffect->value = 0;
         $combinedEffect->duration = 0;
@@ -233,7 +251,7 @@ class StatsManager {
             }
         }
         if ($combinedEffect->duration === 0) {
-            return '';
+            return null;
         }
         $combinedEffect->setType($statusEffectType);
         return $combinedEffect->__toString();
@@ -300,6 +318,31 @@ class StatsManager {
 
     public function getStressHealModifier(AbstractLivingBeing $target): int {
         return $this->getStatValue(Stats::STRESS_SKILL_MOD) + $target->statManager->getStatValue(Stats::STRESS_HEAL_MOD);
+    }
+
+    public function has(string $statusEffectName): bool {
+        foreach ($this->statusEffects as $statusEffect) {
+            if ($statusEffect->getType() === $statusEffectName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function tryBlock(): bool {
+        foreach ($this->statusEffects as $key => $effect) {
+            if ($effect->getType() === StatusEffect::TYPE_BLOCK) {
+                if (--$effect->value >= 0) {
+                    if ($effect->value === 0) {
+                        unset($this->statusEffects[$key]);
+                    }
+                    return true;
+                } else {
+                    unset($this->statusEffects[$key]);
+                }
+            }
+        }
+        return false;
     }
 
 }

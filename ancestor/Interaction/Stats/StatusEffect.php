@@ -110,6 +110,9 @@ class StatusEffect implements TimedEffectInterface {
         if ($this->type === self::TYPE_HORROR) {
             return abs($this->value) . ' stress for ' . $this->duration . 'rds';
         }
+        if ($this->type === self::TYPE_BLOCK) {
+            return 'Is blocking. Blocks left: ' . $this->value;
+        }
         return abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
 
     }
