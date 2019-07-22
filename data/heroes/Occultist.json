@@ -1,0 +1,88 @@
+{
+  "name": "Occultist",
+  "description": "To fight the abyss, one must know it.",
+  "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+  "healthMax": 35,
+  "stats": {
+    "dodge": 30,
+    "critChance": 10,
+    "stunResist": 70,
+    "bleedResist": 90,
+    "blightResist": 80,
+    "debuffResist": 110
+  },
+  "actions": [
+    {
+      "name": "Sacrifical Stab",
+      "effect": {
+        "description": "Inflicts medium amount of damage. Bonus damage vs Eldritch.",
+        "health_value": -7,
+        "healthDeviation": -6,
+        "hitChance": 100,
+        "critChance": 13,
+        "typeBonuses": [
+          {
+            "type": "eldritch",
+            "damageMod": 35
+          }
+        ]
+      }
+    },
+    {
+      "name": "Weakening Curse",
+      "effect": {
+        "description": "Weakling! Just lie down and die!\nReduces target's damage and prot.",
+        "health_value": -1,
+        "healthDeviation": -2,
+        "hitChance": 115,
+        "critChance": 9
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "damageMod",
+          "value": -20
+        },
+        {
+          "chance": 140,
+          "stat": "prot",
+          "value": -20
+        }
+      ]
+    },
+    {
+      "name": "Wyrd Reconstruction",
+      "effect": {
+        "description": "Flesh is weak, but easy to mold.\nHeals target, has a low chance of bleed.",
+        "requiresTarget": true,
+        "health_value": 22,
+        "healthDeviation": -22,
+        "hitChance": -1
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 85,
+          "value": -3
+        }
+      ]
+    },
+    {
+      "name": "Hands from the Abyss",
+      "effect": {
+        "description": "Inflicts low damage and stuns the target.",
+        "hitChance": 110,
+        "critChance": 13,
+        "health_value": -3,
+        "healthDeviation": -3
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "chance": 150,
+          "duration": 1
+        }
+      ]
+    }
+  ]
+}

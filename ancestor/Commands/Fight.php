@@ -12,6 +12,7 @@ use Ancestor\Interaction\Monster;
 use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use function GuzzleHttp\Psr7\str;
 
 class Fight extends Command {
 
@@ -44,6 +45,8 @@ class Fight extends Command {
     private $numOfTypes;
 
 
+    const SURRENDER_COMMAND = 'ff';
+
     public function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'fight', 'Fight a random monster or type "'
             . $handler->prefix
@@ -73,15 +76,22 @@ class Fight extends Command {
     public function run(Message $message, array $args) {
         if (!$this->manager->userIsInteracting($message)) {
             $endless = false;
-            if (!empty($args)) {
-                if ($args[0] === 'endless') {
-                    $endless = true;
-                } else {
-                    return;
+            $heroClassName = '';
+            $this->processArgs($args, $endless, $heroClassName);
+
+            $heroClass = null;
+            if ($heroClassName !== '') {
+                foreach ($this->classes as $class) {
+                    if (mb_strtolower($class->name) === $heroClassName) {
+                        $heroClass = $class;
+                    }
                 }
             }
+            if ($heroClass === null) {
+                $heroClass = $this->classes[mt_rand(0, $this->numOfClasses)];
+            }
 
-            $hero = new Hero($this->classes[mt_rand(0, $this->numOfClasses)], $message->author->username);
+            $hero = new Hero($heroClass, $message->author->username);
             $monster = $this->getRandomMonster();
             $heroFirst = (bool)mt_rand(0, 1);
             $message->reply('', ['embed' => $this->getEncounterEmbed($hero, $monster, $heroFirst)]);
@@ -91,8 +101,12 @@ class Fight extends Command {
         if (empty($args)) {
             return;
         }
-
         $actionName = implode(' ', $args);
+        if ($actionName === self::SURRENDER_COMMAND){
+            $message->reply('**'.$this->getHero($message)->name.'** is now forever lost in space and time.');
+            $this->manager->deleteInteraction($message);
+            return;
+        }
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $hero = $this->getHero($message);
             $message->reply('', ['embed' => $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->name))]);
@@ -105,6 +119,20 @@ class Fight extends Command {
             return;
         }
         $message->reply('', ['embed' => $embed]);
+    }
+
+
+    public function processArgs(array $args, bool &$endless, string &$heroClassName) {
+        foreach ($args as $str) {
+            if ($str === 'endless') {
+                $endless = true;
+                continue;
+            }
+            if (mb_strpos($str, 'test-') === 0) {
+                $heroClassName = mb_strtolower(mb_substr($str, 5));
+                continue;
+            }
+        }
     }
 
     /**

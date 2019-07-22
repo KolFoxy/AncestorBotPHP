@@ -1,0 +1,101 @@
+{
+  "name": "Plague Doctor",
+  "description": "What better laboratory than the blood-soaked battlefield?",
+  "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+  "healthMax": 38,
+  "stats": {
+    "dodge": 20,
+    "critChance": 6,
+    "stunResist": 70,
+    "bleedResist": 70,
+    "blightResist": 110,
+    "debuffResist": 100
+  },
+  "actions": [
+    {
+      "name": "Noxious Blast",
+      "effect": {
+        "description": "Sometimes, you fight fire with fire, and blight with blight.\nBlights the target and reduces their accuracy.",
+        "health_value": -1,
+        "healthDeviation": -1,
+        "hitChance": 115,
+        "critChance": 9
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "accMod",
+          "value": -7
+        }
+      ],
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 140,
+          "value": -7
+        }
+      ]
+    },
+    {
+      "name": "Incision",
+      "effect": {
+        "description": "Even the monsters, bleed, so make them!\nInflicts damage with a hight bleed chance.",
+        "health_value": -7,
+        "healthDeviation": -6,
+        "hitChance": 105,
+        "critChance": 9
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 140,
+          "value": -4
+        }
+      ]
+    },
+    {
+      "name": "Battlefield Medicine",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Bandages and tinctures: the only friends you can trust.\nRemoves blight and bleed.",
+        "health_value": 3,
+        "healthDeviation": 0,
+        "hitChance": -1,
+        "removesBlight": true,
+        "removesBleed": true
+      }
+    },
+    {
+      "name": "Emboldening Vapours",
+      "requiresTarget": true,
+      "effect": {
+        "description": "A simple extract, carries you on, makes you fight, makes you live.\nIncreases damage.",
+        "hitChance": -1
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "stat": "damageMod",
+          "value": 25,
+          "duration": -1
+        }
+      ]
+    },
+    {
+      "name": "Disorienting Blast",
+      "effect": {
+        "description": "Monsters, ha! Even they have the same flaws as us, mere mortals.\nStuns the enemy.",
+        "health_value": 0,
+        "healthDeviation": 0,
+        "hitChance": 115
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    }
+  ]
+}

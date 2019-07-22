@@ -1,0 +1,152 @@
+{
+  "name": "Man-at-Arms",
+  "description": "The raw strength of youth may be spent, but his eyes hold the secrets of a hundred campaigns.",
+  "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+  "healthMax": 55,
+  "stats": {
+    "dodge": 25,
+    "critChance": 6,
+	"stunResist": 90,
+    "bleedResist": 90,
+    "blightResist": 80,
+    "debuffResist": 80
+  },
+  "actions": [
+    {
+      "name": "Crush",
+      "effect": {
+        "description": "Wicked bones, twisted flesh, shatter!\nInflicts high amounts of damage.",
+        "health_value": -8,
+        "healthDeviation": -6,
+        "hitChance": 105,
+		"critChance": 9
+      }
+    },
+    {
+      "name": "Rampart",
+      "effect": {
+        "description": "Stuns the enemy.",
+        "health_value": -3,
+        "healthDeviation": -2,
+        "hitChance": 10,
+		"critChance": 9
+      },
+	  "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Bellow",
+      "effect": {
+        "description": "There is no salvation for you, fiend!\nReduces enemy dodge chance.",
+        "health_value": 0,
+        "hitChance": 115
+      },
+	  "statModifiers": [
+        {
+          "type": "dodge",
+          "chance": 140,
+		  "value": -10
+        }
+      ]
+    },
+    {
+      "name": "Defender",
+      "effect": {
+        "description": "Increases PROT of Man-at-Arms.",
+		"requiresTarget": true,
+        "hitChance": -1
+      },
+      "statModifiers": [
+        {
+          "stat": "prot",
+		  "targetSelf": true,
+          "chance": -1,
+		  "value": 30
+        }
+      ]
+    },
+	{
+      "name": "Retribution",
+      "effect": {
+        "description": "Come at me, beast! I can take you on!\nActivates riposte.",
+        "health_value": -2,
+        "healthDeviation": -1,
+        "hitChance": 105,
+		"critChance": 7
+      },
+	  "statusEffects": [
+        {
+          "type": "riposte",
+		  "targetSelf": true,
+          "duration": 3,
+          "chance": -1
+        },
+		{
+		"type": "marked",
+		"targetSelf": true,
+		"duration": 2,
+		"chance": -1
+		}
+		]
+    },
+	{
+      "name": "Command",
+	  "requiresTarget": true,
+      "effect": {
+        "description": "Strategy, order, survival!\nIncreases accuracy and crit chance.",
+        "hitChance": -1
+      },
+	  "statModifiers": [
+          {
+			"targetSelf": true,
+            "chance": -1,
+            "stat": "accMod",
+            "value": 10
+          },
+		  {
+			"targetSelf": true,
+            "chance": -1,
+            "stat": "critChance",
+            "value": 8
+          }
+		 ]
+    },
+	{
+      "name": "Bolster",
+	  "requiresTarget": true,
+      "effect": {
+        "description": "Do not give in, do not give up!\nIncreases dodge and decreases incoming stress.",
+        "hitChance": -1
+      },
+	  "statModifiers": [
+          {
+			"targetSelf": true,
+            "chance": -1,
+            "stat": "dodge",
+            "value": 5
+          },
+		  {
+			"targetSelf": true,
+            "chance": -1,
+            "stat": "stressMod",
+            "value": -20
+          }
+		 ]
+    }
+  ],
+  "riposteAction":{
+      "name": "Riposte",
+      "effect": {
+        "description": "Taste your own medicine!",
+        "health_value": -6,
+        "healthDeviation": -5,
+        "hitChance": 110,
+		"critChance": 4
+      }
+	}
+}

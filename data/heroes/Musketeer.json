@@ -1,0 +1,106 @@
+{
+  "name": "Musketeer",
+  "description": "A champion markswoman - keen for a new kind of challenge.",
+  "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+  "healthMax": 47,
+  "stats": {
+    "dodge": 20,
+    "critChance": 10,
+    "stunResist": 90,
+    "bleedResist": 80,
+    "blightResist": 80,
+    "debuffResist": 80
+  },
+  "actions": [
+    {
+      "name": "Aimed Shot",
+      "effect": {
+        "description": "With deadly precision...\nInflicts bonus damage vs MARKED",
+        "health_value": -7,
+        "healthDeviation": -7,
+        "hitChance": 115,
+        "critChance": 9,
+        "typeBonuses": [
+          {
+            "type": "marked",
+            "damageMod": 100,
+            "critChanceMod": 13
+          }
+        ]
+      }
+    },
+    {
+      "name": "Smokescreen",
+      "effect": {
+        "description": "Can't hit what you can't see.\nReduces enemy accuracy and crit chance.",
+        "health_value": -1,
+        "healthDeviation": -1,
+        "hitChance": 115,
+        "critChance": -6
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "accMod",
+          "value": -20,
+          "duration": 2
+        },
+        {
+          "chance": 140,
+          "stat": "critChance",
+          "value": -19,
+          "duration": 2
+        }
+      ]
+    },
+    {
+      "name": "Call the Shot",
+      "effect": {
+        "description": "You! You are going down next!\nMarks the enemy and reduces their dodge chance.",
+        "hitChance": 120
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "dodge",
+          "value": -30,
+          "duration": 2
+        }
+      ],
+      "statusEffects": [
+        {
+          "type": "marked",
+          "hitChance": -1,
+          "value": 3
+        }
+      ]
+    },
+    {
+      "name": "Patch Up",
+      "effect": {
+        "description": "Bandage there, and there, and we can move on.\nHeals the target and increases their incoming healing.",
+        "requiresTarget": true,
+        "hitChance": -1,
+        "health_value": 4,
+        "healthDeviation": 1
+      },
+      "statModifiers": [
+        {
+          "stat": "healReceivedMod",
+          "value": 38,
+          "chance": -1
+        }
+      ]
+    },
+    {
+      "name": "Skeet Shot",
+      "effect": {
+        "description": "Get over here!\nRemoves STEALTH",
+        "health_value": 0,
+        "healthDeviation": 0,
+        "hitChance": 115,
+        "removesStealth": true
+      }
+    }
+  ]
+}

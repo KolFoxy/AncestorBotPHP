@@ -102,6 +102,9 @@ class DirectActionEffect extends AbstractEffect {
     }
 
     protected function rollWillHit(AbstractLivingBeing $caster, AbstractLivingBeing $target, int $modifier): bool {
+        if ($this->isHealEffect() || $this->isPositiveStressEffect() || $this->hitChance < 0){
+            return true;
+        }
         $accuracy = self::DEFAULT_ACC_BONUS + $this->hitChance + $caster->statManager->getStatValue(Stats::ACC_MOD)
             + $modifier - $target->statManager->getStatValue(Stats::DODGE);
         if (mt_rand(1, 100) <= $accuracy) {

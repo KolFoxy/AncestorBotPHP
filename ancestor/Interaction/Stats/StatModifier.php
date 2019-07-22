@@ -2,8 +2,6 @@
 
 namespace Ancestor\Interaction\Stats;
 
-use function WyriHaximus\validate_array;
-
 class StatModifier implements TimedEffectInterface {
 
     /**
@@ -44,7 +42,7 @@ class StatModifier implements TimedEffectInterface {
      */
     public function setStat(string $stat) {
         if (!Stats::statIsValid($stat)) {
-            throw new \Exception('Invalid stat name for a StatModifier.');
+            throw new \Exception('Invalid stat name for a StatModifier. "'.$stat.'"');
         }
         $this->stat = $stat;
     }
