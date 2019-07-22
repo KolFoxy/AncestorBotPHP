@@ -199,6 +199,7 @@ abstract class AbstractLivingBeing {
             if ($effect->isDamageEffect() && $target->statManager->tryBlock()) {
                 $res[] = Helper::getEmbedField('**' . $target->name . '** has **``blocked``** the damage!',
                     $target->statManager->getStatusEffectState(StatusEffect::TYPE_BLOCK) ?? $target->name . ' is out of blocks.');
+                $healthValue = 0;
             }
             $target->addHealth($healthValue);
             $res[] = Helper::getEmbedField(
@@ -251,7 +252,7 @@ abstract class AbstractLivingBeing {
             . '``Current``**`` ' . Stats::formatName($toAdd->getStat()) . '``**``: '
             . $effectTarget->statManager->getStatValue($toAdd->getStat()) . '``';
         return Helper::getEmbedField($effectTarget->name
-        . $toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType() . '``**'
+            . ($toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType()) . '``**'
             , $value);
     }
 

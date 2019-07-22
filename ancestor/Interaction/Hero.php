@@ -100,6 +100,7 @@ class Hero extends AbstractLivingBeing {
                 $this->currentHealth = 0;
                 $this->stress = self::STRESS_ROLLBACK;
                 $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
+                $this->bonusStressMessage .= ' ' . $this->getHealthStatus();
             }
         }
     }

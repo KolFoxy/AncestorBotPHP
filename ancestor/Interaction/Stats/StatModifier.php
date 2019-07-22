@@ -14,7 +14,6 @@ class StatModifier implements TimedEffectInterface {
 
     /**
      * @var int Chance to hit. Negative value indicates guaranteed application.
-     * @required
      */
     public $chance = 100;
 
@@ -31,7 +30,6 @@ class StatModifier implements TimedEffectInterface {
 
     /**
      * @var int 0 means it's done, negative value means it's eternal.
-     * @required
      */
     public $duration = 3;
 
@@ -62,13 +60,9 @@ class StatModifier implements TimedEffectInterface {
      * @inheritdoc
      */
     public function processTurn(): bool {
-        if ($this->isDone()) {
-            return true;
+        if ($this->duration > 0) {
+            $this->duration--;
         }
-        if ($this->duration < 0) {
-            return false;
-        }
-        $this->duration--;
         return $this->isDone();
     }
 

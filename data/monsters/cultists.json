@@ -12,14 +12,29 @@
         "name": "Stressful Incantation",
         "effect": {
           "description": "Inflicts high stress damage to the opponent.",
-          "stress_value": 80,
+          "stress_value": 10,
           "health_value": -1,
           "healthDeviation": -2
         },
         "statusEffects": [
           {
-            "type": "bleed",
-            "duration": 1
+            "type": "block",
+            "duration": -1,
+            "value": 2,
+            "targetSelf": true,
+            "chance": -1
+          }
+        ],
+        "statModifiers": [
+          {
+            "stat": "dodge",
+            "value": -55,
+            "chance": 10
+          },
+          {
+            "stat": "accMod",
+            "value": -10,
+            "chance": 100
           }
         ]
       },
@@ -27,7 +42,7 @@
         "name": "Eldritch Push",
         "effect": {
           "description": "Pushes the enemy and inflicts small stress damage.",
-          "stress_value": 80,
+          "stress_value": 10,
           "health_value": -1,
           "healthDeviation": -2,
           "critChance": 14

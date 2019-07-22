@@ -50,8 +50,7 @@ class HeroClass extends AbstractLivingInteraction {
             $action = new DirectAction();
             $action->name = 'pass turn';
             $action->requiresTarget = true;
-            $effect = new Effect();
-            $effect->name = 'Do nothing.';
+            $effect = new DirectActionEffect();
             $effect->setDescription('Hero passed the turn and suffered stress.');
             $effect->stress_value = 6;
             $effect->stressDeviation = 4;

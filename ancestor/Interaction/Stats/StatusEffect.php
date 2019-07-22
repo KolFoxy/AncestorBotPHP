@@ -51,7 +51,8 @@ class StatusEffect implements TimedEffectInterface {
             || $type === self::TYPE_RESTORATION
             || $type === self::TYPE_RIPOSTE
             || $type === self::TYPE_MARKED
-            || $type === self::TYPE_STEALTH) {
+            || $type === self::TYPE_STEALTH
+            || $type === self::TYPE_BLOCK) {
             $this->type = $type;
             return;
         }
@@ -70,7 +71,9 @@ class StatusEffect implements TimedEffectInterface {
      * @inheritdoc
      */
     public function processTurn(): bool {
-        $this->duration--;
+        if ($this->duration > 0) {
+            $this->duration--;
+        }
         return $this->isDone();
     }
 
@@ -78,7 +81,7 @@ class StatusEffect implements TimedEffectInterface {
      * @inheritdoc
      */
     public function isDone(): bool {
-        if ($this->duration <= 0) {
+        if ($this->duration === 0) {
             return true;
         }
         return false;
@@ -111,7 +114,7 @@ class StatusEffect implements TimedEffectInterface {
             return abs($this->value) . ' stress for ' . $this->duration . 'rds';
         }
         if ($this->type === self::TYPE_BLOCK) {
-            return 'Is blocking. Blocks left: ' . $this->value;
+            return 'Blocks left: ' . $this->value;
         }
         return abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
 

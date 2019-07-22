@@ -82,7 +82,7 @@ class StatsManager {
      * @return array|null
      */
     public function getProcessTurn() {
-        $values = $this->getEmptyValuesArray();
+        $values = [];
 
         foreach ($this->statusEffects as $key => $effect) {
             $type = $effect->getType();
@@ -94,7 +94,11 @@ class StatsManager {
             }
 
             if ($effect->value !== null) {
-                $values[$type] += $effect->value;
+                if (isset($values[$type])) {
+                    $values[$type] += $effect->value;
+                } else {
+                    $values[$type] = $effect->value;
+                }
             }
 
             if ($effect->processTurn()) {
@@ -111,25 +115,15 @@ class StatsManager {
         return $this->valuesToFields($values);
     }
 
-    private function getEmptyValuesArray(): array {
-        return [
-            StatusEffect::TYPE_STUN => 0,
-            StatusEffect::TYPE_BLEED => 0,
-            StatusEffect::TYPE_BLIGHT => 0,
-            StatusEffect::TYPE_RESTORATION => 0,
-            StatusEffect::TYPE_HORROR => 0,
-        ];
-    }
-
     /**
      * @param array $values
      * @return array|null
      */
     function valuesToFields(array $values) {
         $res = [];
-        $valueBleed = $values[StatusEffect::TYPE_BLEED];
-        $valueBlight = $values[StatusEffect::TYPE_BLIGHT];
-        $valueRestoration = $values[StatusEffect::TYPE_RESTORATION];
+        $valueBleed = $values[StatusEffect::TYPE_BLEED] ?? 0;
+        $valueBlight = $values[StatusEffect::TYPE_BLIGHT] ?? 0;
+        $valueRestoration = $values[StatusEffect::TYPE_RESTORATION] ?? 0;
         $value = $valueRestoration + $valueBleed + $valueBlight;
         if ($value !== 0) {
             $this->host->addHealth($value);
@@ -144,20 +138,20 @@ class StatsManager {
                 'value' => $body,
                 'inline' => true];
         }
-        if ($values[StatusEffect::TYPE_STUN]) {
+        if (isset($values[StatusEffect::TYPE_STUN])) {
             $res[] = [
                 'name' => $this->host->name . ' is no longer stunned.',
                 'value' => 'Current stun resist: ' . $this->getStatValue(Stats::STUN_RESIST),
                 'inline' => true];
         }
-        if ($values[StatusEffect::TYPE_HORROR]) {
+        if (isset($values[StatusEffect::TYPE_HORROR])) {
             $this->host->addStress($values[StatusEffect::TYPE_HORROR]);
             $res[] = [
                 'name' => $this->host->name . ' has suffered ' . $values[StatusEffect::TYPE_HORROR] . ' stress',
-                'value' => '``' . $this->host->getStressStatus() . '``',
+                'value' => '``' . $this->host->getStressStatus() . '``'
+                    . PHP_EOL . '``' . $this->getStatusEffectState(StatusEffect::TYPE_HORROR) . '``',
                 'inline' => true];
         }
-
         return $res === [] ? null : $res;
     }
 
@@ -203,7 +197,7 @@ class StatsManager {
 
         if ($effectToAdd->getType() === StatusEffect::TYPE_BLOCK) {
             foreach ($this->statusEffects as $statusEffect) {
-                if ($statusEffect->getType() === StatusEffect::TYPE_BLOCK && $statusEffect->value < self::MAX_BLOCKS) {
+                if ($statusEffect->getType() === StatusEffect::TYPE_BLOCK) {
                     $statusEffect->value += $effectToAdd->value;
                     if ($statusEffect->value > self::MAX_BLOCKS) {
                         $statusEffect->value = self::MAX_BLOCKS;
@@ -245,13 +239,16 @@ class StatsManager {
         foreach ($this->statusEffects as $effect) {
             if ($effect->getType() === $statusEffectType) {
                 $combinedEffect->value += $effect->value;
-                if ($effect->duration > $combinedEffect->duration) {
+                if ($effect->duration > $combinedEffect->duration || ($effect->duration < 0)) {
                     $combinedEffect->duration = $effect->duration;
                 }
             }
         }
         if ($combinedEffect->duration === 0) {
             return null;
+        }
+        if ($statusEffectType === StatusEffect::TYPE_BLOCK && $combinedEffect->value > self::MAX_BLOCKS) {
+            $combinedEffect->value = self::MAX_BLOCKS;
         }
         $combinedEffect->setType($statusEffectType);
         return $combinedEffect->__toString();
@@ -260,8 +257,8 @@ class StatsManager {
 
     public function getCurrentStatsString(): string {
         $res = '';
-        foreach (array_slice($this->stats, 0, Stats::DEFAULT_STATS_NUM) as $key => $value) {
-            $res .= '``' . Stats::formatName($key) . ': ' . $value . '``' . PHP_EOL;
+        foreach (array_slice(array_keys($this->stats), 0, Stats::DEFAULT_STATS_NUM) as $key) {
+            $res .= '``' . Stats::formatName($key) . ': ' . $this->getStatValue($key) . '``' . PHP_EOL;
         }
         return $res;
     }
@@ -332,7 +329,8 @@ class StatsManager {
     public function tryBlock(): bool {
         foreach ($this->statusEffects as $key => $effect) {
             if ($effect->getType() === StatusEffect::TYPE_BLOCK) {
-                if (--$effect->value >= 0) {
+                $effect->value--;
+                if ($effect->value >= 0) {
                     if ($effect->value === 0) {
                         unset($this->statusEffects[$key]);
                     }

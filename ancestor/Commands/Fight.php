@@ -96,6 +96,7 @@ class Fight extends Command {
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $hero = $this->getHero($message);
             $message->reply('', ['embed' => $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->name))]);
+            $this->manager->refreshTimer($message, self::TIMEOUT);
             return;
         }
         $embed = $this->processAction($message, $actionName);

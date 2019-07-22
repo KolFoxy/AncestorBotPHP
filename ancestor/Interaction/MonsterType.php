@@ -45,9 +45,8 @@ class MonsterType extends AbstractLivingInteraction {
         if ($this->defAction === null) {
             $action = new DirectAction();
             $action->name = 'attack';
-            $effect = new Effect();
-            $effect->name = 'Attack!';
-            $effect->setDescription($this->name . ' attacks the hero!');
+            $effect = new DirectActionEffect();
+            $effect->setDescription($this->name . ' attacks!');
             $effect->health_value = (-1) * mt_rand(3, 10);
             $action->effect = $effect;
             $this->defAction = $action;
