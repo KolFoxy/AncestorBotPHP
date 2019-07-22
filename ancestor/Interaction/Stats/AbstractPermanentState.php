@@ -51,4 +51,13 @@ abstract class AbstractPermanentState {
         return $this->statModifiers;
     }
 
+    public function keyIsInModifiers(string $key): bool {
+        foreach (array_keys($this->statModifiers) as $arrayKey) {
+            if ($key === $arrayKey) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

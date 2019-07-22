@@ -3,6 +3,7 @@
 namespace Ancestor\Interaction\Stats;
 
 use Ancestor\Interaction\AbstractLivingBeing;
+use Ancestor\Interaction\Hero;
 
 class StatsManager {
     const MAX_BLOCKS = 2;
@@ -28,7 +29,7 @@ class StatsManager {
     public $typeBonuses = [];
 
     /**
-     * @var AbstractLivingBeing
+     * @var AbstractLivingBeing|Hero
      */
     public $host;
 
@@ -341,6 +342,36 @@ class StatsManager {
             }
         }
         return false;
+    }
+
+    public function removeStatusEffectType(string $type): bool {
+        $res = false;
+        foreach ($this->statusEffects as $key => $statusEffect) {
+            if ($statusEffect->getType() === $type) {
+                unset($this->statusEffects[$key]);
+                $res = true;
+            }
+        }
+        return $res;
+    }
+
+    public function removeBleeds(): bool {
+        return $this->removeStatusEffectType(StatusEffect::TYPE_BLEED);
+    }
+
+    public function removeBlight(): bool {
+        return $this->removeStatusEffectType(StatusEffect::TYPE_BLIGHT);
+    }
+
+    public function removeDebuffs() {
+        foreach ($this->modifiers as $key => $modifier) {
+            if ($modifier->getType() === StatModifier::TYPE_DEBUFF) {
+                if (is_a($this->host, Hero::class) && $this->host->debuffIsPermanent($key)) {
+                    continue;
+                }
+                unset($this->modifiers[$key]);
+            }
+        }
     }
 
 }

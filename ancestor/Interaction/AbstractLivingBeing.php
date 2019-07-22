@@ -185,10 +185,10 @@ abstract class AbstractLivingBeing {
     protected function getDAEffectResultFields(DirectActionEffect $effect, AbstractLivingBeing $target, string $title, &$res) {
         list('hit' => $isHit, 'crit' => $isCrit, 'healthValue' => $healthValue, 'stressValue' => $stressValue)
             = $effect->getApplicationResult($this, $target);
-
         if (!$isHit) {
             $res[] = Helper::getEmbedField($title, self::MISS_MESSAGE);
         }
+        $target->tryRemoveBlightBleedWithEffect($effect, $res);
         $critField = null;
         if ($isCrit) {
             $title .= self::CRIT_MESSAGE;
@@ -305,5 +305,22 @@ abstract class AbstractLivingBeing {
         return array_merge($this->type->types, $this->statManager->getStatusesNames());
     }
 
+    protected function tryRemoveBlightBleedWithEffect(DirectActionEffect $effect, array &$res) {
+        $removedBleeds = $effect->removesBleed && $this->statManager->removeBleeds();
+        $removedBlights = $effect->removesBlight && $this->statManager->removeBlight();
+        if (!$removedBleeds && !$removedBlights) {
+            return;
+        }
+        $title = $this->name . ' is cured!';
+        if (!$removedBlights && $removedBleeds) {
+            $res[] = Helper::getEmbedField($title, 'Removed bleeds.');
+            return;
+        }
+        if ($removedBlights && !$removedBleeds) {
+            $res[] = Helper::getEmbedField($title, 'Removed blights.');
+            return;
+        }
+        $res[] = Helper::getEmbedField($title, 'Removed blights amd bleeds.');
+    }
 
 }

@@ -256,4 +256,18 @@ class Hero extends AbstractLivingBeing {
         return RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote();
     }
 
+    public function debuffIsPermanent(string $debuffKey): bool {
+        foreach ($this->trinkets as $trinket) {
+            if ($trinket !== null) {
+                if ($trinket->keyIsInModifiers($debuffKey)) {
+                    return true;
+                }
+            }
+        }
+        if ($this->stressState !== null && $this->stressState->keyIsInModifiers($debuffKey)) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -4,6 +4,9 @@ namespace Ancestor\Interaction\Stats;
 
 class StatModifier implements TimedEffectInterface {
 
+    const TYPE_DEBUFF = 'debuff';
+    const TYPE_BUFF = 'buff';
+
     /**
      * Used for identifying the default stun resist buff to allow stacking.
      */
@@ -42,7 +45,7 @@ class StatModifier implements TimedEffectInterface {
      */
     public function setStat(string $stat) {
         if (!Stats::statIsValid($stat)) {
-            throw new \Exception('Invalid stat name for a StatModifier. "'.$stat.'"');
+            throw new \Exception('Invalid stat name for a StatModifier. "' . $stat . '"');
         }
         $this->stat = $stat;
     }
@@ -98,7 +101,7 @@ class StatModifier implements TimedEffectInterface {
      * @return string Return the type of the StatModifier (buff/debuff).
      */
     public function getType(): string {
-        return $this->isPositive() ? 'buff' : 'debuff';
+        return $this->isPositive() ? self::TYPE_BUFF : self::TYPE_DEBUFF;
     }
 
 
