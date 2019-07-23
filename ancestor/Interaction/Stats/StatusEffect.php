@@ -20,7 +20,7 @@ class StatusEffect implements TimedEffectInterface {
     private $type;
 
     /**
-     * @var int
+     * @var int Negative for permanent effect.
      */
     public $duration = 3;
 
@@ -107,9 +107,6 @@ class StatusEffect implements TimedEffectInterface {
         if ($this->type === self::TYPE_STUN) {
             return 'Stunned for one turn, unable to perform actions.';
         }
-        if ($this->type === self::TYPE_RIPOSTE) {
-            return 'Will respond to attacks with a counterattack.';
-        }
         if ($this->type === self::TYPE_HORROR) {
             return abs($this->value) . ' stress for ' . $this->duration . 'rds';
         }
@@ -117,10 +114,13 @@ class StatusEffect implements TimedEffectInterface {
             return 'Blocks left: ' . $this->value;
         }
         if ($this->type === self::TYPE_RIPOSTE) {
-            return 'Riposte for ' . $this->duration . 'rds';
+            return $this->duration < 0 ? 'Riposte' : 'Riposte for ' . $this->duration . 'rds';
         }
         if ($this->type === self::TYPE_MARKED) {
             return 'Marked for ' . $this->duration . 'rds';
+        }
+        if ($this->type === self::TYPE_STEALTH) {
+            return 'Stealth for ' . $this->duration . 'rds. Concealed from most attacks.';
         }
         return abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
 

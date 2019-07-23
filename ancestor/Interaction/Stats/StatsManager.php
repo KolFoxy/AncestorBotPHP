@@ -374,7 +374,7 @@ class StatsManager {
     }
 
     public function isStealthed() : bool {
-
+        return $this->has(StatusEffect::TYPE_STEALTH);
     }
 
 }

@@ -36,7 +36,8 @@ class DirectAction {
      */
     public $selfEffect = null;
 
-
-
+    public function isUsableVsStealth(): bool {
+        return $this->effect->removesStealth || $this->requiresTarget;
+    }
 
 }

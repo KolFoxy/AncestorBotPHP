@@ -11,6 +11,10 @@ class MonsterType extends AbstractLivingInteraction {
      */
     private $defAction = null;
 
+    /**
+     * @var \Ancestor\Interaction\Stats\StatusEffect[]|null
+     */
+    public $startingStatusEffects = null;
 
     /**
      * @param string $commandName
@@ -44,10 +48,12 @@ class MonsterType extends AbstractLivingInteraction {
     public function defaultAction(): DirectAction {
         if ($this->defAction === null) {
             $action = new DirectAction();
-            $action->name = 'attack';
+            $action->name = 'pass turn';
+            $action->requiresTarget = true;
             $effect = new DirectActionEffect();
-            $effect->setDescription($this->name . ' attacks!');
-            $effect->health_value = (-1) * mt_rand(3, 10);
+            $effect->setDescription($this->name.' passed the turn.');
+            $effect->hitChance = -1;
+            $effect->critChance = -1;
             $action->effect = $effect;
             $this->defAction = $action;
         }

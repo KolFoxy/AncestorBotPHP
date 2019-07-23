@@ -14,6 +14,12 @@ class Monster extends AbstractLivingBeing {
 
     public function __construct(MonsterType $monsterType) {
         parent::__construct($monsterType);
+        if ($monsterType->startingStatusEffects === null) {
+            return;
+        }
+        foreach ($monsterType->startingStatusEffects as $effect) {
+            $this->statManager->addStatusEffect($effect->clone());
+        }
     }
 
     /**

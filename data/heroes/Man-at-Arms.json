@@ -6,7 +6,7 @@
   "stats": {
     "dodge": 25,
     "critChance": 6,
-	"stunResist": 90,
+    "stunResist": 90,
     "bleedResist": 90,
     "blightResist": 80,
     "debuffResist": 80
@@ -20,7 +20,7 @@
         "healthDeviation": -6,
         "hitChance": 105,
         "image": "https://i.imgur.com/Cggaoo7.png",
-		"critChance": 9
+        "critChance": 9
       }
     },
     {
@@ -31,9 +31,9 @@
         "health_value": -3,
         "healthDeviation": -2,
         "hitChance": 110,
-		"critChance": 9
+        "critChance": 9
       },
-	  "statusEffects": [
+      "statusEffects": [
         {
           "type": "stun",
           "duration": 1,
@@ -49,11 +49,11 @@
         "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 115
       },
-	  "statModifiers": [
+      "statModifiers": [
         {
           "stat": "dodge",
           "chance": 140,
-		  "value": -10
+          "value": -10
         }
       ]
     },
@@ -61,20 +61,20 @@
       "name": "Defender",
       "effect": {
         "description": "Increases PROT of Man-at-Arms.",
-		"requiresTarget": true,
+        "requiresTarget": true,
         "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": -1
       },
       "statModifiers": [
         {
           "stat": "prot",
-		  "targetSelf": true,
+          "targetSelf": true,
           "chance": -1,
-		  "value": 30
+          "value": 30
         }
       ]
     },
-	{
+    {
       "name": "Retribution",
       "effect": {
         "description": "Come at me, beast! I can take you on!\nActivates riposte.",
@@ -82,78 +82,78 @@
         "image": "https://i.imgur.com/Cggaoo7.png",
         "healthDeviation": -1,
         "hitChance": 105,
-		"critChance": 7
+        "critChance": 7
       },
-	  "statusEffects": [
+      "statusEffects": [
         {
           "type": "riposte",
-		  "targetSelf": true,
+          "targetSelf": true,
           "duration": 3,
           "chance": -1
         },
-		{
-		"type": "marked",
-		"targetSelf": true,
-		"duration": 2,
-		"chance": -1
-		}
-		]
+        {
+          "type": "marked",
+          "targetSelf": true,
+          "duration": 2,
+          "chance": -1
+        }
+      ]
     },
-	{
+    {
       "name": "Command",
       "image": "https://i.imgur.com/Cggaoo7.png",
-	  "requiresTarget": true,
+      "requiresTarget": true,
       "effect": {
         "description": "Strategy, order, survival!\nIncreases accuracy and crit chance.",
         "hitChance": -1
       },
-	  "statModifiers": [
-          {
-			"targetSelf": true,
-            "chance": -1,
-            "stat": "accMod",
-            "value": 10
-          },
-		  {
-			"targetSelf": true,
-            "chance": -1,
-            "stat": "critChance",
-            "value": 8
-          }
-		 ]
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "accMod",
+          "value": 10
+        },
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "critChance",
+          "value": 8
+        }
+      ]
     },
-	{
+    {
       "name": "Bolster",
-	  "requiresTarget": true,
+      "requiresTarget": true,
       "image": "https://i.imgur.com/Cggaoo7.png",
       "effect": {
         "description": "Do not give in, do not give up!\nIncreases dodge and decreases incoming stress.",
         "hitChance": -1
       },
-	  "statModifiers": [
-          {
-			"targetSelf": true,
-            "chance": -1,
-            "stat": "dodge",
-            "value": 5
-          },
-		  {
-			"targetSelf": true,
-            "chance": -1,
-            "stat": "stressMod",
-            "value": -20
-          }
-		 ]
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "dodge",
+          "value": 5
+        },
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "stressMod",
+          "value": -20
+        }
+      ]
     }
   ],
-  "riposteAction":{
-      "name": "Riposte",
-      "effect": {
-        "description": "Taste your own medicine!",
-        "health_value": -6,
-        "healthDeviation": -5,
-        "hitChance": 110,
-		"critChance": 4
-      }
-	}
+  "riposteAction": {
+    "name": "Riposte",
+    "effect": {
+      "description": "Taste your own medicine!",
+      "health_value": -6,
+      "healthDeviation": -5,
+      "hitChance": 110,
+      "critChance": 4
+    }
+  }
 }

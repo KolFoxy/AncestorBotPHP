@@ -29,4 +29,22 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
      */
     public $riposteAction = null;
 
+    public function getDefaultFooterText(string $commandName, bool $vsStealth = false): string {
+        if (!$vsStealth) {
+            return parent::getDefaultFooterText($commandName);
+        }
+        $footerText = 'Respond with "' . $commandName . ' [ACTION]" to perform the corresponding action. ' . PHP_EOL
+            . 'Available actions: ';
+        foreach ($this->actions as $action) {
+            if ($action->isUsableVsStealth()) {
+                $footerText .= mb_strtolower($action->name) . ',';
+            }
+        }
+        return $footerText . $this->defaultAction()->name;
+    }
+
+    /**
+     * @return DirectAction
+     */
+    public abstract function defaultAction();
 }

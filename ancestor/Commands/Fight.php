@@ -117,7 +117,8 @@ class Fight extends Command {
         }
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $hero = $this->getHero($message);
-            $message->reply('', ['embed' => $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()))]);
+            $message->reply('', ['embed' =>
+                $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(),$this->getMonster($message)->isStealthed()))]);
             $this->manager->refreshTimer($message, self::TIMEOUT);
             return;
         }
@@ -144,7 +145,7 @@ class Fight extends Command {
         }
         $description .= '*' . $hero->type->defaultAction()->name . '*' . PHP_EOL . '``' . $hero->type->defaultAction()->effect->getDescription() . '``';
         $res->setDescription($description);
-        $res->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()));
+        $res->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(),$this->getMonster($message)->isStealthed()));
         return $res;
     }
 
@@ -202,7 +203,7 @@ class Fight extends Command {
         }
 
         $this->manager->refreshTimer($message, self::TIMEOUT);
-        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()));
+        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(),$monster->isStealthed()));
         return $embed;
     }
 
@@ -218,9 +219,10 @@ class Fight extends Command {
         $embed->addField(
             'You encounter a vile **' . $monster->type->name . '**',
             '*``' . $monster->type->description . '``*' . PHP_EOL . '*``' . $monster->getHealthStatus() . '``*'
+            . PHP_EOL . $monster->statManager->getAllCurrentEffectsString()
         );
         $embed->setImage($monster->type->image);
-        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()));
+        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(), $monster->isStealthed()));
 
         if (!$heroFirst) {
             $additionalEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());

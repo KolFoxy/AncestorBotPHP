@@ -108,6 +108,10 @@ abstract class AbstractLivingBeing {
         $this->statManager = new StatsManager($this, $type->stats);
     }
 
+    public function isStealthed(): bool {
+        return $this->statManager->isStealthed();
+    }
+
     /**
      * @param int $value
      */
@@ -159,7 +163,9 @@ abstract class AbstractLivingBeing {
             $res[] = $this->getDeathFromDotField();
             return $res;
         }
-
+        if ($target->statManager->isStealthed() && !$action->isUsableVsStealth()) {
+            $action = $this->type->defaultAction();
+        }
         $title = ('**' . $this->name . '** uses **' . $action->name . '**!');
         $effect = $action->effect;
         $hit = $this->getDAEffectResultFields($effect, $target, $title, $res);
@@ -207,6 +213,10 @@ abstract class AbstractLivingBeing {
         $res[] = Helper::getEmbedField($title, $effect->getDescription());
 
         $target->tryRemoveBlightBleedWithEffect($effect, $res);
+        if ($target->isStealthed() && $effect->removesStealth){
+            $target->statManager->removeStatusEffectType(StatusEffect::TYPE_STEALTH);
+            $res[] = Helper::getEmbedField($target->name.' is exposed!','``Removed`` **``stealth``**.');
+        }
 
         if ($healthValue !== 0) {
             if ($effect->isDamageEffect() && $target->statManager->tryBlock()) {
