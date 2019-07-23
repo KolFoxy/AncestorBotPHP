@@ -80,6 +80,7 @@
     },
     {
       "name": "Patch Up",
+      "requiresTarget": true,
       "effect": {
         "description": "Bandage there, and there, and we can move on.\nHeals the target and increases their incoming healing.",
         "requiresTarget": true,
