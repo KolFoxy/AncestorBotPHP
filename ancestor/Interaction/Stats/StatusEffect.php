@@ -119,6 +119,9 @@ class StatusEffect implements TimedEffectInterface {
         if ($this->type === self::TYPE_RIPOSTE) {
             return 'Riposte for ' . $this->duration . 'rds';
         }
+        if ($this->type === self::TYPE_MARKED) {
+            return 'Marked for ' . $this->duration . 'rds';
+        }
         return abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
 
     }

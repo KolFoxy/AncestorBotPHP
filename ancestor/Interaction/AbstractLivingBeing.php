@@ -162,39 +162,52 @@ abstract class AbstractLivingBeing {
 
         $title = ('**' . $this->name . '** uses **' . $action->name . '**!');
         $effect = $action->effect;
-        $this->getDAEffectResultFields($effect, $target, $title, $res);
+        $hit = $this->getDAEffectResultFields($effect, $target, $title, $res);
         if ($target->isDead()) {
             return $res;
         }
         if ($target->type->riposteAction !== null && $target->statManager->has(StatusEffect::TYPE_RIPOSTE)
             && !($effect->isHealEffect() || $effect->isPositiveStressEffect())) {
-            $target->getDAEffectResultFields($target->type->riposteAction->effect, $this, '***' . $target->name . 'counter-attacks!***', $res);
-            $target->applyTimedEffectsGetResults($target->type->riposteAction->statusEffects, $this, $res);
-            $target->applyTimedEffectsGetResults($target->type->riposteAction->statModifiers, $this, $res);
+            $riposteHit = $target->getDAEffectResultFields($target->type->riposteAction->effect, $this, '***' . $target->name . ' counter-attacks!***', $res);
+            $target->applyTimedEffectsGetResults($target->type->riposteAction->statusEffects, $this, $res, $riposteHit);
+            $target->applyTimedEffectsGetResults($target->type->riposteAction->statModifiers, $this, $res, $riposteHit);
         }
-        $this->applyTimedEffectsGetResults($action->statusEffects, $target, $res);
-        $this->applyTimedEffectsGetResults($action->statModifiers, $target, $res);
 
-        if ($action->selfEffect !== null && !$this->isDead()) {
+        $this->applyTimedEffectsGetResults($action->statusEffects, $target, $res, $hit);
+        $this->applyTimedEffectsGetResults($action->statModifiers, $target, $res, $hit);
+
+        if ($hit && $action->selfEffect !== null && !$this->isDead()) {
             $this->getDAEffectResultFields($action->selfEffect, $this, $action->name, $res);
         }
 
         return $res;
     }
 
-    protected function getDAEffectResultFields(DirectActionEffect $effect, AbstractLivingBeing $target, string $title, &$res) {
+    /**
+     * @param DirectActionEffect $effect
+     * @param AbstractLivingBeing $target
+     * @param string $title
+     * @param $res
+     * @return bool True if HIT, false if MISS
+     */
+    protected function getDAEffectResultFields(DirectActionEffect $effect, AbstractLivingBeing $target, string $title, &$res): bool {
         list('hit' => $isHit, 'crit' => $isCrit, 'healthValue' => $healthValue, 'stressValue' => $stressValue)
             = $effect->getApplicationResult($this, $target);
+
         if (!$isHit) {
             $res[] = Helper::getEmbedField($title, self::MISS_MESSAGE);
+            return false;
         }
-        $target->tryRemoveBlightBleedWithEffect($effect, $res);
+
         $critField = null;
         if ($isCrit) {
             $title .= self::CRIT_MESSAGE;
             $critField = $this->getCritStressResult($effect, $stressValue);
         }
         $res[] = Helper::getEmbedField($title, $effect->getDescription());
+
+        $target->tryRemoveBlightBleedWithEffect($effect, $res);
+
         if ($healthValue !== 0) {
             if ($effect->isDamageEffect() && $target->statManager->tryBlock()) {
                 $res[] = Helper::getEmbedField('**' . $target->name . '** has **``blocked``** the damage!',
@@ -206,30 +219,39 @@ abstract class AbstractLivingBeing {
                 '**' . $target->name . ($effect->isHealEffect() ? '** is healed for **' : '** gets hit for **') . abs($healthValue) . 'HP**!',
                 '*``' . $target->getHealthStatus() . '``*');
         }
+
         if ($critField !== null) {
             $res[] = $critField;
         }
+
         if ($stressValue !== 0 && $target->hasStress()) {
             $target->addStress($stressValue);
             $res[] = Helper::getEmbedField(
                 '**' . $target->name . ($stressValue > 0 ? '** suffers **' : '** feels less tense. **') . $stressValue . ' stress**!',
                 '*``' . $target->getStressStatus() . '``*');
         }
+
         if ($target->isDead()) {
             $res[] = Helper::getEmbedField('***DEATHBLOW***', '***' . $target->getDeathQuote() . '***');
         }
+
+        return true;
     }
 
     /**
      * @param StatusEffect[]|StatModifier[]|null $timedEffects
      * @param AbstractLivingBeing $target
+     * @param bool $hit
      * @param array $result
      */
-    protected function applyTimedEffectsGetResults($timedEffects, AbstractLivingBeing $target, array &$result) {
+    protected function applyTimedEffectsGetResults($timedEffects, AbstractLivingBeing $target, array &$result, bool $hit) {
         if ($timedEffects === null) {
             return;
         }
         foreach ($timedEffects as $timedEffect) {
+            if (!$hit && !$timedEffect->targetsSelf()) {
+                continue;
+            }
             $result[] = $this->getEffectApplicationField($timedEffect, $target);
         }
     }
@@ -252,7 +274,7 @@ abstract class AbstractLivingBeing {
             . '``Current``**`` ' . Stats::formatName($toAdd->getStat()) . '``**``: '
             . $effectTarget->statManager->getStatValue($toAdd->getStat()) . '``';
         return Helper::getEmbedField($effectTarget->name
-            . ($toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType()) . '``**'
+            . ($toAdd->getType() === StatusEffect::TYPE_STUN ? ' is stunned!' : ' now has **``' . $toAdd->getType() . '``**')
             , $value);
     }
 

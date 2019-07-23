@@ -41,7 +41,9 @@
         "critChance": 9
       },
       "selfEffect": {
-        "health_value": 5
+        "description": "Heal from the Judgement.",
+        "health_value": 5,
+        "hitChance": -1
       }
     },
     {

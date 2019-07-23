@@ -30,7 +30,7 @@
         "image": "https://i.imgur.com/Cggaoo7.png",
         "health_value": -3,
         "healthDeviation": -2,
-        "hitChance": 10,
+        "hitChance": 110,
 		"critChance": 9
       },
 	  "statusEffects": [
@@ -51,7 +51,7 @@
       },
 	  "statModifiers": [
         {
-          "type": "dodge",
+          "stat": "dodge",
           "chance": 140,
 		  "value": -10
         }

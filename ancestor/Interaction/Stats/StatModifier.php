@@ -123,7 +123,8 @@ class StatModifier implements TimedEffectInterface {
     }
 
     public function __toString(): string {
-        return Stats::formatName($this->stat) . ': ' . ($this->value < 0 ? '' : '+') . $this->value;
+        return Stats::formatName($this->stat) . ': ' . ($this->value < 0 ? '' : '+') . $this->value
+            . ($this->duration > 0 ? 'for ' . $this->duration . 'rds' : '');
     }
 
     public function guaranteedApplication(): bool {

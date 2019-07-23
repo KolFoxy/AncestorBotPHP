@@ -301,11 +301,10 @@ class StatsManager {
     public function getStatusesNames(): array {
         $res = [];
         foreach ($this->statusEffects as $statusEffect) {
-            if (!in_array($statusEffect->getType(), $res)) {
-                $res[] = $statusEffect->getType();
-            }
+            $res[] = $statusEffect->getType();
+
         }
-        return $res;
+        return array_unique($res);
     }
 
     public function getHealModifier(AbstractLivingBeing $target): int {
@@ -372,6 +371,10 @@ class StatsManager {
                 unset($this->modifiers[$key]);
             }
         }
+    }
+
+    public function isStealthed() : bool {
+
     }
 
 }

@@ -155,7 +155,7 @@ class Fight extends Command {
                 continue;
             }
             if (mb_strpos($str, 'test-') === 0) {
-                $heroClassName = mb_strtolower(mb_substr($str, 5));
+                $heroClassName = str_replace('_', ' ', mb_strtolower(mb_substr($str, 5)));
                 continue;
             }
         }
