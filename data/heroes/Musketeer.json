@@ -16,6 +16,7 @@
       "name": "Aimed Shot",
       "effect": {
         "description": "With deadly precision...\nInflicts bonus damage vs MARKED",
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "health_value": -7,
         "healthDeviation": -7,
         "hitChance": 115,
@@ -35,6 +36,7 @@
         "description": "Can't hit what you can't see.\nReduces enemy accuracy and crit chance.",
         "health_value": -1,
         "healthDeviation": -1,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 115,
         "critChance": -6
       },
@@ -57,6 +59,7 @@
       "name": "Call the Shot",
       "effect": {
         "description": "You! You are going down next!\nMarks the enemy and reduces their dodge chance.",
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 120
       },
       "statModifiers": [
@@ -80,6 +83,7 @@
       "effect": {
         "description": "Bandage there, and there, and we can move on.\nHeals the target and increases their incoming healing.",
         "requiresTarget": true,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": -1,
         "health_value": 4,
         "healthDeviation": 1
@@ -95,9 +99,10 @@
     {
       "name": "Skeet Shot",
       "effect": {
-        "description": "Get over here!\nRemoves STEALTH",
+        "description": "Removes STEALTH",
         "health_value": 0,
         "healthDeviation": 0,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 115,
         "removesStealth": true
       }

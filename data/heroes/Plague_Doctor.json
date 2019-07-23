@@ -19,6 +19,7 @@
         "health_value": -1,
         "healthDeviation": -1,
         "hitChance": 115,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "critChance": 9
       },
       "statModifiers": [
@@ -42,6 +43,7 @@
         "description": "Even the monsters, bleed, so make them!\nInflicts damage with a hight bleed chance.",
         "health_value": -7,
         "healthDeviation": -6,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 105,
         "critChance": 9
       },
@@ -61,6 +63,7 @@
         "health_value": 3,
         "healthDeviation": 0,
         "hitChance": -1,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "removesBlight": true,
         "removesBleed": true
       }
@@ -70,6 +73,7 @@
       "requiresTarget": true,
       "effect": {
         "description": "A simple extract, carries you on, makes you fight, makes you live.\nIncreases damage.",
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": -1
       },
       "statModifiers": [
@@ -87,6 +91,7 @@
         "description": "Monsters, ha! Even they have the same flaws as us, mere mortals.\nStuns the enemy.",
         "health_value": 0,
         "healthDeviation": 0,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 115
       },
       "statusEffects": [

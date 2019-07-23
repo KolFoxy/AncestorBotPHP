@@ -21,6 +21,7 @@
         "healthDeviation": -7,
         "hitChance": 105,
         "critChance": 4,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "typeBonuses": [
           {
             "type": "unholy",
@@ -35,6 +36,7 @@
         "description": "Damages the enemy by holy powers and heals the Vestal.",
         "health_value": -5,
         "healthDeviation": -5,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 105,
         "critChance": 9
       },
@@ -47,6 +49,7 @@
       "effect": {
         "description": "Stuns the opponent with a a ray of holy power!",
         "health_value": -1,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "healthDeviation": -2,
         "hitChance": 110,
         "critChance": 9
@@ -65,6 +68,7 @@
       "effect": {
         "description": "Calls upon the higher forces to mend your wounds.",
         "health_value": 8,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "healthDeviation": 1,
         "hitChance": -1
       }
@@ -76,6 +80,7 @@
         "health_value": -1,
         "healthDeviation": -2,
         "hitChance": 110,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "removesStealth": true
       },
       "statModifiers": [
@@ -94,6 +99,7 @@
         "health_value": -3,
         "healthDeviation": -4,
         "hitChance": 105,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "critChance": 5
       },
       "statModifiers": [

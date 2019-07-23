@@ -19,6 +19,7 @@
         "health_value": -8,
         "healthDeviation": -6,
         "hitChance": 105,
+        "image": "https://i.imgur.com/Cggaoo7.png",
 		"critChance": 9
       }
     },
@@ -26,6 +27,7 @@
       "name": "Rampart",
       "effect": {
         "description": "Stuns the enemy.",
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "health_value": -3,
         "healthDeviation": -2,
         "hitChance": 10,
@@ -44,6 +46,7 @@
       "effect": {
         "description": "There is no salvation for you, fiend!\nReduces enemy dodge chance.",
         "health_value": 0,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 115
       },
 	  "statModifiers": [
@@ -59,6 +62,7 @@
       "effect": {
         "description": "Increases PROT of Man-at-Arms.",
 		"requiresTarget": true,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": -1
       },
       "statModifiers": [
@@ -75,6 +79,7 @@
       "effect": {
         "description": "Come at me, beast! I can take you on!\nActivates riposte.",
         "health_value": -2,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "healthDeviation": -1,
         "hitChance": 105,
 		"critChance": 7
@@ -96,6 +101,7 @@
     },
 	{
       "name": "Command",
+      "image": "https://i.imgur.com/Cggaoo7.png",
 	  "requiresTarget": true,
       "effect": {
         "description": "Strategy, order, survival!\nIncreases accuracy and crit chance.",
@@ -119,6 +125,7 @@
 	{
       "name": "Bolster",
 	  "requiresTarget": true,
+      "image": "https://i.imgur.com/Cggaoo7.png",
       "effect": {
         "description": "Do not give in, do not give up!\nIncreases dodge and decreases incoming stress.",
         "hitChance": -1

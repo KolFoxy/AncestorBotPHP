@@ -17,6 +17,7 @@
         "health_value": -8,
         "healthDeviation": -8,
         "hitChance": 110,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "critChance": 9,
         "ignoresArmor": true
       }
@@ -27,6 +28,7 @@
         "description": "Just one gentle touch, is all you need to be fell.\nInflicts high amounts of damage and applies blight.",
         "health_value": -9,
         "healthDeviation": -9,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": 110,
         "critChance": 9
       },
@@ -44,6 +46,7 @@
         "description": "There are no shadows that you can hide in, monsters.\nRemoves stealth and incrases chance of crit against the target.",
         "removesStealth": true,
         "health_value": -5,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "healthDeviation": -5,
         "hitChance": 110,
         "critChance": 6.5
@@ -61,6 +64,7 @@
       "effect": {
         "description": "Aegis blocks incoming damage.",
         "requiresTarget": true,
+        "image": "https://i.imgur.com/Cggaoo7.png",
         "hitChance": -1
       },
       "statusEffects": [

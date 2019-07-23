@@ -17,8 +17,9 @@ use function GuzzleHttp\Psr7\str;
 class Fight extends Command {
 
     const TIMEOUT = 300.0;
-
+    const SURRENDER_COMMAND = 'ff';
     const CHAR_INFO_COMMAND = 'stats';
+    const CHAR_ACTIONS_COMMAND = 'actions';
 
     /**
      * @var HeroClass[]
@@ -45,13 +46,14 @@ class Fight extends Command {
     private $numOfTypes;
 
 
-    const SURRENDER_COMMAND = 'ff';
-
     public function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'fight', 'Fight a random monster or type "'
             . $handler->prefix
             . 'f endless" in order to start in endless mode, in which more and more monsters will come after defeating previous ones!'
-            . PHP_EOL . 'typing "' . $handler->prefix . 'f stats" while fighting will show all of your character\'s stats'
+            . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_INFO_COMMAND . '`` while fighting will show all of your character\'s stats'
+            . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_ACTIONS_COMMAND . '`` while fighting will show descriptions of all of your character\'s actions'
+            . PHP_EOL . 'typing  ``' . $handler->prefix . 'f ' . self::SURRENDER_COMMAND . '`` while fighting will cancel the fight'
+            . PHP_EOL . '``' . $handler->prefix . 'f test-[CLASS_NAME]`` will start a fight with selected class.'
             , ['f', 'df', 'dfight']);
         $this->manager = new TimedCommandManager($this->client);
 
@@ -77,43 +79,54 @@ class Fight extends Command {
         if (!$this->manager->userIsInteracting($message)) {
             $endless = false;
             $heroClassName = '';
-            $this->processArgs($args, $endless, $heroClassName);
-
-            $heroClass = null;
-            if ($heroClassName !== '') {
-                foreach ($this->classes as $class) {
-                    if (mb_strtolower($class->name) === $heroClassName) {
-                        $heroClass = $class;
-                    }
-                }
-            }
-            if ($heroClass === null) {
-                $heroClass = $this->classes[mt_rand(0, $this->numOfClasses)];
-            }
-
-            $hero = new Hero($heroClass, $message->author->username);
+            $this->processInitialArgs($args, $endless, $heroClassName);
+            $hero = $this->createHero($message->author->username, $heroClassName);
             $monster = $this->getRandomMonster();
             $heroFirst = (bool)mt_rand(0, 1);
             $message->reply('', ['embed' => $this->getEncounterEmbed($hero, $monster, $heroFirst)]);
             $this->manager->addInteraction($message, self::TIMEOUT, [$hero, $monster, $endless]);
             return;
         }
+        $this->processActiveUserInput($message, $args);
+    }
+
+    public function createHero(string $heroName, string $heroClassName): Hero {
+        $heroClass = null;
+        if ($heroClassName !== '') {
+            foreach ($this->classes as $class) {
+                if (mb_strtolower($class->name) === $heroClassName) {
+                    $heroClass = $class;
+                }
+            }
+        }
+        if ($heroClass === null) {
+            $heroClass = $this->classes[mt_rand(0, $this->numOfClasses)];
+        }
+        return new Hero($heroClass, $heroName);
+    }
+
+    public function processActiveUserInput(Message $message, array $args) {
         if (empty($args)) {
             return;
         }
         $actionName = implode(' ', $args);
-        if ($actionName === self::SURRENDER_COMMAND){
-            $message->reply('**'.$this->getHero($message)->name.'** is now forever lost in space and time.');
+        if ($actionName === self::SURRENDER_COMMAND) {
+            $message->reply('**' . $this->getHero($message)->name . '** is now forever lost in space and time.');
             $this->manager->deleteInteraction($message);
             return;
         }
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $hero = $this->getHero($message);
-            $message->reply('', ['embed' => $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->name))]);
+            $message->reply('', ['embed' => $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()))]);
             $this->manager->refreshTimer($message, self::TIMEOUT);
             return;
         }
-        $embed = $this->processAction($message, $actionName);
+        if ($actionName === self::CHAR_ACTIONS_COMMAND) {
+            $message->reply('', ['embed' => $this->getUserActionsDescriptions($message)]);
+            $this->manager->refreshTimer($message, self::TIMEOUT);
+            return;
+        }
+        $embed = $this->processHeroAction($message, $actionName);
         if ($embed === null) {
             $message->reply('Invalid action.');
             return;
@@ -121,8 +134,21 @@ class Fight extends Command {
         $message->reply('', ['embed' => $embed]);
     }
 
+    public function getUserActionsDescriptions(Message $message): MessageEmbed {
+        $res = new MessageEmbed();
+        $hero = $this->getHero($message);
+        $res->setTitle($hero->name . '\'s abilities and actions:');
+        $description = '';
+        foreach ($hero->type->actions as $action) {
+            $description .= '***' . $action->name . '***' . PHP_EOL . '``' . $action->effect->getDescription() . '``' . PHP_EOL;
+        }
+        $description .= '*' . $hero->type->defaultAction()->name . '*' . PHP_EOL . '``' . $hero->type->defaultAction()->effect->getDescription() . '``';
+        $res->setDescription($description);
+        $res->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()));
+        return $res;
+    }
 
-    public function processArgs(array $args, bool &$endless, string &$heroClassName) {
+    public function processInitialArgs(array $args, bool &$endless, string &$heroClassName) {
         foreach ($args as $str) {
             if ($str === 'endless') {
                 $endless = true;
@@ -140,7 +166,7 @@ class Fight extends Command {
      * @param string $actionName
      * @return MessageEmbed|null
      */
-    function processAction(Message $message, string $actionName) {
+    function processHeroAction(Message $message, string $actionName) {
         $hero = $this->getHero($message);
         $action = $hero->type->getActionIfValid($actionName);
         if ($action === null) {
@@ -176,7 +202,7 @@ class Fight extends Command {
         }
 
         $this->manager->refreshTimer($message, self::TIMEOUT);
-        $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix));
+        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()));
         return $embed;
     }
 
@@ -194,7 +220,7 @@ class Fight extends Command {
             '*``' . $monster->type->description . '``*' . PHP_EOL . '*``' . $monster->getHealthStatus() . '``*'
         );
         $embed->setImage($monster->type->image);
-        $embed->setFooter($hero->type->getDefaultFooterText($this->handler->prefix . $this->name));
+        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName()));
 
         if (!$heroFirst) {
             $additionalEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
