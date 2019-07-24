@@ -6,6 +6,7 @@ use Ancestor\CommandHandler\CommandHelper as Helper;
 use Ancestor\Interaction\DirectAction;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Monster;
+use Ancestor\Interaction\Stats\TrinketFactory;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class FightManager {
@@ -39,6 +40,8 @@ class FightManager {
      * @var string
      */
     public $chatCommand;
+
+    const TRINKET_KILLS_THRESHOLD = 2;
 
     public function __construct(Hero $hero, MonsterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
         $this->hero = $hero;
@@ -82,6 +85,7 @@ class FightManager {
                 Helper::mergeEmbed($embed, $extraEmbed);
             } else {
                 if ($this->endless) {
+                    $this->killCount++;
                     $this->monster = new Monster($this->monsterCollection->getRandMonsterType());
                     $embed->addField('***' . $this->monster->type->name . ' emerges from the darkness!***', '*``' . $this->monster->getHealthStatus() . '``*');
                     Helper::mergeEmbed($embed, $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction()));
@@ -97,7 +101,8 @@ class FightManager {
             return $embed;
         }
 
-        $embed->setFooter($this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed()));
+        $embed->setFooter($this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed()) .
+            ($this->killCount > 0 ? 'Kills: ' . $this->killCount : ''));
         return $embed;
     }
 
@@ -121,7 +126,22 @@ class FightManager {
         return $res;
     }
 
+    protected function rollTrinkets(MessageEmbed $resultEmbed) {
+        if ($this->killCount < self::TRINKET_KILLS_THRESHOLD) {
+            return;
+        }
+        $newTrinket = TrinketFactory::create($this->hero);
+        if ($this->hero->hasTrinket($newTrinket->name)) {
+            return;
+        }
+
+    }
+
     public function isOver(): bool {
         return $this->hero->isDead() || ($this->monster->isDead() && !$this->endless);
+    }
+
+    public function getActionIfValid(string $actionName) {
+        //TODO : trinket action support and mild refactor
     }
 }

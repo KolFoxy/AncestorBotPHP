@@ -64,7 +64,6 @@ class Hero extends AbstractLivingBeing {
      */
     protected $stressState = null;
 
-
     public function addStress(int $value) {
         if ($this->isActuallyDead) {
             return;
@@ -183,26 +182,38 @@ class Hero extends AbstractLivingBeing {
         return $this->isActuallyDead;
     }
 
+    public function hasTrinket(string $trinketName): bool {
+        foreach ($this->trinkets as $trinket) {
+            if ($trinket !== null && $trinket->name === $trinketName) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param Trinket $trinket
+     * @param int $slot
+     * @return string Result of trinket equipment.
+     */
     public function equipTrinket(Trinket $trinket, int $slot = 0): string {
         if ($trinket->classRestriction !== null && $trinket->classRestriction !== $this->type->name) {
             return 'Can\'t equip ' . $trinket->name . ' since ' . $this->name . ' is not a ' . $trinket->classRestriction;
         }
+        if ($this->hasTrinket($trinket->name)){
+            return 'Can\'t have duplicate trinkets.';
+        }
         $res = 'Equipped ' . $trinket->name . ' in slot ';
-        if ($slot < 1 && $slot > 2) {
-            foreach ($this->trinkets as $key => $item) {
-                if ($item === null) {
-                    $slot = $key;
-                    break;
-                }
-            }
-            if ($slot < 1 && $slot > 2) {
-                $slot = mt_rand(1, 2);
-            }
+        if ($slot <= 1) {
+            $slot = 1;
+        } elseif ($slot > 1) {
+            $slot = 2;
         }
         $res .= $slot;
         if ($this->trinkets[$slot] !== null) {
             $res .= ', replacing ' . $this->trinkets[$slot]->name;
             $this->trinkets[$slot]->remove();
+            unset($this->trinkets[$slot]);
         }
         $res .= '.';
         $this->trinkets[$slot] = $trinket;
