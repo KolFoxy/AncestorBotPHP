@@ -54,7 +54,7 @@ class Hero extends AbstractLivingBeing {
     /**
      * @var Trinket[]
      */
-    public $trinkets = [
+    protected $trinkets = [
         1 => null,
         2 => null,
     ];
@@ -165,6 +165,19 @@ class Hero extends AbstractLivingBeing {
         return parent::getHealthStatus() . $this->getBonusMessage($this->bonusHealthMessage);
     }
 
+    /**
+     * @return Trinket|null
+     */
+    public function getFirstTrinket(){
+        return $this->trinkets[1];
+    }
+
+    /**
+     * @return Trinket|null
+     */
+    public function getSecondTrinket(){
+        return $this->trinkets[2];
+    }
 
     public function getStatus(): string {
         return $this->getHealthStatus() . ' | ' . $this->getStressStatus();
@@ -200,7 +213,7 @@ class Hero extends AbstractLivingBeing {
         if ($trinket->classRestriction !== null && $trinket->classRestriction !== $this->type->name) {
             return 'Can\'t equip ' . $trinket->name . ' since ' . $this->name . ' is not a ' . $trinket->classRestriction;
         }
-        if ($this->hasTrinket($trinket->name)){
+        if ($this->hasTrinket($trinket->name)) {
             return 'Can\'t have duplicate trinkets.';
         }
         $res = 'Equipped ' . $trinket->name . ' in slot ';
@@ -279,6 +292,11 @@ class Hero extends AbstractLivingBeing {
             return true;
         }
         return false;
+    }
+
+    public function kill() {
+        $this->currentHealth = -1;
+        $this->isActuallyDead = true;
     }
 
 }

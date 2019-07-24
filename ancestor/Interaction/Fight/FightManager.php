@@ -6,6 +6,7 @@ use Ancestor\CommandHandler\CommandHelper as Helper;
 use Ancestor\Interaction\DirectAction;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Monster;
+use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
@@ -41,6 +42,11 @@ class FightManager {
      */
     public $chatCommand;
 
+    /**
+     * @var Trinket|null
+     */
+    public $newTrinket = null;
+
     const TRINKET_KILLS_THRESHOLD = 2;
 
     public function __construct(Hero $hero, MonsterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
@@ -75,7 +81,32 @@ class FightManager {
         return $embed;
     }
 
-    public function getTurn(DirectAction $action, string $heroPicUrl): MessageEmbed {
+    /**
+     * @param DirectAction|int $action
+     * @param string $heroPicUrl
+     * @return MessageEmbed
+     */
+    public function getTurn($action, string $heroPicUrl): MessageEmbed {
+        if (is_int($action)) {
+            if ($this->newTrinket !== null) {
+                return $this->getEquipTrinketTurn($action);
+            }
+            $this->hero->kill();
+            return (new MessageEmbed())->setTitle('***ERROR!***')->setDescription('Invalid action. Terminating session.');
+        }
+        return $this->getHeroTurn($action, $heroPicUrl);
+    }
+
+    protected function getEquipTrinketTurn(int $slot): MessageEmbed {
+
+    }
+
+    /**
+     * @param DirectAction $action
+     * @param string $heroPicUrl
+     * @return MessageEmbed
+     */
+    protected function getHeroTurn(DirectAction $action, string $heroPicUrl): MessageEmbed {
         $target = $action->requiresTarget ? $this->hero : $this->monster;
         $embed = $this->hero->getHeroTurn($action, $target);
         if (!$this->hero->isDead()) {
@@ -95,6 +126,8 @@ class FightManager {
                 }
             }
         }
+
+        //TODO::ROLL_TRINKETS
 
         if ($this->hero->isDead()) {
             $embed->setFooter('R.I.P. ' . $this->hero->name, $heroPicUrl);
@@ -126,22 +159,41 @@ class FightManager {
         return $res;
     }
 
-    protected function rollTrinkets(MessageEmbed $resultEmbed) {
+    protected function rollTrinkets(MessageEmbed $resultEmbed): bool {
         if ($this->killCount < self::TRINKET_KILLS_THRESHOLD) {
-            return;
+            return false;
         }
         $newTrinket = TrinketFactory::create($this->hero);
         if ($this->hero->hasTrinket($newTrinket->name)) {
-            return;
+            return false;
         }
-
+        $this->newTrinket = $newTrinket;
+        $resultEmbed->setImage($newTrinket->image);
+        $resultEmbed->addField('You\'ve found a new trinket: ***' . $newTrinket->name . '***',
+            '``' . $newTrinket->getDescription() . '``'
+            . PHP_EOL . '``Trinket slot`` **``1``**: ***``'
+            . (is_null($this->hero->getFirstTrinket()) ? '[EMPTY]``***' : $this->hero->getFirstTrinket()->name . '``***')
+            . '⚫⚫⚫ ``Trinket slot`` **``2``**: ***``'
+            . (is_null($this->hero->getSecondTrinket()) ? '[EMPTY]``***' : $this->hero->getSecondTrinket()->name . '``***')
+        );
+        return true;
     }
 
     public function isOver(): bool {
         return $this->hero->isDead() || ($this->monster->isDead() && !$this->endless);
     }
 
+    /**
+     * @param string $actionName
+     * @return DirectAction|int|null
+     */
     public function getActionIfValid(string $actionName) {
-        //TODO : trinket action support and mild refactor
+        if (!is_null($this->newTrinket)) {
+            if (is_numeric($actionName)) {
+                return (int)$actionName;
+            }
+            return null;
+        }
+        return $this->hero->type->getActionIfValid($actionName);
     }
 }

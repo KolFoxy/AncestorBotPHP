@@ -32,4 +32,18 @@ class TypeBonus {
         return $this;
     }
 
+    public function getBonusesString(): string {
+        $format = '%+d';
+        return
+            ($this->damageMod !== 0 ? sprintf($format, $this->damageMod) . '% DMG' .
+                (($this->critChanceMod !== 0 || $this->accMod !== 0) ? ',' : '.') : '')
+            . ($this->critChanceMod !== 0 ? sprintf($format, $this->critChanceMod) . '% CRIT' .
+                ($this->accMod !== 0 ? ',' : '.') : '')
+            . ($this->accMod !== 0 ? sprintf($format, $this->accMod) . '% ACC' : '');
+    }
+
+
+    public function __toString() {
+        return 'VS ' . Stats::formatName($this->type) . ': ' . $this->getBonusesString();
+    }
 }

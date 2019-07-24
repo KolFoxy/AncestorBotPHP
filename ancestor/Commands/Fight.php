@@ -122,7 +122,7 @@ class Fight extends Command implements MonsterCollectionInterface {
             $message->reply('', ['embed' => $fight->getHeroActionsDescriptions()]);
             return;
         }
-        if (($action = $fight->hero->type->getActionIfValid($actionName)) === null) {
+        if (($action = $fight->getActionIfValid($actionName)) === null) {
             $message->reply('Invalid action.');
             return;
         }
