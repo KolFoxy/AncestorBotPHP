@@ -78,7 +78,7 @@ class StatModifier implements TimedEffectInterface {
     }
 
     public function isPositive(): bool {
-        if ($this->stat === Stats::STRESS_MOD) {
+        if ($this->stat === Stats::STRESS_MOD || $this->stat === Stats::CRIT_RECEIVED_CHANCE) {
             return $this->value < 0;
         }
         return $this->value > 0;
@@ -124,7 +124,7 @@ class StatModifier implements TimedEffectInterface {
 
     public function __toString(): string {
         return Stats::formatName($this->stat) . ': ' . ($this->value < 0 ? '' : '+') . $this->value
-            . ($this->duration > 0 ? 'for ' . $this->duration . 'rds' : '');
+            . ($this->duration > 0 ? ' for ' . $this->duration . 'rds' : '');
     }
 
     public function guaranteedApplication(): bool {

@@ -6,6 +6,8 @@ use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\CommandHandler\TimedCommandManager;
+use Ancestor\Interaction\Fight\FightManager;
+use Ancestor\Interaction\Fight\MonsterCollectionInterface;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Monster;
@@ -14,7 +16,7 @@ use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use function GuzzleHttp\Psr7\str;
 
-class Fight extends Command {
+class Fight extends Command implements MonsterCollectionInterface {
 
     const TIMEOUT = 300.0;
     const SURRENDER_COMMAND = 'ff';
@@ -81,10 +83,9 @@ class Fight extends Command {
             $heroClassName = '';
             $this->processInitialArgs($args, $endless, $heroClassName);
             $hero = $this->createHero($message->author->username, $heroClassName);
-            $monster = $this->getRandomMonster();
-            $heroFirst = (bool)mt_rand(0, 1);
-            $message->reply('', ['embed' => $this->getEncounterEmbed($hero, $monster, $heroFirst)]);
-            $this->manager->addInteraction($message, self::TIMEOUT, [$hero, $monster, $endless]);
+            $fightManager = new FightManager($hero, $this, $this->getPrefixedName(), $endless);
+            $message->reply('', ['embed' => $fightManager->start()]);
+            $this->manager->addInteraction($message, self::TIMEOUT, $fightManager);
             return;
         }
         $this->processActiveUserInput($message, $args);
@@ -110,43 +111,29 @@ class Fight extends Command {
             return;
         }
         $actionName = implode(' ', $args);
+        $fight = $this->getFight($message);
         if ($actionName === self::SURRENDER_COMMAND) {
-            $message->reply('**' . $this->getHero($message)->name . '** is now forever lost in space and time.');
+            $message->reply('**' . $fight->hero->name . '** is now forever lost in space and time.');
             $this->manager->deleteInteraction($message);
             return;
         }
+        $this->manager->refreshTimer($message, self::TIMEOUT);
         if ($actionName === self::CHAR_INFO_COMMAND) {
-            $hero = $this->getHero($message);
-            $message->reply('', ['embed' =>
-                $hero->getStatsAndEffectsEmbed()->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(),$this->getMonster($message)->isStealthed()))]);
-            $this->manager->refreshTimer($message, self::TIMEOUT);
+            $message->reply('', ['embed' => $fight->getHeroStats()]);
             return;
         }
         if ($actionName === self::CHAR_ACTIONS_COMMAND) {
-            $message->reply('', ['embed' => $this->getUserActionsDescriptions($message)]);
-            $this->manager->refreshTimer($message, self::TIMEOUT);
+            $message->reply('', ['embed' => $fight->getHeroActionsDescriptions()]);
             return;
         }
-        $embed = $this->processHeroAction($message, $actionName);
-        if ($embed === null) {
+        if (($action = $fight->hero->type->getActionIfValid($actionName)) === null) {
             $message->reply('Invalid action.');
             return;
         }
-        $message->reply('', ['embed' => $embed]);
-    }
-
-    public function getUserActionsDescriptions(Message $message): MessageEmbed {
-        $res = new MessageEmbed();
-        $hero = $this->getHero($message);
-        $res->setTitle($hero->name . '\'s abilities and actions:');
-        $description = '';
-        foreach ($hero->type->actions as $action) {
-            $description .= '***' . $action->name . '***' . PHP_EOL . '``' . $action->effect->getDescription() . '``' . PHP_EOL;
+        $message->reply('', ['embed' => $fight->getTurn($action, $message->author->getAvatarURL())]);
+        if ($fight->isOver()) {
+            $this->manager->deleteInteraction($message);
         }
-        $description .= '*' . $hero->type->defaultAction()->name . '*' . PHP_EOL . '``' . $hero->type->defaultAction()->effect->getDescription() . '``';
-        $res->setDescription($description);
-        $res->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(),$this->getMonster($message)->isStealthed()));
-        return $res;
     }
 
     public function processInitialArgs(array $args, bool &$endless, string &$heroClassName) {
@@ -162,94 +149,11 @@ class Fight extends Command {
         }
     }
 
-    /**
-     * @param Message $message
-     * @param string $actionName
-     * @return MessageEmbed|null
-     */
-    function processHeroAction(Message $message, string $actionName) {
-        $hero = $this->getHero($message);
-        $action = $hero->type->getActionIfValid($actionName);
-        if ($action === null) {
-            return null;
-        }
-        $monster = $this->getMonster($message);
-        $target = $action->requiresTarget ? $hero : $monster;
-        $embed = $hero->getHeroTurn($action, $target);
-
-        if (!$hero->isDead()) {
-            if (!$monster->isDead()) {
-                $extraEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
-                $embed->addField($monster->type->name . '\'s turn!', '*``' . $monster->getHealthStatus() . '``*');
-                CommandHelper::mergeEmbed($embed, $extraEmbed);
-            } else {
-                if ($this->getEndless($message)) {
-                    $monster = $this->getRandomMonster();
-                    $embed->addField('***' . $monster->type->name . ' emerges from the darkness!***', '*``' . $monster->getHealthStatus() . '``*');
-                    CommandHelper::mergeEmbed($embed, $monster->getTurn($hero, $monster->type->getRandomAction()));
-                    $this->updateMonster($message, $monster);
-                } else {
-                    $embed->setFooter($hero->name . ' is victorious!', $message->author->getAvatarURL());
-                    $this->manager->deleteInteraction($message);
-                    return $embed;
-                }
-            }
-        }
-
-        if ($hero->isDead()) {
-            $embed->setFooter('R.I.P. ' . $hero->name, $message->author->getAvatarURL());
-            $this->manager->deleteInteraction($message);
-            return $embed;
-        }
-
-        $this->manager->refreshTimer($message, self::TIMEOUT);
-        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(),$monster->isStealthed()));
-        return $embed;
+    public function getRandMonsterType(): MonsterType {
+        return $this->monsterTypes[mt_rand(0, $this->numOfTypes)];
     }
 
-    function getRandomMonster(): Monster {
-        return new Monster($this->monsterTypes[mt_rand(0, $this->numOfTypes)]);
+    function getFight(Message $message): FightManager {
+        return $this->manager->getUserData($message);
     }
-
-    function getEncounterEmbed(Hero $hero, Monster $monster, bool $heroFirst): MessageEmbed {
-        $embed = new MessageEmbed();
-        $embed->setTitle('**' . $hero->name . '**');
-        $embed->setThumbnail($hero->type->image);
-        $embed->setDescription('*``' . $hero->type->description . '``*' . PHP_EOL . '``' . $hero->getStatus() . '``');
-        $embed->addField(
-            'You encounter a vile **' . $monster->type->name . '**',
-            '*``' . $monster->type->description . '``*' . PHP_EOL . '*``' . $monster->getHealthStatus() . '``*'
-            . PHP_EOL . $monster->statManager->getAllCurrentEffectsString()
-        );
-        $embed->setImage($monster->type->image);
-        $embed->setFooter($hero->type->getDefaultFooterText($this->getPrefixedName(), $monster->isStealthed()));
-
-        if (!$heroFirst) {
-            $additionalEmbed = $monster->getTurn($hero, $monster->type->getRandomAction());
-            CommandHelper::mergeEmbed($embed, $additionalEmbed);
-        }
-
-        return $embed;
-    }
-
-
-    function getHero(Message $message): Hero {
-        return $this->manager->getUserData($message)[0];
-    }
-
-    function getMonster(Message $message): Monster {
-        return $this->manager->getUserData($message)[1];
-    }
-
-    function getEndless(Message $message): bool {
-        return $this->manager->getUserData($message)[2];
-    }
-
-    function updateMonster(Message $message, Monster $monster) {
-        $newData = $this->manager->getUserData($message);
-        unset($newData[1]);
-        $newData[1] = $monster;
-        $this->manager->updateData($message, $newData);
-    }
-
 }
