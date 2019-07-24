@@ -36,7 +36,7 @@ class DirectActionEffect extends AbstractEffect {
     public $removesStealth = false;
 
     public function canCrit(): bool {
-        return $this->critChance < 0;
+        return $this->critChance >= 0;
     }
 
     /**
