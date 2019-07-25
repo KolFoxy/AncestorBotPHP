@@ -15,7 +15,7 @@
         "description": "Smites the opponent with righteous fury.",
         "health_value": -10,
         "healthDeviation": -9,
-        "hitChance": 85,
+        "hitChance": 110,
         "image": "https://i.imgur.com/PGDc7lb.png"
       }
     },
@@ -36,7 +36,7 @@
       "effect": {
         "description": "Inspires the target and eases some of their stress.",
         "health_value": 1,
-        "stress_value": -5,
+        "stress_value": -10,
         "image": "https://i.imgur.com/P1cprP7.png",
         "hitChance": -1
       }

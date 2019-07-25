@@ -3,7 +3,7 @@
     "name": "Super Cultist Witch",
     "description": "Human servant of the eldritch powers, assaults opponents' minds with evil incantations.",
     "image": "https://i.imgur.com/0agOsfn.png",
-    "healthMax": 100,
+    "healthMax": 50,
     "startingStatusEffects": [
       {
         "type": "stealth",

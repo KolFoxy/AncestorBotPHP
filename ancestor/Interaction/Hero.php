@@ -64,6 +64,13 @@ class Hero extends AbstractLivingBeing {
      */
     protected $stressState = null;
 
+    public function getTrinketStatus(): string {
+        return '``Trinket slot`` **``1``**: ***``'
+            . (is_null($this->getFirstTrinket()) ? '[EMPTY]``***' : $this->getFirstTrinket()->name . '``***')
+            . '⚫⚫⚫ ``Trinket slot`` **``2``**: ***``'
+            . (is_null($this->getSecondTrinket()) ? '[EMPTY]``***' : $this->getSecondTrinket()->name . '``***');
+    }
+
     public function addStress(int $value) {
         if ($this->isActuallyDead) {
             return;
@@ -168,14 +175,14 @@ class Hero extends AbstractLivingBeing {
     /**
      * @return Trinket|null
      */
-    public function getFirstTrinket(){
+    public function getFirstTrinket() {
         return $this->trinkets[1];
     }
 
     /**
      * @return Trinket|null
      */
-    public function getSecondTrinket(){
+    public function getSecondTrinket() {
         return $this->trinkets[2];
     }
 
@@ -209,7 +216,7 @@ class Hero extends AbstractLivingBeing {
      * @param int $slot
      * @return string Result of trinket equipment.
      */
-    public function equipTrinket(Trinket $trinket, int $slot = 0): string {
+    public function tryEquipTrinket(Trinket $trinket, int $slot = 0): string {
         if ($trinket->classRestriction !== null && $trinket->classRestriction !== $this->type->name) {
             return 'Can\'t equip ' . $trinket->name . ' since ' . $this->name . ' is not a ' . $trinket->classRestriction;
         }

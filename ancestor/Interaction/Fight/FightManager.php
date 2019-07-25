@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Ancestor\Interaction\Fight;
 
@@ -49,6 +50,10 @@ class FightManager {
 
     const TRINKET_KILLS_THRESHOLD = 2;
 
+    const SKIP_TRINKET_ACTION = -13505622;
+
+    const SKIP_HEAL_PERCENTAGE = 0.2;
+
     public function __construct(Hero $hero, MonsterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
         $this->hero = $hero;
         $this->monsterCollection = $monsterCollection;
@@ -60,7 +65,6 @@ class FightManager {
         if (!isset($this->monster)) {
             $this->monster = new Monster($this->monsterCollection->getRandMonsterType());
         }
-
         $embed = new MessageEmbed();
         $embed->setTitle('**' . $this->hero->name . '**');
         $embed->setThumbnail($this->hero->type->image);
@@ -82,6 +86,7 @@ class FightManager {
     }
 
     /**
+     * @noinspection PhpDocMissingThrowsInspection
      * @param DirectAction|int $action
      * @param string $heroPicUrl
      * @return MessageEmbed
@@ -97,8 +102,21 @@ class FightManager {
         return $this->getHeroTurn($action, $heroPicUrl);
     }
 
-    protected function getEquipTrinketTurn(int $slot): MessageEmbed {
-
+    protected function getEquipTrinketTurn(int $action): MessageEmbed {
+        $res = new MessageEmbed();
+        if ($action === self::SKIP_TRINKET_ACTION) {
+            $this->newTrinket = null;
+            $heal = mt_rand(1, (int)($this->hero->healthMax) * self::SKIP_HEAL_PERCENTAGE);
+            $this->hero->addHealth($heal);
+            $res->setTitle('**' . $this->hero->name . '** used their time to heal for **' . $heal . 'HP**');
+            $res->setDescription($this->hero->getHealthStatus());
+        } else {
+            $res->setTitle($this->hero->tryEquipTrinket($this->newTrinket, $action));
+            $this->newTrinket = null;
+            $res->setDescription($this->hero->getTrinketStatus());
+        }
+        $this->newMonsterTurn($res);
+        return $res;
     }
 
     /**
@@ -117,17 +135,16 @@ class FightManager {
             } else {
                 if ($this->endless) {
                     $this->killCount++;
-                    $this->monster = new Monster($this->monsterCollection->getRandMonsterType());
-                    $embed->addField('***' . $this->monster->type->name . ' emerges from the darkness!***', '*``' . $this->monster->getHealthStatus() . '``*');
-                    Helper::mergeEmbed($embed, $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction()));
+                    if ($this->rollTrinkets($embed)) {
+                        return $embed;
+                    }
+                    $this->newMonsterTurn($embed);
                 } else {
                     $embed->setFooter($this->hero->name . ' is victorious!', $heroPicUrl);
                     return $embed;
                 }
             }
         }
-
-        //TODO::ROLL_TRINKETS
 
         if ($this->hero->isDead()) {
             $embed->setFooter('R.I.P. ' . $this->hero->name, $heroPicUrl);
@@ -137,6 +154,15 @@ class FightManager {
         $embed->setFooter($this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed()) .
             ($this->killCount > 0 ? 'Kills: ' . $this->killCount : ''));
         return $embed;
+    }
+
+    public function newMonsterTurn(MessageEmbed $resultEmbed) {
+        $this->monster = new Monster($this->monsterCollection->getRandMonsterType());
+        $resultEmbed->addField('***' . $this->monster->type->name . ' emerges from the darkness!***', '*``' . $this->monster->getHealthStatus() . '``*');
+        if ((bool)mt_rand(0, 1)) {
+            Helper::mergeEmbed($resultEmbed, $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction()));
+        }
+        $resultEmbed->setImage($this->monster->type->image);
     }
 
     public function getHeroStats(): MessageEmbed {
@@ -164,18 +190,14 @@ class FightManager {
             return false;
         }
         $newTrinket = TrinketFactory::create($this->hero);
-        if ($this->hero->hasTrinket($newTrinket->name)) {
-            return false;
-        }
+
         $this->newTrinket = $newTrinket;
         $resultEmbed->setImage($newTrinket->image);
         $resultEmbed->addField('You\'ve found a new trinket: ***' . $newTrinket->name . '***',
             '``' . $newTrinket->getDescription() . '``'
-            . PHP_EOL . '``Trinket slot`` **``1``**: ***``'
-            . (is_null($this->hero->getFirstTrinket()) ? '[EMPTY]``***' : $this->hero->getFirstTrinket()->name . '``***')
-            . '⚫⚫⚫ ``Trinket slot`` **``2``**: ***``'
-            . (is_null($this->hero->getSecondTrinket()) ? '[EMPTY]``***' : $this->hero->getSecondTrinket()->name . '``***')
-        );
+            . PHP_EOL . $this->hero->getTrinketStatus());
+        $resultEmbed->setFooter('Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
+            . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.');
         return true;
     }
 
@@ -189,6 +211,9 @@ class FightManager {
      */
     public function getActionIfValid(string $actionName) {
         if (!is_null($this->newTrinket)) {
+            if ($actionName === 'skip') {
+                return self::SKIP_TRINKET_ACTION;
+            }
             if (is_numeric($actionName)) {
                 return (int)$actionName;
             }
