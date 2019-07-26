@@ -47,11 +47,12 @@ class StatsManager {
         }
     }
 
+
     /**
      * @param string $statName
      * @return int|null Stat value or NULL if $statName doesn't exists;
      */
-    public function getStatValue(string $statName): int {
+    public function getStatValue(string $statName) {
         if (key_exists($statName, $this->stats)) {
             return Stats::validateStatValue($this->stats[$statName] + $this->getStatMod($statName), $statName);
         }

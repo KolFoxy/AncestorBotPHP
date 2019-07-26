@@ -1,0 +1,14 @@
+{
+  "name": "Medic's Boots",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/40/Medics_boots.png",
+  "rarity": 2,
+  "classRestriction": "Musketeer",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 33,
+      "duration": -1
+    }
+  ]
+}

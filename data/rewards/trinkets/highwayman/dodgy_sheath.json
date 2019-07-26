@@ -1,0 +1,20 @@
+{
+  "name": "Dodgy Sheath",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fa/Inv_trinket-dodgy_sheath.png",
+  "rarity": 2,
+  "classRestriction": "Highwayman",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "accMod",
+      "value": -10,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Blasphemous Vial",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3d/Inv_trinket-blasphemous_vial.png",
+  "rarity": 4,
+  "classRestriction": "Plague Doctor",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 15,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Berserk Charm",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/9a/Inv_trinket-berserk_charm.png",
+  "rarity": 3,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "accMod",
+      "value": -5,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": -10,
+      "duration": -1
+    }
+  ]
+}

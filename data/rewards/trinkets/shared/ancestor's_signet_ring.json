@@ -1,0 +1,25 @@
+{
+  "name": "Ancestor's Signet Ring",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/dc/Ancestor_Ring.png",
+  "rarity": 5,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "prot",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

@@ -7,6 +7,7 @@ final class Stats {
     const DEFAULT_STATS_NUM = 10;
 
     const RESIST_SUFFIX = 'Resist';
+    const SKILL_CHANCE_SUFFIX = 'SkillChance';
 
     const STUN_RESIST = 'stunResist';
     const BLEED_RESIST = 'bleedResist';
@@ -29,6 +30,13 @@ final class Stats {
     const HEAL_SKILL_MOD = 'healSkillMod';
     const HEAL_RECEIVED_MOD = 'healReceivedMod';
 
+
+    const STUN_SKILL_CHANCE = 'stunSkillChance';
+    const BLEED_SKILL_CHANCE = 'bleedSkillChance';
+    const BLIGHT_SKILL_CHANCE = 'blightSkillChance';
+    const DEBUFF_SKILL_CHANCE = 'debuffSkillChance';
+
+
     /**
      * @return array Format: ['stat1' => int, 'stat2' => int, ...]
      */
@@ -39,18 +47,27 @@ final class Stats {
             self::BLIGHT_RESIST => 80,
             self::DEBUFF_RESIST => 80,
             self::DEATHBLOW_RESIST => 67,
+
             self::DAMAGE_MOD => 0,
             self::ACC_MOD => 0,
             self::DODGE => 25,
             self::PROT => 0,
             self::CRIT_CHANCE => 0,
+
             self::STRESS_MOD => 0,
             self::STRESS_HEAL_MOD => 0,
             self::STRESS_SKILL_MOD => 0,
+
             self::HEAL_SKILL_MOD => 0,
             self::HEAL_RECEIVED_MOD => 0,
             self::VIRTUE_CHANCE => 25,
             self::CRIT_RECEIVED_CHANCE => 0,
+
+
+            self::STUN_SKILL_CHANCE => 0,
+            self::DEBUFF_SKILL_CHANCE => 0,
+            self::BLEED_SKILL_CHANCE => 0,
+            self::BLIGHT_SKILL_CHANCE => 0,
         ];
     }
 

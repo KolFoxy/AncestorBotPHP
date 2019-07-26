@@ -1,0 +1,19 @@
+{
+  "name": "Book of Holiness",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/00/Inv_trinket-book_of_holiness.png",
+  "rarity": 2,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "deathblowResist",
+      "value": -10,
+      "duration": -1
+    }
+  ]
+}

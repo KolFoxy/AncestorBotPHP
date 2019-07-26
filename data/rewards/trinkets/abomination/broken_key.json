@@ -1,0 +1,26 @@
+{
+  "name": "Broken Key",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/46/Abom_broken_key.png",
+  "rarity": 6,
+  "classRestriction": "abomination",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 35,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "accMod",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

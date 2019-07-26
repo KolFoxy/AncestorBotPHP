@@ -1,0 +1,26 @@
+{
+  "name": "Commander's Orders",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/78/Inv_trinket-commanders_orders.png",
+  "rarity": 3,
+  "classRestriction": "crusader",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressHealMod",
+      "value": 15,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 33,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": -10,
+      "duration": -1
+    }
+  ]
+}

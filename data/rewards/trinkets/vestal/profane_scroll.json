@@ -1,0 +1,32 @@
+{
+  "name": "Profane Scroll",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/15/Inv_trinket-profane_scroll.png",
+  "rarity": 3,
+  "classRestriction": "Vestal",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 33,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

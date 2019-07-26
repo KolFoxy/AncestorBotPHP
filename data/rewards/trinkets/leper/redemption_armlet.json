@@ -1,0 +1,20 @@
+{
+  "name": "Redemption Armlet",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/59/Inv_trinket-selfish_armlet.png",
+  "rarity": 1,
+  "classRestriction": "Leper",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": -3,
+      "duration": -1
+    }
+  ]
+}

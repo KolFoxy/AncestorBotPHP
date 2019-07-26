@@ -1,0 +1,14 @@
+{
+  "name": "Vengeful Greaves",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ed/Vengefulgreaves.png",
+  "rarity": 1,
+  "classRestriction": "arbalest",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 3,
+      "duration": -1
+    }
+  ]
+}

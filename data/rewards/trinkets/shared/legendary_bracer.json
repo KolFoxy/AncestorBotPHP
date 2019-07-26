@@ -1,0 +1,19 @@
+{
+  "name": "Legendary Bracer",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/ad/Inv_trinket-legendary_bracer.png",
+  "rarity": 4,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 12,
+      "duration": -1
+    }
+  ]
+}

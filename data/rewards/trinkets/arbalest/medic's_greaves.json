@@ -1,0 +1,14 @@
+{
+  "name": "Medic's Greaves",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/7a/Inv_trinket_medics_greaves.png",
+  "rarity": 2,
+  "classRestriction": "arbalest",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 33,
+      "duration": -1
+    }
+  ]
+}

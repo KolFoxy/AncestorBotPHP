@@ -1,0 +1,13 @@
+{
+  "name": "Blood Charm",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/8e/Inv_trinket-blood_charm.png",
+  "rarity": 2,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": 30,
+      "duration": -1
+    }
+  ]
+}

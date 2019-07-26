@@ -1,0 +1,19 @@
+{
+  "name": "Shimmering Cloak",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/39/Inv_trinket-shimmering_cloak.png",
+  "rarity": 2,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 8,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healReceivedMod",
+      "value": -33,
+      "duration": -1
+    }
+  ]
+}

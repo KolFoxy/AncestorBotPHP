@@ -1,0 +1,14 @@
+{
+  "name": "Healing Armlet",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f0/Inv_trinket-healing_armlet.png",
+  "rarity": 1,
+  "classRestriction": "Leper",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "healReceivedMod",
+      "value": 20,
+      "duration": -1
+    }
+  ]
+}

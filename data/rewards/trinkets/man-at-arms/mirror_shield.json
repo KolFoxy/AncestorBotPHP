@@ -1,0 +1,26 @@
+{
+  "name": "Mirror Shield",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/89/Maa_mirror_shield.png",
+  "rarity": 6,
+  "classRestriction": "Man-at-Arms",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stunResist",
+      "value": 20,
+      "duration": -1
+    }
+  ]
+}

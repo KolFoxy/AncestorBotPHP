@@ -35,10 +35,31 @@ final class TrinketFactory {
         }
     }
 
+    public static function test() {
+        if (self::$trinketPaths === null) {
+            self::setTrinketPaths();
+        }
+        foreach (self::$trinketPaths as $item) {
+            foreach ($item as $group) {
+                foreach ($group as $trinket) {
+                    $json = json_decode(file_get_contents($trinket));
+                    $mapper = new \JsonMapper();
+                    $mapper->bExceptionOnMissingData = true;
+                    $res = new Trinket();
+                    echo 'Testing: ' . $trinket . '......';
+                    $mapper->map($json, $res);
+                    echo $res->name . ' - OK' . PHP_EOL;
+                }
+            }
+        }
+
+    }
+
     public static function create(Hero $host): Trinket {
         if (self::$trinketPaths === null) {
             self::setTrinketPaths();
         }
+
         $group = mt_rand(1, 100);
         if ($group <= 50) {
             $group = self::GROUP_FIRST;
@@ -48,12 +69,14 @@ final class TrinketFactory {
             $group = self::GROUP_SECOND;
         }
 
+        $heroTypeFolder = str_replace(' ', '_', mb_strtolower($host->type->name));
         $possibleTrinkets = array_merge(
-            self::$trinketPaths[self::SHARED_KEY][$group],
-            self::$trinketPaths[mb_strtolower($host->type->name)][$group]
-        );
+            self::$trinketPaths[self::SHARED_KEY][$group] ?? [],
+            self::$trinketPaths[$heroTypeFolder][$group] ?? []);
+
         $size = count($possibleTrinkets);
-        $json = $size === 0 ? json_decode(file_get_contents(dirname(__DIR__, 3) . self::DEFAULT_TRINKET_PATH))
+        $json = $size === 0
+            ? json_decode(file_get_contents(dirname(__DIR__, 3) . self::DEFAULT_TRINKET_PATH))
             : json_decode(file_get_contents($possibleTrinkets[mt_rand(0, $size - 1)]));
 
         $mapper = new \JsonMapper();
@@ -73,6 +96,5 @@ final class TrinketFactory {
         }
         return self::GROUP_SECOND;
     }
-
-
+    
 }

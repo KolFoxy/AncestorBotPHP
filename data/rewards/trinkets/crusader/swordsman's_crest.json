@@ -1,0 +1,20 @@
+{
+  "name": "Swordsman's Crest",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fa/Inv_trinket-swordsmans_crest.png",
+  "rarity": 1,
+  "classRestriction": "crusader",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 10,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": -50,
+      "duration": -1
+    }
+  ]
+}

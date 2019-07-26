@@ -2,6 +2,7 @@
   "name": "Holy Orders",
   "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e5/Inv_trinket-holy_orders.png",
   "rarity": 4,
+  "classRestriction": "crusader",
   "statModifiers": [
     {
       "chance": -1,

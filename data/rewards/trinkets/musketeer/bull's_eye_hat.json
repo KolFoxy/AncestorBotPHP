@@ -1,0 +1,26 @@
+{
+  "name": "Bull's Eye Hat",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e0/Bullseyehat.png",
+  "rarity": 3,
+  "classRestriction": "Musketeer",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 8,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": 5,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "dodge",
+      "value": -4,
+      "duration": -1
+    }
+  ]
+}

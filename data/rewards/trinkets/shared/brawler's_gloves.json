@@ -1,0 +1,19 @@
+{
+  "name": "Brawler's Gloves",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/38/Inv_trinket-brawlers_gloves.png",
+  "rarity": 3,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 25,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": -5,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Sacrifical Cauldron",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/18/Inv_trinket-sacrificial_cauldron.png",
+  "rarity": 3,
+  "classRestriction": "Occultist",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Wrathful Hat",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d1/Wrathful_hat.png",
+  "rarity": 4,
+  "classRestriction": "Musketeer",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "debuffSkillChance",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": -30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healReceivedMod",
+      "value": -30,
+      "duration": -1
+    }
+  ]
+}

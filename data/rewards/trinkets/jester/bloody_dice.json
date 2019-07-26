@@ -1,0 +1,20 @@
+{
+  "name": "Bloody Dice",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6b/Inv_trinket-bloody_dice.png",
+  "rarity": 1,
+  "classRestriction": "Jester",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "bleedSkillChance",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": -10,
+      "duration": -1
+    }
+  ]
+}

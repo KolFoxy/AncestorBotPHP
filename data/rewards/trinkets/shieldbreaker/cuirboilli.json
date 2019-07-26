@@ -1,0 +1,14 @@
+{
+  "name": "Cuirboilli",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/11/Inv_trinket-sb_5.png",
+  "rarity": 4,
+  "classRestriction": "Shieldbreaker",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 20,
+      "duration": -1
+    }
+  ]
+}

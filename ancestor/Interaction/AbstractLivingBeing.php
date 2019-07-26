@@ -273,6 +273,7 @@ abstract class AbstractLivingBeing {
      */
     protected function getEffectApplicationField($timedEffect, AbstractLivingBeing $target): array {
         $toAdd = $timedEffect->clone();
+        $toAdd->chance += $this->statManager->getStatValue($toAdd->getType() . Stats::SKILL_CHANCE_SUFFIX) ?? 0;
         $effectTarget = $toAdd->targetSelf ? $this : $target;
         $isSE = is_a($toAdd, StatusEffect::class);
         if (!($isSE ? $effectTarget->statManager->addStatusEffect($toAdd) : $effectTarget->statManager->addModifier($toAdd))) {

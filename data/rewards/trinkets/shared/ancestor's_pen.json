@@ -1,0 +1,25 @@
+{
+  "name": "Ancestor's Pen",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/1e/Ancestor_Pen.png",
+  "rarity": 5,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": 8,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

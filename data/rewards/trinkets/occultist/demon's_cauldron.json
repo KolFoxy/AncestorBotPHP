@@ -1,0 +1,38 @@
+{
+  "name": "Demon's Cauldron",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/24/Inv_trinket-demons_cauldron.png",
+  "rarity": 4,
+  "classRestriction": "Occultist",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 40,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "debuffSkillChance",
+      "value": 40,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": 3,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": -10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 15,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Icosahedric Musket Balls",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/7c/Msk_icosahedric_balls.png",
+  "rarity": 6,
+  "classRestriction": "Musketeer",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 20,
+      "duration": -1
+    }
+  ]
+}

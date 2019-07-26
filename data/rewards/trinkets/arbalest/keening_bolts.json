@@ -1,0 +1,26 @@
+{
+  "name": "Keening Bolts",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e5/Arb_keening_bolts.png",
+  "rarity": 6,
+  "classRestriction": "arbalest",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": 7,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

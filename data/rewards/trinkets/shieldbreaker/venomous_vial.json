@@ -1,0 +1,20 @@
+{
+  "name": "Venomous Vial",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d2/Inv_trinket-sb_1.png",
+  "rarity": 1,
+  "classRestriction": "Shieldbreaker",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightResist",
+      "value": -10,
+      "duration": -1
+    }
+  ]
+}
