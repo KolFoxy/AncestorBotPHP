@@ -70,6 +70,7 @@
     },
     {
       "name": "Shard of Growth",
+      "requiresTarget": true,
       "effect": {
         "description": "Wait a second... I need a rest.\nApplies restoration effect to itself.",
         "hitChance": -1

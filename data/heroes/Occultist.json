@@ -54,9 +54,9 @@
     },
     {
       "name": "Wyrd Reconstruction",
+      "requiresTarget": true,
       "effect": {
         "description": "Flesh is weak, but easy to mold.\nHeals target, has a low chance of bleed.",
-        "requiresTarget": true,
         "health_value": 22,
         "image": "https://i.imgur.com/Cggaoo7.png",
         "healthDeviation": -22,

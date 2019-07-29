@@ -61,11 +61,13 @@
     },
     {
       "name": "Serpent Sway",
+      "requiresTarget": true,
       "effect": {
         "description": "Aegis blocks incoming damage.",
         "requiresTarget": true,
         "image": "https://i.imgur.com/Cggaoo7.png",
-        "hitChance": -1
+        "hitChance": -1,
+        "critChance": -1
       },
       "statusEffects": [
         {

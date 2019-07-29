@@ -59,11 +59,12 @@
     },
     {
       "name": "Defender",
+      "requiresTarget": true,
       "effect": {
         "description": "Increases PROT of Man-at-Arms.",
-        "requiresTarget": true,
         "image": "https://i.imgur.com/Cggaoo7.png",
-        "hitChance": -1
+        "hitChance": -1,
+        "critChance": -1
       },
       "statModifiers": [
         {
@@ -105,7 +106,8 @@
       "requiresTarget": true,
       "effect": {
         "description": "Strategy, order, survival!\nIncreases accuracy and crit chance.",
-        "hitChance": -1
+        "hitChance": -1,
+        "critChance": -1
       },
       "statModifiers": [
         {
@@ -128,7 +130,8 @@
       "image": "https://i.imgur.com/Cggaoo7.png",
       "effect": {
         "description": "Do not give in, do not give up!\nIncreases dodge and decreases incoming stress.",
-        "hitChance": -1
+        "hitChance": -1,
+        "critChance": -1
       },
       "statModifiers": [
         {

@@ -32,13 +32,12 @@ abstract class AbstractInteraction {
      * @return Action|DirectAction|null
      */
     public function getActionIfValid(string $actionName) {
-        $defAction = $this->defaultAction();
         $actionL = mb_strtolower($actionName);
-        if ($actionL === mb_strtolower($defAction->name)) {
-            return $defAction;
+        if (mb_strpos(mb_strtolower($this->defaultAction()->name), $actionL !== false)) {
+            return $this->defaultAction();
         }
         foreach ($this->actions as $action) {
-            if (mb_strtolower($action->name) === $actionL) {
+            if (mb_strpos(mb_strtolower($action->name), $actionL) !== false) {
                 return $action;
             }
         }

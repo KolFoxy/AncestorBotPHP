@@ -292,6 +292,14 @@ class Hero extends AbstractLivingBeing {
         if ($heroStressStateChecker && !is_null($target->getStressState())) {
             $fields[] = $target->getStressState()->toField();
         }
+
+        if ($target->isDead() && !is_a($target, self::class)) {
+            if ((bool)mt_rand(0, 1)) {
+                $this->addStress(parent::DEFAULT_STRESS_SELF_HEAL);
+                $fields[] = CommandHelper::getEmbedField('The act of killing inspires the hero! ' . parent::DEFAULT_STRESS_SELF_HEAL . ' stress!',
+                    $this->getStressStatus());
+            }
+        }
         $topField = array_shift($fields);
         $res->setTitle($topField['name']);
         $res->setDescription($topField['value']);

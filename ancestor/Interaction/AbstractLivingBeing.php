@@ -12,7 +12,7 @@ use Ancestor\CommandHandler\CommandHelper as Helper;
 
 abstract class AbstractLivingBeing {
 
-    const CRIT_STRESS_SELF_HEAL = -3;
+    const DEFAULT_STRESS_SELF_HEAL = -3;
     const CRIT_STRESS = 10;
     const CRIT_HEAL_STRESS_RELIEF = -4;
 
@@ -312,8 +312,8 @@ abstract class AbstractLivingBeing {
         if (!$this->hasStress()) {
             return null;
         }
-        $this->addStress(self::CRIT_STRESS_SELF_HEAL);
-        return Helper::getEmbedField('**' . $this->name . '** feels confident! **' . self::CRIT_STRESS_SELF_HEAL . ' stress**!',
+        $this->addStress(self::DEFAULT_STRESS_SELF_HEAL);
+        return Helper::getEmbedField('**' . $this->name . '** feels confident! **' . self::DEFAULT_STRESS_SELF_HEAL. ' stress**!',
             '*``' . $this->getStressStatus() . '``*');
 
     }

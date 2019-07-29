@@ -5,7 +5,7 @@ namespace Ancestor\Interaction;
 class DirectAction {
 
     /**
-     * @var bool
+     * @var bool Whether or not effect ISN'T used against an enemy, AKA: effect is positive
      */
     public $requiresTarget = false;
 

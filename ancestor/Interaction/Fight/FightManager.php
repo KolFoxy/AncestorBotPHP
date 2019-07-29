@@ -141,7 +141,8 @@ class FightManager {
                 $extraEmbed = $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
                 $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
                 Helper::mergeEmbed($embed, $extraEmbed);
-            } else {
+            }
+            if ($this->monster->isDead()) {
                 if ($this->endless) {
                     $this->killCount++;
                     if ($this->rollTrinkets($embed)) {

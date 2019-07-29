@@ -67,15 +67,6 @@ class HeroClass extends AbstractLivingInteraction {
      * @return Action|DirectAction|null
      */
     public function getActionIfValid(string $actionName) {
-        $actionL = mb_strtolower($actionName);
-        if ($actionL === mb_strtolower($this->defaultAction()->name)) {
-            return $this->defaultAction();
-        }
-        foreach ($this->actions as $action) {
-            if (mb_strpos($actionL, mb_strtolower($action->name)) === 0) {
-                return $action;
-            }
-        }
-        return null;
+        return parent::getActionIfValid($actionName);
     }
 }

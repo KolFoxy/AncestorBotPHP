@@ -74,14 +74,15 @@
       "effect": {
         "description": "A simple extract, carries you on, makes you fight, makes you live.\nIncreases damage.",
         "image": "https://i.imgur.com/Cggaoo7.png",
-        "hitChance": -1
+        "hitChance": -1,
+        "critChance": -1
       },
       "statModifiers": [
         {
           "chance": -1,
           "stat": "damageMod",
           "value": 25,
-          "duration": -1
+          "duration": 4
         }
       ]
     },
