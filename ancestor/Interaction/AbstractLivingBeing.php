@@ -318,20 +318,6 @@ abstract class AbstractLivingBeing {
 
     }
 
-    public function getStatsAndEffectsEmbed(): MessageEmbed {
-        $res = new MessageEmbed();
-        $res->setTitle('**' . $this->name . '**');
-        $res->setDescription('*``' . $this->type->description . '``*' .
-            PHP_EOL . '**``' . $this->getHealthStatus() . ' ' . $this->getStressStatus() . '``**');
-        $res->addField('**Stats:**', $this->statManager->getCurrentStatsString(), true);
-        $res->setThumbnail($this->type->image);
-        $effects = $this->statManager->getAllCurrentEffectsString();
-        if ($effects !== '') {
-            $res->addField('**Effects:**', $effects, true);
-        }
-        return $res;
-    }
-
     /**
      * @return string[]
      */

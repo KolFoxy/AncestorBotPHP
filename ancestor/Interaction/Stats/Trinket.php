@@ -72,15 +72,19 @@ class Trinket extends AbstractPermanentState {
     public function getDescription(): string {
         $res = is_null($this->text) ? '' : $this->text . PHP_EOL;
         $counter = 1;
+        $statModsMax = count($this->statModifiers);
         foreach ($this->statModifiers as $modifier) {
             $res .= $modifier->__toString();
-            $counter++;
-            if ($counter === 3) {
-                $counter = 1;
+            if ($counter === $statModsMax) {
+                continue;
+            }
+            $countMod3 = $counter % 3;
+            if ($countMod3 === 0) {
                 $res .= PHP_EOL;
             } else {
                 $res .= ' | ';
             }
+            $counter++;
         }
         foreach ($this->typeBonuses as $typeBonus) {
             $res .= PHP_EOL . $typeBonus->__toString();

@@ -10,6 +10,7 @@ use Ancestor\Interaction\Monster;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use function Composer\Autoload\includeFile;
 
 class FightManager {
 
@@ -75,14 +76,22 @@ class FightManager {
             . PHP_EOL . $this->monster->statManager->getAllCurrentEffectsString()
         );
         $embed->setImage($this->monster->type->image);
-        $embed->setFooter($this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed()));
+        $embed->setFooter($this->getCurrentFooter());
 
         if ((bool)mt_rand(0, 1)) {
             $additionalEmbed = $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction());
             Helper::mergeEmbed($embed, $additionalEmbed);
         }
-
         return $embed;
+    }
+
+    protected function getCurrentFooter(): string {
+        if ($this->newTrinket !== null) {
+            return 'Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
+                . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.';
+        }
+        return $this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed())
+            . PHP_EOL . ($this->killCount > 0 ? 'Kills: ' . $this->killCount : '');
     }
 
     /**
@@ -105,17 +114,17 @@ class FightManager {
     protected function getEquipTrinketTurn(int $action): MessageEmbed {
         $res = new MessageEmbed();
         if ($action === self::SKIP_TRINKET_ACTION) {
-            $this->newTrinket = null;
             $heal = mt_rand(1, (int)($this->hero->healthMax) * self::SKIP_HEAL_PERCENTAGE);
             $this->hero->addHealth($heal);
             $res->setTitle('**' . $this->hero->name . '** used their time to heal for **' . $heal . 'HP**');
             $res->setDescription($this->hero->getHealthStatus());
         } else {
             $res->setTitle($this->hero->tryEquipTrinket($this->newTrinket, $action));
-            $this->newTrinket = null;
             $res->setDescription($this->hero->getTrinketStatus());
         }
+        $this->newTrinket = null;
         $this->newMonsterTurn($res);
+        $res->setFooter($this->getCurrentFooter());
         return $res;
     }
 
@@ -151,14 +160,15 @@ class FightManager {
             return $embed;
         }
 
-        $embed->setFooter($this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed()) .
-            ($this->killCount > 0 ? 'Kills: ' . $this->killCount : ''));
+        $embed->setFooter($this->getCurrentFooter());
         return $embed;
     }
 
     public function newMonsterTurn(MessageEmbed $resultEmbed) {
         $this->monster = new Monster($this->monsterCollection->getRandMonsterType());
-        $resultEmbed->addField('***' . $this->monster->type->name . ' emerges from the darkness!***', '*``' . $this->monster->getHealthStatus() . '``*');
+        $resultEmbed->addField('***' . $this->monster->type->name . ' emerges from the darkness!***',
+            '*``' . $this->monster->type->description . '``*'
+            . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*');
         if ((bool)mt_rand(0, 1)) {
             Helper::mergeEmbed($resultEmbed, $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction()));
         }
@@ -166,9 +176,7 @@ class FightManager {
     }
 
     public function getHeroStats(): MessageEmbed {
-        return $this->hero->getStatsAndEffectsEmbed()->setFooter(
-            $this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed())
-        );
+        return $this->hero->getStatsAndEffectsEmbed()->setFooter($this->getCurrentFooter());
     }
 
     public function getHeroActionsDescriptions(): MessageEmbed {
@@ -181,7 +189,7 @@ class FightManager {
         $description .= '*' . $this->hero->type->defaultAction()->name . '*'
             . PHP_EOL . '``' . $this->hero->type->defaultAction()->effect->getDescription() . '``';
         $res->setDescription($description);
-        $res->setFooter($this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed()));
+        $res->setFooter($this->getCurrentFooter());
         return $res;
     }
 
@@ -196,8 +204,7 @@ class FightManager {
         $resultEmbed->addField('You\'ve found a new trinket: ***' . $newTrinket->name . '***',
             '``' . $newTrinket->getDescription() . '``'
             . PHP_EOL . $this->hero->getTrinketStatus());
-        $resultEmbed->setFooter('Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
-            . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.');
+        $resultEmbed->setFooter($this->getCurrentFooter());
         return true;
     }
 

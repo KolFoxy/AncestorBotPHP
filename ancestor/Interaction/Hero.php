@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
 
 namespace Ancestor\Interaction;
 
@@ -67,7 +67,7 @@ class Hero extends AbstractLivingBeing {
     public function getTrinketStatus(): string {
         return '``Trinket slot`` **``1``**: ***``'
             . (is_null($this->getFirstTrinket()) ? '[EMPTY]``***' : $this->getFirstTrinket()->name . '``***')
-            . '⚫⚫⚫ ``Trinket slot`` **``2``**: ***``'
+            . '⚫``Trinket slot`` **``2``**: ***``'
             . (is_null($this->getSecondTrinket()) ? '[EMPTY]``***' : $this->getSecondTrinket()->name . '``***');
     }
 
@@ -109,6 +109,22 @@ class Hero extends AbstractLivingBeing {
                 $this->bonusStressMessage .= ' ' . $this->getHealthStatus();
             }
         }
+    }
+
+
+    public function getStatsAndEffectsEmbed(): MessageEmbed {
+        $res = new MessageEmbed();
+        $res->setTitle('**' . $this->name . '**');
+        $res->setDescription('*``' . $this->type->description . '``*'
+            . PHP_EOL . '**``' . $this->getHealthStatus() . ' ' . $this->getStressStatus() . '``**'
+            . PHP_EOL . $this->getTrinketStatus());
+        $res->addField('**Stats:**', $this->statManager->getCurrentStatsString(), true);
+        $res->setThumbnail($this->type->image);
+        $effects = $this->statManager->getAllCurrentEffectsString();
+        if ($effects !== '') {
+            $res->addField('**Effects:**', $effects, true);
+        }
+        return $res;
     }
 
     /**

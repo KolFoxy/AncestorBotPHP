@@ -37,7 +37,7 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
             . 'Available actions: ';
         foreach ($this->actions as $action) {
             if ($action->isUsableVsStealth()) {
-                $footerText .= mb_strtolower($action->name) . ',';
+                $footerText .= mb_strtolower($action->name) . ', ';
             }
         }
         return $footerText . $this->defaultAction()->name;

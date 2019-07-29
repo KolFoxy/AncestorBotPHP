@@ -4,6 +4,7 @@ namespace Ancestor\Commands;
 
 use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
+use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\CommandHandler\TimedCommandManager;
 use Ancestor\Interaction\Fight\FightManager;
 use Ancestor\Interaction\Fight\MonsterCollectionInterface;
@@ -74,12 +75,16 @@ class Fight extends Command implements MonsterCollectionInterface {
     }
 
     public function run(Message $message, array $args) {
+        if (isset($args[0]) && $args[0] === 'help') {
+            $this->handler->helpCommand($message, [$this->name]);
+            return;
+        }
         if (!$this->manager->userIsInteracting($message)) {
             $endless = false;
             $heroClassName = '';
             $this->processInitialArgs($args, $endless, $heroClassName);
             $hero = $this->createHero($message->author->username, $heroClassName);
-            $fightManager = new FightManager($hero, $this, $this->getPrefixedName(), $endless);
+            $fightManager = new FightManager($hero, $this, $this->handler->prefix . 'f', $endless);
             $message->reply('', ['embed' => $fightManager->start()]);
             $this->manager->addInteraction($message, self::TIMEOUT, $fightManager);
             return;

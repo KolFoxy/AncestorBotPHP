@@ -60,7 +60,7 @@
       "effect": {
         "description": "You! You are going down next!\nMarks the enemy and reduces their dodge chance.",
         "image": "https://i.imgur.com/Cggaoo7.png",
-        "hitChance": 120
+        "hitChance": -1
       },
       "statModifiers": [
         {
@@ -73,8 +73,7 @@
       "statusEffects": [
         {
           "type": "marked",
-          "hitChance": -1,
-          "value": 3
+          "hitChance": -1
         }
       ]
     },
