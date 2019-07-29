@@ -1,0 +1,88 @@
+{
+  "name": "Scarecrow",
+  "description": "My field, go away!",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/59/Scarecrow_Heal.png",
+  "healthMax": 22,
+  "types": [
+    "husk"
+  ],
+  "startingStatusEffects": [
+    {
+      "type": "stealth",
+      "duration": 2,
+      "chance": -1,
+      "targetSelf": true
+    }
+  ],
+  "stats": {
+    "stunResist": 100,
+    "bleedResist": 240,
+    "blightResist": 65,
+    "debuffResist": 80,
+    "dodge": 35,
+    "prot": 0
+  },
+  "actions": [
+    {
+      "name": "Haunting Revelation",
+      "effect": {
+        "description": "Surprise! It's party time!\nInflicts low stress and health damage.",
+        "health_value": -2,
+        "healthDeviation": -3,
+        "stress_value": 4,
+        "critChance": 14,
+        "hitChance": 105
+      }
+    },
+    {
+      "name": "Flail The Crops",
+      "effect": {
+        "description": "Clawwww!\nInflicts medium-to-high health damage and applies blight.",
+        "health_value": -6,
+        "healthDeviation": -6,
+        "critChance": 8,
+        "hitChance": 105
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 140,
+          "value": -4
+        }
+      ]
+    },
+    {
+      "name": "Roots",
+      "effect": {
+        "description": "Stay there you are!\nInflicts health damage and applies accuracy debuff.",
+        "health_value": -4,
+        "healthDeviation": -2,
+        "critChance": 7,
+        "hitChance": 100
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "accMod",
+          "value": -12
+        }
+      ]
+    },
+    {
+      "name": "Shard of Growth",
+      "effect": {
+        "description": "Wait a second... I need a rest.\nApplies restoration effect to itself.",
+        "hitChance": -1
+      },
+      "statusEffects": [
+        {
+          "type": "restoration",
+          "chance": -1,
+          "value": 5,
+          "duration": 2,
+          "targetSelf": true
+        }
+      ]
+    }
+  ]
+}

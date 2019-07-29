@@ -61,16 +61,23 @@ class Fight extends Command implements MonsterCollectionInterface {
 
         foreach (glob(dirname(__DIR__, 2) . '/data/heroes/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
-            $this->classes[] = $mapper->map($json, new HeroClass());
+            try {
+                $this->classes[] = $mapper->map($json, new HeroClass());
+            } catch (\JsonMapper_Exception $e) {
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+            }
         }
-        foreach (glob(dirname(__DIR__, 2) . '/data/monsters/*.json') as $path) {
+        foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
-            $arrayOfMonsterTypes = $mapper->mapArray($json, [], MonsterType::class);
-            $this->monsterTypes = array_merge($this->monsterTypes, $arrayOfMonsterTypes);
+            try {
+                $this->monsterTypes[] = $mapper->map($json, new MonsterType());
+            } catch (\JsonMapper_Exception $e) {
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+            }
         }
 
-        $this->numOfClasses = sizeof($this->classes) - 1;
-        $this->numOfTypes = sizeof($this->monsterTypes) - 1;
+        $this->numOfClasses = count($this->classes) - 1;
+        $this->numOfTypes = count($this->monsterTypes) - 1;
 
     }
 

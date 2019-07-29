@@ -1,6 +1,7 @@
 {
   "name": "Farmhand",
-  "description": "Someone needs to take this sh** out.",
+  "description": "Sturdy worker. Someone needs to take this sh** out, after all.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/23/Farmhand.png",
   "healthMax": 22,
   "types": [
     "husk",
@@ -18,7 +19,7 @@
     {
       "name": "Sow the Seeds",
       "effect": {
-        "description": "Work is hard.",
+        "description": "Work is hard.\nInflicts high stress damage and applies blight.",
         "health_value": -2,
         "healthDeviation": -1,
         "stress_value": 15,
@@ -36,7 +37,7 @@
       "name": "Pause from Labor",
       "requiresTarget": true,
       "effect": {
-        "description": "Heals the target for a small amount.",
+        "description": "A quick rest before more work.\nHeals the Farmhand.",
         "health_value": 7,
         "hitChance": -1
       }
@@ -44,7 +45,7 @@
     {
       "name": "Ceaseless Labor ",
       "effect": {
-        "description": "Poke, poke, POKE!",
+        "description": "Poke, poke, POKE!\nInflicts medium health damage.",
         "health_value": -5,
         "healthDeviation": -4,
         "critChance": 9,

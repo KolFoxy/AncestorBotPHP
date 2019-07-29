@@ -56,4 +56,11 @@ class Monster extends AbstractLivingBeing {
         return $res;
     }
 
+    public function getProgrammableAction(): DirectAction {
+        if (!is_null($this->type->actionsManager)){
+            return $this->type->actionsManager->getDirectAction($this);
+        }
+        return $this->type->getRandomAction();
+    }
+
 }

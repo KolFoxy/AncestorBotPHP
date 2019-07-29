@@ -13,8 +13,9 @@ class StatusEffect implements TimedEffectInterface {
     const TYPE_STEALTH = "stealth";
     const TYPE_MARKED = "marked";
     const TYPE_BLOCK = "block";
-    
+
     const MARKED_DEF_DURATION = 4;
+    const STUN_DEF_DURATION = 1;
 
     /**
      * @var string
@@ -46,11 +47,17 @@ class StatusEffect implements TimedEffectInterface {
      * @throws \Exception
      */
     public function setType(string $type) {
-        if ($type === self::TYPE_MARKED){
+        if ($type === self::TYPE_MARKED) {
             $this->type = $type;
             $this->duration = self::MARKED_DEF_DURATION;
             return;
         }
+        if ($type === self::TYPE_STUN) {
+            $this->type = $type;
+            $this->duration = self::STUN_DEF_DURATION;
+            return;
+        }
+
         if ($type === self::TYPE_BLEED
             || $type === self::TYPE_BLIGHT
             || $type === self::TYPE_STUN

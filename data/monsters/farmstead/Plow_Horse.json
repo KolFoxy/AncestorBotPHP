@@ -1,0 +1,85 @@
+{
+  "name": "Plow Horse",
+  "description": "An evil steed appears!",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/41/Plowhorse_trample.png",
+  "healthMax": 36,
+  "types": [
+    "husk",
+    "beast"
+  ],
+  "stats": {
+    "stunResist": 90,
+    "bleedResist": 60,
+    "blightResist": 60,
+    "debuffResist": 80,
+    "dodge": 25,
+    "prot": 15
+  },
+  "actions": [
+    {
+      "name": "Paw The Ground",
+      "effect": {
+        "description": "Brace yourself!\nPlow Horse conceals themselves in stealth.",
+        "hitChance": -1
+      },
+      "statusEffects": [
+        {
+          "type": "stealth",
+          "chance": -1,
+          "duration": 2,
+          "targetSelf": true
+        }
+      ]
+    },
+    {
+      "name": "Trample",
+      "effect": {
+        "description": "Here it comes!\nInflicts low to medium damage with high CRIT chance.",
+        "health_value": -4,
+        "healthDeviation": -3,
+        "critChance": 12,
+        "hitChance": 110
+      },
+      "selfEffect": {
+        "description": "Out of stealth.",
+        "removesStealth": true,
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Rearing Strike",
+      "effect": {
+        "description": "Don't stay close to an angry horse!\nInflicts medium damage, applies bleed and stun.",
+        "health_value": -5,
+        "healthDeviation": -4,
+        "critChance": 9,
+        "hitChance": 105
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 140,
+          "value": -3
+        },
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Bestial Scream",
+      "effect": {
+        "description": "Horses' screams can be quite unnerving.\nInflicts stress samage.",
+        "stress_value": 8,
+        "hitChance": 120
+      }
+    }
+  ],
+  "actionsManager": {
+    "statusActionsRelations": {
+      "stealth": "Trample"
+    }
+  }
+}

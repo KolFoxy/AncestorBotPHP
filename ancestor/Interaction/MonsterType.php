@@ -17,6 +17,11 @@ class MonsterType extends AbstractLivingInteraction {
     public $startingStatusEffects = null;
 
     /**
+     * @var null|MonsterActionsManager
+     */
+    public $actionsManager = null;
+
+    /**
      * @param string $commandName
      * @param HeroClass|null $attacker
      * @param string $healthStatus

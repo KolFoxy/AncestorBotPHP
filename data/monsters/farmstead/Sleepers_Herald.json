@@ -1,0 +1,68 @@
+{
+  "name": "Sleeper's Herald",
+  "description": "Can't touch this!",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/50/Sleeper_Herald.png",
+  "healthMax": 11,
+  "types": [
+    "husk"
+  ],
+  "startingStatusEffects": [
+    {
+      "type": "riposte",
+      "duration": -1,
+      "chance": -1
+    }
+  ],
+  "stats": {
+    "stunResist": 140,
+    "bleedResist": 140,
+    "blightResist": 140,
+    "debuffResist": 100,
+    "dodge": 20,
+    "prot": 45
+  },
+  "actions": [
+    {
+      "name": "Reality Bend",
+      "effect": {
+        "description": "Doom is coming!\nInflicts high stress damage and applies nasty debuff.",
+        "health_value": -1,
+        "healthDeviation": -2,
+        "stress_value": 8,
+        "critChance": 9,
+        "hitChance": 110
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "accMod",
+          "value": -12,
+          "duration": 4
+        },
+        {
+          "chance": 140,
+          "stat": "healReceivedMod",
+          "value": -25,
+          "duration": 4
+        }
+      ]
+    }
+  ],
+  "riposteAction": {
+    "name": "Riposte!",
+    "effect": {
+      "description": "You hit it - you get this!\nInflicts medium health damage and increases stress damage.",
+      "health_value": -6,
+      "healthDeviation": -2,
+      "critChance": 13,
+      "hitChance": 105
+    },
+    "statModifiers": [
+      {
+        "chance": 125,
+        "stat": "stressMod",
+        "value": 20
+      }
+    ]
+  }
+}

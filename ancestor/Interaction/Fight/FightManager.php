@@ -79,7 +79,7 @@ class FightManager {
         $embed->setFooter($this->getCurrentFooter());
 
         if ((bool)mt_rand(0, 1)) {
-            $additionalEmbed = $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction());
+            $additionalEmbed = $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
             Helper::mergeEmbed($embed, $additionalEmbed);
         }
         return $embed;
@@ -138,7 +138,7 @@ class FightManager {
         $embed = $this->hero->getHeroTurn($action, $target);
         if (!$this->hero->isDead()) {
             if (!$this->monster->isDead()) {
-                $extraEmbed = $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction());
+                $extraEmbed = $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
                 $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
                 Helper::mergeEmbed($embed, $extraEmbed);
             } else {
@@ -170,7 +170,7 @@ class FightManager {
             '*``' . $this->monster->type->description . '``*'
             . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*');
         if ((bool)mt_rand(0, 1)) {
-            Helper::mergeEmbed($resultEmbed, $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction()));
+            Helper::mergeEmbed($resultEmbed, $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction()));
         }
         $resultEmbed->setImage($this->monster->type->image);
     }
