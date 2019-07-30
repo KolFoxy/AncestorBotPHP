@@ -1,7 +1,7 @@
 {
   "name": "Vestal",
   "description": "A sister of battle - pious and unrelenting!",
-  "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/a/a5/Vestal_portrait_roster.png/75px-Vestal_portrait_roster.png",
   "healthMax": 44,
   "types": [
     "religious"
@@ -21,7 +21,7 @@
         "healthDeviation": -7,
         "hitChance": 105,
         "critChance": 4,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fe/Mace_Bash.png",
         "typeBonuses": [
           {
             "type": "unholy",
@@ -33,15 +33,15 @@
     {
       "name": "Judgement",
       "effect": {
-        "description": "Damages the enemy by holy powers and heals the Vestal.",
+        "description": "Strikes the enemy with holy powers and heals the Vestal.",
         "health_value": -5,
         "healthDeviation": -5,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b0/Judgement.png",
         "hitChance": 105,
         "critChance": 9
       },
       "selfEffect": {
-        "description": "Heal from the Judgement.",
+        "description": "Heal from Judgement.",
         "health_value": 5,
         "hitChance": -1
       }
@@ -51,7 +51,7 @@
       "effect": {
         "description": "Stuns the opponent with a a ray of holy power!",
         "health_value": -1,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e4/Dazzling_Light.png",
         "healthDeviation": -2,
         "hitChance": 110,
         "critChance": 9
@@ -70,7 +70,7 @@
       "effect": {
         "description": "Calls upon the higher forces to mend your wounds.",
         "health_value": 8,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a1/Divine_Grace.png",
         "healthDeviation": 1,
         "hitChance": -1
       }
@@ -78,11 +78,11 @@
     {
       "name": "Illumination",
       "effect": {
-        "description": "Reveal your foes' flaws, making them easier to hit.",
+        "description": "Reveal your foes' flaws, making them easier to hit.\nRemoves stealth, applies dodge debuff.",
         "health_value": -1,
         "healthDeviation": -2,
         "hitChance": 110,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/c/cd/Illumination.png",
         "removesStealth": true
       },
       "statModifiers": [
@@ -101,7 +101,7 @@
         "health_value": -3,
         "healthDeviation": -4,
         "hitChance": 105,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Hand_of_Light.png",
         "critChance": 5
       },
       "statModifiers": [

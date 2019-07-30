@@ -21,6 +21,10 @@ class Hero extends AbstractLivingBeing {
 
     const AT_DEATH_S_DOOR_MESSAGE = ' AT DEATH\'S DOOR!';
 
+    const TRANSFORM_ACTION = 'Transform';
+
+    const TRANSFORM_PATH_SUFFIX = '_transform';
+
     /**
      * @var string
      */
@@ -60,9 +64,36 @@ class Hero extends AbstractLivingBeing {
     ];
 
     /**
+     * @var null|HeroClass
+     */
+    protected $transformType = null;
+
+    /**
      * @var null|StressState
      */
     protected $stressState = null;
+
+    protected function transform() {
+        if ($this->transformType === null) {
+
+        }
+    }
+
+    protected function setTransformType() {
+        $suffixedType = $this->type->name . self::TRANSFORM_PATH_SUFFIX;
+        $path = dirname(__DIR__, 2) . '/data/heroes/' . $suffixedType . '/' . $suffixedType . '.json';
+        if (!file_exists($path)) {
+            throw new \Exception('FILE NOT FOUND "' . $path . '" For transforming hero type ' . $this->type->name);
+        }
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+        $json = json_decode(file_get_contents($path));
+        try {
+            $this->transformType = $mapper->map($json, new HeroClass());
+        } catch (\JsonMapper_Exception $e) {
+            throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+        }
+    }
 
     public function getTrinketStatus(): string {
         return '``Trinket slot`` **``1``**: ***``'

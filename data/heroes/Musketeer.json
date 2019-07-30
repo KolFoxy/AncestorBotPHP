@@ -1,7 +1,7 @@
 {
   "name": "Musketeer",
   "description": "A champion markswoman - keen for a new kind of challenge.",
-  "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/3/38/Musketeer_portrait.png/75px-Musketeer_portrait.png",
   "healthMax": 47,
   "stats": {
     "dodge": 20,
@@ -16,7 +16,7 @@
       "name": "Aimed Shot",
       "effect": {
         "description": "With deadly precision...\nInflicts bonus damage vs MARKED",
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/86/Aimed_Shot.png",
         "health_value": -7,
         "healthDeviation": -7,
         "hitChance": 115,
@@ -36,7 +36,7 @@
         "description": "Can't hit what you can't see.\nReduces enemy accuracy and crit chance.",
         "health_value": -1,
         "healthDeviation": -1,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/74/Smokescreen.png",
         "hitChance": 115,
         "critChance": -6
       },
@@ -59,7 +59,7 @@
       "name": "Call the Shot",
       "effect": {
         "description": "You! You are going down next!\nMarks the enemy and reduces their dodge chance.",
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/70/Sniper's_Mark.png",
         "hitChance": -1
       },
       "statModifiers": [
@@ -83,7 +83,7 @@
       "effect": {
         "description": "Bandage there, and there, and now we can move on.\nHeals the target and increases their incoming healing.",
         "requiresTarget": true,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/8c/Battlefield_Bandage.png",
         "hitChance": -1,
         "health_value": 4,
         "healthDeviation": 1
@@ -102,7 +102,7 @@
         "description": "Removes STEALTH",
         "health_value": 0,
         "healthDeviation": 0,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fa/Skeet_Shot.png",
         "hitChance": 115,
         "removesStealth": true
       }

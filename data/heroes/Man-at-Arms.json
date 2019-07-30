@@ -1,7 +1,7 @@
 {
   "name": "Man-at-Arms",
   "description": "The raw strength of youth may be spent, but his eyes hold the secrets of a hundred campaigns.",
-  "image": "https://cdn.discordapp.com/embed/avatars/0.png",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/f/fa/Man-at-arms_portrait_roster.png/75px-Man-at-arms_portrait_roster.png",
   "healthMax": 55,
   "stats": {
     "dodge": 25,
@@ -19,7 +19,7 @@
         "health_value": -8,
         "healthDeviation": -6,
         "hitChance": 105,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/15/Crush.png",
         "critChance": 9
       }
     },
@@ -27,7 +27,7 @@
       "name": "Rampart",
       "effect": {
         "description": "Stuns the enemy.",
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f2/Rampart.png",
         "health_value": -3,
         "healthDeviation": -2,
         "hitChance": 110,
@@ -46,7 +46,7 @@
       "effect": {
         "description": "There is no salvation for you, fiend!\nReduces enemy dodge chance.",
         "health_value": 0,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/82/Bellow.png",
         "hitChance": 115
       },
       "statModifiers": [
@@ -62,7 +62,7 @@
       "requiresTarget": true,
       "effect": {
         "description": "Increases PROT of Man-at-Arms.",
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0d/Defender.png",
         "hitChance": -1,
         "critChance": -1
       },
@@ -80,7 +80,7 @@
       "effect": {
         "description": "Come at me, beast! I can take you on!\nActivates riposte.",
         "health_value": -2,
-        "image": "https://i.imgur.com/Cggaoo7.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fb/Retribution.png",
         "healthDeviation": -1,
         "hitChance": 105,
         "critChance": 7
@@ -102,7 +102,7 @@
     },
     {
       "name": "Command",
-      "image": "https://i.imgur.com/Cggaoo7.png",
+      "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/94/Command.png",
       "requiresTarget": true,
       "effect": {
         "description": "Strategy, order, survival!\nIncreases accuracy and crit chance.",
@@ -127,7 +127,7 @@
     {
       "name": "Bolster",
       "requiresTarget": true,
-      "image": "https://i.imgur.com/Cggaoo7.png",
+      "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ef/Bolster.png",
       "effect": {
         "description": "Do not give in, do not give up!\nIncreases dodge and decreases incoming stress.",
         "hitChance": -1,

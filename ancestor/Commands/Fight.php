@@ -4,7 +4,6 @@ namespace Ancestor\Commands;
 
 use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\CommandHandler\TimedCommandManager;
 use Ancestor\Interaction\Fight\FightManager;
 use Ancestor\Interaction\Fight\MonsterCollectionInterface;
@@ -46,9 +45,9 @@ class Fight extends Command implements MonsterCollectionInterface {
 
 
     public function __construct(CommandHandler $handler) {
-        parent::__construct($handler, 'fight', 'Fight a random monster or type "'
+        parent::__construct($handler, 'fight', 'Fight a random monster or type ``'
             . $handler->prefix
-            . 'f endless" in order to start in endless mode, in which more and more monsters will come after defeating previous ones!'
+            . 'f endless`` in order to start in endless mode, in which more and more monsters will come after defeating previous ones!'
             . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_INFO_COMMAND . '`` while fighting will show all of your character\'s stats'
             . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_ACTIONS_COMMAND . '`` while fighting will show descriptions of all of your character\'s actions'
             . PHP_EOL . 'typing  ``' . $handler->prefix . 'f ' . self::SURRENDER_COMMAND . '`` while fighting will cancel the fight'

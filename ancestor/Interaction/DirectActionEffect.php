@@ -76,7 +76,8 @@ class DirectActionEffect extends AbstractEffect {
     }
 
     protected function getDamageModifier(AbstractLivingBeing $caster, AbstractLivingBeing $target, int $modifier): float {
-        $modifier += $caster->statManager->getStatValue(Stats::DAMAGE_MOD);
+        $modifier += $caster->statManager->getStatValue(Stats::DAMAGE_MOD)
+            + $target->statManager->getStatValue(Stats::DAMAGE_TAKEN_MOD);
         $protMod = $this->ignoresArmor ? 1.00 : $target->statManager->getValueMod(Stats::PROT);
         return (1.00 + $modifier / 100.00) * $protMod;
     }
@@ -102,7 +103,7 @@ class DirectActionEffect extends AbstractEffect {
     }
 
     protected function rollWillHit(AbstractLivingBeing $caster, AbstractLivingBeing $target, int $modifier): bool {
-        if ($this->isHealEffect() || $this->isPositiveStressEffect() || $this->hitChance < 0){
+        if ($this->isHealEffect() || $this->isPositiveStressEffect() || $this->hitChance < 0) {
             return true;
         }
         $accuracy = self::DEFAULT_ACC_BONUS + $this->hitChance + $caster->statManager->getStatValue(Stats::ACC_MOD)

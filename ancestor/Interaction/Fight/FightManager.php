@@ -138,9 +138,8 @@ class FightManager {
         $embed = $this->hero->getHeroTurn($action, $target);
         if (!$this->hero->isDead()) {
             if (!$this->monster->isDead()) {
-                $extraEmbed = $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
                 $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
-                Helper::mergeEmbed($embed, $extraEmbed);
+                Helper::mergeEmbed($embed, $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction()));
             }
             if ($this->monster->isDead()) {
                 if ($this->endless) {

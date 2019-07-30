@@ -2,7 +2,7 @@
   "name": "Crusader",
   "description": "A mighty sword arm anchored by holy purpose - a zealous warrior!",
   "image": "https://i.imgur.com/Cggaoo7.png",
-  "healthMax": 60,
+  "healthMax": 61,
   "stats": {
     "dodge": 25,
     "critChance": 7
@@ -12,19 +12,26 @@
     {
       "name": "Smite",
       "effect": {
-        "description": "Smites the opponent with righteous fury.",
+        "description": "Smites the opponent with righteous fury.\nInflicts high health damage. Bonus damage vs. Unholy",
         "health_value": -10,
         "healthDeviation": -9,
-        "hitChance": 110,
-        "image": "https://i.imgur.com/PGDc7lb.png"
+        "hitChance": 105,
+		"critChance": 4,
+        "image": "https://i.imgur.com/PGDc7lb.png",
+		"typeBonuses": [
+          {
+            "type": "unholy",
+            "damageMod": 35
+          }
+        ]
       }
     },
     {
       "name": "Battle Heal",
       "requiresTarget": true,
       "effect": {
-        "description": "Heals the target for a small amount.",
-        "health_value": 2,
+        "description": "Heals for a small amount.",
+        "health_value": 5,
         "healthDeviation": 1,
         "image": "https://i.imgur.com/DB3BRs3.png",
         "hitChance": -1
@@ -35,8 +42,8 @@
       "requiresTarget": true,
       "effect": {
         "description": "Inspires the target and eases some of their stress.",
-        "health_value": 1,
-        "stress_value": -10,
+        "health_value": 2,
+        "stress_value": -8,
         "image": "https://i.imgur.com/P1cprP7.png",
         "hitChance": -1
       }
@@ -48,13 +55,39 @@
         "health_value": -5,
         "healthDeviation": -4,
         "hitChance": 110,
-        "critChance": 4
+        "critChance": 4,
+		"image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/45/Stunning_Blow.png",
       },
       "statusEffects": [
         {
           "type": "stun",
           "duration": 1,
           "chance": 140
+        }
+      ]
+    },
+	{
+      "name": "Bulwark of Faith",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Raise the shield of faith!\nIncreases Crusader's PROT",
+        "hitChance": -1,
+        "critChance": -1,
+		"image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/da/Bulwark_of_Faith.png",
+      },
+      "statusEffects": [
+        {
+          "type": "marked",
+          "chance": -1,
+		  "targetSelf": true
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "prot",
+          "value": 30
         }
       ]
     }

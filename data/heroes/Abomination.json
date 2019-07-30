@@ -1,0 +1,96 @@
+{
+  "name": "Abomination",
+  "description": "Beaten, branded and imprisoned for untold decades, this furtive vagrant hides a terrible secret. The Eldritch poison coursing through his veins has given him unspeakable power, at a terrible cost.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/0/03/Abomination_portrait_roster.png/75px-Abomination_portrait_roster.png",
+  "healthMax": 46,
+  "stats": {
+    "dodge": 28,
+    "critChance": 6,
+    "stunResist": 90,
+    "bleedResist": 80,
+    "blightResist": 110,
+    "debuffResist": 70
+  },
+  "embedColor": 16777215,
+  "actions": [
+    {
+      "name": "Manacles",
+      "effect": {
+        "description": "Strikes the target with his chains.\nStuns the target and inflicts low-to-medium damage.",
+        "health_value": -4,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/00/Manacles.png",
+        "healthDeviation": -4,
+        "hitChance": 115,
+        "critChance": 5
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Beast's Bile",
+      "effect": {
+        "description": "Applies blight and reduces blight resist.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3f/Beast's_Bile.png",
+        "hitChance": 115,
+        "critChance": 6,
+        "health_value": -1,
+        "healthDeviation": -1
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 140,
+          "value": 5
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "blightResist",
+          "value": -33
+        }
+      ]
+    },
+    {
+      "name": "Absolution",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Heals health and stress damage.",
+        "health_value": 5,
+        "stress_value": -10,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/81/Absolution.png",
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Transform",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Transforms into the Beast.",
+        "health_value": 10,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/4a/Transform.png",
+        "hitChance": -1
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "stat": "damageMod",
+          "value": 25,
+          "targetSelf": true
+        },
+        {
+          "chance": -1,
+          "stat": "blightResist",
+          "value": 30,
+          "targetSelf": true,
+          "duration": 4
+        }
+      ]
+    }
+  ]
+}

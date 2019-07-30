@@ -36,6 +36,8 @@ final class Stats {
     const BLIGHT_SKILL_CHANCE = 'blightSkillChance';
     const DEBUFF_SKILL_CHANCE = 'debuffSkillChance';
 
+    const DAMAGE_TAKEN_MOD = 'damageTakenMod';
+
 
     /**
      * @return array Format: ['stat1' => int, 'stat2' => int, ...]
@@ -68,6 +70,8 @@ final class Stats {
             self::DEBUFF_SKILL_CHANCE => 0,
             self::BLEED_SKILL_CHANCE => 0,
             self::BLIGHT_SKILL_CHANCE => 0,
+
+            self::DAMAGE_TAKEN_MOD => 0
         ];
     }
 
