@@ -207,11 +207,10 @@ class Hero extends AbstractLivingBeing {
                 return;
             }
         }
+        
         if ($this->currentHealth > $this->healthMax) {
             $this->currentHealth = $this->healthMax;
-            return;
-        }
-        if ($this->currentHealth <= 0) {
+        } elseif ($this->currentHealth <= 0) {
             $this->currentHealth = 0;
             $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
             return;
