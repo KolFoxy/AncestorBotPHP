@@ -33,7 +33,7 @@ abstract class AbstractInteraction {
      */
     public function getActionIfValid(string $actionName) {
         $actionL = mb_strtolower($actionName);
-        if (mb_strpos(mb_strtolower($this->defaultAction()->name), $actionL !== false)) {
+        if (mb_strpos(mb_strtolower($this->defaultAction()->name), $actionL) !== false) {
             return $this->defaultAction();
         }
         foreach ($this->actions as $action) {

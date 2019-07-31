@@ -2,6 +2,7 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\SpontaneousAction\SpontaneousAction;
 use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
@@ -21,11 +22,53 @@ class HeroClass extends AbstractLivingInteraction {
     public $embedColor = null;
 
     /**
+     * @var null|HeroClass
+     */
+    protected $transformClass = null;
+
+    /**
+     * @var null|\Ancestor\Interaction\SpontaneousAction\SpontaneousAction[]
+     */
+    public $spontaneousActions = null;
+
+    /**
+     * @param HeroClass|null $transformClass
+     */
+    public function setTransformClass(?HeroClass $transformClass): void {
+        if ($transformClass === null) {
+            return;
+        }
+        $this->transformClass = $transformClass;
+        $this->transformClass->transformClass = $this;
+    }
+
+    /**
+     * @return HeroClass|null
+     */
+    public function getTransformClass(): ?HeroClass {
+        return $this->transformClass;
+    }
+
+    /**
+     * @return DirectAction|null
+     */
+    public function getTransformAction(): ?DirectAction {
+        foreach ($this->actions as $action) {
+            if ($action->name === DirectAction::TRANSFORM_ACTION) {
+                return $action;
+            }
+        }
+        return null;
+    }
+
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
      * @param string $commandName
      * @param string|null $status
      * @return MessageEmbed
      */
     public function getEmbedResponse(string $commandName = null, string $status = null): MessageEmbed {
+        /** @noinspection PhpUnhandledExceptionInspection */
         $embedResponse = new MessageEmbed();
         $embedResponse->setThumbnail($this->image);
         $embedResponse->setTitle('Your class is **' . $this->name . '**');
@@ -42,6 +85,7 @@ class HeroClass extends AbstractLivingInteraction {
         return $embedResponse;
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @return DirectAction
      */
@@ -51,6 +95,7 @@ class HeroClass extends AbstractLivingInteraction {
             $action->name = 'pass turn';
             $action->requiresTarget = true;
             $effect = new DirectActionEffect();
+            /** @noinspection PhpUnhandledExceptionInspection */
             $effect->setDescription('Hero passed the turn and suffered stress.');
             $effect->stress_value = 6;
             $effect->stressDeviation = 4;

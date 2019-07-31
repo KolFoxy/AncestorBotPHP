@@ -3,6 +3,7 @@
 namespace Ancestor\Interaction;
 
 use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\Interaction\SpontaneousAction\SpontaneousActionsManager;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StressState;
 use Ancestor\Interaction\Stats\StressStateFactory;
@@ -21,9 +22,7 @@ class Hero extends AbstractLivingBeing {
 
     const AT_DEATH_S_DOOR_MESSAGE = ' AT DEATH\'S DOOR!';
 
-    const TRANSFORM_ACTION = 'Transform';
-
-    const TRANSFORM_PATH_SUFFIX = '_transform';
+    protected $transformationCooldown = 0;
 
     /**
      * @var string
@@ -64,35 +63,44 @@ class Hero extends AbstractLivingBeing {
     ];
 
     /**
-     * @var null|HeroClass
-     */
-    protected $transformType = null;
-
-    /**
      * @var null|StressState
      */
     protected $stressState = null;
 
-    protected function transform() {
-        if ($this->transformType === null) {
+    /**
+     * @var SpontaneousActionsManager
+     */
+    protected $saManager;
 
-        }
+    /**
+     * @noinspection PhpDocMissingThrowsInspection
+     */
+    protected function transform() {
+        $this->saManager->removeSpontaneousAction($this->type->spontaneousActions);
+        $this->type = $this->type->getTransformClass();
+        $this->saManager->addSpontaneousAction($this->type->spontaneousActions);
     }
 
-    protected function setTransformType() {
-        $suffixedType = $this->type->name . self::TRANSFORM_PATH_SUFFIX;
-        $path = dirname(__DIR__, 2) . '/data/heroes/' . $suffixedType . '/' . $suffixedType . '.json';
-        if (!file_exists($path)) {
-            throw new \Exception('FILE NOT FOUND "' . $path . '" For transforming hero type ' . $this->type->name);
+    protected function setTransformEmbedImages(MessageEmbed $res): MessageEmbed {
+        $tEffect = $this->type->getTransformAction()->effect;
+        if ($tEffect->hasImage()) {
+            $res->setThumbnail($tEffect->image);
+        } else {
+            $res->setImage($this->type->getTransformClass()->image);
         }
-        $mapper = new \JsonMapper();
-        $mapper->bExceptionOnMissingData = true;
-        $json = json_decode(file_get_contents($path));
-        try {
-            $this->transformType = $mapper->map($json, new HeroClass());
-        } catch (\JsonMapper_Exception $e) {
-            throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+        return $res;
+    }
+
+    /**
+     * @param bool $heroIsStunned
+     * @return array Fields array
+     */
+    protected function getSpontaneousActionsResults(bool $heroIsStunned): array {
+        $res = [];
+        foreach ($this->saManager->getTurnStartEffects($heroIsStunned) as $directActionEffect) {
+            $this->getDAEffectResultFields($directActionEffect, $this, $directActionEffect->getDescription(), $res, true);
         }
+        return $res;
     }
 
     public function getTrinketStatus(): string {
@@ -241,6 +249,7 @@ class Hero extends AbstractLivingBeing {
     public function __construct(HeroClass $class, string $name) {
         parent::__construct($class);
         $this->name = $name . ' the ' . $class->name;
+        $this->saManager = new SpontaneousActionsManager($class->spontaneousActions);
     }
 
     public function isDead(): bool {
@@ -306,36 +315,55 @@ class Hero extends AbstractLivingBeing {
     }
 
     /**
+     * @noinspection PhpDocMissingThrowsInspection
      * @param DirectAction $action
      * @param AbstractLivingBeing|Hero $target
      * @return MessageEmbed
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
         $res = new MessageEmbed();
-        if ($action === $this->type->defaultAction()) {
-            $target = $this;
-        }
-        if (!$this->statManager->isStunned()) {
+        $fields = $this->getTurn($target, $action);
+        $topField = array_shift($fields);
+        $res->setTitle($topField['name']);
+        $res->setDescription($topField['value']);
+        if ($action->name === DirectAction::TRANSFORM_ACTION) {
+            $this->setTransformEmbedImages($res);
+            $this->transform();
+        } else {
             $res->setThumbnail($action->effect->image);
         }
-        $heroStressStateChecker = is_a($target, Hero::class) && is_null($target->getStressState());
-        $fields = $this->getTurn($target, $action);
-        if ($heroStressStateChecker && !is_null($target->getStressState())) {
-            $fields[] = $target->getStressState()->toField();
+        CommandHelper::mergeEmbed($res, $fields);
+        return $res;
+    }
+
+    /**
+     * @param AbstractLivingBeing|Hero $target
+     * @param DirectAction $action
+     * @return array
+     */
+    public function getTurn($target, DirectAction $action): array {
+        $isStunned = $this->statManager->isStunned();
+        if (!$isStunned && $action === $this->type->defaultAction()) {
+            $target = $this;
         }
 
-        if ($target->isDead() && !is_a($target, self::class)) {
+        $targetIsHero = is_a($target, Hero::class);
+        $heroStressStateChecker = $targetIsHero && is_null($target->getStressState());
+        $fields = $this->getSpontaneousActionsResults($isStunned);
+        if (!$this->isDead()) {
+            $fields = array_merge($fields, parent::getTurn($target, $action));
+            if ($heroStressStateChecker && !is_null($target->getStressState())) {
+                $fields[] = $target->getStressState()->toField();
+            }
+        }
+        if ($target->isDead() && !$targetIsHero) {
             if ((bool)mt_rand(0, 1)) {
                 $this->addStress(parent::DEFAULT_STRESS_SELF_HEAL);
                 $fields[] = CommandHelper::getEmbedField('The act of killing inspires the hero! ' . parent::DEFAULT_STRESS_SELF_HEAL . ' stress!',
                     $this->getStressStatus());
             }
         }
-        $topField = array_shift($fields);
-        $res->setTitle($topField['name']);
-        $res->setDescription($topField['value']);
-        CommandHelper::mergeEmbed($res, $fields);
-        return $res;
+        return $fields;
     }
 
     public function getDeathQuote(): string {

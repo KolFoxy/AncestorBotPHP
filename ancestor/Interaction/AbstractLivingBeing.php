@@ -194,9 +194,10 @@ abstract class AbstractLivingBeing {
      * @param AbstractLivingBeing $target
      * @param string $title
      * @param $res
+     * @param bool $skipIntro
      * @return bool True if HIT, false if MISS
      */
-    protected function getDAEffectResultFields(DirectActionEffect $effect, AbstractLivingBeing $target, string $title, &$res): bool {
+    protected function getDAEffectResultFields(DirectActionEffect $effect, AbstractLivingBeing $target, string $title, &$res, bool $skipIntro = false): bool {
         list('hit' => $isHit, 'crit' => $isCrit, 'healthValue' => $healthValue, 'stressValue' => $stressValue)
             = $effect->getApplicationResult($this, $target);
 
@@ -210,7 +211,10 @@ abstract class AbstractLivingBeing {
             $title .= self::CRIT_MESSAGE;
             $critField = $this->getCritStressResult($effect, $stressValue);
         }
-        $res[] = Helper::getEmbedField($title, $effect->getDescription());
+
+        if (!$skipIntro) {
+            $res[] = Helper::getEmbedField($title, $effect->getDescription());
+        }
 
         $target->tryRemoveBlightBleedWithEffect($effect, $res);
         if ($target->isStealthed() && $effect->removesStealth) {
@@ -313,7 +317,7 @@ abstract class AbstractLivingBeing {
             return null;
         }
         $this->addStress(self::DEFAULT_STRESS_SELF_HEAL);
-        return Helper::getEmbedField('**' . $this->name . '** feels confident! **' . self::DEFAULT_STRESS_SELF_HEAL. ' stress**!',
+        return Helper::getEmbedField('**' . $this->name . '** feels confident! **' . self::DEFAULT_STRESS_SELF_HEAL . ' stress**!',
             '*``' . $this->getStressStatus() . '``*');
 
     }

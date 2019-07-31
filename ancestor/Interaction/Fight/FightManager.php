@@ -6,11 +6,11 @@ namespace Ancestor\Interaction\Fight;
 use Ancestor\CommandHandler\CommandHelper as Helper;
 use Ancestor\Interaction\DirectAction;
 use Ancestor\Interaction\Hero;
+use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Monster;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
-use function Composer\Autoload\includeFile;
 
 class FightManager {
 
@@ -49,11 +49,18 @@ class FightManager {
      */
     public $newTrinket = null;
 
+    /**
+     * @var int
+     */
+    protected $transformTimer = self::TRANSFORM_TURNS_CD;
+
     const TRINKET_KILLS_THRESHOLD = 2;
 
     const SKIP_TRINKET_ACTION = -13505622;
 
     const SKIP_HEAL_PERCENTAGE = 0.2;
+
+    const TRANSFORM_TURNS_CD = 4;
 
     public function __construct(Hero $hero, MonsterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
         $this->hero = $hero;
@@ -90,8 +97,18 @@ class FightManager {
             return 'Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
                 . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.';
         }
-        return $this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed())
+        return $this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed(), $this->noTransform())
             . PHP_EOL . ($this->killCount > 0 ? 'Kills: ' . $this->killCount : '');
+    }
+
+    protected function resetTransformTimer() {
+        $this->transformTimer = 0;
+    }
+
+    protected function transformTimerTick() {
+        if ($this->transformTimer < self::TRANSFORM_TURNS_CD) {
+            $this->transformTimer++;
+        }
     }
 
     /**
@@ -106,7 +123,7 @@ class FightManager {
                 return $this->getEquipTrinketTurn($action);
             }
             $this->hero->kill();
-            return (new MessageEmbed())->setTitle('***ERROR!***')->setDescription('Invalid action. Terminating session.');
+            return (new MessageEmbed())->setTitle('***FATAL ERROR!***')->setDescription('Invalid action. Terminating session.');
         }
         return $this->getHeroTurn($action, $heroPicUrl);
     }
@@ -128,6 +145,13 @@ class FightManager {
         return $res;
     }
 
+    protected function noTransform(): bool {
+        if ($this->transformTimer < self::TRANSFORM_TURNS_CD) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param DirectAction $action
      * @param string $heroPicUrl
@@ -136,7 +160,12 @@ class FightManager {
     protected function getHeroTurn(DirectAction $action, string $heroPicUrl): MessageEmbed {
         $target = $action->requiresTarget ? $this->hero : $this->monster;
         $embed = $this->hero->getHeroTurn($action, $target);
-        if (!$this->hero->isDead()) {
+        $isTransformAction = $action->isTransformAction();
+        if ($isTransformAction) {
+            $this->resetTransformTimer();
+        }
+        if (!$this->hero->isDead() && !$isTransformAction) {
+            $this->transformTimerTick();
             if (!$this->monster->isDead()) {
                 $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
                 Helper::mergeEmbed($embed, $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction()));
@@ -224,6 +253,9 @@ class FightManager {
             if (is_numeric($actionName)) {
                 return (int)$actionName;
             }
+            return null;
+        }
+        if ($this->noTransform() && $actionName === DirectAction::TRANSFORM_ACTION) {
             return null;
         }
         return $this->hero->type->getActionIfValid($actionName);
