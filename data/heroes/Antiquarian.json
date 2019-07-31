@@ -39,7 +39,7 @@
           "type": "blight",
           "chance": 140,
           "targetSelf": false,
-          "value": 4
+          "value": -4
         }
       ],
       "statModifiers": [

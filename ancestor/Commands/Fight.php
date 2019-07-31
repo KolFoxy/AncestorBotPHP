@@ -62,7 +62,7 @@ class Fight extends Command implements MonsterCollectionInterface {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->classes[] = $mapper->map($json, new HeroClass());
-            } catch (\JsonMapper_Exception $e) {
+            } catch (\Exception $e) {
                 throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
             }
         }
@@ -70,7 +70,7 @@ class Fight extends Command implements MonsterCollectionInterface {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->monsterTypes[] = $mapper->map($json, new MonsterType());
-            } catch (\JsonMapper_Exception $e) {
+            } catch (\Exception $e) {
                 throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
             }
         }

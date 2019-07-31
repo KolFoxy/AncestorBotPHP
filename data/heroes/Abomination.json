@@ -45,7 +45,7 @@
         {
           "type": "blight",
           "chance": 140,
-          "value": 5
+          "value": -5
         }
       ],
       "statModifiers": [

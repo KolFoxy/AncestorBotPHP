@@ -16,9 +16,9 @@
         "health_value": -10,
         "healthDeviation": -9,
         "hitChance": 105,
-		"critChance": 4,
+        "critChance": 4,
         "image": "https://i.imgur.com/PGDc7lb.png",
-		"typeBonuses": [
+        "typeBonuses": [
           {
             "type": "unholy",
             "damageMod": 35
@@ -56,7 +56,7 @@
         "healthDeviation": -4,
         "hitChance": 110,
         "critChance": 4,
-		"image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/45/Stunning_Blow.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/45/Stunning_Blow.png"
       },
       "statusEffects": [
         {
@@ -66,20 +66,20 @@
         }
       ]
     },
-	{
+    {
       "name": "Bulwark of Faith",
       "requiresTarget": true,
       "effect": {
         "description": "Raise the shield of faith!\nIncreases Crusader's PROT",
         "hitChance": -1,
         "critChance": -1,
-		"image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/da/Bulwark_of_Faith.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/da/Bulwark_of_Faith.png"
       },
       "statusEffects": [
         {
           "type": "marked",
           "chance": -1,
-		  "targetSelf": true
+          "targetSelf": true
         }
       ],
       "statModifiers": [
