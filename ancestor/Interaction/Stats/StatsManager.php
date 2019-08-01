@@ -230,6 +230,7 @@ class StatsManager {
         return true;
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @param string $statusEffectType
      * @return null|string
@@ -252,6 +253,7 @@ class StatsManager {
         if ($statusEffectType === StatusEffect::TYPE_BLOCK && $combinedEffect->value > self::MAX_BLOCKS) {
             $combinedEffect->value = self::MAX_BLOCKS;
         }
+        /** @noinspection PhpUnhandledExceptionInspection */
         $combinedEffect->setType($statusEffectType);
         return $combinedEffect->__toString();
 
@@ -267,8 +269,15 @@ class StatsManager {
 
     public function getAllCurrentEffectsString(): string {
         $res = '';
+        $statusEffectsStates = [];
         foreach ($this->statusEffects as $statusEffect) {
-            $res .= '``' . Stats::formatName($statusEffect->getType()) . ': ' . $statusEffect->__toString() . '``' . PHP_EOL;
+            $type = $statusEffect->getType();
+            if (!isset($statusEffectsStates[$type])) {
+                $statusEffectsStates[$type] = $this->getStatusEffectState($type);
+            }
+        }
+        foreach ($statusEffectsStates as $state) {
+            $res .= '``' . $state . '``' . PHP_EOL;
         }
         foreach ($this->modifiers as $modifier) {
             $res .= '``' . $modifier->__toString() . '``' . PHP_EOL;

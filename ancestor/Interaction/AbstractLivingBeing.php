@@ -7,7 +7,6 @@ use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
 use Ancestor\Interaction\Stats\StatusEffect;
 use Ancestor\Interaction\Stats\TimedEffectInterface;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use Ancestor\CommandHandler\CommandHelper as Helper;
 
 abstract class AbstractLivingBeing {
@@ -173,7 +172,7 @@ abstract class AbstractLivingBeing {
             return $res;
         }
         if ($target->type->riposteAction !== null && $target->statManager->has(StatusEffect::TYPE_RIPOSTE)
-            && !($effect->isHealEffect() || $effect->isPositiveStressEffect())) {
+            && ($effect->isDamageEffect() || $effect->isNegativeStressEffect())) {
             $riposteHit = $target->getDAEffectResultFields($target->type->riposteAction->effect, $this, '***' . $target->name . ' counter-attacks!***', $res);
             $target->applyTimedEffectsGetResults($target->type->riposteAction->statusEffects, $this, $res, $riposteHit);
             $target->applyTimedEffectsGetResults($target->type->riposteAction->statModifiers, $this, $res, $riposteHit);

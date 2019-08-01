@@ -6,7 +6,6 @@ namespace Ancestor\Interaction\Fight;
 use Ancestor\CommandHandler\CommandHelper as Helper;
 use Ancestor\Interaction\DirectAction;
 use Ancestor\Interaction\Hero;
-use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Monster;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\Trinket;
