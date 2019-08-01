@@ -11,6 +11,9 @@
     "blightResist": 80,
     "debuffResist": 80
   },
+  "types": [
+    "human"
+  ],
   "embedColor": 16777215,
   "actions": [
     {

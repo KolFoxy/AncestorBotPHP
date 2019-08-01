@@ -43,13 +43,6 @@ class MonsterType extends AbstractLivingInteraction {
         return $embedResponse;
     }
 
-    /**
-     * @return DirectAction
-     */
-    public function getRandomAction(): DirectAction {
-        return $this->actions[mt_rand(0, sizeof($this->actions) - 1)];
-    }
-
     public function defaultAction(): DirectAction {
         if ($this->defAction === null) {
             $action = new DirectAction();

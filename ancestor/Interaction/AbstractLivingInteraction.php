@@ -50,5 +50,12 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
     /**
      * @return DirectAction
      */
+    public function getRandomAction(): DirectAction {
+        return $this->actions[mt_rand(0, sizeof($this->actions) - 1)];
+    }
+
+    /**
+     * @return DirectAction
+     */
     public abstract function defaultAction();
 }

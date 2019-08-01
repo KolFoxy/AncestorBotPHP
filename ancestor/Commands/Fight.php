@@ -6,13 +6,13 @@ use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\TimedCommandManager;
 use Ancestor\Interaction\Fight\FightManager;
-use Ancestor\Interaction\Fight\MonsterCollectionInterface;
+use Ancestor\Interaction\Fight\EncounterCollectionInterface;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Models\Message;
 
-class Fight extends Command implements MonsterCollectionInterface {
+class Fight extends Command implements EncounterCollectionInterface {
 
     const TIMEOUT = 300.0;
     const SURRENDER_COMMAND = 'ff';
@@ -108,9 +108,13 @@ class Fight extends Command implements MonsterCollectionInterface {
             }
         }
         if ($heroClass === null) {
-            $heroClass = $this->classes[mt_rand(0, $this->numOfClasses)];
+            $heroClass = $this->getRandHeroClass();
         }
         return new Hero($heroClass, $heroName);
+    }
+
+    public function getRandHeroClass(): HeroClass {
+        return $this->classes[mt_rand(0, $this->numOfClasses)];
     }
 
     public function processActiveUserInput(Message $message, array $args) {

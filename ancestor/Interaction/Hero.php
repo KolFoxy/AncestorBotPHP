@@ -320,6 +320,9 @@ class Hero extends AbstractLivingBeing {
      * @return MessageEmbed
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
+        if ($action->requiresTarget){
+            $target = $this;
+        }
         $res = new MessageEmbed();
         $fields = $this->getTurn($target, $action);
         $topField = array_shift($fields);

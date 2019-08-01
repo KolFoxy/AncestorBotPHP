@@ -7,6 +7,9 @@
     "dodge": 25,
     "critChance": 7
   },
+  "types": [
+    "human"
+  ],
   "embedColor": 16777215,
   "actions": [
     {

@@ -11,6 +11,9 @@
     "blightResist": 110,
     "debuffResist": 100
   },
+  "types": [
+    "human"
+  ],
   "actions": [
     {
       "name": "Noxious Blast",

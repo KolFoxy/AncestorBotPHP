@@ -374,8 +374,14 @@ class StatsManager {
         }
     }
 
-    public function isStealthed() : bool {
+    public function isStealthed(): bool {
         return $this->has(StatusEffect::TYPE_STEALTH);
+    }
+
+    public function setStat(string $statName, int $value) {
+        if (key_exists($statName, $this->stats)) {
+            $this->stats[$statName] = $value;
+        }
     }
 
 }

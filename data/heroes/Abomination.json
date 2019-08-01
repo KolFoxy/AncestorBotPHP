@@ -72,6 +72,9 @@
   "name": "Abomination",
   "description": "Beaten, branded and imprisoned for untold decades, this furtive vagrant hides a terrible secret. The Eldritch poison coursing through his veins has given him unspeakable power, at a terrible cost.",
   "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/0/03/Abomination_portrait_roster.png/75px-Abomination_portrait_roster.png",
+  "types": [
+    "human"
+  ],
   "healthMax": 46,
   "stats": {
     "dodge": 28,

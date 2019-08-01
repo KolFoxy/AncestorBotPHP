@@ -3,6 +3,9 @@
   "description": "Shifting, swaying - she mesmerizes her prey before the final strike.",
   "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/a/a6/Shieldbreaker_portrait_roster.png/75px-Shieldbreaker_portrait_roster.png",
   "healthMax": 36,
+  "types": [
+    "human"
+  ],
   "stats": {
     "dodge": 28,
     "critChance": 10,

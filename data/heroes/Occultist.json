@@ -11,6 +11,9 @@
     "blightResist": 80,
     "debuffResist": 110
   },
+  "types": [
+    "human"
+  ],
   "actions": [
     {
       "name": "Sacrifical Stab",

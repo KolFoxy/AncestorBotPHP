@@ -3,6 +3,9 @@
   "description": "She searches where others will not go, and sees what others will not see.",
   "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/4/40/Antiquarian_portrait_roster.png/75px-Antiquarian_portrait_roster.png",
   "healthMax": 29,
+  "types": [
+    "human"
+  ],
   "stats": {
     "dodge": 30,
     "critChance": 5,

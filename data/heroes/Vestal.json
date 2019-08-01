@@ -4,7 +4,8 @@
   "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/a/a5/Vestal_portrait_roster.png/75px-Vestal_portrait_roster.png",
   "healthMax": 44,
   "types": [
-    "religious"
+    "religious",
+    "human"
   ],
   "stats": {
     "dodge": 20,

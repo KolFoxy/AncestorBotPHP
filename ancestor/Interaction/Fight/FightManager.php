@@ -8,11 +8,14 @@ use Ancestor\Interaction\DirectAction;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Monster;
+use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
+use Ancestor\Zalgo\Zalgo;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class FightManager {
+
 
     /**
      * @var Hero
@@ -20,7 +23,7 @@ class FightManager {
     public $hero;
 
     /**
-     * @var Monster
+     * @var Monster|Hero
      */
     public $monster;
 
@@ -30,9 +33,9 @@ class FightManager {
     public $killCount = 0;
 
     /**
-     * @var MonsterCollectionInterface
+     * @var EncounterCollectionInterface
      */
-    public $monsterCollection;
+    public $encounterCollection;
 
     /**
      * @var bool
@@ -58,27 +61,37 @@ class FightManager {
 
     const SKIP_TRINKET_ACTION = -13505622;
 
-    const SKIP_HEAL_PERCENTAGE = 0.2;
+    const SKIP_HEAL_PERCENTAGE = 0.1;
 
     const TRANSFORM_TURNS_CD = 4;
 
-    public function __construct(Hero $hero, MonsterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
+    const CORRUPTED_HERO_THRESHOLD = 10;
+    const CORRUPTED_HERO_CHANCE = 20;
+
+    const CORRUPTED_NAME_LENGTH = 5;
+    const CORRUPTED_NAME_ZALGOCHARS = 4;
+    const UTF8_ALPHABET_START = 65;
+    const UTF8_ALPHABET_END = 90;
+
+    const CORRUPTED_DEATHBLOW_RESIST = 30;
+
+    public function __construct(Hero $hero, EncounterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
         $this->hero = $hero;
-        $this->monsterCollection = $monsterCollection;
+        $this->encounterCollection = $monsterCollection;
         $this->endless = $endless;
         $this->chatCommand = $chatCommand;
     }
 
     public function start(): MessageEmbed {
         if (!isset($this->monster)) {
-            $this->monster = new Monster($this->monsterCollection->getRandMonsterType());
+            $this->monster = $this->rollNewMonster();
         }
         $embed = new MessageEmbed();
         $embed->setTitle('**' . $this->hero->name . '**');
         $embed->setThumbnail($this->hero->type->image);
         $embed->setDescription('*``' . $this->hero->type->description . '``*' . PHP_EOL . '``' . $this->hero->getStatus() . '``');
         $embed->addField(
-            'You encounter a vile **' . $this->monster->type->name . '**',
+            'You encounter a vile **' . $this->monster->name . '**',
             '*``' . $this->monster->type->description . '``*' . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*'
             . PHP_EOL . $this->monster->statManager->getAllCurrentEffectsString()
         );
@@ -91,6 +104,7 @@ class FightManager {
         }
         return $embed;
     }
+
 
     protected function getCurrentFooter(): string {
         if ($this->newTrinket !== null) {
@@ -131,7 +145,7 @@ class FightManager {
     protected function getEquipTrinketTurn(int $action): MessageEmbed {
         $res = new MessageEmbed();
         if ($action === self::SKIP_TRINKET_ACTION) {
-            $heal = mt_rand(1, (int)($this->hero->healthMax) * self::SKIP_HEAL_PERCENTAGE);
+            $heal = mt_rand(1, (int)($this->hero->healthMax) * self::SKIP_HEAL_PERCENTAGE * $this->newTrinket->rarity);
             $this->hero->addHealth($heal);
             $res->setTitle('**' . $this->hero->name . '** used their time to heal for **' . $heal . 'HP**');
             $res->setDescription($this->hero->getHealthStatus());
@@ -158,8 +172,7 @@ class FightManager {
      * @return MessageEmbed
      */
     protected function getHeroTurn(DirectAction $action, string $heroPicUrl): MessageEmbed {
-        $target = $action->requiresTarget ? $this->hero : $this->monster;
-        $embed = $this->hero->getHeroTurn($action, $target);
+        $embed = $this->hero->getHeroTurn($action, $this->monster);
         $isTransformAction = $action->isTransformAction();
         if ($isTransformAction) {
             $this->resetTransformTimer();
@@ -168,7 +181,7 @@ class FightManager {
             $this->transformTimerTick();
             if (!$this->monster->isDead()) {
                 $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
-                Helper::mergeEmbed($embed, $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction()));
+                Helper::mergeEmbed($embed, $this->monsterTurn());
             }
             if ($this->monster->isDead()) {
                 if ($this->endless) {
@@ -193,15 +206,46 @@ class FightManager {
         return $embed;
     }
 
+    /**
+     * @return array|MessageEmbed
+     */
+    protected function monsterTurn() {
+        if (is_a($this->monster, Monster::class)) {
+            return $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
+        }
+        return $this->monster->getHeroTurn($this->monster->type->getRandomAction(), $this->hero);
+    }
+
     public function newMonsterTurn(MessageEmbed $resultEmbed) {
-        $this->monster = new Monster($this->monsterCollection->getRandMonsterType());
-        $resultEmbed->addField('***' . $this->monster->type->name . ' emerges from the darkness!***',
+        $this->monster = $this->rollNewMonster();
+        $resultEmbed->addField('***' . $this->monster->name . ' emerges from the darkness!***',
             '*``' . $this->monster->type->description . '``*'
             . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*');
         if ((bool)mt_rand(0, 1)) {
-            Helper::mergeEmbed($resultEmbed, $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction()));
+            Helper::mergeEmbed($resultEmbed, $this->monsterTurn());
         }
         $resultEmbed->setImage($this->monster->type->image);
+    }
+
+    /**
+     * @return Hero|Monster
+     */
+    protected function rollNewMonster() {
+        if ($this->killCount >= self::CORRUPTED_HERO_THRESHOLD
+            && (mt_rand(1, 100) <= self::CORRUPTED_HERO_CHANCE)) {
+            $corruptedHero = new Hero($this->encounterCollection->getRandHeroClass(), $this->generateCorruptedName());
+            $corruptedHero->statManager->setStat(Stats::DEATHBLOW_RESIST, self::CORRUPTED_DEATHBLOW_RESIST);
+            return $corruptedHero;
+        }
+        return new Monster($this->encounterCollection->getRandMonsterType());
+    }
+
+    protected function generateCorruptedName() {
+        $res = '';
+        for ($i = 0; $i < self::CORRUPTED_NAME_LENGTH; $i++) {
+            $res .= mb_chr(mt_rand(self::UTF8_ALPHABET_START, self::UTF8_ALPHABET_END), 'UTF-8');
+        }
+        return Zalgo::zalgorizeString($res, self::CORRUPTED_NAME_ZALGOCHARS);
     }
 
     public function getHeroStats(): MessageEmbed {
