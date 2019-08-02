@@ -221,6 +221,42 @@ abstract class AbstractLivingBeing {
             $res[] = Helper::getEmbedField($target->name . ' is exposed!', '``Removed`` **``stealth``**.');
         }
 
+        $this->dAEffectAddHealth($effect,$healthValue,$target,$res);
+        if ($critField !== null) {
+            $res[] = $critField;
+        }
+        if ($target->isDead() || $this->dAEffectAddStress($stressValue, $target, $res)->isDead()) {
+            $res[] = Helper::getEmbedField('***DEATHBLOW***', '***' . $target->getDeathQuote() . '***');
+        }
+
+        return true;
+
+    }
+
+    /**
+     * @param int $stressValue
+     * @param AbstractLivingBeing $target
+     * @param array $res
+     * @return AbstractLivingBeing Returns target.
+     */
+    protected function dAEffectAddStress(int $stressValue, AbstractLivingBeing $target, array &$res): AbstractLivingBeing {
+        if ($stressValue !== 0 && $target->hasStress()) {
+            $target->addStress($stressValue);
+            $res[] = Helper::getEmbedField(
+                '**' . $target->name . ($stressValue > 0 ? '** suffers **' : '** feels less tense. **') . $stressValue . ' stress**!',
+                '*``' . $target->getStressStatus() . '``*');
+        }
+        return $target;
+    }
+
+    /**
+     * @param DirectActionEffect $effect
+     * @param int $healthValue
+     * @param AbstractLivingBeing $target
+     * @param array $res
+     * @return AbstractLivingBeing Returns target
+     */
+    protected function dAEffectAddHealth(DirectActionEffect $effect, int $healthValue, AbstractLivingBeing $target, array &$res): AbstractLivingBeing {
         if ($healthValue !== 0) {
             if ($effect->isDamageEffect() && $target->statManager->tryBlock()) {
                 $res[] = Helper::getEmbedField('**' . $target->name . '** has **``blocked``** the damage!',
@@ -232,23 +268,7 @@ abstract class AbstractLivingBeing {
                 '**' . $target->name . ($effect->isHealEffect() ? '** is healed for **' : '** gets hit for **') . abs($healthValue) . 'HP**!',
                 '*``' . $target->getHealthStatus() . '``*');
         }
-
-        if ($critField !== null) {
-            $res[] = $critField;
-        }
-
-        if ($stressValue !== 0 && $target->hasStress()) {
-            $target->addStress($stressValue);
-            $res[] = Helper::getEmbedField(
-                '**' . $target->name . ($stressValue > 0 ? '** suffers **' : '** feels less tense. **') . $stressValue . ' stress**!',
-                '*``' . $target->getStressStatus() . '``*');
-        }
-
-        if ($target->isDead()) {
-            $res[] = Helper::getEmbedField('***DEATHBLOW***', '***' . $target->getDeathQuote() . '***');
-        }
-
-        return true;
+        return $target;
     }
 
     /**
