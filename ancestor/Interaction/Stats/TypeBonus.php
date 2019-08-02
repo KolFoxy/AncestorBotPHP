@@ -25,6 +25,8 @@ class TypeBonus {
      */
     public $accMod = 0;
 
+    const SIGNED_DECIMAL_FORMAT = '%+d';
+
     public function combineWith(TypeBonus $typeBonus): TypeBonus {
         $this->damageMod += $typeBonus->damageMod;
         $this->critChanceMod += $typeBonus->critChanceMod;
@@ -33,13 +35,12 @@ class TypeBonus {
     }
 
     public function getBonusesString(): string {
-        $format = '%+d';
         return
-            ($this->damageMod !== 0 ? sprintf($format, $this->damageMod) . '% DMG' .
+            ($this->damageMod !== 0 ? sprintf(self::SIGNED_DECIMAL_FORMAT, $this->damageMod) . '% DMG' .
                 (($this->critChanceMod !== 0 || $this->accMod !== 0) ? ',' : '.') : '')
-            . ($this->critChanceMod !== 0 ? sprintf($format, $this->critChanceMod) . '% CRIT' .
+            . ($this->critChanceMod !== 0 ? sprintf(self::SIGNED_DECIMAL_FORMAT, $this->critChanceMod) . '% CRIT' .
                 ($this->accMod !== 0 ? ',' : '.') : '')
-            . ($this->accMod !== 0 ? sprintf($format, $this->accMod) . '% ACC' : '');
+            . ($this->accMod !== 0 ? sprintf(self::SIGNED_DECIMAL_FORMAT, $this->accMod) . '% ACC' : '');
     }
 
 
