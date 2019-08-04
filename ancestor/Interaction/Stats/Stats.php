@@ -4,7 +4,8 @@ namespace Ancestor\Interaction\Stats;
 
 final class Stats {
 
-    const DEFAULT_STATS_NUM = 10;
+    const DEFAULT_STATS_NUM = 22;
+    const TEST_STATS_NUM = 10;
 
     const RESIST_SUFFIX = 'Resist';
     const SKILL_CHANCE_SUFFIX = 'SkillChance';
@@ -64,7 +65,6 @@ final class Stats {
             self::HEAL_RECEIVED_MOD => 0,
             self::VIRTUE_CHANCE => 25,
             self::CRIT_RECEIVED_CHANCE => 0,
-
 
             self::STUN_SKILL_CHANCE => 0,
             self::DEBUFF_SKILL_CHANCE => 0,

@@ -59,7 +59,10 @@ class ActionResult {
         $this->target = $target;
         $this->actionName = $actionName;
         $this->targetFeed = new ActionResultFeed();
-        //TODO: Maybe refactor this to better support caster = target situation
+        if ($target === $caster) {
+            $this->casterFeed = $this->targetFeed;
+            return;
+        }
         $this->casterFeed = new ActionResultFeed();
     }
 
@@ -68,29 +71,25 @@ class ActionResult {
         if ($this->miss) {
             return Helper::getEmbedField($title, self::MISS_MESSAGE);
         }
-
-        $res = $this->sourceValueArrayToResult($this->targetFeed->health, 'HP');
-        if ($res !== '' && !empty($this->targetFeed->stress)) {
-            $res .= ', ';
+        $res = $this->feedToResultString($this->targetFeed, $this->target->name);
+        if ($this->targetFeed === $this->casterFeed) {
+            return Helper::getEmbedField($title, $res);
         }
-        $res .= $this->sourceValueArrayToResult($this->targetFeed->stress, ' Stress');
-        if ($res !== '') {
-            $res = $this->target->name . ': ' . $res . '.';
-        }
-        $this->notEmptyAddEol($res, $this->feedToStatusEffectResult($this->targetFeed, $this->target->name));
-
+        $this->notEmptyAddEol($res, $this->feedToResultString($this->casterFeed, $this->caster->name));
+        return Helper::getEmbedField($title, $res);
     }
 
     protected function feedToResultString(ActionResultFeed $feed, string $name): string {
-        $res = $this->sourceValueArrayToResult($this->targetFeed->health, 'HP');
-        if ($res !== '' && !empty($this->targetFeed->stress)) {
+        $res = $this->sourceValueArrayToResult($feed->health, 'HP');
+        if ($res !== '' && !empty($feed->stress)) {
             $res .= ', ';
         }
-        $res .= $this->sourceValueArrayToResult($this->targetFeed->stress, ' Stress');
+        $res .= $this->sourceValueArrayToResult($feed->stress, ' Stress');
         if ($res !== '') {
-            $res = $this->target->name . ': ' . $res . '.';
+            $res = $name . ': ' . $res . '.';
         }
-        $this->notEmptyAddEol($res, $this->feedToStatusEffectResult($this->targetFeed, $this->target->name));
+        $this->notEmptyAddEol($res, $this->feedToStatusEffectResult($feed, $name));
+        return $res;
     }
 
     protected function notEmptyAddEol(string &$str, string $toAdd) {
