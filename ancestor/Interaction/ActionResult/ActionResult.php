@@ -38,10 +38,14 @@ class ActionResult {
      */
     public $miss = false;
 
+    protected $message = '';
+
     /**
      * @var null|bool
      */
     protected $resistedDebuff = null;
+
+    protected $isCrit = false;
 
     const DEFAULT_STRESS_SELF_HEAL = -3;
     const CRIT_STRESS = 10;
@@ -66,20 +70,30 @@ class ActionResult {
         $this->casterFeed = new ActionResultFeed();
     }
 
-    public function toFields(): array {
-        $title = '**' . $this->caster . '** uses **' . $this->actionName . '**';
-        if ($this->miss) {
-            return Helper::getEmbedField($title, self::MISS_MESSAGE);
+    public function toFields(string $extra = '', string $description = '', ?string $forcedTitle = null): array {
+        $title = $forcedTitle ?? '**' . $this->caster->name . '** uses **' . $this->actionName . '**';
+        if ($this->isCrit) {
+            $title .= self::CRIT_MESSAGE;
         }
-        $res = $this->feedToResultString($this->targetFeed, $this->target->name);
-        if ($this->targetFeed === $this->casterFeed) {
-            return Helper::getEmbedField($title, $res);
-        }
-        $this->notEmptyAddEol($res, $this->feedToResultString($this->casterFeed, $this->caster->name));
+        $res = $description;
+        $this->notEmptyAddEol($res, $this->__toString());
+        $this->notEmptyAddEol($res, $extra);
         return Helper::getEmbedField($title, $res);
     }
 
-    protected function feedToResultString(ActionResultFeed $feed, string $name): string {
+    public function __toString(): string {
+        if ($this->miss) {
+            return self::MISS_MESSAGE;
+        }
+        $res = $this->feedToResultString($this->targetFeed, $this->target->name, $this->target);
+        if ($this->targetFeed === $this->casterFeed) {
+            return $res;
+        }
+        $this->notEmptyAddEol($res, $this->feedToResultString($this->casterFeed, $this->caster->name, $this->caster));
+        return $res;
+    }
+
+    protected function feedToResultString(ActionResultFeed $feed, string $name, AbstractLivingBeing $being): string {
         $res = $this->sourceValueArrayToResult($feed->health, 'HP');
         if ($res !== '' && !empty($feed->stress)) {
             $res .= ', ';
@@ -89,6 +103,9 @@ class ActionResult {
             $res = $name . ': ' . $res . '.';
         }
         $this->notEmptyAddEol($res, $this->feedToStatusEffectResult($feed, $name));
+        if ($being->isDead()) {
+            $res .= PHP_EOL . '***DEATHBLOW***' . PHP_EOL . '***' . $being->getDeathQuote() . '***';
+        }
         return $res;
     }
 
@@ -159,19 +176,19 @@ class ActionResult {
         return $res;
     }
 
+    public function addMessage(string $message) {
+        if ($this->message === '') {
+            $this->message = $message;
+        }
+        $this->message .= PHP_EOL . $this->message;
+    }
+
     public function setCrit() {
-        $this->actionName .= self::CRIT_MESSAGE;
+        $this->isCrit = true;
     }
 
     public function setMiss() {
         $this->miss = true;
-    }
-
-    protected function formatSource(&$source) {
-        if ($source === '') {
-            return;
-        }
-        $source = ' ' . $source;
     }
 
 
@@ -195,18 +212,16 @@ class ActionResult {
         if (!$being->hasStress() || $value === 0) {
             return;
         }
-        $this->formatSource($source);
         $being->addStress($value);
         $feed->stress[] = ['value' => $value, 'source' => $source];
     }
 
     protected function healthToBeing(AbstractLivingBeing $being, ActionResultFeed $feed, int $value, string $source) {
-        $this->formatSource($source);
         $being->addHealth($value);
         $feed->health[] = ['value' => $value, 'source' => $source];
     }
 
-    protected function removeBlightBleedStealthFromTarget(bool $removeBlight, bool $removeBleed, bool $removeStealth) {
+    public function removeBlightBleedStealthFromTarget(bool $removeBlight, bool $removeBleed, bool $removeStealth) {
         if ($removeStealth && $this->target->isStealthed()) {
             $this->target->statManager->removeStatusEffectType(StatusEffect::TYPE_STEALTH);
             $this->targetFeed->removedEffects[] = StatusEffect::TYPE_STEALTH;
@@ -217,6 +232,14 @@ class ActionResult {
         if ($removeBleed && $this->target->statManager->removeBleeds()) {
             $this->targetFeed->removedEffects[] = StatusEffect::TYPE_BLEED;
         }
+    }
+
+    public function removedFromTarget(string $whatWasRemoved) {
+        $this->targetFeed->removedEffects[] = $whatWasRemoved;
+    }
+
+    public function removedFromCaster(string $whatWasRemoved) {
+        $this->casterFeed->removedEffects[] = $whatWasRemoved;
     }
 
     /**
@@ -254,7 +277,7 @@ class ActionResult {
         }
 
         $effectTarget->statManager->addModifier($toAdd);
-        $feed->newEffects = $toAdd->__toString();
+        $feed->newEffects[] = $toAdd->__toString();
     }
 
 

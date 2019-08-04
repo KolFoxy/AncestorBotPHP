@@ -10,6 +10,10 @@ class SpontaneousActionsManager {
      */
     public $spontaneousActions = [];
 
+    public function isEmpty():bool {
+        return $this->spontaneousActions === [];
+    }
+
     /**
      * @param bool $stunnedTurn
      * @return DirectActionEffect[]

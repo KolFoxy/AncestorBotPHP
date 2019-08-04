@@ -3,6 +3,7 @@
 namespace Ancestor\Interaction;
 
 use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\Interaction\ActionResult\ActionResult;
 use Ancestor\Interaction\SpontaneousAction\SpontaneousActionsManager;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StressState;
@@ -75,6 +76,10 @@ class Hero extends AbstractLivingBeing {
     /**
      * @noinspection PhpDocMissingThrowsInspection
      */
+    const VIRTUE_STRESS_ROLLBACK = 45;
+
+    const STRESS_STATE_THRESHOLD = 100;
+
     protected function transform() {
         $this->saManager->removeSpontaneousAction($this->type->spontaneousActions);
         $this->type = $this->type->getTransformClass();
@@ -96,16 +101,19 @@ class Hero extends AbstractLivingBeing {
      * @return array Fields array
      */
     protected function getSpontaneousActionsResults(bool $heroIsStunned): array {
-        $res = [];
-        foreach ($this->saManager->getTurnStartEffects($heroIsStunned) as $directActionEffect) {
-            $this->getDAEffectResultFields($directActionEffect, $this, $directActionEffect->getDescription(), $res, true);
+        if ($this->saManager->isEmpty()) {
+            return [];
         }
-        return $res;
+        $res = new ActionResult($this, $this, '');
+        foreach ($this->saManager->getTurnStartEffects($heroIsStunned) as $directActionEffect) {
+            $this->getDAEffectResult($directActionEffect, $this, $res);
+        }
+        return [$res->toFields('', '', $this->name . ' suffers from condition.')];
     }
 
     public function getTrinketStatus(): string {
         return '``Trinket slot`` **``1``**: ***``'
-            . (is_null($this->getFirstTrinket()) ? '[EMPTY]``***' : $this->getFirstTrinket()->name . '``***')
+            . (is_null($this->getFirstTrinket()) ? !'[EMPTY]``***' : $this->getFirstTrinket()->name . '``***')
             . '⚫``Trinket slot`` **``2``**: ***``'
             . (is_null($this->getSecondTrinket()) ? '[EMPTY]``***' : $this->getSecondTrinket()->name . '``***');
     }
@@ -122,10 +130,10 @@ class Hero extends AbstractLivingBeing {
             }
             return;
         }
-        if ($this->stress > 100) {
+        if ($this->stress >= self::STRESS_STATE_THRESHOLD) {
             if ($this->stressState === null) {
                 if ($this->addStressState()->isVirtue) {
-                    $this->stress = 45;
+                    $this->stress = self::VIRTUE_STRESS_ROLLBACK;
                     return;
                 }
             }
@@ -207,7 +215,7 @@ class Hero extends AbstractLivingBeing {
                 return;
             }
         }
-        
+
         if ($this->currentHealth > $this->healthMax) {
             $this->currentHealth = $this->healthMax;
         } elseif ($this->currentHealth <= 0) {
@@ -320,7 +328,7 @@ class Hero extends AbstractLivingBeing {
      * @return MessageEmbed
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
-        if ($action->requiresTarget){
+        if ($action->requiresTarget) {
             $target = $this;
         }
         $res = new MessageEmbed();
@@ -348,8 +356,8 @@ class Hero extends AbstractLivingBeing {
         if (!$isStunned && $action === $this->type->defaultAction()) {
             $target = $this;
         }
-
         $targetIsHero = is_a($target, Hero::class);
+        $thisStressChecker = is_null($this->getStressState());
         $heroStressStateChecker = $targetIsHero && is_null($target->getStressState());
         $fields = $this->getSpontaneousActionsResults($isStunned);
         if (!$this->isDead()) {
@@ -364,6 +372,9 @@ class Hero extends AbstractLivingBeing {
                 $fields[] = CommandHelper::getEmbedField('The act of killing inspires the hero! ' . parent::DEFAULT_STRESS_SELF_HEAL . ' stress!',
                     $this->getStressStatus());
             }
+        }
+        if ($thisStressChecker && !$this->isDead() && !is_null($this->getStressState())) {
+            $fields[] = $this->getStressState()->toField();
         }
         return $fields;
     }

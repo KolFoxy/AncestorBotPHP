@@ -64,8 +64,8 @@ class FightManager {
 
     const TRANSFORM_TURNS_CD = 4;
 
-    const CORRUPTED_HERO_THRESHOLD = 10;
-    const CORRUPTED_HERO_CHANCE = 20;
+    const CORRUPTED_HERO_THRESHOLD = 9;
+    const CORRUPTED_HERO_CHANCE = 30;
 
     const CORRUPTED_NAME_LENGTH = 5;
     const CORRUPTED_NAME_ZALGOCHARS = 4;
@@ -171,11 +171,17 @@ class FightManager {
      * @return MessageEmbed
      */
     protected function getHeroTurn(DirectAction $action, string $heroPicUrl): MessageEmbed {
-        $embed = $this->hero->getHeroTurn($action, $this->monster);
         $isTransformAction = $action->isTransformAction();
         if ($isTransformAction) {
+            if ($this->noTransform()) {
+                $embed = new MessageEmbed();
+                $embed->setTitle('Can\'t transform yet.');
+                $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer).' turns.');
+                return $embed;
+            }
             $this->resetTransformTimer();
         }
+        $embed = $this->hero->getHeroTurn($action, $this->monster);
         if (!$this->hero->isDead() && !$isTransformAction) {
             $this->transformTimerTick();
             if (!$this->monster->isDead()) {

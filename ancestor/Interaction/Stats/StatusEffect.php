@@ -118,7 +118,7 @@ class StatusEffect implements TimedEffectInterface {
 
     public function __toString(): string {
         if ($this->type === self::TYPE_STUN) {
-            return 'Stunned for one turn, unable to perform actions.';
+            return 'Stun for 1rd';
         }
         if ($this->type === self::TYPE_HORROR) {
             return abs($this->value) . ' stress for ' . $this->duration . 'rds';
@@ -135,7 +135,7 @@ class StatusEffect implements TimedEffectInterface {
         if ($this->type === self::TYPE_STEALTH) {
             return 'Stealth for ' . $this->duration . 'rds. Concealed from most attacks.';
         }
-        return abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
+        return Stats::formatName($this->type) . ' ' . abs($this->value) . 'pts/rd for ' . $this->duration . 'rds';
 
     }
 
