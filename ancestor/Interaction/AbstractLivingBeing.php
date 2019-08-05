@@ -191,8 +191,7 @@ abstract class AbstractLivingBeing {
             $extra .= $selfEffectRes->__toString();
         }
 
-        $turnFields[] = $actRes->toFields($extra);
-
+        $turnFields[] = $actRes->toFields($extra, $action->isTransformAction() ? $effect->getDescription() : '');
         return $turnFields;
     }
 
@@ -241,7 +240,7 @@ abstract class AbstractLivingBeing {
                 if ($target->statManager->getStatusEffectState(StatusEffect::TYPE_BLOCK) === null) {
                     $actRes->removedFromTarget(StatusEffect::TYPE_BLOCK);
                 }
-
+                return $target;
             }
             $actRes->healthToTarget($healthValue);
         }

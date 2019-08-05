@@ -95,12 +95,22 @@ class ActionResult {
 
     protected function feedToResultString(ActionResultFeed $feed, string $name, AbstractLivingBeing $being): string {
         $res = $this->sourceValueArrayToResult($feed->health, 'HP');
-        if ($res !== '' && !empty($feed->stress)) {
+        $feedHasStress = !empty($feed->stress);
+        if ($res !== '' && $feedHasStress) {
             $res .= ', ';
         }
         $res .= $this->sourceValueArrayToResult($feed->stress, ' Stress');
         if ($res !== '') {
-            $res = $name . ': ' . $res . '.';
+            $res = $name . ': ' . $res . '.' . PHP_EOL;
+            if (!empty($feed->health)) {
+                $res .= '*``' . $being->getHealthStatus() . '``*';
+                if ($feedHasStress) {
+                    $res .= '; ';
+                }
+            }
+            if ($feedHasStress) {
+                $res .= '*``' . $being->getStressStatus() . '``*';
+            }
         }
         $this->notEmptyAddEol($res, $this->feedToStatusEffectResult($feed, $name));
         if ($being->isDead()) {

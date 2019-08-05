@@ -85,7 +85,6 @@ class StatsManager {
      */
     public function getProcessTurn() {
         $values = [];
-
         foreach ($this->statusEffects as $key => $effect) {
             $type = $effect->getType();
             if ($type === StatusEffect::TYPE_STUN) {
@@ -94,7 +93,6 @@ class StatsManager {
                 $this->addModifier(StatModifier::getDefaultStunResistBuff());
                 continue;
             }
-
             if ($effect->value !== null) {
                 if (isset($values[$type])) {
                     $values[$type] += $effect->value;
@@ -102,18 +100,15 @@ class StatsManager {
                     $values[$type] = $effect->value;
                 }
             }
-
             if ($effect->processTurn()) {
                 unset($this->statusEffects[$key]);
             }
         }
-
         foreach ($this->modifiers as $key => $modifier) {
             if ($modifier->processTurn()) {
                 unset($this->modifiers[$key]);
             }
         }
-
         return $this->valuesToFields($values);
     }
 
@@ -121,7 +116,7 @@ class StatsManager {
      * @param array $values
      * @return array|null
      */
-    function valuesToFields(array $values) {
+    function valuesToFields(array &$values) {
         $res = [];
         $valueBleed = $values[StatusEffect::TYPE_BLEED] ?? 0;
         $valueBlight = $values[StatusEffect::TYPE_BLIGHT] ?? 0;
@@ -131,9 +126,21 @@ class StatsManager {
             $this->host->addHealth($value);
             $effect = $value < 0 ? 'suffered' : 'restored';
             $body = '``' . $this->host->getHealthStatus() . PHP_EOL;
-            $body .= $valueBleed !== 0 ? 'Bleed: ' . $valueBleed . PHP_EOL : '';
-            $body .= $valueBlight !== 0 ? 'Blight: ' . $valueBlight . PHP_EOL : '';
-            $body .= $valueRestoration !== 0 ? 'Restoration: ' . $valueRestoration : '';
+            if ($valueBleed !== 0) {
+                $body .= 'Bleed: ' . $valueBleed;
+                if ($valueBlight !== 0 || $valueRestoration !== 0) {
+                    $body .= PHP_EOL;
+                }
+            }
+            if ($valueBlight !== 0) {
+                $body .= 'Blight: ' . $valueBlight;
+                if ($valueRestoration !== 0) {
+                    $body .= PHP_EOL;
+                }
+            }
+            if ($valueRestoration !== 0) {
+                $body .= 'Restoration: ' . $valueRestoration;
+            }
             $body .= '``';
             $res[] = [
                 'name' => $this->host->name . ' has ' . $effect . ' ' . abs($value) . 'HP',

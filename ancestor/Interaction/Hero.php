@@ -113,7 +113,7 @@ class Hero extends AbstractLivingBeing {
 
     public function getTrinketStatus(): string {
         return '``Trinket slot`` **``1``**: ***``'
-            . (is_null($this->getFirstTrinket()) ? !'[EMPTY]``***' : $this->getFirstTrinket()->name . '``***')
+            . (is_null($this->getFirstTrinket()) ? '[EMPTY]``***' : $this->getFirstTrinket()->name . '``***')
             . '⚫``Trinket slot`` **``2``**: ***``'
             . (is_null($this->getSecondTrinket()) ? '[EMPTY]``***' : $this->getSecondTrinket()->name . '``***');
     }
@@ -280,7 +280,8 @@ class Hero extends AbstractLivingBeing {
      * @return string Result of trinket equipment.
      */
     public function tryEquipTrinket(Trinket $trinket, int $slot = 0): string {
-        if ($trinket->classRestriction !== null && $trinket->classRestriction !== $this->type->name) {
+        if ($trinket->classRestriction !== null &&
+            mb_strtolower(trim($trinket->classRestriction)) !== mb_strtolower(trim($this->type->name))) {
             return 'Can\'t equip ' . $trinket->name . ' since ' . $this->name . ' is not a ' . $trinket->classRestriction;
         }
         if ($this->hasTrinket($trinket->name)) {
@@ -366,15 +367,17 @@ class Hero extends AbstractLivingBeing {
                 $fields[] = $target->getStressState()->toField();
             }
         }
-        if ($target->isDead() && !$targetIsHero) {
-            if ((bool)mt_rand(0, 1)) {
-                $this->addStress(parent::DEFAULT_STRESS_SELF_HEAL);
-                $fields[] = CommandHelper::getEmbedField('The act of killing inspires the hero! ' . parent::DEFAULT_STRESS_SELF_HEAL . ' stress!',
-                    $this->getStressStatus());
+        if ($target !== $this) {
+            if ($target->isDead()) {
+                if ((bool)mt_rand(0, 1)) {
+                    $this->addStress(parent::DEFAULT_STRESS_SELF_HEAL);
+                    $fields[] = CommandHelper::getEmbedField('The act of killing inspires the hero! ' . parent::DEFAULT_STRESS_SELF_HEAL . ' stress!',
+                        $this->getStressStatus());
+                }
             }
-        }
-        if ($thisStressChecker && !$this->isDead() && !is_null($this->getStressState())) {
-            $fields[] = $this->getStressState()->toField();
+            if ($thisStressChecker && !$this->isDead() && !is_null($this->getStressState())) {
+                $fields[] = $this->getStressState()->toField();
+            }
         }
         return $fields;
     }

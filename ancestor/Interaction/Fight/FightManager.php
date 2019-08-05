@@ -64,7 +64,7 @@ class FightManager {
 
     const TRANSFORM_TURNS_CD = 4;
 
-    const CORRUPTED_HERO_THRESHOLD = 9;
+    const CORRUPTED_HERO_THRESHOLD = 10;
     const CORRUPTED_HERO_CHANCE = 30;
 
     const CORRUPTED_NAME_LENGTH = 5;
