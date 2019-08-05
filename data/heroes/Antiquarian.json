@@ -14,6 +14,13 @@
     "blightResist": 70,
     "debuffResist": 70
   },
+  "actionRatings": {
+    "nervous": 25,
+    "festering": 25,
+    "get": 20,
+    "flash": 10,
+    "fortifying": 10
+  },
   "embedColor": 16777215,
   "actions": [
     {

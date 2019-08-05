@@ -12,6 +12,12 @@
     "stunResist": 100,
     "blightResist": 70
   },
+  "actionRatings": {
+    "pierce": 30,
+    "adder": 30,
+    "expose": 20,
+    "serpent": 15
+  },
   "actions": [
     {
       "name": "Pierce",

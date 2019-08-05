@@ -13,6 +13,14 @@
     "stunResist": 80,
     "bleedResist": 90
   },
+  "actionRatings": {
+    "mace": 20,
+    "judge": 20,
+    "dazzling": 20,
+    "grace": 20,
+    "illumination": 5,
+    "hand": 10
+  },
   "actions": [
     {
       "name": "Mace Bash",

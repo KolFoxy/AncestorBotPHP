@@ -165,6 +165,7 @@ class FightManager {
         return false;
     }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @param DirectAction $action
      * @param string $heroPicUrl
@@ -176,7 +177,7 @@ class FightManager {
             if ($this->noTransform()) {
                 $embed = new MessageEmbed();
                 $embed->setTitle('Can\'t transform yet.');
-                $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer).' turns.');
+                $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer) . ' turns.');
                 return $embed;
             }
             $this->resetTransformTimer();

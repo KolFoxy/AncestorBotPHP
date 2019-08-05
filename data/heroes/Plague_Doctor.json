@@ -14,6 +14,13 @@
   "types": [
     "human"
   ],
+  "actionRatings": {
+    "noxious": 25,
+    "incision": 30,
+    "battle": 10,
+    "embold": 10,
+    "disorient": 20
+  },
   "actions": [
     {
       "name": "Noxious Blast",

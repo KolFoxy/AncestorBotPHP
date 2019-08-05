@@ -20,6 +20,11 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
     public $actions;
 
     /**
+     * @var array|null
+     */
+    public $actionRatings = null;
+
+    /**
      * @var array
      */
     public $stats = [];
@@ -51,6 +56,9 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
      * @return DirectAction
      */
     public function getRandomAction(): DirectAction {
+        if ($this->actionRatings !== null) {
+            return $this->getRatedAction();
+        }
         return $this->actions[mt_rand(0, sizeof($this->actions) - 1)];
     }
 
@@ -58,4 +66,16 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
      * @return DirectAction
      */
     public abstract function defaultAction();
+
+    protected function getRatedAction(): DirectAction {
+        $totalValue = array_sum($this->actionRatings);
+        $seed = mt_rand(1, $totalValue);
+        foreach ($this->actionRatings as $actionName => $rating) {
+            $seed -= $rating;
+            if ($seed <= 0) {
+                return $this->getActionIfValid($actionName);
+            }
+        }
+        return $this->getRatedAction();
+    }
 }

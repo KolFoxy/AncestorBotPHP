@@ -15,6 +15,11 @@
     "dodge": 28,
     "prot": 0
   },
+  "actionRatings": {
+    "sow": 4,
+    "pause": 2,
+    "ceaseless": 5
+  },
   "actions": [
     {
       "name": "Sow the Seeds",
@@ -43,7 +48,7 @@
       }
     },
     {
-      "name": "Ceaseless Labor ",
+      "name": "Ceaseless Labor",
       "effect": {
         "description": "Poke, poke, POKE!\nInflicts medium health damage.",
         "health_value": -5,

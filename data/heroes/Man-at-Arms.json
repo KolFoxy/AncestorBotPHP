@@ -14,6 +14,15 @@
   "types": [
     "human"
   ],
+  "actionRatings": {
+    "crush": 30,
+    "rampart": 20,
+    "bellow": 10,
+    "defender": 10,
+    "retribution": 20,
+    "command": 10,
+    "bolster": 10
+  },
   "actions": [
     {
       "name": "Crush",

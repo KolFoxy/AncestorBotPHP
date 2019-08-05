@@ -1,6 +1,11 @@
 {
   "transformClass": {
     "name": "Beast",
+    "actionRatings": {
+      "rage": 30,
+      "slam": 30,
+      "transform": 10
+    },
     "description": "The Beast, unleashed!",
     "spontaneousActions": [
       {
@@ -83,6 +88,12 @@
     "bleedResist": 80,
     "blightResist": 110,
     "debuffResist": 70
+  },
+  "actionRatings": {
+    "manacles": 30,
+    "beast": 30,
+    "absolution": 20,
+    "transform": 10
   },
   "embedColor": 16777215,
   "actions": [

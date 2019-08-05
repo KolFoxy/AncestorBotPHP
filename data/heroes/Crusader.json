@@ -10,6 +10,13 @@
   "types": [
     "human"
   ],
+  "actionRatings": {
+    "smite": 30,
+    "battle": 10,
+    "inspir": 10,
+    "stunning": 20,
+    "bulwark": 10
+  },
   "embedColor": 16777215,
   "actions": [
     {

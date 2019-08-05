@@ -14,6 +14,12 @@
   "types": [
     "human"
   ],
+  "actionRatings": {
+    "stab": 30,
+    "weak": 10,
+    "wyrd": 10,
+    "hands": 20
+  },
   "actions": [
     {
       "name": "Sacrifical Stab",
