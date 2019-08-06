@@ -354,7 +354,7 @@ class Hero extends AbstractLivingBeing {
      */
     public function getTurn($target, DirectAction $action): array {
         $isStunned = $this->statManager->isStunned();
-        if (!$isStunned && $action === $this->type->defaultAction()) {
+        if ($action === $this->type->defaultAction()) {
             $target = $this;
         }
         $targetIsHero = is_a($target, Hero::class);

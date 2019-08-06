@@ -82,10 +82,8 @@ class ActionResult {
     }
 
     public function __toString(): string {
-        if ($this->miss) {
-            return self::MISS_MESSAGE;
-        }
-        $res = $this->feedToResultString($this->targetFeed, $this->target->name, $this->target);
+        $res = $this->miss ? self::MISS_MESSAGE : '';
+        $this->notEmptyAddEol($res, $this->feedToResultString($this->targetFeed, $this->target->name, $this->target));
         if ($this->targetFeed === $this->casterFeed) {
             return $res;
         }
@@ -94,6 +92,9 @@ class ActionResult {
     }
 
     protected function feedToResultString(ActionResultFeed $feed, string $name, AbstractLivingBeing $being): string {
+        if ($feed->isEmpty()) {
+            return '';
+        }
         $res = $this->sourceValueArrayToResult($feed->health, 'HP');
         $feedHasStress = !empty($feed->stress);
         if ($res !== '' && $feedHasStress) {
@@ -170,11 +171,16 @@ class ActionResult {
         $freeVal = 0;
         $maxIndex = count($arr) - 1;
         for ($i = 0; $i <= $maxIndex; $i++) {
+            $value = $arr[$i]['value'];
             if ($arr[$i]['source'] === '') {
-                $freeVal += $arr[$i]['value'];
+                $freeVal += $value;
                 continue;
             }
-            $res .= '**``' . sprintf(self::SIGNED_DECIMAL_FORMAT, $arr[$i]['value']) . $valueName . '(' . $arr[$i]['source'] . ')``**';
+            $res .= '**``'
+                . ($value === 0 ? $value : sprintf(self::SIGNED_DECIMAL_FORMAT, $value))
+                . $valueName
+                . '(' . $arr[$i]['source']
+                . ')``**';
             if ($i !== $maxIndex) {
                 $res .= ', ';
             }

@@ -27,4 +27,12 @@ class ActionResultFeed {
      * @var string[]
      */
     public $resisted = [];
+
+    public function isEmpty(): bool {
+        return $this->stress === []
+            && $this->health === []
+            && $this->newEffects === []
+            && $this->removedEffects === []
+            && $this->resisted === [];
+    }
 }

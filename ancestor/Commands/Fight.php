@@ -25,11 +25,6 @@ class Fight extends Command implements EncounterCollectionInterface {
     private $classes = [];
 
     /**
-     * @var int
-     */
-    private $numOfClasses;
-
-    /**
      * @var TimedCommandManager
      */
     private $manager;
@@ -37,11 +32,27 @@ class Fight extends Command implements EncounterCollectionInterface {
     /**
      * @var MonsterType[]
      */
-    private $monsterTypes = [];
+    private $regMonsterTypes = [];
+
+    /**
+     * @var MonsterType[]
+     */
+    private $eliteMonsterTypes = [];
+
     /**
      * @var int
      */
-    private $numOfTypes;
+    private $regularsMaxIndex;
+
+    /**
+     * @var int
+     */
+    private $classesMaxIndex;
+
+    /**
+     * @var int
+     */
+    private $elitesMaxIndex;
 
 
     public function __construct(CommandHandler $handler) {
@@ -69,15 +80,22 @@ class Fight extends Command implements EncounterCollectionInterface {
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
-                $this->monsterTypes[] = $mapper->map($json, new MonsterType());
+                $this->regMonsterTypes[] = $mapper->map($json, new MonsterType());
             } catch (\Exception $e) {
                 throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
             }
         }
-
-        $this->numOfClasses = count($this->classes) - 1;
-        $this->numOfTypes = count($this->monsterTypes) - 1;
-
+        foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/elite/*.json') as $path) {
+            $json = json_decode(file_get_contents($path));
+            try {
+                $this->eliteMonsterTypes[] = $mapper->map($json, new MonsterType());
+            } catch (\Exception $e) {
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+            }
+        }
+        $this->classesMaxIndex = count($this->classes) - 1;
+        $this->regularsMaxIndex = count($this->regMonsterTypes) - 1;
+        $this->elitesMaxIndex = count($this->eliteMonsterTypes) - 1;
     }
 
     public function run(Message $message, array $args) {
@@ -108,13 +126,13 @@ class Fight extends Command implements EncounterCollectionInterface {
             }
         }
         if ($heroClass === null) {
-            $heroClass = $this->getRandHeroClass();
+            $heroClass = $this->randHeroClass();
         }
         return new Hero($heroClass, $heroName);
     }
 
-    public function getRandHeroClass(): HeroClass {
-        return $this->classes[mt_rand(0, $this->numOfClasses)];
+    public function randHeroClass(): HeroClass {
+        return $this->classes[mt_rand(0, $this->classesMaxIndex)];
     }
 
     public function processActiveUserInput(Message $message, array $args) {
@@ -160,8 +178,12 @@ class Fight extends Command implements EncounterCollectionInterface {
         }
     }
 
-    public function getRandMonsterType(): MonsterType {
-        return $this->monsterTypes[mt_rand(0, $this->numOfTypes)];
+    public function randRegularMonsterType(): MonsterType {
+        return $this->regMonsterTypes[mt_rand(0, $this->regularsMaxIndex)];
+    }
+
+    public function randEliteMonsterType(): MonsterType {
+        return $this->eliteMonsterTypes[mt_rand(0, $this->elitesMaxIndex)];
     }
 
     function getFight(Message $message): FightManager {

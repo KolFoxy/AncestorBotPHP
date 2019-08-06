@@ -10,10 +10,15 @@ interface EncounterCollectionInterface {
     /**
      * @return MonsterType
      */
-    public function getRandMonsterType(): MonsterType;
+    public function randRegularMonsterType(): MonsterType;
+
+    /**
+     * @return MonsterType
+     */
+    public function randEliteMonsterType(): MonsterType;
 
     /**
      * @return HeroClass
      */
-    public function getRandHeroClass(): HeroClass;
+    public function randHeroClass(): HeroClass;
 }

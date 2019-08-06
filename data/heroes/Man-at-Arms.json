@@ -150,7 +150,8 @@
           "targetSelf": true,
           "chance": -1,
           "stat": "dodge",
-          "value": 5
+          "value": 10,
+          "duration": 4
         },
         {
           "targetSelf": true,

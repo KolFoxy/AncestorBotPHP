@@ -65,9 +65,12 @@ class FightManager {
     const TRANSFORM_TURNS_CD = 4;
 
     const CORRUPTED_HERO_THRESHOLD = 10;
-    const CORRUPTED_HERO_CHANCE = 30;
+    const CORRUPTED_HERO_CHANCE = 25;
+    const ELITE_MONSTER_THRESHOLD = 12;
+    const ELITE_MONSTER_CHANCE = 20;
 
-    const CORRUPTED_NAME_LENGTH = 5;
+    const CORRUPTED_NAME_MAXLENGTH = 5;
+    const CORRUPTED_NAME_MINLENGTH = 3;
     const CORRUPTED_NAME_ZALGOCHARS = 4;
     const UTF8_ALPHABET_START = 65;
     const UTF8_ALPHABET_END = 90;
@@ -95,12 +98,11 @@ class FightManager {
             . PHP_EOL . $this->monster->statManager->getAllCurrentEffectsString()
         );
         $embed->setImage($this->monster->type->image);
-        $embed->setFooter($this->getCurrentFooter());
-
         if ((bool)mt_rand(0, 1)) {
             $additionalEmbed = $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
             Helper::mergeEmbed($embed, $additionalEmbed);
         }
+        $embed->setFooter($this->getCurrentFooter());
         return $embed;
     }
 
@@ -237,18 +239,25 @@ class FightManager {
      * @return Hero|Monster
      */
     protected function rollNewMonster() {
-        if ($this->killCount >= self::CORRUPTED_HERO_THRESHOLD
-            && (mt_rand(1, 100) <= self::CORRUPTED_HERO_CHANCE)) {
-            $corruptedHero = new Hero($this->encounterCollection->getRandHeroClass(), $this->generateCorruptedName());
-            $corruptedHero->statManager->setStat(Stats::DEATHBLOW_RESIST, self::CORRUPTED_DEATHBLOW_RESIST);
-            return $corruptedHero;
+        if ($this->killCount >= self::CORRUPTED_HERO_THRESHOLD && ((mt_rand(1, 100) <= self::CORRUPTED_HERO_CHANCE))) {
+            return $this->rolLNewCorruptedHero();
         }
-        return new Monster($this->encounterCollection->getRandMonsterType());
+        if ($this->killCount >= self::ELITE_MONSTER_THRESHOLD && ((mt_rand(1, 100)) <= self::ELITE_MONSTER_CHANCE)) {
+            return new Monster($this->encounterCollection->randEliteMonsterType());
+        }
+        return new Monster($this->encounterCollection->randRegularMonsterType());
+    }
+
+    protected function rolLNewCorruptedHero(): Hero {
+        $corruptedHero = new Hero($this->encounterCollection->randHeroClass(), $this->generateCorruptedName());
+        $corruptedHero->statManager->setStat(Stats::DEATHBLOW_RESIST, self::CORRUPTED_DEATHBLOW_RESIST);
+        return $corruptedHero;
     }
 
     protected function generateCorruptedName() {
         $res = '';
-        for ($i = 0; $i < self::CORRUPTED_NAME_LENGTH; $i++) {
+        $len = mt_rand(self::CORRUPTED_NAME_MINLENGTH, self::CORRUPTED_NAME_MAXLENGTH);
+        for ($i = 0; $i < $len; $i++) {
             $res .= mb_chr(mt_rand(self::UTF8_ALPHABET_START, self::UTF8_ALPHABET_END), 'UTF-8');
         }
         return Zalgo::zalgorizeString($res, self::CORRUPTED_NAME_ZALGOCHARS);
@@ -308,6 +317,7 @@ class FightManager {
         if ($this->noTransform() && $actionName === DirectAction::TRANSFORM_ACTION) {
             return null;
         }
-        return $this->hero->type->getActionIfValid($actionName);
+        $action = $this->hero->type->getActionIfValid($actionName);
+        return is_null($action) || (!$action->isUsableVsStealth() && $this->monster->statManager->isStealthed()) ? null : $action;
     }
 }

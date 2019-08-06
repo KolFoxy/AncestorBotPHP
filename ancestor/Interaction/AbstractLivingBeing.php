@@ -165,6 +165,7 @@ abstract class AbstractLivingBeing {
         }
         if ($target->statManager->isStealthed() && !$action->isUsableVsStealth()) {
             $action = $this->type->defaultAction();
+            $target = $this;
         }
         $effect = $action->effect;
         $actRes = new ActionResult($this, $target, $action->name);
@@ -190,7 +191,6 @@ abstract class AbstractLivingBeing {
             }
             $extra .= $selfEffectRes->__toString();
         }
-
         $turnFields[] = $actRes->toFields($extra, $action->isTransformAction() ? $effect->getDescription() : '');
         return $turnFields;
     }
@@ -234,16 +234,19 @@ abstract class AbstractLivingBeing {
      * @return AbstractLivingBeing Returns target
      */
     protected function dAEffectAddHealth(DirectActionEffect $effect, int $healthValue, AbstractLivingBeing $target, ActionResult $actRes): AbstractLivingBeing {
-        if ($healthValue !== 0) {
-            if ($effect->isDamageEffect() && $target->statManager->tryBlock()) {
-                $actRes->healthToTarget(0, 'Block!');
-                if ($target->statManager->getStatusEffectState(StatusEffect::TYPE_BLOCK) === null) {
-                    $actRes->removedFromTarget(StatusEffect::TYPE_BLOCK);
-                }
-                return $target;
+        $source = '';
+        if ($healthValue === 0) {
+            if ($effect->isDamageEffect() || $effect->isHealEffect()) {
+                $source = 'Oof';
             }
-            $actRes->healthToTarget($healthValue);
+        } elseif ($effect->isDamageEffect() && $target->statManager->tryBlock()) {
+            $source = 'Block';
+            $healthValue = 0;
+            if ($target->statManager->getStatusEffectState(StatusEffect::TYPE_BLOCK) === null) {
+                $actRes->removedFromTarget(StatusEffect::TYPE_BLOCK);
+            }
         }
+        $actRes->healthToTarget($healthValue, $source);
         return $target;
     }
 
