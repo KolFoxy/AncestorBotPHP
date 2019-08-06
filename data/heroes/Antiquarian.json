@@ -9,10 +9,10 @@
   "stats": {
     "dodge": 30,
     "critChance": 5,
-    "stunResist": 70,
-    "bleedResist": 70,
-    "blightResist": 70,
-    "debuffResist": 70
+    "stunResist": 90,
+    "bleedResist": 80,
+    "blightResist": 80,
+    "debuffResist": 80
   },
   "actionRatings": {
     "nervous": 25,
@@ -29,7 +29,7 @@
         "description": "Clumsily stabs the enemy.\nInflicts medium health damage.",
         "health_value": -5,
         "healthDeviation": -4,
-        "hitChance": 105,
+        "hitChance": 110,
         "critChance": 7,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0b/Nervous_Stab.png"
       }
@@ -47,9 +47,9 @@
       "statusEffects": [
         {
           "type": "blight",
-          "chance": 140,
+          "chance": 150,
           "targetSelf": false,
-          "value": -4
+          "value": -6
         }
       ],
       "statModifiers": [
@@ -80,7 +80,7 @@
           "chance": -1,
           "targetSelf": true,
           "stat": "blightSkillChance",
-          "value": 15,
+          "value": 20,
           "duration": 4
         }
       ]
@@ -98,7 +98,7 @@
           "chance": 140,
           "stat": "accMod",
           "value": -15,
-          "duration": 3
+          "duration": 5
         }
       ]
     },
@@ -115,12 +115,14 @@
         {
           "chance": -1,
           "stat": "bleedResist",
-          "value": 15
+          "value": 30,
+          "duration": 5
         },
         {
           "chance": -1,
           "stat": "blightResist",
-          "value": 15
+          "value": 30,
+          "duration": 5
         }
       ]
     }

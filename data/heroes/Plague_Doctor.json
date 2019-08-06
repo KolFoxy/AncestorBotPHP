@@ -42,7 +42,7 @@
       "statusEffects": [
         {
           "type": "blight",
-          "chance": 140,
+          "chance": 150,
           "value": -7
         }
       ]
