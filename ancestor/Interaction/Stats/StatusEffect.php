@@ -47,6 +47,7 @@ class StatusEffect implements TimedEffectInterface {
      * @throws \Exception
      */
     public function setType(string $type) {
+        $type = mb_strtolower($type);
         if ($type === self::TYPE_MARKED) {
             $this->type = $type;
             $this->duration = self::MARKED_DEF_DURATION;

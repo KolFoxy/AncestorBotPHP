@@ -168,30 +168,30 @@ abstract class AbstractLivingBeing {
             $target = $this;
         }
         $effect = $action->effect;
-        $actRes = new ActionResult($this, $target, $action->name);
+        $actRes = new ActionResult($this, $target, $action->name, $effect->getDescription());
         $hit = $this->getDAEffectResult($effect, $target, $actRes);
         $riposteRes = null;
         if (!$target->isDead()) {
             if ($target->type->riposteAction !== null && $target->statManager->has(StatusEffect::TYPE_RIPOSTE)
                 && ($effect->isDamageEffect() || $effect->isNegativeStressEffect())) {
-                $riposteRes = new ActionResult($target, $this, $target->type->riposteAction->name);
+                $riposteRes = new ActionResult($target, $this, $target->type->riposteAction->name, $target->type->riposteAction->effect->getDescription());
                 $riposteHit = $target->getDAEffectResult($target->type->riposteAction->effect, $this, $riposteRes);
                 $target->applyTimedEffectsGetResults($target->type->riposteAction->statusEffects, $riposteRes, $riposteHit);
                 $target->applyTimedEffectsGetResults($target->type->riposteAction->statModifiers, $riposteRes, $riposteHit);
             }
-            $this->applyTimedEffectsGetResults($action->statusEffects, $actRes, $hit);
-            $this->applyTimedEffectsGetResults($action->statModifiers, $actRes, $hit);
         }
+        $this->applyTimedEffectsGetResults($action->statusEffects, $actRes, $hit);
+        $this->applyTimedEffectsGetResults($action->statModifiers, $actRes, $hit);
         $extra = $riposteRes === null ? '' : '**' . $target->name . ' counter-attacks!**' . PHP_EOL . $riposteRes->__toString();
         if ($hit && $action->selfEffect !== null && !$this->isDead()) {
-            $selfEffectRes = new ActionResult($this, $this, $action->selfEffect->getDescription());
+            $selfEffectRes = new ActionResult($this, $this, $action->selfEffect->getDescription(), $action->selfEffect->getDescription());
             $this->getDAEffectResult($action->selfEffect, $this, $selfEffectRes);
             if ($riposteRes !== null) {
                 $extra .= PHP_EOL;
             }
             $extra .= $selfEffectRes->__toString();
         }
-        $turnFields[] = $actRes->toFields($extra, $action->isTransformAction() ? $effect->getDescription() : '');
+        $turnFields[] = $actRes->toFields($extra);
         return $turnFields;
     }
 

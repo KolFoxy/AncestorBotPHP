@@ -1,0 +1,171 @@
+{
+  "name": "Grave Robber",
+  "description": "To those with a keen eye, gold gleams like a dagger's point.",
+  "image": "https://i.imgur.com/AM8QG7A.png",
+  "healthMax": 36,
+  "stats": {
+    "dodge": 30,
+    "critChance": 10,
+    "stunResist": 70,
+    "blightResist": 100
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "pick": 15,
+    "lunge": 30,
+    "shadow": 15,
+    "dagger": 20,
+    "dart": 25,
+    "toxin": 10
+  },
+  "embedColor": 16777215,
+  "actions": [
+    {
+      "name": "Pick to the Face",
+      "effect": {
+        "description": "Put your pick where it belongs.\nInflicts medium-to-high amounts of damage. Ignores armor.",
+        "health_value": -6,
+        "healthDeviation": -6,
+        "hitChance": 110,
+        "critChance": 5,
+        "ignoresArmor": true,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/8b/Pick_to_the_Face.png"
+      }
+    },
+    {
+      "name": "Lunge",
+      "effect": {
+        "description": "Inflicts high amounts of damage. Bonus damage vs blighted enemies.",
+        "health_value": -10,
+        "healthDeviation": -10,
+        "hitChance": 115,
+        "critChance": 12,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/79/Lunge.png",
+        "typeBonuses": [
+          {
+            "type": "blight",
+            "damageMod": 33
+          }
+        ]
+      }
+    },
+    {
+      "name": "Shadow Fade",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Strike form the shadows!\nGrave Robber goes into stealth, recieves short DODGE, DMG and CRIT buff.",
+        "hitChance": -1,
+        "critChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/7d/Shadow_Fade.png"
+      },
+      "statusEffects": [
+        {
+          "type": "stealth",
+          "chance": -1,
+          "targetSelf": true,
+          "duration": 1
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "damageMod",
+          "value": 80,
+          "duration": 2
+        },
+        {
+          "chance": -1,
+          "duration": 2,
+          "targetSelf": true,
+          "stat": "critChance",
+          "value": 10
+        },
+        {
+          "chance": -1,
+          "duration": 3,
+          "targetSelf": true,
+          "stat": "dodge",
+          "value": 15
+        }
+      ]
+    },
+    {
+      "name": "Thrown Dagger",
+      "effect": {
+        "description": "Throw the special blight-aimed dagger.\nInflicts bonus damage to blighted or marked enemies. Buffs Grave Robber's accuracy.",
+        "health_value": -6,
+        "healthDeviation": -7,
+        "hitChance": 110,
+        "critChance": 12,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a7/Thrown_Dagger.png",
+        "typeBonuses": [
+          {
+            "type": "marked",
+            "damageMod": 40
+          },
+          {
+            "type": "blight",
+            "damageMod": 33
+          }
+        ]
+      },
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "accMod",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "name": "Poison Dart",
+      "effect": {
+        "description": "Blights the enemy and reduces their blight resist.",
+        "health_value": -3,
+        "healthDeviation": -2,
+        "hitChance": 115,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b8/Poison_Dart.png",
+        "critChance": 12
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "blightResist",
+          "value": -33
+        }
+      ],
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 140,
+          "value": -4,
+          "duration": 4
+        }
+      ]
+    },
+    {
+      "name": "Toxin Trickery",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Cures blight, bleed. Increases dodge.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/91/Toxin_Trickery.png",
+        "hitChance": -1,
+        "critChance": -1,
+        "removesBlight": true,
+        "removesBleed": true
+      },
+      "statModifiers": [
+        {
+          "stat": "dodge",
+          "targetSelf": true,
+          "chance": -1,
+          "value": 13
+        }
+      ]
+    }
+  ]
+}

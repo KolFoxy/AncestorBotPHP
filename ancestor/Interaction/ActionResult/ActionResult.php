@@ -47,6 +47,11 @@ class ActionResult {
 
     protected $isCrit = false;
 
+    /**
+     * @var string
+     */
+    public $description;
+
     const DEFAULT_STRESS_SELF_HEAL = -3;
     const CRIT_STRESS = 10;
     const CRIT_HEAL_STRESS_RELIEF = -4;
@@ -58,9 +63,10 @@ class ActionResult {
     const SIGNED_DECIMAL_FORMAT = '%+d';
 
 
-    public function __construct(AbstractLivingBeing $caster, AbstractLivingBeing $target, string $actionName) {
+    public function __construct(AbstractLivingBeing $caster, AbstractLivingBeing $target, string $actionName, string $description) {
         $this->caster = $caster;
         $this->target = $target;
+        $this->description = $description;
         $this->actionName = $actionName;
         $this->targetFeed = new ActionResultFeed();
         if ($target === $caster) {
@@ -70,13 +76,12 @@ class ActionResult {
         $this->casterFeed = new ActionResultFeed();
     }
 
-    public function toFields(string $extra = '', string $description = '', ?string $forcedTitle = null): array {
+    public function toFields(string $extra = '', ?string $forcedTitle = null): array {
         $title = $forcedTitle ?? '**' . $this->caster->name . '** uses **' . $this->actionName . '**';
         if ($this->isCrit) {
             $title .= self::CRIT_MESSAGE;
         }
-        $res = $description;
-        $this->notEmptyAddEol($res, $this->__toString());
+        $res = $this->__toString();
         $this->notEmptyAddEol($res, $extra);
         return Helper::getEmbedField($title, $res);
     }
@@ -85,9 +90,16 @@ class ActionResult {
         $res = $this->miss ? self::MISS_MESSAGE : '';
         $this->notEmptyAddEol($res, $this->feedToResultString($this->targetFeed, $this->target->name, $this->target));
         if ($this->targetFeed === $this->casterFeed) {
-            return $res;
+            return $this->defaultResult($res);
         }
         $this->notEmptyAddEol($res, $this->feedToResultString($this->casterFeed, $this->caster->name, $this->caster));
+        return $this->defaultResult($res);
+    }
+
+    protected function defaultResult(string &$res): string {
+        if ($res === '') {
+            $res = $this->description;
+        }
         return $res;
     }
 
@@ -271,7 +283,9 @@ class ActionResult {
             $effectTarget = $this->target;
             $feed = $this->targetFeed;
         }
-
+        if ($effectTarget->isDead()) {
+            return;
+        }
         if (is_a($toAdd, StatusEffect::class)) {
             if ($effectTarget->statManager->addStatusEffect($toAdd)) {
                 $feed->newEffects[] = $effectTarget->statManager->getStatusEffectState($toAdd->getType());

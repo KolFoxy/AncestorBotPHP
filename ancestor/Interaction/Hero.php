@@ -104,11 +104,11 @@ class Hero extends AbstractLivingBeing {
         if ($this->saManager->isEmpty()) {
             return [];
         }
-        $res = new ActionResult($this, $this, '');
+        $res = new ActionResult($this, $this, '', 'Passive effect.');
         foreach ($this->saManager->getTurnStartEffects($heroIsStunned) as $directActionEffect) {
             $this->getDAEffectResult($directActionEffect, $this, $res);
         }
-        return [$res->toFields('', '', $this->name . ' suffers from condition.')];
+        return [$res->toFields('', $this->name . ' suffers from condition.')];
     }
 
     public function getTrinketStatus(): string {
