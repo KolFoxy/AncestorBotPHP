@@ -51,4 +51,26 @@ class ImageTemplateApplier {
         }
         return $canvas;
     }
+
+    /**
+     * Creates new GD image resources with $imageSrc added to $imageDestination.
+     * @param resource $imageSrc Image to slap.
+     * @param resource $imageDestination Image to slap $imageSrc to.
+     * @param bool $destroySource
+     */
+    public function slapTemplate($imageSrc, $imageDestination, bool $destroySource = false) {
+        imagecopy(
+            $imageDestination,
+            $imageSrc,
+            $this->imgTemplate->imgPositionX,
+            $this->imgTemplate->imgPositionY,
+            0,
+            0,
+            $this->imgTemplate->imgW,
+            $this->imgTemplate->imgH
+        );
+        if ($destroySource) {
+            imagedestroy($imageSrc);
+        }
+    }
 }
