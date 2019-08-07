@@ -295,17 +295,20 @@ class ActionResult {
             return;
         }
 
-        if ($toAdd->getType() === StatModifier::TYPE_DEBUFF && (is_null($this->resistedDebuff) || $this->resistedDebuff === false)) {
-            if ($effectTarget->statManager->addModifier($toAdd)) {
-                $this->resistedDebuff = false;
+        if ($toAdd->getType() === StatModifier::TYPE_DEBUFF) {
+            if ($this->resistedDebuff === true) {
+                return;
+            }
+            if (is_null($this->resistedDebuff)) {
+                $this->resistedDebuff = !$effectTarget->statManager->addModifier($toAdd);
+            }
+            if (!$this->resistedDebuff) {
                 $feed->newEffects[] = $toAdd->__toString();
                 return;
             }
-            $this->resistedDebuff = true;
             $feed->resisted[] = StatModifier::TYPE_DEBUFF;
             return;
         }
-
         $effectTarget->statManager->addModifier($toAdd);
         $feed->newEffects[] = $toAdd->__toString();
     }
