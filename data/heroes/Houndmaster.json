@@ -1,0 +1,134 @@
+{
+  "name": "Houndmaster",
+  "description": "A lawman and his faithful beast - a bond forged by battle and bloodshed.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/1/13/Hound_master_portrait_roster.png/75px-Hound_master_portrait_roster.png",
+  "healthMax": 37,
+  "stats": {
+    "dodge": 30,
+    "critChance": 8,
+    "blightResist": 90,
+    "bleedResist": 90
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "rush": 40,
+    "whistle": 25,
+    "cry": 5,
+    "guard": 15,
+    "lick": 15,
+    "blackjack": 25
+  },
+  "embedColor": 16777215,
+  "actions": [
+    {
+      "name": "Hound's Rush",
+      "effect": {
+        "description": "Hound takes a bite of the target.\nDeals medium-to-high damage, applies bleed. Bonus damage vs Beast and vs Marked.",
+        "health_value": -7,
+        "healthDeviation": -6,
+        "hitChance": 105,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/eb/Hound%27s_Rush.png",
+        "typeBonuses": [
+          {
+            "type": "beast",
+            "damageMod": 35
+          },
+          {
+            "type": "marked",
+            "damageMod": 100
+          }
+        ]
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 140,
+          "value": -2,
+          "duration": 3
+        }
+      ]
+    },
+    {
+      "name": "Target Whistle",
+      "effect": {
+        "description": "Marks the target and decreases their PROT.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/18/Whistle.png",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statusEffects": [
+        {
+          "type": "marked",
+          "chance": -1,
+          "duration": 3
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 170,
+          "stat": "prot",
+          "value": -30
+        }
+      ]
+    },
+    {
+      "name": "Cry Havoc",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Soothing hound's howls.\nHeals stress damage.",
+        "stress_value": -15,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f2/Cry_Havoc.png",
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Guard Dog",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Increases Houndmaster's DODGE chance.",
+        "hitChance": -1,
+        "critChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/5d/Guard_Dog.png"
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "dodge",
+          "value": 20
+        }
+      ]
+    },
+    {
+      "name": "Lick Wounds",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Restores health.",
+        "health_value": 8,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/69/Lick_Wounds.png",
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Blackjack",
+      "effect": {
+        "description": "Deals low amounts of damage and stuns the target.",
+        "health_value": -2,
+        "healthDeviation": -3,
+        "hitChance": 115,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/86/Blackjack.png"
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 150
+        }
+      ]
+    }
+  ]
+}

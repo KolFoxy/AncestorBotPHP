@@ -78,7 +78,7 @@ class StatModifier implements TimedEffectInterface {
     }
 
     public function isPositive(): bool {
-        if ($this->stat === Stats::STRESS_MOD || $this->stat === Stats::CRIT_RECEIVED_CHANCE) {
+        if ($this->stat === Stats::STRESS_MOD || $this->stat === Stats::CRIT_RECEIVED_CHANCE || $this->stat === Stats::DAMAGE_TAKEN_MOD) {
             return $this->value < 0;
         }
         return $this->value > 0;

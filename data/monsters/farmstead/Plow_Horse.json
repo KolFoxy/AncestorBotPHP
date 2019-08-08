@@ -18,6 +18,7 @@
   "actions": [
     {
       "name": "Paw The Ground",
+      "requiresTarget": true,
       "effect": {
         "description": "Brace yourself!\nPlow Horse conceals themselves in stealth.",
         "hitChance": -1

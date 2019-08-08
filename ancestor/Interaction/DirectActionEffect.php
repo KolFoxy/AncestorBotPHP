@@ -8,6 +8,7 @@ use Ancestor\Interaction\Stats\TypeBonus;
 class DirectActionEffect extends AbstractEffect {
 
     const DEFAULT_ACC_BONUS = 5;
+    const FINALE = 'Finale.';
 
     /**
      * Chance of crit for the effect. negative - can't crit.
@@ -78,8 +79,15 @@ class DirectActionEffect extends AbstractEffect {
     protected function getDamageModifier(AbstractLivingBeing $caster, AbstractLivingBeing $target, int $modifier): float {
         $modifier += $caster->statManager->getStatValue(Stats::DAMAGE_MOD)
             + $target->statManager->getStatValue(Stats::DAMAGE_TAKEN_MOD);
+        if ($this->isFinale()) {
+            $modifier += $caster->statManager->getStatValue(Stats::FINALE_DMG_MOD);
+        }
         $protMod = $this->ignoresArmor ? 1.00 : $target->statManager->getValueMod(Stats::PROT);
         return (1.00 + $modifier / 100.00) * $protMod;
+    }
+
+    protected function isFinale(): bool {
+        return mb_strpos($this->getDescription(), self::FINALE) !== false;
     }
 
     public function getTotalTypeBonus(AbstractLivingBeing $caster, AbstractLivingBeing $target): TypeBonus {

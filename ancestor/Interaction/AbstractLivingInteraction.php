@@ -53,13 +53,33 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
     }
 
     /**
+     * @param bool $targetStealthed
      * @return DirectAction
      */
-    public function getRandomAction(): DirectAction {
+    public function getRandomAction(bool $targetStealthed = false): DirectAction {
+        if ($targetStealthed) {
+            return $this->getActionVsStealthed();
+        }
         if ($this->actionRatings !== null) {
             return $this->getRatedAction();
         }
         return $this->actions[mt_rand(0, sizeof($this->actions) - 1)];
+    }
+
+    public function getActionVsStealthed() {
+        $pool = [];
+        foreach ($this->actions as $action) {
+            if ($action->effect->removesStealth) {
+                return $action;
+            }
+            if ($action->isUsableVsStealth()) {
+                $pool[] = $action;
+            }
+        }
+        if (($count = count($pool)) === 0) {
+            return $this->defaultAction();
+        }
+        return $pool[mt_rand(0, $count - 1)];
     }
 
     /**

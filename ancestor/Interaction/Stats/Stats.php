@@ -39,6 +39,8 @@ final class Stats {
 
     const DAMAGE_TAKEN_MOD = 'damageTakenMod';
 
+    const FINALE_DMG_MOD = 'finaleDamage';
+
 
     /**
      * @return array Format: ['stat1' => int, 'stat2' => int, ...]
@@ -71,7 +73,9 @@ final class Stats {
             self::BLEED_SKILL_CHANCE => 0,
             self::BLIGHT_SKILL_CHANCE => 0,
 
-            self::DAMAGE_TAKEN_MOD => 0
+            self::DAMAGE_TAKEN_MOD => 0,
+
+            self::FINALE_DMG_MOD => 0,
         ];
     }
 

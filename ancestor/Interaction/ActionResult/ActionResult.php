@@ -275,7 +275,9 @@ class ActionResult {
      */
     public function addTimedEffect($timedEffect) {
         $toAdd = $timedEffect->clone();
-        $toAdd->chance += $this->caster->statManager->getStatValue($toAdd->getType() . Stats::SKILL_CHANCE_SUFFIX) ?? 0;
+        if (!$toAdd->guaranteedApplication()) {
+            $toAdd->chance += $this->caster->statManager->getStatValue($toAdd->getType() . Stats::SKILL_CHANCE_SUFFIX) ?? 0;
+        }
         if ($toAdd->targetSelf) {
             $effectTarget = $this->caster;
             $feed = $this->casterFeed;
@@ -299,17 +301,20 @@ class ActionResult {
             if ($this->resistedDebuff === true) {
                 return;
             }
+            if ($this->resistedDebuff === false) {
+                $toAdd->chance = -1;
+                $effectTarget->statManager->addModifier($toAdd);
+            }
             if (is_null($this->resistedDebuff)) {
                 $this->resistedDebuff = !$effectTarget->statManager->addModifier($toAdd);
+                if ($this->resistedDebuff === true) {
+                    $feed->resisted[] = StatModifier::TYPE_DEBUFF;
+                    return;
+                }
             }
-            if (!$this->resistedDebuff) {
-                $feed->newEffects[] = $toAdd->__toString();
-                return;
-            }
-            $feed->resisted[] = StatModifier::TYPE_DEBUFF;
-            return;
+        } else {
+            $effectTarget->statManager->addModifier($toAdd);
         }
-        $effectTarget->statManager->addModifier($toAdd);
         $feed->newEffects[] = $toAdd->__toString();
     }
 

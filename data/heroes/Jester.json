@@ -1,0 +1,198 @@
+{
+  "name": "Jester",
+  "description": "He will be laughing still... at the end.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/e/e2/Jester_portrait_roster.png/75px-Jester_portrait_roster.png",
+  "healthMax": 35,
+  "stats": {
+    "dodge": 35,
+    "critChance": 8,
+    "stunResist": 70,
+    "blightResist": 90,
+    "debuffResist": 90
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "dirk": 23,
+    "slice": 20,
+    "battle": 5,
+    "tune": 5,
+    "solo": 10,
+    "finale": 12
+  },
+  "embedColor": 16777215,
+  "actions": [
+    {
+      "name": "Dirk Stab",
+      "effect": {
+        "description": "Quite an unethical stab.\nDeals medium damage and increases damage of the Finale ability.",
+        "health_value": -7,
+        "healthDeviation": -6,
+        "hitChance": 105,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/40/Dirk_Stab.png"
+      },
+      "statModifiers": [
+        {
+          "stat": "finaleDamage",
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 8,
+          "value": 30
+        }
+      ]
+    },
+    {
+      "name": "Finale",
+      "effect": {
+        "description": "Finale.\nDeals very high amounts of damage, reduces Jester's dodge and incrases his stress taken, reduces Finale's damage.",
+        "health_value": -11,
+        "healthDeviation": -9,
+        "hitChance": 160,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/59/Finale.png"
+      },
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "dodge",
+          "duration": 4,
+          "value": -35
+        },
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 4,
+          "stat": "stressMod",
+          "value": 100
+        },
+        {
+          "stat": "finaleDamage",
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 4,
+          "value": -85
+        }
+      ]
+    },
+    {
+      "name": "Solo",
+      "effect": {
+        "description": "Show off your lute skills.\nIncreases Jester's DODGE, Finale's damage and marks Jester.",
+        "hitChance": 145,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/10/Solo.png"
+      },
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "dodge",
+          "duration": 3,
+          "value": 30
+        },
+        {
+          "stat": "finaleDamage",
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 8,
+          "value": 75
+        }
+      ],
+      "statusEffects": [
+        {
+          "type": "marked",
+          "chance": -1,
+          "duration": 4,
+          "targetSelf": true
+        }
+      ]
+    },
+    {
+      "name": "Slice Off",
+      "effect": {
+        "description": "An exsanguinating joke.\nDeals medium damage and applies bleed. Increaes Finale's damage.",
+        "health_value": -5,
+        "healthDeviation": -4,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/09/Slice_Off.png",
+        "hitChance": 115,
+        "critChance": 12
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 140,
+          "value": -5,
+          "duration": 3
+        }
+      ],
+      "statModifiers": [
+        {
+          "stat": "finaleDamage",
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 8,
+          "value": 30
+        }
+      ]
+    },
+    {
+      "name": "Battle Ballad",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Increases accuracy, crit chance and Finale's damage.",
+        "hitChance": -1,
+        "critChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/64/Battle_Ballad.png"
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "accMod",
+          "value": 15
+        },
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "critChance",
+          "value": 8
+        },
+        {
+          "stat": "finaleDamage",
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 8,
+          "value": 30
+        }
+      ]
+    },
+    {
+      "name": "Inspiring Tune",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Heals stress damage, reduces incoming stress and increases Finale's damage.",
+        "hitChance": -1,
+        "critChance": -1,
+        "stress_value": -12,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/af/Inspiring_Tune.png"
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "stressMod",
+          "value": -20
+        },
+        {
+          "stat": "finaleDamage",
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 8,
+          "value": 30
+        }
+      ]
+    }
+  ]
+}

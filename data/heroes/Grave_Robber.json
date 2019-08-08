@@ -73,7 +73,7 @@
           "chance": -1,
           "targetSelf": true,
           "stat": "damageMod",
-          "value": 80,
+          "value": 50,
           "duration": 2
         },
         {
@@ -85,7 +85,7 @@
         },
         {
           "chance": -1,
-          "duration": 3,
+          "duration": 2,
           "targetSelf": true,
           "stat": "dodge",
           "value": 15

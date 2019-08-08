@@ -218,10 +218,13 @@ class FightManager {
      * @return array|MessageEmbed
      */
     protected function monsterTurn() {
+        if ($this->hero->isStealthed()) {
+            return $this->monster->getTurn($this->hero, $this->monster->type->getActionVsStealthed());
+        }
         if (is_a($this->monster, Monster::class)) {
             return $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
         }
-        return $this->monster->getHeroTurn($this->monster->type->getRandomAction(), $this->hero);
+        return $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction());
     }
 
     public function newMonsterTurn(MessageEmbed $resultEmbed) {

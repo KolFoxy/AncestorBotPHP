@@ -329,20 +329,16 @@ class Hero extends AbstractLivingBeing {
      * @return MessageEmbed
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
-        if ($action->requiresTarget) {
-            $target = $this;
-        }
         $res = new MessageEmbed();
+        if ($action->name === DirectAction::TRANSFORM_ACTION) {
+            $this->setTransformEmbedImages($res);
+        } else {
+            $res->setThumbnail($action->effect->image);
+        }
         $fields = $this->getTurn($target, $action);
         $topField = array_shift($fields);
         $res->setTitle($topField['name']);
         $res->setDescription($topField['value']);
-        if ($action->name === DirectAction::TRANSFORM_ACTION) {
-            $this->setTransformEmbedImages($res);
-            $this->transform();
-        } else {
-            $res->setThumbnail($action->effect->image);
-        }
         CommandHelper::mergeEmbed($res, $fields);
         return $res;
     }
@@ -353,10 +349,10 @@ class Hero extends AbstractLivingBeing {
      * @return array
      */
     public function getTurn($target, DirectAction $action): array {
-        $isStunned = $this->statManager->isStunned();
-        if ($action === $this->type->defaultAction()) {
+        if ($action->requiresTarget) {
             $target = $this;
         }
+        $isStunned = $this->statManager->isStunned();
         $targetIsHero = is_a($target, Hero::class);
         $thisStressChecker = is_null($this->getStressState());
         $heroStressStateChecker = $targetIsHero && is_null($target->getStressState());
@@ -378,6 +374,9 @@ class Hero extends AbstractLivingBeing {
             if ($thisStressChecker && !$this->isDead() && !is_null($this->getStressState())) {
                 $fields[] = $this->getStressState()->toField();
             }
+        }
+        if ($action->name === DirectAction::TRANSFORM_ACTION) {
+            $this->transform();
         }
         return $fields;
     }

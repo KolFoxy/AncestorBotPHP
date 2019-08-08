@@ -59,7 +59,7 @@ class ImageTemplateApplier {
      * @param bool $destroySource
      */
     public function slapTemplate($imageSrc, $imageDestination, bool $destroySource = false) {
-        imagecopy(
+        imagecopyresized(
             $imageDestination,
             $imageSrc,
             $this->imgTemplate->imgPositionX,
@@ -67,7 +67,9 @@ class ImageTemplateApplier {
             0,
             0,
             $this->imgTemplate->imgW,
-            $this->imgTemplate->imgH
+            $this->imgTemplate->imgH,
+            imagesx($imageSrc),
+            imagesy($imageSrc)
         );
         if ($destroySource) {
             imagedestroy($imageSrc);
