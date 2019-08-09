@@ -17,9 +17,9 @@ class HeroClass extends AbstractLivingInteraction {
 
     /**
      * Color of the embedResponse
-     * @var null|integer
+     * @var integer
      */
-    public $embedColor = null;
+    public $embedColor = self::EMBED_COLOR;
 
     /**
      * @var null|HeroClass

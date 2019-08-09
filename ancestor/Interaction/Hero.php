@@ -158,9 +158,8 @@ class Hero extends AbstractLivingBeing {
         }
     }
 
-
     public function getStatsAndEffectsEmbed(): MessageEmbed {
-        $res = new MessageEmbed();
+        $res = (new MessageEmbed())->setColor($this->type->embedColor);
         $res->setTitle('**' . $this->name . '**');
         $res->setDescription('*``' . $this->type->description . '``*'
             . PHP_EOL . '**``' . $this->getHealthStatus() . ' ' . $this->getStressStatus() . '``**'
@@ -330,6 +329,7 @@ class Hero extends AbstractLivingBeing {
      */
     public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
         $res = new MessageEmbed();
+        $res->setColor($this->type->embedColor);
         if ($action->name === DirectAction::TRANSFORM_ACTION) {
             $this->setTransformEmbedImages($res);
         } else {

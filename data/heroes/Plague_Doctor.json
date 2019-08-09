@@ -21,6 +21,7 @@
     "embold": 10,
     "disorient": 20
   },
+  "embedColor": 3858217,
   "actions": [
     {
       "name": "Noxious Blast",

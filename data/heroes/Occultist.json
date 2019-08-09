@@ -20,6 +20,7 @@
     "wyrd": 10,
     "hands": 20
   },
+  "embedColor": 4995948,
   "actions": [
     {
       "name": "Sacrifical Stab",

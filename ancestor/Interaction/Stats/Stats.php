@@ -4,8 +4,7 @@ namespace Ancestor\Interaction\Stats;
 
 final class Stats {
 
-    const DEFAULT_STATS_NUM = 22;
-    const TEST_STATS_NUM = 10;
+    const DEFAULT_STATS_NUM = 10; //ALL - 23
 
     const RESIST_SUFFIX = 'Resist';
     const SKILL_CHANCE_SUFFIX = 'SkillChance';

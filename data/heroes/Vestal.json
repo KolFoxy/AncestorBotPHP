@@ -21,6 +21,7 @@
     "illumination": 5,
     "hand": 10
   },
+  "embedColor": 16777215,
   "actions": [
     {
       "name": "Mace Bash",

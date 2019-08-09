@@ -20,6 +20,7 @@
     "call": 20,
     "patch": 10
   },
+  "embedColor": 4072703,
   "actions": [
     {
       "name": "Aimed Shot",

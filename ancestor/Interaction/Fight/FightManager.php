@@ -90,7 +90,7 @@ class FightManager {
         if (!isset($this->monster)) {
             $this->monster = $this->rollNewMonster();
         }
-        $embed = new MessageEmbed();
+        $embed = $this->newColoredEmbed();
         $embed->setTitle('**' . $this->hero->name . '**');
         $embed->setThumbnail($this->hero->type->image);
         $embed->setDescription('*``' . $this->hero->type->description . '``*' . PHP_EOL . '``' . $this->hero->getStatus() . '``');
@@ -145,6 +145,11 @@ class FightManager {
         return $this->getHeroTurn($action, $heroPicUrl);
     }
 
+    /**
+     * @param DirectAction|int $action
+     * @param string $heroPicUrl
+     * @return ExtendedPromiseInterface callback(MessageEmbed $embed), canceller = fight is over
+     */
     public function createTurnPromise($action, string $heroPicUrl): ExtendedPromiseInterface {
         return new Promise(function (callable $resolve, callable $cancel) use ($action, $heroPicUrl) {
             $turn = $this->getTurn($action, $heroPicUrl);
@@ -156,7 +161,7 @@ class FightManager {
     }
 
     protected function getEquipTrinketTurn(int $action): MessageEmbed {
-        $res = new MessageEmbed();
+        $res = $this->newColoredEmbed();
         if ($action === self::SKIP_TRINKET_ACTION) {
             $heal = mt_rand(1, (int)($this->hero->healthMax) * self::SKIP_HEAL_PERCENTAGE * $this->newTrinket->rarity);
             $this->hero->addHealth($heal);
@@ -231,7 +236,7 @@ class FightManager {
     }
 
     protected function transformCdEmbed(): MessageEmbed {
-        $embed = new MessageEmbed();
+        $embed = $this->newColoredEmbed();
         $embed->setTitle('Can\'t transform yet.');
         $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer) . ' turns.');
         return $embed;
@@ -299,7 +304,7 @@ class FightManager {
     }
 
     public function getHeroActionsDescriptions(): MessageEmbed {
-        $res = new MessageEmbed();
+        $res = $this->newColoredEmbed();
         $res->setTitle($this->hero->name . '\'s abilities and actions:');
         $description = '';
         foreach ($this->hero->type->actions as $action) {
@@ -349,5 +354,9 @@ class FightManager {
         }
         $action = $this->hero->type->getActionIfValid($actionName);
         return is_null($action) || (!$action->isUsableVsStealth() && $this->monster->statManager->isStealthed()) ? null : $action;
+    }
+
+    protected function newColoredEmbed(): MessageEmbed {
+        return (new MessageEmbed())->setColor($this->hero->type->embedColor);
     }
 }

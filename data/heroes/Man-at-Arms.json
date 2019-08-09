@@ -23,6 +23,7 @@
     "command": 10,
     "bolster": 10
   },
+  "embedColor": 7762028,
   "actions": [
     {
       "name": "Crush",
