@@ -10,10 +10,12 @@ use Ancestor\Interaction\Fight\EncounterCollectionInterface;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\MonsterType;
+use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
 use CharlotteDunois\Yasmin\Models\Message;
 
-class Fight extends Command implements EncounterCollectionInterface {
 
+class Fight extends Command implements EncounterCollectionInterface {
+    const CHANNEL_SWITCH_REMINDER = 'Remember to switch to the original channel of the fight before continuing.';
     const TIMEOUT = 300.0;
     const SURRENDER_COMMAND = 'ff';
     const CHAR_INFO_COMMAND = 'stats';
@@ -148,11 +150,17 @@ class Fight extends Command implements EncounterCollectionInterface {
         }
         $this->manager->refreshTimer($message, self::TIMEOUT);
         if ($actionName === self::CHAR_INFO_COMMAND) {
-            $message->reply('', ['embed' => $fight->getHeroStats()]);
-            return;
+            $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {
+                $channel->send('', ['embed' => $fight->getHeroStats()->setFooter(self::CHANNEL_SWITCH_REMINDER)]);
+            });
+            $message->reply('Check DMs for your hero\'s stats.');
+            return; 
         }
         if ($actionName === self::CHAR_ACTIONS_COMMAND) {
-            $message->reply('', ['embed' => $fight->getHeroActionsDescriptions()]);
+            $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {
+                $channel->send('', ['embed' => $fight->getHeroActionsDescriptions()->setFooter(self::CHANNEL_SWITCH_REMINDER)]);
+            });
+            $message->reply('Check DMs for the list of actions and their descriptions.');
             return;
         }
         if (($action = $fight->getActionIfValid($actionName)) === null) {
