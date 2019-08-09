@@ -112,9 +112,9 @@ class Hero extends AbstractLivingBeing {
     }
 
     public function getTrinketStatus(): string {
-        return '``Trinket slot`` **``1``**: ***``'
+        return '``Slot`` **``1``**: ***``'
             . (is_null($this->getFirstTrinket()) ? '[EMPTY]``***' : $this->getFirstTrinket()->name . '``***')
-            . '⚫``Trinket slot`` **``2``**: ***``'
+            . '⚫``Slot`` **``2``**: ***``'
             . (is_null($this->getSecondTrinket()) ? '[EMPTY]``***' : $this->getSecondTrinket()->name . '``***');
     }
 
