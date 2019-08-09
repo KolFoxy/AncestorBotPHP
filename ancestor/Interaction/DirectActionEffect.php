@@ -122,5 +122,61 @@ class DirectActionEffect extends AbstractEffect {
         return false;
     }
 
+    public function __toString() {
+        $res = $this->getDescription();
+        if ($this->health_value !== 0) {
+            $res .= PHP_EOL . ($this->isHealEffect() ? 'Heal: ' : 'DMG: ') . $this->deviatingValueToString($this->health_value, $this->healthDeviation);
+        }
+        if ($this->stress_value !== 0) {
+            $res .= PHP_EOL . ($this->isPositiveStressEffect() ? 'Stress Heal: ' : 'Stress: ') . $this->deviatingValueToString($this->stress_value, $this->stressDeviation);
+        }
+        $this->addEffectRemovalsToString($res);
+        if ($this->ignoresArmor) {
+            $res .= PHP_EOL . 'Ignores armor.';
+        }
+        if ($this->hitChance >= 0) {
+            $res .= PHP_EOL . 'Accuracy: ' . $this->hitChance;
+        }
+        if ($this->critChance > 0) {
+            $res .= PHP_EOL . 'Crit Mod: +' . $this->critChance;
+        }
+        if ($this->typeBonuses !== null) {
+            foreach ($this->typeBonuses as $typeBonus) {
+                $res .= PHP_EOL . $typeBonus->__toString();
+            }
+        }
+        return $res;
+    }
+
+    protected function addEffectRemovalsToString(string &$str) {
+        $removes = [];
+        if ($this->removesDebuff) {
+            $removes[] = 'debuff';
+        }
+        if ($this->removesBlight) {
+            $removes[] = 'blight';
+        }
+        if ($this->removesBleed) {
+            $removes[] = 'bleed';
+        }
+        if ($this->removesStealth) {
+            $removes[] = 'stealth';
+        }
+        $firstRemoved = array_shift($removes);
+        if ($firstRemoved !== null) {
+            $str .= PHP_EOL . 'Removes: ' . $firstRemoved;
+            foreach ($removes as $removed) {
+                $str .= ', ' . $removed;
+            }
+        }
+    }
+
+    protected function deviatingValueToString(int $value, int $deviation): string {
+        $valueStr = abs($value);
+        if ($deviation !== 0) {
+            $valueStr .= '-' . abs($value + $deviation);
+        }
+        return $valueStr;
+    }
 
 }

@@ -25,7 +25,7 @@
     {
       "name": "Noxious Blast",
       "effect": {
-        "description": "Sometimes, you fight fire with fire, and blight with blight.\nBlights the target and reduces their accuracy.",
+        "description": "Sometimes, you fight fire with fire, and blight with blight.",
         "health_value": -1,
         "healthDeviation": -1,
         "hitChance": 115,
@@ -50,7 +50,7 @@
     {
       "name": "Incision",
       "effect": {
-        "description": "Even the monsters, bleed, so make them!\nInflicts damage with a hight bleed chance.",
+        "description": "Even the monsters bleed, so make them!",
         "health_value": -7,
         "healthDeviation": -6,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d5/Incision.png",
@@ -69,7 +69,7 @@
       "name": "Battlefield Medicine",
       "requiresTarget": true,
       "effect": {
-        "description": "Bandages and tinctures: the only friends you can trust.\nRemoves blight and bleed.",
+        "description": "Bandages and tinctures: the only friends you can trust.",
         "health_value": 3,
         "healthDeviation": 0,
         "hitChance": -1,
@@ -82,7 +82,7 @@
       "name": "Emboldening Vapours",
       "requiresTarget": true,
       "effect": {
-        "description": "A simple extract, carries you on, makes you fight, makes you live.\nIncreases damage.",
+        "description": "A simple extract, carries you on, makes you fight, makes you live.",
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/7a/Emboldening_Vapours.png",
         "hitChance": -1,
         "critChance": -1
@@ -99,7 +99,7 @@
     {
       "name": "Disorienting Blast",
       "effect": {
-        "description": "Monsters, ha! Even they have the same flaws as us, mere mortals.\nStuns the enemy.",
+        "description": "Monsters, ha! Even they have the same flaws as us.",
         "health_value": 0,
         "healthDeviation": 0,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/49/Disorienting_Blast.png",

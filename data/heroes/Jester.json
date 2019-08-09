@@ -26,7 +26,7 @@
     {
       "name": "Dirk Stab",
       "effect": {
-        "description": "Quite an unethical stab.\nDeals medium damage and increases damage of the Finale ability.",
+        "description": "Quite an unethical stab.",
         "health_value": -7,
         "healthDeviation": -6,
         "hitChance": 105,
@@ -46,7 +46,7 @@
     {
       "name": "Finale",
       "effect": {
-        "description": "Finale.\nDeals very high amounts of damage, reduces Jester's dodge and incrases his stress taken, reduces Finale's damage.",
+        "description": "Finale.",
         "health_value": -11,
         "healthDeviation": -9,
         "hitChance": 160,
@@ -80,7 +80,7 @@
     {
       "name": "Solo",
       "effect": {
-        "description": "Show off your lute skills.\nIncreases Jester's DODGE, Finale's damage and marks Jester.",
+        "description": "Show off your lute skills.",
         "hitChance": 145,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/10/Solo.png"
       },
@@ -112,7 +112,7 @@
     {
       "name": "Slice Off",
       "effect": {
-        "description": "An exsanguinating joke.\nDeals medium damage and applies bleed. Increaes Finale's damage.",
+        "description": "An exsanguinating joke.",
         "health_value": -5,
         "healthDeviation": -4,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/09/Slice_Off.png",

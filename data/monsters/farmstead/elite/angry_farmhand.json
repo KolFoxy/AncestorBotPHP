@@ -2,7 +2,7 @@
   "name": "Angry Farmhand",
   "description": "He had enough of your bullsh**.",
   "image": "https://i.imgur.com/XwNd2Z0.png",
-  "healthMax": 35,
+  "healthMax": 50,
   "types": [
     "husk",
     "human"

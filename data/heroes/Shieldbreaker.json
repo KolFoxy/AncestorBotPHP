@@ -22,7 +22,7 @@
     {
       "name": "Pierce",
       "effect": {
-        "description": "There is no defense against a righteous blow!\nInflicts medium amounts of damage, pierces through armor.",
+        "description": "There is no defense against a righteous blow!",
         "health_value": -8,
         "healthDeviation": -8,
         "hitChance": 110,
@@ -34,7 +34,7 @@
     {
       "name": "Adder's Kiss",
       "effect": {
-        "description": "Just one gentle touch, is all you need to be fell.\nInflicts high amounts of damage and applies blight.",
+        "description": "Just one gentle touch, is all you need to fall.",
         "health_value": -9,
         "healthDeviation": -9,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ea/Shieldbreaker.ability.three.png",
@@ -52,7 +52,7 @@
     {
       "name": "Expose",
       "effect": {
-        "description": "There are no shadows that you can hide in, monsters.\nRemoves stealth and increases chance of crit against the target.",
+        "description": "There are no shadows that you can hide in, monsters.",
         "removesStealth": true,
         "health_value": -5,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e9/Shieldbreaker.ability.five.png",

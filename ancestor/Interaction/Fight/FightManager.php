@@ -177,47 +177,58 @@ class FightManager {
         $isTransformAction = $action->isTransformAction();
         if ($isTransformAction) {
             if ($this->noTransform()) {
-                $embed = new MessageEmbed();
-                $embed->setTitle('Can\'t transform yet.');
-                $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer) . ' turns.');
-                return $embed;
+                return $this->transformCdEmbed();
             }
             $this->resetTransformTimer();
         }
         $embed = $this->hero->getHeroTurn($action, $this->monster);
         if (!$this->hero->isDead() && !$isTransformAction) {
             $this->transformTimerTick();
-            if (!$this->monster->isDead()) {
-                $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
-                Helper::mergeEmbed($embed, $this->monsterTurn());
-            }
-            if ($this->monster->isDead()) {
-                if ($this->endless) {
-                    $this->killCount++;
-                    if ($this->rollTrinkets($embed)) {
-                        return $embed;
-                    }
-                    $this->newMonsterTurn($embed);
-                } else {
+            if ($this->monsterTurnIsFinal($embed)) {
+                if ($this->endless === false) {
                     $embed->setFooter($this->hero->name . ' is victorious!', $heroPicUrl);
-                    return $embed;
                 }
+                return $embed;
             }
         }
-
         if ($this->hero->isDead()) {
             $embed->setFooter('R.I.P. ' . $this->hero->name, $heroPicUrl);
             return $embed;
         }
-
         $embed->setFooter($this->getCurrentFooter());
         return $embed;
     }
 
+    protected function monsterTurnIsFinal(MessageEmbed $embed): bool {
+        if (!$this->monster->isDead()) {
+            $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
+            Helper::mergeEmbed($embed, $this->getMonsterTurnFields());
+        }
+        if ($this->monster->isDead()) {
+            if ($this->endless) {
+                $this->killCount++;
+                if ($this->rollTrinkets($embed)) {
+                    return true;
+                }
+                return $this->newMonsterTurn($embed);
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected function transformCdEmbed(): MessageEmbed {
+        $embed = new MessageEmbed();
+        $embed->setTitle('Can\'t transform yet.');
+        $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer) . ' turns.');
+        return $embed;
+    }
+
     /**
-     * @return array|MessageEmbed
+     * @return array
      */
-    protected function monsterTurn() {
+    protected function getMonsterTurnFields(): array {
         if ($this->hero->isStealthed()) {
             return $this->monster->getTurn($this->hero, $this->monster->type->getActionVsStealthed());
         }
@@ -227,15 +238,20 @@ class FightManager {
         return $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction());
     }
 
-    public function newMonsterTurn(MessageEmbed $resultEmbed) {
+    /**
+     * @param MessageEmbed $resultEmbed
+     * @return bool Whether or not the first turn of the new monster is final. AKA if Monsters dies on his first turn.
+     */
+    public function newMonsterTurn(MessageEmbed $resultEmbed): bool {
         $this->monster = $this->rollNewMonster();
         $resultEmbed->addField('***' . $this->monster->name . ' emerges from the darkness!***',
             '*``' . $this->monster->type->description . '``*'
             . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*');
-        if ((bool)mt_rand(0, 1)) {
-            Helper::mergeEmbed($resultEmbed, $this->monsterTurn());
-        }
         $resultEmbed->setImage($this->monster->type->image);
+        if ((bool)mt_rand(0, 1)) {
+            return $this->monsterTurnIsFinal($resultEmbed);
+        }
+        return false;
     }
 
     /**
@@ -275,7 +291,7 @@ class FightManager {
         $res->setTitle($this->hero->name . '\'s abilities and actions:');
         $description = '';
         foreach ($this->hero->type->actions as $action) {
-            $description .= '***' . $action->name . '***' . PHP_EOL . '``' . $action->effect->getDescription() . '``' . PHP_EOL;
+            $description .= '***' . $action->name . '***' . PHP_EOL . '``' . $action->__toString() . '``' . PHP_EOL;
         }
         $description .= '*' . $this->hero->type->defaultAction()->name . '*'
             . PHP_EOL . '``' . $this->hero->type->defaultAction()->effect->getDescription() . '``';
@@ -289,7 +305,6 @@ class FightManager {
             return false;
         }
         $newTrinket = TrinketFactory::create($this->hero);
-
         $this->newTrinket = $newTrinket;
         $resultEmbed->setImage($newTrinket->image);
         $resultEmbed->addField('You\'ve found a new trinket: ***' . $newTrinket->name . '***',

@@ -14,7 +14,12 @@
     "human"
   ],
   "actionRatings": {
-    "action": 30
+    "chop": 50,
+    "purge": 15,
+    "revenge": 15,
+    "withstand": 15,
+    "solem": 15,
+    "intimidate": 15
   },
   "embedColor": 16777215,
   "actions": [
@@ -53,7 +58,7 @@
       "name": "Revenge",
       "requiresTarget": true,
       "effect": {
-        "description": "Channel your anger.\nIncreases Leper's accuracy, damage and crit chance, but increases his damage taken and reduces his dodge.",
+        "description": "Channel your anger.",
         "hitChance": -1,
         "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/5f/Revenge.png"
@@ -100,7 +105,7 @@
       "name": "Withstand",
       "requiresTarget": true,
       "effect": {
-        "description": "Increases Leper's PROT, resists and marks Leper.",
+        "description": "Be prepared.",
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a5/Withstand.png",
         "hitChance": -1,
         "critChance": -1
@@ -147,7 +152,7 @@
       "name": "Solemnity",
       "requiresTarget": true,
       "effect": {
-        "description": "Live to chop another day.\nHeal stress and health damage.",
+        "description": "Live to chop another day.",
         "health_value": 12,
         "stress_value": -7,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3f/Solemnity.png",
@@ -157,7 +162,7 @@
     {
       "name": "Intimidate",
       "effect": {
-        "description": "Deals small amounts of damage. Removes target's stealth, reduces their damage and marks Leper.",
+        "description": "Come at me!",
         "health_value": -2,
         "healthDeviation": -2,
         "hitChance": 115,

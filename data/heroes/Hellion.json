@@ -31,7 +31,7 @@
     {
       "name": "Barbaric YAWP!",
       "effect": {
-        "description": "YAWP!\nStuns the opponent and increases Hellion's damage output for a short time.",
+        "description": "YAWP!",
         "hitChance": 115,
         "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6e/Barbaric_Yawp.png"
@@ -55,7 +55,7 @@
     {
       "name": "If It Bleeds",
       "effect": {
-        "description": "Yep, it bleeds.\nDeals medium-to-high damage and applies bleed.",
+        "description": "Yep, it bleeds.",
         "health_value": -7,
         "healthDeviation": -5,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a9/If_It_Bleeds.png",
@@ -100,7 +100,7 @@
     {
       "name": "Bleed Out",
       "effect": {
-        "description": "Show the true barbaric might.\nInflicts very hight amounts of damage and applies bleed. The Hellion will recieve damage penalty for a short time.",
+        "description": "Show the true barbaric might.",
         "health_value": -12,
         "healthDeviation": -11,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/19/Bleed_Out.png",

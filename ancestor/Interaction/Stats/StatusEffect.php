@@ -140,6 +140,16 @@ class StatusEffect implements TimedEffectInterface {
 
     }
 
+    public function getShortDescription() {
+        if ($this->type === self::TYPE_BLIGHT
+            || $this->type === self::TYPE_BLEED
+            || $this->type === self::TYPE_HORROR
+            || $this->type === self::TYPE_RIPOSTE){
+            return $this->__toString();
+        }
+        return $this->type;
+    }
+
     public function guaranteedApplication(): bool {
         return $this->isPositive() || $this->chance < 0 || $this->type === self::TYPE_MARKED;
     }

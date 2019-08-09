@@ -58,7 +58,7 @@ class Fight extends Command implements EncounterCollectionInterface {
     public function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'fight', 'Fight a random monster or type ``'
             . $handler->prefix
-            . 'f endless`` in order to start in endless mode, in which more and more monsters will come after defeating previous ones!'
+            . 'f single`` in order to start in single mode, in which only one monster will spawn.'
             . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_INFO_COMMAND . '`` while fighting will show all of your character\'s stats'
             . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_ACTIONS_COMMAND . '`` while fighting will show descriptions of all of your character\'s actions'
             . PHP_EOL . 'typing  ``' . $handler->prefix . 'f ' . self::SURRENDER_COMMAND . '`` while fighting will cancel the fight'
@@ -104,7 +104,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             return;
         }
         if (!$this->manager->userIsInteracting($message)) {
-            $endless = false;
+            $endless = true;
             $heroClassName = '';
             $this->processInitialArgs($args, $endless, $heroClassName);
             $hero = $this->createHero($message->author->username, $heroClassName);
@@ -167,8 +167,8 @@ class Fight extends Command implements EncounterCollectionInterface {
 
     public function processInitialArgs(array $args, bool &$endless, string &$heroClassName) {
         foreach ($args as $str) {
-            if ($str === 'endless') {
-                $endless = true;
+            if ($str === 'single') {
+                $endless = false;
                 continue;
             }
             if (mb_strpos($str, 'test-') === 0) {

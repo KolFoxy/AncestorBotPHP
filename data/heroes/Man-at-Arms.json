@@ -27,7 +27,7 @@
     {
       "name": "Crush",
       "effect": {
-        "description": "Wicked bones, twisted flesh, shatter!\nInflicts high amounts of damage.",
+        "description": "Wicked bones, twisted flesh, shatter!",
         "health_value": -8,
         "healthDeviation": -6,
         "hitChance": 105,
@@ -56,7 +56,7 @@
     {
       "name": "Bellow",
       "effect": {
-        "description": "There is no salvation for you, fiend!\nReduces enemy dodge chance.",
+        "description": "There is no salvation for you, fiend!",
         "health_value": 0,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/82/Bellow.png",
         "hitChance": 115
@@ -90,7 +90,7 @@
     {
       "name": "Retribution",
       "effect": {
-        "description": "Come at me, beast! I can take you on!\nActivates riposte.",
+        "description": "Come at me, beast! I can take you on!",
         "health_value": -2,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fb/Retribution.png",
         "healthDeviation": -1,
@@ -117,7 +117,7 @@
       "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/94/Command.png",
       "requiresTarget": true,
       "effect": {
-        "description": "Strategy, order, survival!\nIncreases accuracy and crit chance.",
+        "description": "Strategy, order, survival!",
         "hitChance": -1,
         "critChance": -1
       },
@@ -141,7 +141,7 @@
       "requiresTarget": true,
       "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ef/Bolster.png",
       "effect": {
-        "description": "Do not give in, do not give up!\nIncreases dodge and decreases incoming stress.",
+        "description": "Do not give in, do not give up!",
         "hitChance": -1,
         "critChance": -1
       },

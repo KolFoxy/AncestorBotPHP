@@ -25,7 +25,7 @@
     {
       "name": "Mace Bash",
       "effect": {
-        "description": "Purge the unholy!\nInflicts medium damage. Bonus damage vs unholy.",
+        "description": "Purge the unholy!",
         "health_value": -7,
         "healthDeviation": -7,
         "hitChance": 105,
@@ -87,7 +87,7 @@
     {
       "name": "Illumination",
       "effect": {
-        "description": "Reveal your foes' flaws, making them easier to hit.\nRemoves stealth, applies dodge debuff.",
+        "description": "Reveal your foes' flaws, making them easier to hit.",
         "health_value": -1,
         "healthDeviation": -2,
         "hitChance": 110,

@@ -43,8 +43,35 @@ class DirectAction {
         return $this->effect->removesStealth || $this->requiresTarget;
     }
 
-    public function isTransformAction():bool {
+    public function isTransformAction(): bool {
         return $this->name === self::TRANSFORM_ACTION;
+    }
+
+    public function __toString() {
+        $res = $this->effect->__toString();
+        if ($this->statusEffects !== null || $this->statModifiers !== null) {
+            $res .= PHP_EOL . 'Effects:';
+            if ($this->statModifiers !== null) {
+                foreach ($this->statModifiers as $statModifier) {
+                    $res .= PHP_EOL . $statModifier->__toString();
+                    if ($statModifier->targetSelf || $this->requiresTarget) {
+                        $res .= ' on self';
+                    }
+                }
+            }
+            if ($this->statusEffects !== null) {
+                foreach ($this->statusEffects as $statusEffect) {
+                    $res .= PHP_EOL . $statusEffect->getShortDescription();
+                    if ($statusEffect->targetSelf || $this->requiresTarget) {
+                        $res .= ' on self';
+                    }
+                }
+            }
+        }
+        if ($this->selfEffect !== null) {
+            $res .= PHP_EOL . 'Self:' . $this->selfEffect->__toString();
+        }
+        return $res;
     }
 
 }

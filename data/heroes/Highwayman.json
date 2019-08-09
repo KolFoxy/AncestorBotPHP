@@ -22,7 +22,7 @@
     {
       "name": "Wicked Slice",
       "effect": {
-        "description": "Strike the enemy with wicked precision.\nInflicts hight health damage.",
+        "description": "Strike the enemy with wicked precision.",
         "health_value": -10,
         "healthDeviation": -8,
         "hitChance": 105,
@@ -50,7 +50,7 @@
     {
       "name": "Grapeshot Blast",
       "effect": {
-        "description": "In a case when enemy is a little more cunning.\nDeals low-to-medium damage, removes stealth, increases target's crit recieved chance.",
+        "description": "In a case when enemy is a little more cunning.",
         "health_value": -5,
         "healthDeviation": -3,
         "hitChance": 95,
@@ -69,7 +69,7 @@
     {
       "name": "Tracking Shot",
       "effect": {
-        "description": "Sharpen your senses by... sniffing gunpowder?\nDeals very low damage, removes stealth, increases Highwayman's ACC, CRIT and DMG",
+        "description": "Sharpen your senses by... sniffing gunpowder?",
         "health_value": -2,
         "healthDeviation": -1,
         "hitChance": 115,
@@ -120,10 +120,10 @@
     {
       "name": "Open Vein",
       "effect": {
-        "description": "Deals medium-to-high damage. Applies bleed and decreases target's bleed resist.",
+        "description": "Make 'em bleed.",
         "health_value": -8,
         "healthDeviation": -6,
-        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b5/Duelist's_Advance.png",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Open_Vein.png",
         "hitChance": 115,
         "critChance": 4
       },

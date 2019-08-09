@@ -22,7 +22,7 @@
     {
       "name": "Smite",
       "effect": {
-        "description": "Smites the opponent with righteous fury.\nInflicts high health damage. Bonus damage vs. Unholy",
+        "description": "Smites the opponent with righteous fury.",
         "health_value": -10,
         "healthDeviation": -9,
         "hitChance": 105,
@@ -80,7 +80,7 @@
       "name": "Bulwark of Faith",
       "requiresTarget": true,
       "effect": {
-        "description": "Raise the shield of faith!\nIncreases Crusader's PROT",
+        "description": "Raise the shield of faith!",
         "hitChance": -1,
         "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/da/Bulwark_of_Faith.png"

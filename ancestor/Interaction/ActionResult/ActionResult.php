@@ -52,11 +52,6 @@ class ActionResult {
      */
     public $description;
 
-    const DEFAULT_STRESS_SELF_HEAL = -3;
-    const CRIT_STRESS = 10;
-    const CRIT_HEAL_STRESS_RELIEF = -4;
-
-
     const MISS_MESSAGE = '``...and misses!``';
     const CRIT_MESSAGE = ' ***CRIT!***';
 

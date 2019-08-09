@@ -25,7 +25,7 @@
     {
       "name": "Hound's Rush",
       "effect": {
-        "description": "Hound takes a bite of the target.\nDeals medium-to-high damage, applies bleed. Bonus damage vs Beast and vs Marked.",
+        "description": "Hound takes a bite of the target.",
         "health_value": -7,
         "healthDeviation": -6,
         "hitChance": 105,
@@ -78,7 +78,7 @@
       "name": "Cry Havoc",
       "requiresTarget": true,
       "effect": {
-        "description": "Soothing hound's howls.\nHeals stress damage.",
+        "description": "Soothing hound's howls.",
         "stress_value": -15,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f2/Cry_Havoc.png",
         "hitChance": -1
@@ -88,7 +88,7 @@
       "name": "Guard Dog",
       "requiresTarget": true,
       "effect": {
-        "description": "Increases Houndmaster's DODGE chance.",
+        "description": "Hide behind the hound.",
         "hitChance": -1,
         "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/5d/Guard_Dog.png"
@@ -106,7 +106,7 @@
       "name": "Lick Wounds",
       "requiresTarget": true,
       "effect": {
-        "description": "Restores health.",
+        "description": "Dog is a viable substitute for bandages.",
         "health_value": 8,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/69/Lick_Wounds.png",
         "hitChance": -1
@@ -115,7 +115,7 @@
     {
       "name": "Blackjack",
       "effect": {
-        "description": "Deals low amounts of damage and stuns the target.",
+        "description": "Smack stick.",
         "health_value": -2,
         "healthDeviation": -3,
         "hitChance": 115,

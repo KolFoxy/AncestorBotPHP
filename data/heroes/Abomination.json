@@ -47,7 +47,7 @@
       {
         "name": "Slam",
         "effect": {
-          "description": "CHAAARGE\nDeals medium-to-hight amounts of damage and reduces target's DODGE chance.",
+          "description": "CHAAARGE",
           "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Slam.png",
           "hitChance": 100,
           "critChance": 5,
@@ -100,7 +100,7 @@
     {
       "name": "Manacles",
       "effect": {
-        "description": "Strikes the target with his chains.\nStuns the target and inflicts low-to-medium damage.",
+        "description": "Strikes the target with chains.",
         "health_value": -4,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/00/Manacles.png",
         "healthDeviation": -4,

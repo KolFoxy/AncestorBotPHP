@@ -25,7 +25,7 @@
     {
       "name": "Collect Bounty",
       "effect": {
-        "description": "The reward better be worth it.\nInflicts medium-to-high health damage. Bonus damage vs. Marked and vs. Human",
+        "description": "The reward better be worth it.",
         "health_value": -8,
         "healthDeviation": -8,
         "hitChance": 105,
@@ -68,7 +68,7 @@
     {
       "name": "Uppercut",
       "effect": {
-        "description": "Up close and personal.\nStuns the target and inflicts low damage.",
+        "description": "Up close and personal.",
         "health_value": -3,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/27/Uppercut.png",
         "healthDeviation": -2,

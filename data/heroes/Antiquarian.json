@@ -26,7 +26,7 @@
     {
       "name": "Nervous Stab",
       "effect": {
-        "description": "Clumsily stabs the enemy.\nInflicts medium health damage.",
+        "description": "Clumsily stab the enemy.",
         "health_value": -5,
         "healthDeviation": -4,
         "hitChance": 110,
@@ -64,7 +64,7 @@
       "name": "Get Down!",
       "requiresTarget": true,
       "effect": {
-        "description": "Hide behind the nearest rock!\nIncreases Antiquarian's dodge and blight skill chance.",
+        "description": "Hide behind the nearest rock!",
         "hitChance": -1,
         "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/19/Get_Down.png"
@@ -88,7 +88,7 @@
     {
       "name": "Flashpowder",
       "effect": {
-        "description": "Blinds and reveals your opponent!\nDecreases target's accuracy and removes stealth.",
+        "description": "Blinds and reveals your opponent!",
         "hitChance": 115,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/47/Flashpowder.png",
         "removesStealth": true
@@ -106,7 +106,7 @@
       "name": "Fortifying Vapours",
       "requiresTarget": true,
       "effect": {
-        "description": "A peculiar set of vapours.\nIncreases bleed and blight resists, heals for a small amount.",
+        "description": "A peculiar set of vapours.",
         "health_value": 3,
         "hitChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6b/Fortifying_Vapours.png"
