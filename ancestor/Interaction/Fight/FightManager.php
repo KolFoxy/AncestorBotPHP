@@ -12,6 +12,8 @@ use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
 use Ancestor\Zalgo\Zalgo;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use React\Promise\ExtendedPromiseInterface;
+use React\Promise\Promise;
 
 class FightManager {
 
@@ -141,6 +143,16 @@ class FightManager {
             return (new MessageEmbed())->setTitle('***FATAL ERROR!***')->setDescription('Invalid action. Terminating session.');
         }
         return $this->getHeroTurn($action, $heroPicUrl);
+    }
+
+    public function createTurnPromise($action, string $heroPicUrl): ExtendedPromiseInterface {
+        return new Promise(function (callable $resolve, callable $cancel) use ($action, $heroPicUrl) {
+            $turn = $this->getTurn($action, $heroPicUrl);
+            if ($this->isOver()) {
+                return $cancel($turn);
+            }
+            return $resolve($turn);
+        });
     }
 
     protected function getEquipTrinketTurn(int $action): MessageEmbed {

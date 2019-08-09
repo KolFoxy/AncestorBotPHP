@@ -12,7 +12,7 @@ use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
 use CharlotteDunois\Yasmin\Models\Message;
-
+use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Fight extends Command implements EncounterCollectionInterface {
     const CHANNEL_SWITCH_REMINDER = 'Remember to switch to the original channel of the fight before continuing.';
@@ -167,10 +167,15 @@ class Fight extends Command implements EncounterCollectionInterface {
             $message->reply('Invalid action.');
             return;
         }
-        $message->reply('', ['embed' => $fight->getTurn($action, $message->author->getAvatarURL())]);
-        if ($fight->isOver()) {
-            $this->manager->deleteInteraction($message);
-        }
+        $fight->createTurnPromise($action, $message->author->getAvatarURL())->done(
+            function (MessageEmbed $embed) use ($message) {
+                $message->reply('', ['embed' => $embed]);
+            },
+            function (MessageEmbed $embed) use ($message) {
+                $this->manager->deleteInteraction($message);
+                $message->reply('', ['embed' => $embed]);
+            }
+        );
     }
 
     public function processInitialArgs(array $args, bool &$endless, string &$heroClassName) {
