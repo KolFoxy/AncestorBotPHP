@@ -140,7 +140,7 @@ class Hero extends AbstractLivingBeing {
             if ($this->stress > self::MAX_STRESS) {
                 if ($this->stressState !== null && $this->stressState->isVirtue) {
                     $this->stress = 0;
-                    $this->bonusStressMessage = ' ' . $this->name . ' is no longer ``' . $this->stressState->name . '``';
+                    $this->bonusStressMessage = ' ' . $this->name . ' is no longer ' . $this->stressState->name;
                     $this->removeStressState();
                     return;
                 }
@@ -153,7 +153,6 @@ class Hero extends AbstractLivingBeing {
                 $this->currentHealth = 0;
                 $this->stress = self::STRESS_ROLLBACK;
                 $this->bonusHealthMessage = self::AT_DEATH_S_DOOR_MESSAGE;
-                $this->bonusStressMessage .= ' ' . $this->getHealthStatus();
             }
         }
     }

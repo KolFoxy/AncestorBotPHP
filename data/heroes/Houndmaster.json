@@ -38,7 +38,8 @@
           },
           {
             "type": "marked",
-            "damageMod": 100
+            "damageMod": 100,
+            "accMod": 15
           }
         ]
       },
