@@ -148,12 +148,15 @@ abstract class AbstractLivingBeing {
 
     /**
      * @param AbstractLivingBeing $target
-     * @param DirectAction $action
+     * @param DirectAction|null $action
      * @return array Array of fields representing results of the turn Format: [['name' => string, 'value' => string, 'inline' => bool]]
      */
-    public function getTurn(AbstractLivingBeing $target, DirectAction $action): array {
+    public function getTurn(AbstractLivingBeing $target, ?DirectAction $action = null): array {
         if ($this->statManager->isStunned()) {
             return $this->getStunnedTurn();
+        }
+        if ($action === null) {
+            $action = $this->type->getRandomAction();
         }
         $turnFields = $this->statManager->getProcessTurn();
         if ($turnFields === null) {

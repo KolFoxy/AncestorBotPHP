@@ -4,6 +4,10 @@
 namespace Ancestor\Interaction\Fight;
 
 use Ancestor\CommandHandler\CommandHelper as Helper;
+use Ancestor\FileDownloader\FileDownloader;
+use Ancestor\ImageTemplate\ImageTemplate;
+use Ancestor\ImageTemplate\ImageTemplateApplier;
+use Ancestor\Interaction\AbstractLivingBeing;
 use Ancestor\Interaction\DirectAction;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Monster;
@@ -12,6 +16,7 @@ use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
 use Ancestor\Zalgo\Zalgo;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use React\EventLoop\LoopInterface;
 use React\Promise\ExtendedPromiseInterface;
 use React\Promise\Promise;
 
@@ -24,7 +29,7 @@ class FightManager {
     public $hero;
 
     /**
-     * @var Monster|Hero
+     * @var AbstractLivingBeing
      */
     public $monster;
 
@@ -54,9 +59,16 @@ class FightManager {
     public $newTrinket = null;
 
     /**
+     * @var string[]
+     */
+    protected $killedMonsters = [];
+
+    /**
      * @var int
      */
     protected $transformTimer = self::TRANSFORM_TURNS_CD;
+
+    const ENDSCREEN_PATH = '/data/images/endscreen/';
 
     const TRINKET_KILLS_THRESHOLD = 2;
 
@@ -160,6 +172,37 @@ class FightManager {
         });
     }
 
+
+    public function createEndscreen(string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
+        return new Promise(function (callable $resolve, callable $cancel) use ($heroPicUrl, $loop) {
+            $fdl = new FileDownloader($loop);
+            $callback = function ($fileHandler) use ($resolve, $cancel) {
+                $avatar = Helper::ImageFromFileHandler($fileHandler);
+                $endPath = dirname(__DIR__, 3) . self::ENDSCREEN_PATH
+                    . mb_strtolower(str_replace(' ', '_', $this->hero->type->name));
+                if ($avatar === false || !file_exists($endPath . '.png') || !file_exists($endPath . '.json')) {
+                    return $cancel();
+                }
+
+                $mapper = new \JsonMapper();
+                $mapper->bExceptionOnMissingData = true;
+                $template = new ImageTemplate();
+                $json = json_decode(file_get_contents($endPath . '.json'));
+                $mapper->map($json, $template);
+                $applier = new ImageTemplateApplier($template);
+                $canvas = imagecreatefrompng($endPath . '.png');
+                $applier->slapTemplate($avatar, $canvas, true);
+
+                ob_start();
+                imagepng($canvas);
+                $result = ob_get_clean();
+                imagedestroy($canvas);
+                return $resolve($result);
+            };
+            $fdl->DownloadUrlAsync($heroPicUrl, $callback);
+        });
+    }
+
     protected function getEquipTrinketTurn(int $action): MessageEmbed {
         $res = $this->newColoredEmbed();
         if ($action === self::SKIP_TRINKET_ACTION) {
@@ -249,10 +292,7 @@ class FightManager {
         if ($this->hero->isStealthed()) {
             return $this->monster->getTurn($this->hero, $this->monster->type->getActionVsStealthed());
         }
-        if (is_a($this->monster, Monster::class)) {
-            return $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
-        }
-        return $this->monster->getTurn($this->hero, $this->monster->type->getRandomAction());
+        return $this->monster->getTurn($this->hero);
     }
 
     /**

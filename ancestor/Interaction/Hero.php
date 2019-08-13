@@ -344,10 +344,13 @@ class Hero extends AbstractLivingBeing {
 
     /**
      * @param AbstractLivingBeing|Hero $target
-     * @param DirectAction $action
+     * @param DirectAction|null $action
      * @return array
      */
-    public function getTurn($target, DirectAction $action): array {
+    public function getTurn($target, ?DirectAction $action = null): array {
+        if ($action === null){
+            $action = $this->type->getRandomAction();
+        }
         if ($action->requiresTarget) {
             $target = $this;
         }

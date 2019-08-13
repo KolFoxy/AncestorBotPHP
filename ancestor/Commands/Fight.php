@@ -148,13 +148,24 @@ class Fight extends Command implements EncounterCollectionInterface {
             $this->manager->deleteInteraction($message);
             return;
         }
+        if ($actionName === 'endscreen') {
+            $fight->createEndscreen($message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
+                function ($data) use ($message) {
+                    $message->reply('', ['files' => [['data' => $data, 'name' => 'end.png']]]);
+                },
+                function () use ($message, $fight) {
+                    $message->reply('**' . $fight->hero->name . '** is now forever lost in space and time.');
+                }
+            );
+            return;
+        }
         $this->manager->refreshTimer($message, self::TIMEOUT);
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {
                 $channel->send('', ['embed' => $fight->getHeroStats()->setFooter(self::CHANNEL_SWITCH_REMINDER)]);
             });
             $message->reply('Check DMs for your hero\'s stats.');
-            return; 
+            return;
         }
         if ($actionName === self::CHAR_ACTIONS_COMMAND) {
             $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {

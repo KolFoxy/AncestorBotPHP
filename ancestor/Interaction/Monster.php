@@ -44,11 +44,14 @@ class Monster extends AbstractLivingBeing {
 
     /**
      * @param AbstractLivingBeing|Hero $target
-     * @param DirectAction $action
+     * @param DirectAction|null $action
      * @return array
      */
-    public function getTurn(AbstractLivingBeing $target, DirectAction $action): array {
-        if ($action->requiresTarget){
+    public function getTurn(AbstractLivingBeing $target, ?DirectAction $action = null): array {
+        if ($action === null) {
+            $action = $this->getProgrammableAction();
+        }
+        if ($action->requiresTarget) {
             $target = $this;
         }
         $heroStressStateChecker = is_a($target, Hero::class) && is_null($target->getStressState());
@@ -60,7 +63,7 @@ class Monster extends AbstractLivingBeing {
     }
 
     public function getProgrammableAction(): DirectAction {
-        if (!is_null($this->type->actionsManager)){
+        if (!is_null($this->type->actionsManager)) {
             return $this->type->actionsManager->getDirectAction($this);
         }
         return $this->type->getRandomAction();
