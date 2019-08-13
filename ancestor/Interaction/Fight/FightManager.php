@@ -176,6 +176,9 @@ class FightManager {
     public function createEndscreen(string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
         return new Promise(function (callable $resolve, callable $cancel) use ($heroPicUrl, $loop) {
             $fdl = new FileDownloader($loop);
+            return $fdl->getDownloadAsyncImagePromise($heroPicUrl)->then(
+                
+            );
             $callback = function ($fileHandler) use ($resolve, $cancel) {
                 $avatar = Helper::ImageFromFileHandler($fileHandler);
                 $endPath = dirname(__DIR__, 3) . self::ENDSCREEN_PATH
