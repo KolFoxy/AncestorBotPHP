@@ -3,12 +3,8 @@
 namespace Ancestor\FileDownloader;
 
 use Ancestor\CommandHandler\CommandHelper;
-use Clue\React\Buzz\Browser;
-use GuzzleHttp\RequestOptions;
-use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
-use React\Promise\ExtendedPromiseInterface;
 use React\Promise\Promise;
 
 class FileDownloader implements AsyncFileDownloaderInterface {

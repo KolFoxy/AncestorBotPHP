@@ -70,6 +70,37 @@ class FightManager {
     protected $transformTimer = self::TRANSFORM_TURNS_CD;
 
     const ENDSCREEN_PATH = '/data/images/endscreen/';
+    const FONT_PATH = '/data/the_font/DwarvenAxeDynamic.ttf';
+    const FONT_SIZE = 48;
+    const KILLCOUNT_X = 13;
+    const KILLCOUNT_Y = 195;
+    const KILLS_NUMBER_X = 128;
+    const CORPSES_PATH = '/data/images/corpses/';
+    const DEFAULT_CORPSE_PATH = '/data/images/corpses/default.png';
+    const CORPSE_Y_POSITIONS = [
+        0 => [
+            'max' => 410,
+            'min' => 393,
+        ],
+        1 => [
+            'max' => 343,
+            'min' => 326
+        ],
+        2 => [
+            'max' => 298,
+            'min' => 281
+        ],
+        3 => [
+            'max' => 260,
+            'min' => 243
+        ],
+    ];
+    const CORPSE_HEIGHT = 100;
+    const CORPSE_WIDTH = 159;
+
+
+    const CORPSE_MAX_X = 107;
+    const CORPSE_MIN_X = -25;
 
     const TRINKET_KILLS_THRESHOLD = 2;
 
@@ -91,6 +122,8 @@ class FightManager {
     const UTF8_ALPHABET_END = 90;
 
     const CORRUPTED_DEATHBLOW_RESIST = 30;
+
+    const SMALL_FONT_SIZE = 24;
 
     public function __construct(Hero $hero, EncounterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
         $this->hero = $hero;
@@ -189,6 +222,7 @@ class FightManager {
                 $applier = new ImageTemplateApplier($template);
                 $canvas = imagecreatefrompng($endPath . '.png');
                 $applier->slapTemplate($imageFile, $canvas, true);
+                $this->addKillCountToImage($canvas);
 
                 ob_start();
                 imagepng($canvas);
@@ -198,6 +232,26 @@ class FightManager {
                 return $result;
             }
         );
+    }
+
+    protected function addKillCountToImage($image) {
+        $cyan = imagecolorallocate($image, 0, 255, 255);
+        $red = imagecolorallocate($image, 255, 0, 0);
+        $ttfPath = dirname(__DIR__, 3) . self::FONT_PATH;
+        $numSize = $this->killCount >= 10000 ? self::SMALL_FONT_SIZE : self::FONT_SIZE;
+        imagettftext($image, self::FONT_SIZE, 0, self::KILLCOUNT_X, self::KILLCOUNT_Y, $cyan, $ttfPath, 'Kills:');
+        imagettftext($image, $numSize, 0, self::KILLS_NUMBER_X, self::KILLCOUNT_Y, $red, $ttfPath, (string)$this->killCount);
+    }
+
+    protected function addCorpsesToImage($image) {
+        $killed = count($this->killedMonsters) - 1;
+        for ($i = 0; $i < $killed; $i++) {
+            $path = dirname(__DIR__, 3) . self::CORPSES_PATH
+                . str_replace(' ', '_', mb_strtolower($this->killedMonsters[$i]));
+            if (!file_exists($path)) {
+                $path = self::DEFAULT_CORPSE_PATH;
+            }
+        }
     }
 
     protected function getEquipTrinketTurn(int $action): MessageEmbed {
@@ -264,6 +318,7 @@ class FightManager {
         if ($this->monster->isDead()) {
             if ($this->endless) {
                 $this->killCount++;
+                $this->killedMonsters = $this->monster->type->name;
                 if ($this->rollTrinkets($embed)) {
                     return true;
                 }
