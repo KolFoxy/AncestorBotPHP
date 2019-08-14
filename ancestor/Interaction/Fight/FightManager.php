@@ -19,6 +19,7 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use React\EventLoop\LoopInterface;
 use React\Promise\ExtendedPromiseInterface;
 use React\Promise\Promise;
+use React\Promise\PromiseInterface;
 
 class FightManager {
 
@@ -174,36 +175,29 @@ class FightManager {
 
 
     public function createEndscreen(string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
-        return new Promise(function (callable $resolve, callable $cancel) use ($heroPicUrl, $loop) {
-            $fdl = new FileDownloader($loop);
-            return $fdl->getDownloadAsyncImagePromise($heroPicUrl)->then(
-                
-            );
-            $callback = function ($fileHandler) use ($resolve, $cancel) {
-                $avatar = Helper::ImageFromFileHandler($fileHandler);
+        $fdl = new FileDownloader($loop);
+        return $fdl->getDownloadAsyncImagePromise($heroPicUrl)->then(
+            function ($imageFile) {
                 $endPath = dirname(__DIR__, 3) . self::ENDSCREEN_PATH
                     . mb_strtolower(str_replace(' ', '_', $this->hero->type->name));
-                if ($avatar === false || !file_exists($endPath . '.png') || !file_exists($endPath . '.json')) {
-                    return $cancel();
-                }
-
                 $mapper = new \JsonMapper();
                 $mapper->bExceptionOnMissingData = true;
                 $template = new ImageTemplate();
                 $json = json_decode(file_get_contents($endPath . '.json'));
                 $mapper->map($json, $template);
+
                 $applier = new ImageTemplateApplier($template);
                 $canvas = imagecreatefrompng($endPath . '.png');
-                $applier->slapTemplate($avatar, $canvas, true);
+                $applier->slapTemplate($imageFile, $canvas, true);
 
                 ob_start();
                 imagepng($canvas);
                 $result = ob_get_clean();
                 imagedestroy($canvas);
-                return $resolve($result);
-            };
-            $fdl->DownloadUrlAsync($heroPicUrl, $callback);
-        });
+
+                return $result;
+            }
+        );
     }
 
     protected function getEquipTrinketTurn(int $action): MessageEmbed {

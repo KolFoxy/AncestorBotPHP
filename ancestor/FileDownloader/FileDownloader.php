@@ -9,6 +9,7 @@ use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
+use React\Promise\Promise;
 
 class FileDownloader implements AsyncFileDownloaderInterface {
     /**
@@ -68,10 +69,15 @@ class FileDownloader implements AsyncFileDownloaderInterface {
         $request->end();
     }
 
-    public function getDownloadAsyncImagePromise(string $url): ExtendedPromiseInterface {
+    public function getDownloadAsyncImagePromise(string $url): Promise {
         $deferred = new Deferred();
         $callback = function ($file) use ($deferred) {
-            $deferred->resolve(CommandHelper::ImageFromFileHandler($file));
+            $imageFile = CommandHelper::ImageFromFileHandler($file);
+            if ($imageFile === false){
+                $deferred->reject();
+                return;
+            }
+            $deferred->resolve($imageFile);
         };
         $this->DownloadUrlAsync($url, $callback);
         return $deferred->promise();
