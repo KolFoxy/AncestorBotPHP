@@ -148,7 +148,16 @@ class Fight extends Command implements EncounterCollectionInterface {
             $this->manager->deleteInteraction($message);
             return;
         }
-        if ($actionName === 'endscreen') {
+        if ($actionName === 'endscreen') { //for testing only, delete later
+            $fight->killCount = 20;
+            $fight->killedMonsters = [];
+            for ($i = 0; $i < $fight->killCount; $i++) {
+                if (mt_rand(0, 9) === 1) {
+                    $fight->killedMonsters[] = $this->randHeroClass()->name;
+                    continue;
+                }
+                $fight->killedMonsters[] = $this->randRegularMonsterType()->name;
+            }
             $fight->createEndscreen($message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
                 function ($data) use ($message) {
                     $message->reply('', ['files' => [['data' => $data, 'name' => 'end.png']]]);
@@ -178,13 +187,13 @@ class Fight extends Command implements EncounterCollectionInterface {
             $message->reply('Invalid action.');
             return;
         }
-        $fight->createTurnPromise($action, $message->author->getAvatarURL())->done(
-            function (MessageEmbed $embed) use ($message) {
-                $message->reply('', ['embed' => $embed]);
+        $fight->createTurnPromise($action, $message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
+            function ($messageData) use ($message) {
+                $message->reply('', $messageData);
             },
-            function (MessageEmbed $embed) use ($message) {
+            function ($messageData) use ($message) {
                 $this->manager->deleteInteraction($message);
-                $message->reply('', ['embed' => $embed]);
+                $message->reply('', $messageData);
             }
         );
     }

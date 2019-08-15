@@ -17,6 +17,7 @@ use Ancestor\Interaction\Stats\TrinketFactory;
 use Ancestor\Zalgo\Zalgo;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use React\EventLoop\LoopInterface;
+use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
 use React\Promise\Promise;
 use React\Promise\PromiseInterface;
@@ -62,7 +63,7 @@ class FightManager {
     /**
      * @var string[]
      */
-    protected $killedMonsters = [];
+    public $killedMonsters = [];
 
     /**
      * @var int
@@ -84,23 +85,23 @@ class FightManager {
         ],
         1 => [
             'max' => 343,
-            'min' => 326
+            'min' => 326,
         ],
         2 => [
             'max' => 298,
-            'min' => 281
+            'min' => 281,
         ],
         3 => [
             'max' => 260,
-            'min' => 243
+            'min' => 243,
         ],
     ];
+    const CORPSES_PER_LAYER = 8;
+    const MAX_LAYER_INDEX = 3;
     const CORPSE_HEIGHT = 100;
     const CORPSE_WIDTH = 159;
-
-
-    const CORPSE_MAX_X = 107;
-    const CORPSE_MIN_X = -25;
+    const CORPSE_MAX_X = 168;
+    const CORPSE_MIN_X = -70;
 
     const TRINKET_KILLS_THRESHOLD = 2;
 
@@ -124,6 +125,8 @@ class FightManager {
     const CORRUPTED_DEATHBLOW_RESIST = 30;
 
     const SMALL_FONT_SIZE = 24;
+
+    const ENDSCREEN_THRESHOLD = 15;
 
     public function __construct(Hero $hero, EncounterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
         $this->hero = $hero;
@@ -194,18 +197,30 @@ class FightManager {
     /**
      * @param DirectAction|int $action
      * @param string $heroPicUrl
-     * @return ExtendedPromiseInterface callback(MessageEmbed $embed), canceller = fight is over
+     * @param LoopInterface $loop
+     * @return ExtendedPromiseInterface callback($messageData), canceller = fight is over
      */
-    public function createTurnPromise($action, string $heroPicUrl): ExtendedPromiseInterface {
-        return new Promise(function (callable $resolve, callable $cancel) use ($action, $heroPicUrl) {
-            $turn = $this->getTurn($action, $heroPicUrl);
-            if ($this->isOver()) {
-                return $cancel($turn);
+    public function createTurnPromise($action, string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
+        $deferred = new Deferred();
+        $turn = $this->getTurn($action, $heroPicUrl);
+        if ($this->isOver()) {
+            if ($this->killCount < self::ENDSCREEN_THRESHOLD) {
+                $deferred->reject(['embed' => $turn]);
+            } else {
+                $this->createEndscreen($heroPicUrl, $loop)->done(
+                    function ($data) use ($deferred, $turn) {
+                        $deferred->reject(['embed' => $turn, 'files' => [['data' => $data, 'name' => 'end.png']]]);
+                    },
+                    function () use ($deferred, $turn) {
+                        $deferred->reject(['embed' => $turn]);
+                    }
+                );
             }
-            return $resolve($turn);
-        });
+        } else {
+            $deferred->resolve(['embed' => $turn]);
+        }
+        return $deferred->promise();
     }
-
 
     public function createEndscreen(string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
         $fdl = new FileDownloader($loop);
@@ -223,6 +238,7 @@ class FightManager {
                 $canvas = imagecreatefrompng($endPath . '.png');
                 $applier->slapTemplate($imageFile, $canvas, true);
                 $this->addKillCountToImage($canvas);
+                $this->addCorpsesToImage($canvas);
 
                 ob_start();
                 imagepng($canvas);
@@ -244,14 +260,62 @@ class FightManager {
     }
 
     protected function addCorpsesToImage($image) {
-        $killed = count($this->killedMonsters) - 1;
-        for ($i = 0; $i < $killed; $i++) {
-            $path = dirname(__DIR__, 3) . self::CORPSES_PATH
-                . str_replace(' ', '_', mb_strtolower($this->killedMonsters[$i]));
-            if (!file_exists($path)) {
-                $path = self::DEFAULT_CORPSE_PATH;
+        $distributions = $this->getCorpsesDistributionArray();
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+        $applier = new ImageTemplateApplier($this->getDefaultTemplate());
+        foreach ($distributions as $layer) {
+            foreach ($layer as $name => $positions) {
+                $path = dirname(__DIR__, 3) . self::CORPSES_PATH
+                    . str_replace(' ', '_', mb_strtolower($name)) . '.png';
+                if (!file_exists($path)) {
+                    $path = dirname(__DIR__, 3) . self::DEFAULT_CORPSE_PATH;
+                }
+                $corpseImage = imagecreatefrompng($path);
+                if ($corpseImage === false) {
+                    echo 'INVALID PATH "' . $path . '"' . PHP_EOL;
+                    continue;
+                }
+                foreach ($positions as $position) {
+                    $applier->imgTemplate->imgPositionX = $position[0];
+                    $applier->imgTemplate->imgPositionY = $position[1];
+                    $applier->slapTemplate($corpseImage, $image);
+                }
+                imagedestroy($corpseImage);
             }
         }
+
+    }
+
+    protected function getDefaultTemplate(): ImageTemplate {
+        $res = new ImageTemplate();
+        $res->imgH = self::CORPSE_HEIGHT;
+        $res->imgW = self::CORPSE_WIDTH;
+        return $res;
+    }
+
+    protected function getCorpsesDistributionArray(): array {
+        $res = [];
+        for ($i = self::MAX_LAYER_INDEX; $i >= 0; $i--) {
+            $res[$i] = [];
+        }
+        $killed = count($this->killedMonsters);
+        for ($i = 0; $i < $killed; $i++) {
+            $layer = (int)($i / self::CORPSES_PER_LAYER);
+            if ($layer > self::MAX_LAYER_INDEX) {
+                $layer = mt_rand(0, self::MAX_LAYER_INDEX);
+            }
+            $position = [
+                mt_rand(self::CORPSE_MIN_X, self::CORPSE_MAX_X),
+                mt_rand(self::CORPSE_Y_POSITIONS[$layer]['min'], self::CORPSE_Y_POSITIONS[$layer]['max']),
+            ];
+            if (isset($res[$layer][$this->killedMonsters[$i]])) {
+                $res[$layer][$this->killedMonsters[$i]][] = $position;
+            } else {
+                $res[$layer][$this->killedMonsters[$i]] = [$position];
+            }
+        }
+        return $res;
     }
 
     protected function getEquipTrinketTurn(int $action): MessageEmbed {
@@ -318,7 +382,7 @@ class FightManager {
         if ($this->monster->isDead()) {
             if ($this->endless) {
                 $this->killCount++;
-                $this->killedMonsters = $this->monster->type->name;
+                $this->killedMonsters[] = $this->monster->type->name;
                 if ($this->rollTrinkets($embed)) {
                     return true;
                 }

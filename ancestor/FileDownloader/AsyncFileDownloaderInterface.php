@@ -2,6 +2,8 @@
 
 namespace Ancestor\FileDownloader;
 
+use React\Promise\Promise;
+
 interface AsyncFileDownloaderInterface {
 
 
@@ -11,4 +13,6 @@ interface AsyncFileDownloaderInterface {
      * @param $callback
      */
     public function DownloadUrlAsync(string $url, $callback);
+
+    public function getDownloadAsyncImagePromise(string $url): Promise;
 }
