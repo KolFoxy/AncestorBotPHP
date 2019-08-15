@@ -60,6 +60,9 @@ class TimedCommandManager {
 
     public function deleteInteraction(Message $message, int $userId = null) {
         $id = $this->generateId($message, $userId);
+        if (!$this->interactingUsers->has($id)) {
+            return;
+        }
         $this->client->cancelTimer($this->getTimer($id));
         $this->interactingUsers->delete($id);
     }
