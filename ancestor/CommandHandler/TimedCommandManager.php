@@ -36,13 +36,17 @@ class TimedCommandManager {
      * @param int $timeout
      * @param $data
      * @param int|null $userId
+     * @param callable|null $onTimeout
      */
-    public function addInteraction(Message $message, int $timeout, $data, int $userId = null) {
+    public function addInteraction(Message $message, int $timeout, $data, int $userId = null, callable $onTimeout = null) {
         $id = $this->generateId($message, $userId);
         $this->interactingUsers->set($id, [
             'data' => $data,
             'timer' => $this->client->addTimer($timeout,
-                function () use ($id) {
+                function () use ($id, $onTimeout) {
+                    if ($onTimeout !== null) {
+                        $onTimeout();
+                    }
                     $this->interactingUsers->delete($id);
                 }
             ),

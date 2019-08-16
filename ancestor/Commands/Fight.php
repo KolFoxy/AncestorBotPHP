@@ -57,6 +57,8 @@ class Fight extends Command implements EncounterCollectionInterface {
     private $elitesMaxIndex;
 
 
+    const ABORT_MESSAGE = 'is now forever lost in space and time.';
+
     public function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'fight', 'Fight a random monster or type ``'
             . $handler->prefix
@@ -112,7 +114,11 @@ class Fight extends Command implements EncounterCollectionInterface {
             $hero = $this->createHero($message->author->username, $heroClassName);
             $fightManager = new FightManager($hero, $this, $this->handler->prefix . 'f', $endless);
             $message->reply('', ['embed' => $fightManager->start()]);
-            $this->manager->addInteraction($message, self::TIMEOUT, $fightManager);
+            $this->manager->addInteraction($message, self::TIMEOUT, $fightManager, null,
+                function () use ($fightManager, $message) {
+                    $this->forfeitFight($message, $fightManager);
+                }
+            );
             return;
         }
         $this->processActiveUserInput($message, $args);
@@ -144,8 +150,7 @@ class Fight extends Command implements EncounterCollectionInterface {
         $actionName = implode(' ', $args);
         $fight = $this->getFight($message);
         if ($actionName === self::SURRENDER_COMMAND) {
-            $message->reply('**' . $fight->hero->name . '** is now forever lost in space and time.');
-            $this->manager->deleteInteraction($message);
+            $this->forfeitFight($message, $fight);
             return;
         }
         if ($actionName === 'endscreen') { //for testing only, delete later
@@ -163,7 +168,7 @@ class Fight extends Command implements EncounterCollectionInterface {
                     $message->reply('', ['files' => [['data' => $data, 'name' => 'end.png']]]);
                 },
                 function () use ($message, $fight) {
-                    $message->reply('**' . $fight->hero->name . '** is now forever lost in space and time.');
+                    $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
                 }
             );
             return;
@@ -196,6 +201,25 @@ class Fight extends Command implements EncounterCollectionInterface {
                 $message->reply('', $messageData);
             }
         );
+    }
+
+    function forfeitFight(Message $message, FightManager $fight) {
+        if ($fight->killCount >= FightManager::ENDSCREEN_THRESHOLD) {
+            $fight->createEndscreen($message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
+                function ($imageData) use ($message, $fight) {
+                    $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE
+                        , ['files' => [['data' => $imageData, 'name' => 'end.png']]]);
+                    $this->manager->deleteInteraction($message);
+                },
+                function () use ($message, $fight) {
+                    $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
+                    $this->manager->deleteInteraction($message);
+                }
+            );
+            return;
+        }
+        $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
+        $this->manager->deleteInteraction($message);
     }
 
     public function processInitialArgs(array $args, bool &$endless, string &$heroClassName) {

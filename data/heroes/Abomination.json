@@ -69,7 +69,8 @@
         "effect": {
           "description": "Transforms back to the human form.",
           "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/4a/Transform.png",
-          "hitChance": -1
+          "hitChance": -1,
+          "critChance": -1
         }
       }
     ]
