@@ -117,6 +117,16 @@ abstract class AbstractLivingBeing {
      */
     abstract public function addHealth(int $value);
 
+    /**
+     * @param int $value
+     * @return int For how much the being was healed
+     */
+    public function heal(int $value): int {
+        $value = (int)($this->statManager->getValueMod(Stats::HEAL_RECEIVED_MOD) * $value);
+        $this->addHealth($value);
+        return $value;
+    }
+
     abstract public function getDeathQuote(): string;
 
     public function getStunnedTurn(): array {

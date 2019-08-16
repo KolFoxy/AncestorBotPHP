@@ -12,7 +12,8 @@
     "stunResist": 90,
     "bleedResist": 80,
     "blightResist": 80,
-    "debuffResist": 80
+    "debuffResist": 80,
+    "healReceivedMod": 50
   },
   "actionRatings": {
     "nervous": 25,

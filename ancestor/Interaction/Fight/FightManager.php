@@ -123,8 +123,8 @@ class FightManager {
     const CORRUPTED_HERO_THRESHOLD = 10;
     const CORRUPTED_HERO_CHANCE = 25;
 
-    const ELITE_MONSTER_THRESHOLD = 12;
-    const ELITE_MONSTER_CHANCE = 20;
+    const ELITE_MONSTER_THRESHOLD = 15;
+    const ELITE_MONSTER_CHANCE = 25;
     const CORRUPTED_NAME_MAXLENGTH = 6;
     const CORRUPTED_NAME_MINLENGTH = 3;
     const CORRUPTED_NAME_ZALGOCHARS = 4;
@@ -337,7 +337,7 @@ class FightManager {
         $res = $this->newColoredEmbed();
         if ($action === self::SKIP_TRINKET_ACTION) {
             $heal = mt_rand(1, (int)($this->hero->healthMax) * self::SKIP_HEAL_PERCENTAGE * $this->newTrinket->rarity);
-            $this->hero->addHealth($heal);
+            $heal = $this->hero->heal($heal);
             $res->setTitle('**' . $this->hero->name . '** used their time to heal for **' . $heal . 'HP**');
             $res->setDescription($this->hero->getHealthStatus());
         } else {
@@ -495,7 +495,11 @@ class FightManager {
         $newTrinket = TrinketFactory::create($this->hero);
         $this->newTrinket = $newTrinket;
         $resultEmbed->setImage($newTrinket->image);
-        $resultEmbed->addField('You\'ve found a new trinket: ***' . $newTrinket->name . '***',
+        $trinketTitle = $newTrinket->name;
+        for ($i = 0; $i < $this->newTrinket->rarity; $i++) {
+            $trinketTitle .= '☆';
+        }
+        $resultEmbed->addField('You\'ve found a new trinket: ***' . $trinketTitle . '***',
             '``' . $newTrinket->getDescription() . '``'
             . PHP_EOL . $this->hero->getTrinketStatus());
         $resultEmbed->setFooter($this->getCurrentFooter());

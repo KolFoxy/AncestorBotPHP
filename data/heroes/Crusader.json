@@ -97,7 +97,7 @@
           "chance": -1,
           "targetSelf": true,
           "stat": "prot",
-          "value": 30
+          "value": 32
         }
       ]
     }

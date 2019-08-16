@@ -348,7 +348,7 @@ class Hero extends AbstractLivingBeing {
      * @return array
      */
     public function getTurn($target, ?DirectAction $action = null): array {
-        if ($action === null){
+        if ($action === null) {
             $action = $this->type->getRandomAction();
         }
         if ($action->requiresTarget) {
