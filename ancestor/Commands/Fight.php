@@ -149,7 +149,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             return;
         }
         if ($actionName === 'endscreen') { //for testing only, delete later
-            $fight->killCount = 20;
+            $fight->killCount = 56;
             $fight->killedMonsters = [];
             for ($i = 0; $i < $fight->killCount; $i++) {
                 if (mt_rand(0, 9) === 1) {

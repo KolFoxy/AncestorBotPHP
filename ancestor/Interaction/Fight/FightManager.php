@@ -19,11 +19,8 @@ use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
-use React\Promise\Promise;
-use React\Promise\PromiseInterface;
 
 class FightManager {
-
 
     /**
      * @var Hero
@@ -73,9 +70,12 @@ class FightManager {
     const ENDSCREEN_PATH = '/data/images/endscreen/';
     const FONT_PATH = '/data/the_font/DwarvenAxeDynamic.ttf';
     const FONT_SIZE = 48;
+    const SMALL_FONT_SIZE = 24;
     const KILLCOUNT_X = 13;
     const KILLCOUNT_Y = 195;
     const KILLS_NUMBER_X = 128;
+    const TITLE_X = 65;
+    const TITLE_Y = 220;
     const CORPSES_PATH = '/data/images/corpses/';
     const DEFAULT_CORPSE_PATH = '/data/images/corpses/default.png';
     const CORPSE_Y_POSITIONS = [
@@ -102,31 +102,38 @@ class FightManager {
     const CORPSE_WIDTH = 159;
     const CORPSE_MAX_X = 168;
     const CORPSE_MIN_X = -70;
+    /**
+     * array [int killThreshold => string Title]
+     */
+    const FINAL_TITLES = [
+        100 => 'LEGEND',
+        55 => 'CHAMPION',
+        40 => 'VETERAN',
+        25 => 'APPRENTICE',
+        0 => 'RECRUIT',
+    ];
+    const ENDSCREEN_THRESHOLD = 15;
 
     const TRINKET_KILLS_THRESHOLD = 2;
 
     const SKIP_TRINKET_ACTION = -13505622;
 
     const SKIP_HEAL_PERCENTAGE = 0.1;
-
     const TRANSFORM_TURNS_CD = 4;
-
     const CORRUPTED_HERO_THRESHOLD = 10;
     const CORRUPTED_HERO_CHANCE = 25;
+
     const ELITE_MONSTER_THRESHOLD = 12;
     const ELITE_MONSTER_CHANCE = 20;
-
     const CORRUPTED_NAME_MAXLENGTH = 6;
     const CORRUPTED_NAME_MINLENGTH = 3;
     const CORRUPTED_NAME_ZALGOCHARS = 4;
+
     const UTF8_ALPHABET_START = 65;
+
     const UTF8_ALPHABET_END = 90;
 
     const CORRUPTED_DEATHBLOW_RESIST = 30;
-
-    const SMALL_FONT_SIZE = 24;
-
-    const ENDSCREEN_THRESHOLD = 15;
 
     public function __construct(Hero $hero, EncounterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
         $this->hero = $hero;
@@ -257,13 +264,21 @@ class FightManager {
         $numSize = $this->killCount >= 10000 ? self::SMALL_FONT_SIZE : self::FONT_SIZE;
         imagettftext($image, self::FONT_SIZE, 0, self::KILLCOUNT_X, self::KILLCOUNT_Y, $cyan, $ttfPath, 'Kills:');
         imagettftext($image, $numSize, 0, self::KILLS_NUMBER_X, self::KILLCOUNT_Y, $red, $ttfPath, (string)$this->killCount);
+        $title = '';
+        foreach (self::FINAL_TITLES as $threshold => $item) {
+            if ($this->killCount >= $threshold) {
+                $title = $item;
+                break;
+            }
+        }
+        imagettftext($image, self::SMALL_FONT_SIZE, 0, self::TITLE_X, self::TITLE_Y, $cyan, $ttfPath, $title);
     }
 
     protected function addCorpsesToImage($image) {
         $distributions = $this->getCorpsesDistributionArray();
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
-        $applier = new ImageTemplateApplier($this->getDefaultTemplate());
+        $applier = new ImageTemplateApplier($this->getDefaultCorpseTemplate());
         foreach ($distributions as $layer) {
             foreach ($layer as $name => $positions) {
                 $path = dirname(__DIR__, 3) . self::CORPSES_PATH
@@ -287,7 +302,7 @@ class FightManager {
 
     }
 
-    protected function getDefaultTemplate(): ImageTemplate {
+    protected function getDefaultCorpseTemplate(): ImageTemplate {
         $res = new ImageTemplate();
         $res->imgH = self::CORPSE_HEIGHT;
         $res->imgW = self::CORPSE_WIDTH;
