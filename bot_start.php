@@ -8,6 +8,7 @@ $ancestorBot = new \Ancestor\AncestorBot(
     new \CharlotteDunois\Yasmin\Client([
         'ws.disabledEvents' => [
             'TYPING_START',
+            'TYPING_STOP',
             'MESSAGE_REACTION_ADD',
             'MESSAGE_REACTION_REMOVE',
             'MESSAGE_REACTION_REMOVE_ALL',
@@ -17,7 +18,9 @@ $ancestorBot = new \Ancestor\AncestorBot(
         ],
         'presenceCache' => false,
         'ws.presenceUpdate.ignoreUnknownUsers' => true,
-        'messageCache' => false,], $loop),
+        'messageCache' => false,
+        'userSweepInterval' => 60,
+        'ws.largeThreshold' => 51], $loop),
     $config);
 
 $token = getenv('abot_token');
