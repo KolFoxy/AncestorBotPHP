@@ -13,7 +13,11 @@
     "human"
   ],
   "actionRatings": {
-    "action": 30
+    "hack": 30,
+    "YAWP": 30,
+    "if": 30,
+    "rush": 15,
+    "out": 25
   },
   "embedColor": 13903384,
   "actions": [

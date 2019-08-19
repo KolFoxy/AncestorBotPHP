@@ -20,15 +20,19 @@ class StressState extends AbstractPermanentState {
     }
 
     public function toField(): array {
-        $statMods = PHP_EOL;
+        return [
+            'name' => '**' . $this->host->name . '\'s resolve is tested...** ***' . $this->name . '***',
+            'value' => '***' . $this->quote . '***' . PHP_EOL . $this->getStatModsString(),
+            'inline' => false,
+        ];
+    }
+
+    public function getStatModsString(): string {
+        $statMods = '';
         foreach ($this->statModifiers as $statModifier) {
             $statMods .= '*``' . $statModifier->__toString() . '``*' . PHP_EOL;
         }
-        return [
-            'name' => '**' . $this->host->name . '\'s resolve is tested...** ***' . $this->name . '***',
-            'value' => '***' . $this->quote . '***' . $statMods,
-            'inline' => false,
-        ];
+        return $statMods;
     }
 
 

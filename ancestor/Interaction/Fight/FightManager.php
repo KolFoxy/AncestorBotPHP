@@ -432,9 +432,11 @@ class FightManager {
      */
     public function newMonsterTurn(MessageEmbed $resultEmbed): bool {
         $this->monster = $this->rollNewMonster();
-        $resultEmbed->addField('***' . $this->monster->name . ' emerges from the darkness!***',
-            '*``' . $this->monster->type->description . '``*'
-            . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*');
+        $resultEmbed->addField('***' . $this->monster->name . ' emerges from the darkness!***'
+            , '*``' . $this->monster->type->description . '``*'
+            . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*'
+            . PHP_EOL . $this->monster->statManager->getAllCurrentEffectsString()
+        );
         $resultEmbed->setImage($this->monster->type->image);
         if ((bool)mt_rand(0, 1)) {
             return $this->monsterTurnIsFinal($resultEmbed);

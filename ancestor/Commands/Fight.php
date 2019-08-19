@@ -11,6 +11,7 @@ use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
+use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
 use CharlotteDunois\Yasmin\Models\Message;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
@@ -116,7 +117,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             $message->reply('', ['embed' => $fightManager->start()]);
             $this->manager->addInteraction($message, self::TIMEOUT, $fightManager, null,
                 function () use ($fightManager, $message) {
-                    $this->forfeitFight($message, $fightManager);
+                    $this->sendEndscreen($message->channel, $fightManager, $message->author->getAvatarURL(), $message->author->__toString());
                 }
             );
             return;
@@ -150,7 +151,8 @@ class Fight extends Command implements EncounterCollectionInterface {
         $actionName = implode(' ', $args);
         $fight = $this->getFight($message);
         if ($actionName === self::SURRENDER_COMMAND) {
-            $this->forfeitFight($message, $fight);
+            $this->sendEndscreen($message->channel, $fight, $message->author->getAvatarURL(), $message->author->__toString());
+            $this->manager->deleteInteraction($message);
             return;
         }
         if ($actionName === 'endscreen') { //for testing only, delete later
@@ -203,23 +205,20 @@ class Fight extends Command implements EncounterCollectionInterface {
         );
     }
 
-    function forfeitFight(Message $message, FightManager $fight) {
+    function sendEndscreen(TextChannelInterface $channel, FightManager $fight, string $avatarUrl, string $mention) {
         if ($fight->killCount >= FightManager::ENDSCREEN_THRESHOLD) {
-            $fight->createEndscreen($message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
-                function ($imageData) use ($message, $fight) {
-                    $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE
+            $fight->createEndscreen($avatarUrl, $this->handler->client->getLoop())->done(
+                function ($imageData) use ($channel, $fight, $mention) {
+                    $channel->send($mention . ' **' . $fight->hero->name . '** ' . self::ABORT_MESSAGE
                         , ['files' => [['data' => $imageData, 'name' => 'end.png']]]);
-                    $this->manager->deleteInteraction($message);
                 },
-                function () use ($message, $fight) {
-                    $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
-                    $this->manager->deleteInteraction($message);
+                function () use ($channel, $fight, $mention) {
+                    $channel->send($mention . ' **' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
                 }
             );
             return;
         }
-        $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
-        $this->manager->deleteInteraction($message);
+        $channel->send($mention . ' **' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
     }
 
     public function processInitialArgs(array $args, bool &$endless, string &$heroClassName) {

@@ -160,9 +160,13 @@ class Hero extends AbstractLivingBeing {
     public function getStatsAndEffectsEmbed(): MessageEmbed {
         $res = (new MessageEmbed())->setColor($this->type->embedColor);
         $res->setTitle('**' . $this->name . '**');
-        $res->setDescription('*``' . $this->type->description . '``*'
+        $description = '*``' . $this->type->description . '``*'
             . PHP_EOL . '**``' . $this->getHealthStatus() . ' ' . $this->getStressStatus() . '``**'
-            . PHP_EOL . $this->getTrinketStatus());
+            . PHP_EOL . $this->getTrinketStatus();
+        if ($this->stressState !== null) {
+            $description .= PHP_EOL . '**``State of mind:``** ***``' . $this->stressState->name . '``***';
+        }
+        $res->setDescription($description);
         $res->addField('**Stats:**', $this->statManager->getCurrentStatsString(), true);
         $res->setThumbnail($this->type->image);
         $effects = $this->statManager->getAllCurrentEffectsString();
