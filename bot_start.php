@@ -9,7 +9,6 @@ $ancestorBot = new \Ancestor\AncestorBot(
         'ws.disabledEvents' => [
             'TYPING_START',
             'TYPING_STOP',
-            'MESSAGE_REACTION_ADD',
             'MESSAGE_REACTION_REMOVE',
             'MESSAGE_REACTION_REMOVE_ALL',
             'VOICE_STATE_UPDATE',

@@ -13,6 +13,7 @@ use Ancestor\Commands\Roll;
 use Ancestor\Commands\Spin;
 use Ancestor\Commands\Stress;
 use Ancestor\Commands\Suicide;
+use Ancestor\Commands\TestReactions;
 use Ancestor\Commands\Zalgo;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Client as Client;
@@ -78,7 +79,8 @@ class AncestorBot {
             new Zalgo($this->commandHandler),
             new Read($this->commandHandler),
             new Reveal($this->commandHandler),
-            new Fight($this->commandHandler)
+            new Fight($this->commandHandler),
+            new TestReactions($this->commandHandler),
         ];
     }
 
