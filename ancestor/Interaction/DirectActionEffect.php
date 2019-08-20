@@ -114,9 +114,9 @@ class DirectActionEffect extends AbstractEffect {
         if ($this->isHealEffect() || $this->isPositiveStressEffect() || $this->hitChance < 0) {
             return true;
         }
-        $accuracy = self::DEFAULT_ACC_BONUS + $this->hitChance + $caster->statManager->getStatValue(Stats::ACC_MOD)
+        $accuracy = $this->hitChance + $caster->statManager->getStatValue(Stats::ACC_MOD)
             + $modifier - $target->statManager->getStatValue(Stats::DODGE);
-        if (mt_rand(1, 100) <= $accuracy) {
+        if (mt_rand(1, 100) <= $accuracy || (mt_rand(1, 100) <= self::DEFAULT_ACC_BONUS)) {
             return true;
         }
         return false;

@@ -19,7 +19,7 @@
 	{
       "chance": -1,
       "stat": "healReceivedMod",
-      "value": -33,
+      "value": -15,
       "duration": -1
     }
   ]

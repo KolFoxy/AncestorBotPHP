@@ -38,7 +38,7 @@
         "description": "Here it comes!\nInflicts low to medium damage with high CRIT chance.",
         "health_value": -4,
         "healthDeviation": -3,
-        "critChance": 12,
+        "critChance": 19,
         "hitChance": 110
       },
       "selfEffect": {

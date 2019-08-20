@@ -26,6 +26,12 @@
       "stat": "virtueChance",
       "value": -10,
       "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 5,
+      "duration": -1
     }
   ]
 }

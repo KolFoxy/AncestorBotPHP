@@ -13,7 +13,7 @@
   "typeBonuses": [
 	{
 	  "type": "human",
-	  "damageMod": 25
+	  "damageMod": 35
 	}
   ]
 }

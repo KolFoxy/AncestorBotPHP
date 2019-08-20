@@ -70,7 +70,8 @@
       "effect": {
         "description": "You! You are going down next!\nMarks the enemy and reduces their dodge chance.",
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/70/Sniper's_Mark.png",
-        "hitChance": -1
+        "hitChance": -1,
+        "critChance": -1
       },
       "statModifiers": [
         {

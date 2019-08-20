@@ -6,13 +6,13 @@
     {
       "chance": -1,
       "stat": "dodge",
-      "value": 8,
+      "value": 15,
       "duration": -1
     },
 	{
       "chance": -1,
       "stat": "healReceivedMod",
-      "value": -33,
+      "value": -20,
       "duration": -1
     }
   ]
