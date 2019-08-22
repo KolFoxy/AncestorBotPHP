@@ -204,11 +204,10 @@ class CommandHelper {
                 return '8⃣';
             case 9:
                 return '9⃣';
-            case 10:
+            case 0:
                 return '0⃣';
         }
         return null;
     }
-
 
 }

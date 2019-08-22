@@ -2,7 +2,10 @@
 
 namespace Ancestor\CommandHandler;
 
-class CommandHandler {
+use CharlotteDunois\Yasmin\Models\MessageReaction;
+use CharlotteDunois\Yasmin\Models\User;
+
+class CommandHandler implements ReactionHandlerInterface {
     protected $FAILED_RESPONSE = "The abyss has finally got me, for I am unable to process your request. Or perhaps the futile experiments of my creators have finally shown the whole scope of their puniness.";
     protected $HELP_COMMAND = 'help';
     /** @var \CharlotteDunois\Yasmin\Client */
@@ -13,6 +16,11 @@ class CommandHandler {
      * @var \CharlotteDunois\Collect\Collection()
      */
     protected $commands;
+
+    /**
+     * @var ReactionHandlerInterface[]
+     */
+    protected $reactionHandlers = [];
 
     /** @var string */
     public $prefix;
@@ -61,7 +69,16 @@ class CommandHandler {
         return true;
     }
 
+    public function handleReaction(MessageReaction $reaction, User $user): bool {
+        foreach ($this->reactionHandlers as $handler) {
+            if ($handler->handleReaction($reaction, $user)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * Provides generic "help" command.
      * Can be overrode by creating specific "help" command
@@ -73,7 +90,7 @@ class CommandHandler {
         $title = 'Error';
         if (empty($args)) {
             $title = '**Commands. Use ' . $this->prefix . 'help [COMMAND] for more info.**';
-            $commandsArray = array();
+            $commandsArray = [];
             foreach ($this->commands->values() as $item) {
                 if ($item->hidden) {
                     continue;
@@ -96,23 +113,28 @@ class CommandHandler {
             $title = $this->prefix . 'help';
             $answer = 'Use "' . $this->prefix . 'help [COMMAND]" to get command`s description';
         }
+        /** @noinspection PhpUnhandledExceptionInspection */
         $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
         $embedResponse->addField($title, $answer);
-        $message->channel->send('', array('embed' => $embedResponse));
+        $message->channel->send('', ['embed' => $embedResponse]);
     }
 
     /**
      * Register a command.
-     * @param Command $commandClass
-     * @throws \RuntimeException
+     * @param Command|ReactionHandlerInterface $command
      */
-    function registerCommand(Command $command) {
+    function registerCommand($command) {
         try {
-            $this->commands->set(mb_strtolower($command->getName()), $command);
-            if (!empty($command->aliases)) {
-                foreach ($command->aliases as $alias) {
-                    $this->commands->set(mb_strtolower($alias), $command);
+            if ($command instanceof Command) {
+                $this->commands->set(mb_strtolower($command->getName()), $command);
+                if (!empty($command->aliases)) {
+                    foreach ($command->aliases as $alias) {
+                        $this->commands->set(mb_strtolower($alias), $command);
+                    }
                 }
+            }
+            if ($command instanceof ReactionHandlerInterface) {
+                $this->reactionHandlers[] = $command;
             }
         } catch (\Throwable $e) {
             throw new \RuntimeException('Unable to load a command. Error: ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());

@@ -4,6 +4,8 @@ namespace Ancestor\Commands;
 
 use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
+use Ancestor\CommandHandler\CommandHelper as Helper;
+use Ancestor\CommandHandler\ReactionHandlerInterface;
 use Ancestor\CommandHandler\TimedCommandManager;
 use Ancestor\Interaction\Fight\FightManager;
 use Ancestor\Interaction\Fight\EncounterCollectionInterface;
@@ -13,9 +15,10 @@ use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
 use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
 use CharlotteDunois\Yasmin\Models\Message;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use CharlotteDunois\Yasmin\Models\MessageReaction;
+use CharlotteDunois\Yasmin\Models\User;
 
-class Fight extends Command implements EncounterCollectionInterface {
+class Fight extends Command implements EncounterCollectionInterface, ReactionHandlerInterface {
     const CHANNEL_SWITCH_REMINDER = 'Remember to switch to the original channel of the fight before continuing.';
     const TIMEOUT = 300.0;
     const SURRENDER_COMMAND = 'ff';
@@ -103,6 +106,16 @@ class Fight extends Command implements EncounterCollectionInterface {
         $this->elitesMaxIndex = count($this->eliteMonsterTypes) - 1;
     }
 
+    public function handleReaction(MessageReaction $reaction, User $user): bool {
+        $fight = $this->getFightFromReaction($reaction, $user);
+        if ($fight === null || $fight->lastFightMessageId !== $reaction->message->id) {
+            return false;
+        }
+        $this->manager->refreshTimer($this->manager->generateId($reaction->message->channel->getId(), $user->id), self::TIMEOUT);
+        $this->processFightAction($fight, Helper::emojiToNumber($reaction->emoji->name), $reaction->message->channel, $user->getAvatarURL(), $user->id);
+        return true;
+    }
+
     public function run(Message $message, array $args) {
         if (isset($args[0]) && $args[0] === 'help') {
             $this->handler->helpCommand($message, [$this->name]);
@@ -115,7 +128,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             $hero = $this->createHero($message->author->username, $heroClassName);
             $fightManager = new FightManager($hero, $this, $this->handler->prefix . 'f', $endless);
             $message->reply('', ['embed' => $fightManager->start()]);
-            $this->manager->addInteraction($message, self::TIMEOUT, $fightManager, null,
+            $this->manager->addInteraction($message, self::TIMEOUT, $fightManager,
                 function () use ($fightManager, $message) {
                     $this->sendEndscreen($message->channel, $fightManager, $message->author->getAvatarURL(), $message->author->__toString());
                 }
@@ -149,7 +162,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             return;
         }
         $actionName = implode(' ', $args);
-        $fight = $this->getFight($message);
+        $fight = $this->getFightFromMessage($message);
         if ($actionName === self::SURRENDER_COMMAND) {
             $this->sendEndscreen($message->channel, $fight, $message->author->getAvatarURL(), $message->author->__toString());
             $this->manager->deleteInteraction($message);
@@ -190,19 +203,36 @@ class Fight extends Command implements EncounterCollectionInterface {
             $message->reply('Check DMs for the list of actions and their descriptions.');
             return;
         }
+        $this->processFightAction($fight, $actionName, $message->channel, $message->author->getAvatarURL(), $message->author->id);
+    }
+
+    /**
+     * @param FightManager $fight
+     * @param string|int|null $actionName
+     * @param TextChannelInterface $channel
+     * @param string $avatarUrl
+     * @param string $userId
+     */
+    function processFightAction(FightManager $fight, $actionName, TextChannelInterface $channel, string $avatarUrl, string $userId) {
+        $userMention = '<@' . $userId . '>';
         if (($action = $fight->getActionIfValid($actionName)) === null) {
-            $message->reply('Invalid action.');
+            $channel->send($userMention . ' Invalid action.');
             return;
         }
-        $fight->createTurnPromise($action, $message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
-            function ($messageData) use ($message) {
-                $message->reply('', $messageData);
-            },
-            function ($messageData) use ($message) {
-                $this->manager->deleteInteraction($message);
-                $message->reply('', $messageData);
-            }
-        );
+        $fight->lastFightMessageId = '';
+        $fight->createTurnPromise($action, $avatarUrl, $this->handler->client->getLoop())
+            ->then(function ($messageData) use ($channel, $userMention) {
+                return $channel->send($userMention, $messageData);
+            }, function ($messageData) use ($channel, $userMention, $userId) {
+                $this->manager->deleteInteraction($this->manager->generateId($channel->getId(), $userId));
+                $channel->send($userMention, $messageData);
+            })
+            ->then(function (Message $sentMessage) use ($fight) {
+                $fight->lastFightMessageId = $sentMessage->id;
+                foreach ($fight->getCurrentReactionEmojis() as $emoji) {
+                    $sentMessage->react($emoji);
+                }
+            });
     }
 
     function sendEndscreen(TextChannelInterface $channel, FightManager $fight, string $avatarUrl, string $mention) {
@@ -242,7 +272,11 @@ class Fight extends Command implements EncounterCollectionInterface {
         return $this->eliteMonsterTypes[mt_rand(0, $this->elitesMaxIndex)];
     }
 
-    function getFight(Message $message): FightManager {
+    function getFightFromMessage(Message $message): ?FightManager {
         return $this->manager->getUserData($message);
+    }
+
+    function getFightFromReaction(MessageReaction $reaction, User $user): ?FightManager {
+        return $this->manager->getUserData($this->manager->generateId($reaction->message->channel->getId(), $user->id));
     }
 }

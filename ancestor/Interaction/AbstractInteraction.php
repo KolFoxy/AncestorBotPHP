@@ -28,10 +28,21 @@ abstract class AbstractInteraction {
     public $actions;
 
     /**
-     * @param string $actionName
+     * @param string|int $actionName
      * @return Action|DirectAction|null
      */
-    public function getActionIfValid(string $actionName) {
+    public function getActionIfValid($actionName) {
+        if (is_int($actionName)) {
+            if ($actionName === 0) {
+                return $this->defaultAction();
+            }
+            $actionName--;
+            if (isset($this->actions[$actionName])) {
+                return $this->actions[$actionName];
+            }
+            return null;
+        }
+
         $actionL = mb_strtolower($actionName);
         foreach ($this->actions as $action) {
             if (mb_strpos(mb_strtolower($action->name), $actionL) !== false) {

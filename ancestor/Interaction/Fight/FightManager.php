@@ -67,6 +67,11 @@ class FightManager {
      */
     protected $transformTimer = self::TRANSFORM_TURNS_CD;
 
+    /**
+     * @var string
+     */
+    public $lastFightMessageId;
+
     const ENDSCREEN_PATH = '/data/images/endscreen/';
     const FONT_PATH = '/data/the_font/DwarvenAxeDynamic.ttf';
     const FONT_SIZE = 48;
@@ -116,7 +121,7 @@ class FightManager {
 
     const TRINKET_KILLS_THRESHOLD = 2;
 
-    const SKIP_TRINKET_ACTION = -13505622;
+    const SKIP_TRINKET_ACTION = 0;
 
     const SKIP_HEAL_PERCENTAGE = 0.1;
     const TRANSFORM_TURNS_CD = 4;
@@ -167,11 +172,18 @@ class FightManager {
 
     protected function getCurrentFooter(): string {
         if ($this->newTrinket !== null) {
-            return 'Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
-                . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.';
+            return 'React with number or respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
+                . $this->chatCommand . ' skip" or ' . Helper::numberToEmoji(self::SKIP_TRINKET_ACTION) . ' will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.';
         }
         return $this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed(), $this->noTransform())
             . PHP_EOL . ($this->killCount > 0 ? 'Kills: ' . $this->killCount : '');
+    }
+
+    public function getCurrentReactionEmojis(): array {
+        if ($this->newTrinket !== null) {
+            return [Helper::numberToEmoji(1), Helper::numberToEmoji(2), Helper::numberToEmoji(0)];
+        }
+        return $this->hero->type->getAvailableActionsEmojis($this->monster->isStealthed(), $this->noTransform());
     }
 
     protected function resetTransformTimer() {
@@ -191,12 +203,8 @@ class FightManager {
      * @return MessageEmbed
      */
     public function getTurn($action, string $heroPicUrl): MessageEmbed {
-        if (is_int($action)) {
-            if ($this->newTrinket !== null) {
-                return $this->getEquipTrinketTurn($action);
-            }
-            $this->hero->kill();
-            return (new MessageEmbed())->setTitle('***FATAL ERROR!***')->setDescription('Invalid action. Terminating session.');
+        if ($this->newTrinket !== null) {
+            return $this->getEquipTrinketTurn($action);
         }
         return $this->getHeroTurn($action, $heroPicUrl);
     }
@@ -205,7 +213,7 @@ class FightManager {
      * @param DirectAction|int $action
      * @param string $heroPicUrl
      * @param LoopInterface $loop
-     * @return ExtendedPromiseInterface callback($messageData), canceller = fight is over
+     * @return ExtendedPromiseInterface Resolves with array of Message arguments.
      */
     public function createTurnPromise($action, string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
         $deferred = new Deferred();
@@ -214,14 +222,12 @@ class FightManager {
             if ($this->killCount < self::ENDSCREEN_THRESHOLD) {
                 $deferred->reject(['embed' => $turn]);
             } else {
-                $this->createEndscreen($heroPicUrl, $loop)->done(
-                    function ($data) use ($deferred, $turn) {
+                $this->createEndscreen($heroPicUrl, $loop)
+                    ->done(function ($data) use ($deferred, $turn) {
                         $deferred->reject(['embed' => $turn, 'files' => [['data' => $data, 'name' => 'end.png']]]);
-                    },
-                    function () use ($deferred, $turn) {
+                    }, function () use ($deferred, $turn) {
                         $deferred->reject(['embed' => $turn]);
-                    }
-                );
+                    });
             }
         } else {
             $deferred->resolve(['embed' => $turn]);
@@ -229,6 +235,11 @@ class FightManager {
         return $deferred->promise();
     }
 
+    /**
+     * @param string $heroPicUrl
+     * @param LoopInterface $loop
+     * @return ExtendedPromiseInterface Resolves with image data
+     */
     public function createEndscreen(string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
         $fdl = new FileDownloader($loop);
         return $fdl->getDownloadAsyncImagePromise($heroPicUrl)->then(
@@ -244,8 +255,8 @@ class FightManager {
                 $applier = new ImageTemplateApplier($template);
                 $canvas = imagecreatefrompng($endPath . '.png');
                 $applier->slapTemplate($imageFile, $canvas, true);
-                $this->addKillCountToImage($canvas);
                 $this->addCorpsesToImage($canvas);
+                $this->addKillCountToImage($canvas);
 
                 ob_start();
                 imagepng($canvas);
@@ -513,10 +524,10 @@ class FightManager {
     }
 
     /**
-     * @param string $actionName
+     * @param string|int $actionName
      * @return DirectAction|int|null
      */
-    public function getActionIfValid(string $actionName) {
+    public function getActionIfValid($actionName) {
         if (!is_null($this->newTrinket)) {
             if ($actionName === 'skip') {
                 return self::SKIP_TRINKET_ACTION;
@@ -524,9 +535,6 @@ class FightManager {
             if (is_numeric($actionName)) {
                 return (int)$actionName;
             }
-            return null;
-        }
-        if ($this->noTransform() && $actionName === DirectAction::TRANSFORM_ACTION) {
             return null;
         }
         $action = $this->hero->type->getActionIfValid($actionName);

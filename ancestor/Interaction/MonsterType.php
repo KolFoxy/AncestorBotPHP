@@ -58,7 +58,11 @@ class MonsterType extends AbstractLivingInteraction {
         return $this->defAction;
     }
 
-    public function getActionIfValid(string $actionName): DirectAction {
+    /**
+     * @param int|string $actionName
+     * @return DirectAction
+     */
+    public function getActionIfValid($actionName): DirectAction {
         return parent::getActionIfValid($actionName);
     }
 }

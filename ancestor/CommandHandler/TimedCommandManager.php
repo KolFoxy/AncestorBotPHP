@@ -23,23 +23,29 @@ class TimedCommandManager {
     }
 
     /**
-     * @param Message $message
-     * @param int|null $userId
+     * @param Message|string $idSource
      * @return bool
      */
-    public function userIsInteracting(Message $message, int $userId = null) {
-        return $this->interactingUsers->has($this->generateId($message, $userId));
+    public function userIsInteracting($idSource) {
+        return $this->interactingUsers->has($this->idSourceToId($idSource));
     }
 
     /**
-     * @param Message $message
+     * @param $idSource
+     * @return string|Message
+     */
+    protected function idSourceToId($idSource) {
+        return is_string($idSource) ? $idSource : $this->generateId($idSource->channel->getId(), $idSource->author->id);
+    }
+
+    /**
+     * @param string|Message $idSource
      * @param int $timeout
      * @param $data
-     * @param int|null $userId
      * @param callable|null $onTimeout
      */
-    public function addInteraction(Message $message, int $timeout, $data, int $userId = null, callable $onTimeout = null) {
-        $id = $this->generateId($message, $userId);
+    public function addInteraction($idSource, int $timeout, $data, callable $onTimeout = null) {
+        $id = $this->idSourceToId($idSource);
         $this->interactingUsers->set($id, [
             'data' => $data,
             'timer' => $this->client->addTimer($timeout,
@@ -54,16 +60,18 @@ class TimedCommandManager {
     }
 
     /**
-     * @param Message $message
-     * @param int|null $userId ;
+     * @param Message|string $idSource
      * @return mixed
      */
-    public function getUserData(Message $message, int $userId = null) {
-        return $this->interactingUsers->get($this->generateId($message, $userId))['data'];
+    public function getUserData($idSource) {
+        return $this->interactingUsers->get($this->idSourceToId($idSource))['data'];
     }
 
-    public function deleteInteraction(Message $message, int $userId = null) {
-        $id = $this->generateId($message, $userId);
+    /**
+     * @param Message|string $idSource
+     */
+    public function deleteInteraction($idSource) {
+        $id = $this->idSourceToId($idSource);
         if (!$this->interactingUsers->has($id)) {
             return;
         }
@@ -81,19 +89,20 @@ class TimedCommandManager {
 
     /**
      * Generates id string from channel id and user id.
-     * @param Message $message
-     * @param int|null $userId
+     * @param $channelId
+     * @param $userId
      * @return string
      */
-    private function generateId(Message $message, int $userId = null): string {
-        if ($userId === null) {
-            $userId = $message->author->id;
-        }
-        return $message->channel->getId() . $userId;
+    public function generateId($channelId, $userId): string {
+        return (string)$channelId . (string)$userId;
     }
 
-    public function refreshTimer(Message $message, int $timerTimeout) {
-        $id = $this->generateId($message);
+    /**
+     * @param Message|string $idSource
+     * @param int $timerTimeout
+     */
+    public function refreshTimer($idSource, int $timerTimeout) {
+        $id = is_string($idSource) ? $idSource : $this->generateId($idSource->channel->getId(), $idSource->author->id);
         $this->client->cancelTimer($this->getTimer($id));
         $value = $this->interactingUsers->get($id);
         $value['timer'] = $this->client->addTimer($timerTimeout,
@@ -105,8 +114,12 @@ class TimedCommandManager {
 
     }
 
-    public function updateData(Message $message, $data) {
-        $id = $this->generateId($message);
+    /**
+     * @param Message|string $idSource
+     * @param $data
+     */
+    public function updateData($idSource, $data) {
+        $id = $this->idSourceToId($idSource);
         $value = $this->interactingUsers->get($id);
         $value['data'] = $data;
         $this->interactingUsers->set($id, $value);

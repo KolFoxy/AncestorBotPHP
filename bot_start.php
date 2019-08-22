@@ -17,7 +17,9 @@ $ancestorBot = new \Ancestor\AncestorBot(
         ],
         'presenceCache' => false,
         'ws.presenceUpdate.ignoreUnknownUsers' => true,
-        'messageCache' => false,
+        'messageCache' => true,
+        'messageCacheLifetime' => 60,
+        'messageSweepInterval' => 60,
         'userSweepInterval' => 60,
         'ws.largeThreshold' => 51], $loop),
     $config);
