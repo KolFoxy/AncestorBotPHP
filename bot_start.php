@@ -9,6 +9,7 @@ $ancestorBot = new \Ancestor\AncestorBot(
         'ws.disabledEvents' => [
             'TYPING_START',
             'TYPING_STOP',
+            'MESSAGE_REACTION_ADD',
             'MESSAGE_REACTION_REMOVE',
             'MESSAGE_REACTION_REMOVE_ALL',
             'VOICE_STATE_UPDATE',
@@ -17,9 +18,7 @@ $ancestorBot = new \Ancestor\AncestorBot(
         ],
         'presenceCache' => false,
         'ws.presenceUpdate.ignoreUnknownUsers' => true,
-        'messageCache' => true,
-        'messageCacheLifetime' => 60,
-        'messageSweepInterval' => 60,
+        'messageCache' => false,
         'userSweepInterval' => 60,
         'ws.largeThreshold' => 51], $loop),
     $config);

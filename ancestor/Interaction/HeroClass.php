@@ -108,10 +108,10 @@ class HeroClass extends AbstractLivingInteraction {
     }
 
     /**
-     * @param string|int $actionName
+     * @param string $actionName
      * @return Action|DirectAction|null
      */
-    public function getActionIfValid($actionName) {
+    public function getActionIfValid(string $actionName) {
         return parent::getActionIfValid($actionName);
     }
 }
