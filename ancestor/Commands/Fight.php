@@ -229,10 +229,21 @@ class Fight extends Command implements EncounterCollectionInterface, ReactionHan
             })
             ->then(function (Message $sentMessage) use ($fight) {
                 $fight->lastFightMessageId = $sentMessage->id;
-                foreach ($fight->getCurrentReactionEmojis() as $emoji) {
-                    $sentMessage->react($emoji);
-                }
+                $this->addReactionsToMessageAsync($fight->getCurrentReactionEmojis(), $sentMessage->id, $sentMessage->channel->getId());
             });
+    }
+
+    function addReactionsToMessageAsync(array $emojis, string $messageId, string $channelId) {
+        $maxIndex = count($emojis) - 1;
+        $index = 0;
+        $this->client->loop->addPeriodicTimer(0.5, function ($timer) use ($emojis, $messageId, $channelId, $maxIndex, &$index) {
+            /** @noinspection PhpInternalEntityUsedInspection */
+            $this->client->apimanager()->endpoints->channel->createMessageReaction($channelId, $messageId, $emojis[$index]);
+            $index++;
+            if ($index > $maxIndex) {
+                $this->client->cancelTimer($timer);
+            }
+        });
     }
 
     function sendEndscreen(TextChannelInterface $channel, FightManager $fight, string $avatarUrl, string $mention) {
