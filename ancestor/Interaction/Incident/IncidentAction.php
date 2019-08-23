@@ -19,7 +19,7 @@ class IncidentAction extends AbstractAction {
     /**
      * @var Incident|null
      */
-    public $resultIncident = null;
+    protected $resultIncident = null;
 
     /**
      * @var string[]|null List of classes that this action is available for.
@@ -35,6 +35,35 @@ class IncidentAction extends AbstractAction {
      * @var \Ancestor\Interaction\Stats\StatModifier[]|null
      */
     public $statModifiers = null;
+
+    /**
+     * @return Incident|null
+     */
+    public function getResultIncident(): ?Incident {
+        return $this->resultIncident;
+    }
+
+    /**
+     * @param mixed|null $resultIncident
+     */
+    public function setResultIncident($resultIncident): void {
+        if ($resultIncident === null) {
+            return;
+        }
+        if ($resultIncident instanceof Incident) {
+            $this->resultIncident = $resultIncident;
+            return;
+        }
+        if (is_string($resultIncident)) {
+            $mapper = new \JsonMapper();
+            $mapper->bExceptionOnMissingData = true;
+            $resultIncident = dirname(__DIR__, 3) . $resultIncident;
+            if (!file_exists($resultIncident)) {
+                throw new \Exception('ERROR: File "' . $resultIncident . '" doesn\'t exist.)');
+            }
+            $this->resultIncident = $mapper->map(json_decode(file_get_contents($resultIncident)), new Incident());
+        }
+    }
 
     public function isAvailableForClass(?string $className): bool {
         if ($this->exclusiveClasses === null) {
