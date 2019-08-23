@@ -7,8 +7,6 @@ use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\StatsManager;
 use Ancestor\Interaction\Stats\StatusEffect;
-use Ancestor\Interaction\Stats\TimedEffectInterface;
-use Ancestor\CommandHandler\CommandHelper as Helper;
 
 abstract class AbstractLivingBeing {
 

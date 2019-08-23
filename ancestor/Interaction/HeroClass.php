@@ -63,30 +63,6 @@ class HeroClass extends AbstractLivingInteraction {
 
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
-     * @param string $commandName
-     * @param string|null $status
-     * @return MessageEmbed
-     */
-    public function getEmbedResponse(string $commandName = null, string $status = null): MessageEmbed {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $embedResponse = new MessageEmbed();
-        $embedResponse->setThumbnail($this->image);
-        $embedResponse->setTitle('Your class is **' . $this->name . '**');
-        if ($this->embedColor === null) {
-            $embedResponse->setColor(self::EMBED_COLOR);
-        } else {
-            $embedResponse->setColor($this->embedColor);
-        }
-        $embedResponse->setDescription('*' . $this->description . '*');
-        if ($status != null) {
-            $footerText = $status;
-            $embedResponse->setFooter($footerText);
-        }
-        return $embedResponse;
-    }
-
-    /** @noinspection PhpDocMissingThrowsInspection */
-    /**
      * @return DirectAction
      */
     public function defaultAction(): DirectAction {
@@ -109,9 +85,9 @@ class HeroClass extends AbstractLivingInteraction {
 
     /**
      * @param string $actionName
-     * @return Action|DirectAction|null
+     * @return DirectAction|null
      */
-    public function getActionIfValid(string $actionName) {
+    public function getActionIfValid(string $actionName) : ?DirectAction {
         return parent::getActionIfValid($actionName);
     }
 }

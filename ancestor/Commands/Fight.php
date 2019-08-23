@@ -13,7 +13,6 @@ use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
 use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
 use CharlotteDunois\Yasmin\Models\Message;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Fight extends Command implements EncounterCollectionInterface {
     const CHANNEL_SWITCH_REMINDER = 'Remember to switch to the original channel of the fight before continuing.';
@@ -113,11 +112,12 @@ class Fight extends Command implements EncounterCollectionInterface {
             $heroClassName = '';
             $this->processInitialArgs($args, $endless, $heroClassName);
             $hero = $this->createHero($message->author->username, $heroClassName);
-            $fightManager = new FightManager($hero, $this, $this->handler->prefix . 'f', $endless);
+            $fightManager = new FightManager($hero, $message->author->getAvatarURL()
+                , $this, $this->handler->prefix . 'f', $this->client->getLoop(), $endless);
             $message->reply('', ['embed' => $fightManager->start()]);
             $this->manager->addInteraction($message, self::TIMEOUT, $fightManager, null,
                 function () use ($fightManager, $message) {
-                    $this->sendEndscreen($message->channel, $fightManager, $message->author->getAvatarURL(), $message->author->__toString());
+                    $this->sendEndscreen($message->channel, $fightManager, $message->author->__toString());
                 }
             );
             return;
@@ -151,7 +151,7 @@ class Fight extends Command implements EncounterCollectionInterface {
         $actionName = implode(' ', $args);
         $fight = $this->getFight($message);
         if ($actionName === self::SURRENDER_COMMAND) {
-            $this->sendEndscreen($message->channel, $fight, $message->author->getAvatarURL(), $message->author->__toString());
+            $this->sendEndscreen($message->channel, $fight, $message->author->__toString());
             $this->manager->deleteInteraction($message);
             return;
         }
@@ -165,14 +165,7 @@ class Fight extends Command implements EncounterCollectionInterface {
                 }
                 $fight->killedMonsters[] = $this->randRegularMonsterType()->name;
             }
-            $fight->createEndscreen($message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
-                function ($data) use ($message) {
-                    $message->reply('', ['files' => [['data' => $data, 'name' => 'end.png']]]);
-                },
-                function () use ($message, $fight) {
-                    $message->reply('**' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
-                }
-            );
+            $this->sendEndscreen($message->channel, $fight, $message->author->__toString());
             return;
         }
         $this->manager->refreshTimer($message, self::TIMEOUT);
@@ -194,7 +187,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             $message->reply('Invalid action.');
             return;
         }
-        $fight->createTurnPromise($action, $message->author->getAvatarURL(), $this->handler->client->getLoop())->done(
+        $fight->createTurnPromise($action)->done(
             function ($messageData) use ($message) {
                 $message->reply('', $messageData);
             },
@@ -205,9 +198,9 @@ class Fight extends Command implements EncounterCollectionInterface {
         );
     }
 
-    function sendEndscreen(TextChannelInterface $channel, FightManager $fight, string $avatarUrl, string $mention) {
+    function sendEndscreen(TextChannelInterface $channel, FightManager $fight, string $mention) {
         if ($fight->killCount >= FightManager::ENDSCREEN_THRESHOLD) {
-            $fight->createEndscreen($avatarUrl, $this->handler->client->getLoop())->done(
+            $fight->createEndscreen()->done(
                 function ($imageData) use ($channel, $fight, $mention) {
                     $channel->send($mention . ' **' . $fight->hero->name . '** ' . self::ABORT_MESSAGE
                         , ['files' => [['data' => $imageData, 'name' => 'end.png']]]);

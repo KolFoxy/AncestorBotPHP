@@ -14,7 +14,7 @@ class ActionResult {
      */
     public $target;
     /**
-     * @var AbstractLivingBeing
+     * @var AbstractLivingBeing|null
      */
     public $caster;
 
@@ -58,13 +58,13 @@ class ActionResult {
     const SIGNED_DECIMAL_FORMAT = '%+d';
 
 
-    public function __construct(AbstractLivingBeing $caster, AbstractLivingBeing $target, string $actionName, string $description) {
+    public function __construct(?AbstractLivingBeing $caster, AbstractLivingBeing $target, string $actionName, string $description) {
         $this->caster = $caster;
         $this->target = $target;
         $this->description = $description;
         $this->actionName = $actionName;
         $this->targetFeed = new ActionResultFeed();
-        if ($target === $caster) {
+        if ($target === $caster || $caster === null) {
             $this->casterFeed = $this->targetFeed;
             return;
         }
@@ -72,7 +72,7 @@ class ActionResult {
     }
 
     public function toFields(string $extra = '', ?string $forcedTitle = null): array {
-        $title = $forcedTitle ?? '**' . $this->caster->name . '** uses **' . $this->actionName . '**';
+        $title = $forcedTitle ?? '**' . ($this->caster->name ?? $this->target->name) . '** uses **' . $this->actionName . '**';
         if ($this->isCrit) {
             $title .= self::CRIT_MESSAGE;
         }
@@ -84,7 +84,7 @@ class ActionResult {
     public function __toString(): string {
         $res = $this->miss ? self::MISS_MESSAGE : '';
         $this->notEmptyAddEol($res, $this->feedToResultString($this->targetFeed, $this->target->name, $this->target));
-        if ($this->targetFeed === $this->casterFeed) {
+        if ($this->targetFeed === $this->casterFeed || $this->caster === null) {
             return $this->defaultResult($res);
         }
         $this->notEmptyAddEol($res, $this->feedToResultString($this->casterFeed, $this->caster->name, $this->caster));
@@ -224,14 +224,20 @@ class ActionResult {
     }
 
     public function healthToCaster(int $healthValue, string $source = '') {
+        if ($this->caster === null) {
+            return;
+        }
         $this->healthToBeing($this->caster, $this->casterFeed, $healthValue, $source);
     }
 
     public function stressToCaster(int $stressValue, string $source = '') {
+        if ($this->caster === null) {
+            return;
+        }
         $this->stressToBeing($this->caster, $this->casterFeed, $stressValue, $source);
     }
 
-    protected function stressToBeing(AbstractLivingBeing $being, ActionResultFeed $feed, int $value, string $source) {
+    protected function stressToBeing(?AbstractLivingBeing $being, ActionResultFeed $feed, int $value, string $source) {
         if (!$being->hasStress() || $value === 0) {
             return;
         }
@@ -239,12 +245,12 @@ class ActionResult {
         $feed->stress[] = ['value' => $value, 'source' => $source];
     }
 
-    protected function healthToBeing(AbstractLivingBeing $being, ActionResultFeed $feed, int $value, string $source) {
+    protected function healthToBeing(?AbstractLivingBeing $being, ActionResultFeed $feed, int $value, string $source) {
         $being->addHealth($value);
         $feed->health[] = ['value' => $value, 'source' => $source];
     }
 
-    public function removeBlightBleedStealthFromTarget(bool $removeBlight, bool $removeBleed, bool $removeStealth) {
+    public function removeBlightBleedStealthFromTarget(bool $removeBlight, bool $removeBleed, bool $removeStealth, bool $removeDebuff = false) {
         if ($removeStealth && $this->target->isStealthed()) {
             $this->target->statManager->removeStatusEffectType(StatusEffect::TYPE_STEALTH);
             $this->targetFeed->removedEffects[] = StatusEffect::TYPE_STEALTH;
@@ -255,6 +261,10 @@ class ActionResult {
         if ($removeBleed && $this->target->statManager->removeBleeds()) {
             $this->targetFeed->removedEffects[] = StatusEffect::TYPE_BLEED;
         }
+        if ($removeDebuff && $this->target->statManager->removeDebuffs()) {
+            $this->targetFeed->removedEffects[] = StatModifier::TYPE_DEBUFF;
+        }
+
     }
 
     public function removedFromTarget(string $whatWasRemoved) {
@@ -270,11 +280,11 @@ class ActionResult {
      */
     public function addTimedEffect($timedEffect) {
         $toAdd = $timedEffect->clone();
-        if (!$toAdd->guaranteedApplication()) {
+        if (!$toAdd->guaranteedApplication() && $this->caster !== null) {
             $toAdd->chance += $this->caster->statManager->getStatValue($toAdd->getType() . Stats::SKILL_CHANCE_SUFFIX) ?? 0;
         }
         if ($toAdd->targetSelf) {
-            $effectTarget = $this->caster;
+            $effectTarget = $this->caster ?? $this->target;
             $feed = $this->casterFeed;
         } else {
             $effectTarget = $this->target;

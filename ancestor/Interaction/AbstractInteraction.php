@@ -16,20 +16,22 @@ abstract class AbstractInteraction {
      * @required
      */
     public $description;
+
     /**
      * URL to the image of the interaction.
      * @var string
      * @required
      */
     public $image;
+
     /**
-     * @var Action[]
+     * @var AbstractAction[]
      */
     public $actions;
 
     /**
      * @param string $actionName
-     * @return Action|DirectAction|null
+     * @return AbstractAction|mixed|null
      */
     public function getActionIfValid(string $actionName) {
         $actionL = mb_strtolower($actionName);
@@ -44,11 +46,6 @@ abstract class AbstractInteraction {
         return null;
     }
 
-    /**
-     * @param string $commandName
-     * @return MessageEmbed
-     */
-    abstract public function getEmbedResponse(string $commandName): MessageEmbed;
 
     /**
      * @param string $commandName
@@ -58,13 +55,17 @@ abstract class AbstractInteraction {
         if ($this->actions === null) {
             return '';
         }
-        $footerText = 'Respond with "' . $commandName . ' [ACTION]" to perform the corresponding action. ' . PHP_EOL
-            . 'Available actions: ';
+        $footerText = $this->getDefaultFooterStart($commandName);
         foreach ($this->actions as $action) {
             $footerText .= mb_strtolower($action->name) . ', ';
         }
         $footerText .= $this->defaultAction()->name;
         return $footerText;
+    }
+
+    protected function getDefaultFooterStart(string $commandName): string {
+        return 'Respond with "' . $commandName . ' [ACTION]" to perform the corresponding action. ' . PHP_EOL
+            . 'Available actions: ';
     }
 
     /**

@@ -10,6 +10,8 @@ use Ancestor\ImageTemplate\ImageTemplateApplier;
 use Ancestor\Interaction\AbstractLivingBeing;
 use Ancestor\Interaction\DirectAction;
 use Ancestor\Interaction\Hero;
+use Ancestor\Interaction\Incident\Incident;
+use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Monster;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\Trinket;
@@ -31,6 +33,11 @@ class FightManager {
      * @var AbstractLivingBeing
      */
     public $monster;
+
+    /**
+     * @var LoopInterface
+     */
+    public $loop;
 
     /**
      * @var int
@@ -58,6 +65,11 @@ class FightManager {
     public $newTrinket = null;
 
     /**
+     * @var Incident|null
+     */
+    public $incident = null;
+
+    /**
      * @var string[]
      */
     public $killedMonsters = [];
@@ -66,6 +78,11 @@ class FightManager {
      * @var int
      */
     protected $transformTimer = self::TRANSFORM_TURNS_CD;
+
+    /**
+     * @var string
+     */
+    public $heroPicUrl;
 
     const ENDSCREEN_PATH = '/data/images/endscreen/';
     const FONT_PATH = '/data/the_font/DwarvenAxeDynamic.ttf';
@@ -135,8 +152,12 @@ class FightManager {
 
     const CORRUPTED_DEATHBLOW_RESIST = 30;
 
-    public function __construct(Hero $hero, EncounterCollectionInterface $monsterCollection, string $chatCommand, bool $endless = false) {
+    const INVALID_ACTION_ERROR_MSG = 'Try again. If error persists - contact the developer with issue on GitHub.';
+
+    public function __construct(Hero $hero, string $heroPicUrl, EncounterCollectionInterface $monsterCollection, string $chatCommand, LoopInterface $loop, bool $endless = false) {
         $this->hero = $hero;
+        $this->loop = $loop;
+        $this->heroPicUrl = $heroPicUrl;
         $this->encounterCollection = $monsterCollection;
         $this->endless = $endless;
         $this->chatCommand = $chatCommand;
@@ -170,6 +191,9 @@ class FightManager {
             return 'Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
                 . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.';
         }
+        if ($this->incident !== null) {
+            return $this->incident->getDefaultFooterText($this->chatCommand, $this->hero->type->name);
+        }
         return $this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed(), $this->noTransform())
             . PHP_EOL . ($this->killCount > 0 ? 'Kills: ' . $this->killCount : '');
     }
@@ -186,35 +210,47 @@ class FightManager {
 
     /**
      * @noinspection PhpDocMissingThrowsInspection
-     * @param DirectAction|int $action
-     * @param string $heroPicUrl
+     * @param IncidentAction|DirectAction|int $action
      * @return MessageEmbed
      */
-    public function getTurn($action, string $heroPicUrl): MessageEmbed {
-        if (is_int($action)) {
-            if ($this->newTrinket !== null) {
+    public function getTurn($action): MessageEmbed {
+        if ($this->newTrinket !== null) {
+            if (is_int($action)) {
                 return $this->getEquipTrinketTurn($action);
             }
-            $this->hero->kill();
-            return (new MessageEmbed())->setTitle('***FATAL ERROR!***')->setDescription('Invalid action. Terminating session.');
+            return $this->getInvalidActionEmbed();
         }
-        return $this->getHeroTurn($action, $heroPicUrl);
+        if ($this->incident !== null) {
+            if ($action instanceof IncidentAction) {
+                return $this->getIncidentTurn($action);
+            }
+            return $this->getInvalidActionEmbed();
+        }
+        return $this->getHeroTurn($action);
+    }
+
+    protected function getIncidentTurn(IncidentAction $action): MessageEmbed {
+        $res = $action->getResult($this->hero);
+        $this->incident = $action->resultIncident;
+        return $res;
+    }
+
+    protected function getInvalidActionEmbed(): MessageEmbed {
+        return (new MessageEmbed())->setTitle('Invalid action.')->setDescription(self::INVALID_ACTION_ERROR_MSG);
     }
 
     /**
      * @param DirectAction|int $action
-     * @param string $heroPicUrl
-     * @param LoopInterface $loop
      * @return ExtendedPromiseInterface callback($messageData), canceller = fight is over
      */
-    public function createTurnPromise($action, string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
+    public function createTurnPromise($action): ExtendedPromiseInterface {
         $deferred = new Deferred();
-        $turn = $this->getTurn($action, $heroPicUrl);
+        $turn = $this->getTurn($action);
         if ($this->isOver()) {
             if ($this->killCount < self::ENDSCREEN_THRESHOLD) {
                 $deferred->reject(['embed' => $turn]);
             } else {
-                $this->createEndscreen($heroPicUrl, $loop)->done(
+                $this->createEndscreen()->done(
                     function ($data) use ($deferred, $turn) {
                         $deferred->reject(['embed' => $turn, 'files' => [['data' => $data, 'name' => 'end.png']]]);
                     },
@@ -229,9 +265,9 @@ class FightManager {
         return $deferred->promise();
     }
 
-    public function createEndscreen(string $heroPicUrl, LoopInterface $loop): ExtendedPromiseInterface {
-        $fdl = new FileDownloader($loop);
-        return $fdl->getDownloadAsyncImagePromise($heroPicUrl)->then(
+    public function createEndscreen(): ExtendedPromiseInterface {
+        $fdl = new FileDownloader($this->loop);
+        return $fdl->getDownloadAsyncImagePromise($this->heroPicUrl)->then(
             function ($imageFile) {
                 $endPath = dirname(__DIR__, 3) . self::ENDSCREEN_PATH
                     . mb_strtolower(str_replace(' ', '_', $this->hero->type->name));
@@ -360,10 +396,9 @@ class FightManager {
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @param DirectAction $action
-     * @param string $heroPicUrl
      * @return MessageEmbed
      */
-    protected function getHeroTurn(DirectAction $action, string $heroPicUrl): MessageEmbed {
+    protected function getHeroTurn(DirectAction $action): MessageEmbed {
         $isTransformAction = $action->isTransformAction();
         if ($isTransformAction) {
             if ($this->noTransform()) {
@@ -376,13 +411,13 @@ class FightManager {
             $this->transformTimerTick();
             if ($this->monsterTurnIsFinal($embed)) {
                 if ($this->endless === false) {
-                    $embed->setFooter($this->hero->name . ' is victorious!', $heroPicUrl);
+                    $embed->setFooter($this->hero->name . ' is victorious!', $this->heroPicUrl);
                 }
                 return $embed;
             }
         }
         if ($this->hero->isDead()) {
-            $embed->setFooter('R.I.P. ' . $this->hero->name, $heroPicUrl);
+            $embed->setFooter('R.I.P. ' . $this->hero->name, $this->heroPicUrl);
             return $embed;
         }
         $embed->setFooter($this->getCurrentFooter());
@@ -392,16 +427,13 @@ class FightManager {
     protected function monsterTurnIsFinal(MessageEmbed $embed): bool {
         if (!$this->monster->isDead()) {
             $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
-            Helper::mergeEmbed($embed, $this->getMonsterTurnFields());
+            Helper::mergeEmbed($embed, $this->monster->getTurn($this->hero));
         }
         if ($this->monster->isDead()) {
             if ($this->endless) {
                 $this->killCount++;
                 $this->killedMonsters[] = $this->monster->type->name;
-                if ($this->rollTrinkets($embed)) {
-                    return true;
-                }
-                return $this->newMonsterTurn($embed);
+                return $this->rollNewEncounterIsFinal($embed);
             } else {
                 return true;
             }
@@ -409,21 +441,18 @@ class FightManager {
         return false;
     }
 
+    protected function rollNewEncounterIsFinal(MessageEmbed $embed): bool {
+        if ($this->rollTrinkets($embed)) {
+            return true;
+        }
+        return $this->newMonsterTurn($embed);
+    }
+
     protected function transformCdEmbed(): MessageEmbed {
         $embed = $this->newColoredEmbed();
         $embed->setTitle('Can\'t transform yet.');
         $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer) . ' turns.');
         return $embed;
-    }
-
-    /**
-     * @return array
-     */
-    protected function getMonsterTurnFields(): array {
-        if ($this->hero->isStealthed()) {
-            return $this->monster->getTurn($this->hero, $this->monster->type->getActionVsStealthed());
-        }
-        return $this->monster->getTurn($this->hero);
     }
 
     /**
@@ -514,10 +543,10 @@ class FightManager {
 
     /**
      * @param string $actionName
-     * @return DirectAction|int|null
+     * @return IncidentAction|DirectAction|int|null
      */
     public function getActionIfValid(string $actionName) {
-        if (!is_null($this->newTrinket)) {
+        if ($this->newTrinket !== null) {
             if ($actionName === 'skip') {
                 return self::SKIP_TRINKET_ACTION;
             }
@@ -526,6 +555,11 @@ class FightManager {
             }
             return null;
         }
+
+        if ($this->incident !== null) {
+            return $this->incident->getActionIfValid($actionName, $this->hero->type->name);
+        }
+
         if ($this->noTransform() && $actionName === DirectAction::TRANSFORM_ACTION) {
             return null;
         }

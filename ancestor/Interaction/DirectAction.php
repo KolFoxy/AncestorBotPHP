@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction;
 
-class DirectAction {
+class DirectAction extends AbstractAction {
 
 
     const TRANSFORM_ACTION = 'Transform';
@@ -11,12 +11,6 @@ class DirectAction {
      * @var bool Whether or not effect ISN'T used against an enemy, AKA: effect is positive
      */
     public $requiresTarget = false;
-
-    /**
-     * @var string
-     * @required
-     */
-    public $name;
 
     /**
      * @var DirectActionEffect

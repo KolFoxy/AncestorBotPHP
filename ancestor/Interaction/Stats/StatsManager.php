@@ -379,15 +379,18 @@ class StatsManager {
         return $this->removeStatusEffectType(StatusEffect::TYPE_BLIGHT);
     }
 
-    public function removeDebuffs() {
+    public function removeDebuffs(): bool {
+        $res = false;
         foreach ($this->modifiers as $key => $modifier) {
             if ($modifier->getType() === StatModifier::TYPE_DEBUFF) {
                 if (is_a($this->host, Hero::class) && $this->host->debuffIsPermanent($key)) {
                     continue;
                 }
                 unset($this->modifiers[$key]);
+                $res = true;
             }
         }
+        return $res;
     }
 
     public function isStealthed(): bool {

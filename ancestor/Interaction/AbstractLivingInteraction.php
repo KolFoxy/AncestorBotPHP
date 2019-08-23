@@ -38,8 +38,7 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
         if (!$vsStealth && !$noTransform) {
             return parent::getDefaultFooterText($commandName);
         }
-        $footerText = 'Respond with "' . $commandName . ' [ACTION]" to perform the corresponding action. ' . PHP_EOL
-            . 'Available actions: ';
+        $footerText = $this->getDefaultFooterStart($commandName);
         foreach ($this->actions as $action) {
             if ($noTransform && $action->isTransformAction()) {
                 continue;
@@ -97,5 +96,9 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
             }
         }
         return $this->getRatedAction();
+    }
+
+    public function getActionIfValid(string $actionName) : ?DirectAction {
+        return parent::getActionIfValid($actionName);
     }
 }

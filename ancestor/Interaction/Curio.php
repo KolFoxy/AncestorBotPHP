@@ -14,6 +14,13 @@ class Curio extends AbstractInteraction {
     private $defAction = null;
 
     /**
+     * @var Action[]
+     */
+    public $actions;
+
+
+    /** @noinspection PhpDocMissingThrowsInspection */
+    /**
      * @param string $commandName
      * @return MessageEmbed
      */

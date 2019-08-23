@@ -3,6 +3,7 @@
 namespace Ancestor\Interaction;
 
 use Ancestor\ImageTemplate\ImageTemplate;
+use Ancestor\Interaction\Stats\Stats;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 use function GuzzleHttp\Psr7\str;
@@ -61,4 +62,15 @@ class Effect extends AbstractEffect {
         return '';
     }
 
+
+    public function getApplicationResult(AbstractLivingBeing $target, int &$healthResult, int &$stressResult) {
+        $healthResult = (int)($this->getHealthValue() *
+            ($this->isHealEffect()
+                ? $target->statManager->getValueMod(Stats::HEAL_RECEIVED_MOD)
+                : $target->statManager->getValueMod(Stats::DAMAGE_TAKEN_MOD)));
+        $stressResult = (int)($this->getStressValue() *
+            ($this->isPositiveStressEffect()
+                ? $target->statManager->getValueMod(Stats::STRESS_HEAL_MOD)
+                : $target->statManager->getValueMod(Stats::STRESS_MOD)));
+    }
 }

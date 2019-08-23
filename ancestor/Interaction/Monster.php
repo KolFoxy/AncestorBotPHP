@@ -49,7 +49,11 @@ class Monster extends AbstractLivingBeing {
      */
     public function getTurn(AbstractLivingBeing $target, ?DirectAction $action = null): array {
         if ($action === null) {
-            $action = $this->getProgrammableAction();
+            if ($target->isStealthed()) {
+                $action = $this->type->getActionVsStealthed();
+            } else {
+                $action = $this->getProgrammableAction();
+            }
         }
         if ($action->requiresTarget) {
             $target = $this;
