@@ -20,10 +20,10 @@ class Incident extends AbstractInteraction {
     public function defaultAction(): IncidentAction {
         if (self::$defAction === null) {
             self::$defAction = new IncidentAction();
-            self::$defAction->name = 'skip';
+            self::$defAction->name = 'run';
             self::$defAction->effect = new Effect();
             /** @noinspection PhpUnhandledExceptionInspection */
-            self::$defAction->effect->setDescription('You choose to walk away peacefully.');
+            self::$defAction->effect->setDescription('You can feel this is going south.');
         }
         return self::$defAction;
     }

@@ -4,7 +4,6 @@ namespace Ancestor\Interaction\Incident;
 
 use Ancestor\Interaction\AbstractAction;
 use Ancestor\Interaction\ActionResult\ActionResult;
-use Ancestor\Interaction\ActionResult\ActionResultFeed;
 use Ancestor\Interaction\Hero;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
@@ -12,7 +11,6 @@ class IncidentAction extends AbstractAction {
 
     /**
      * @var \Ancestor\Interaction\Effect
-     * @required
      */
     public $effect;
 
@@ -45,6 +43,7 @@ class IncidentAction extends AbstractAction {
 
     /**
      * @param mixed|null $resultIncident
+     * @throws \JsonMapper_Exception
      */
     public function setResultIncident($resultIncident): void {
         if ($resultIncident === null) {
@@ -54,9 +53,13 @@ class IncidentAction extends AbstractAction {
             $this->resultIncident = $resultIncident;
             return;
         }
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+        if (is_object($resultIncident)) {
+            $this->resultIncident = $mapper->map($resultIncident, new Incident());
+            return;
+        }
         if (is_string($resultIncident)) {
-            $mapper = new \JsonMapper();
-            $mapper->bExceptionOnMissingData = true;
             $resultIncident = dirname(__DIR__, 3) . $resultIncident;
             if (!file_exists($resultIncident)) {
                 throw new \Exception('ERROR: File "' . $resultIncident . '" doesn\'t exist.)');
@@ -101,24 +104,35 @@ class IncidentAction extends AbstractAction {
         }
     }
 
-    public function getResult(Hero $hero): MessageEmbed {
-        /** @noinspection PhpUnhandledExceptionInspection */
-        $res = new MessageEmbed();
+    public function getResult(Hero $hero, MessageEmbed $res): MessageEmbed {
         $res->setTitle('*' . $this->name . '*');
         $res->setDescription('*``' . $this->effect->getDescription() . '``*' . PHP_EOL . $this->applyEffectsGetResults($hero));
+        if ($this->effect->image !== null) {
+            $res->setThumbnail($this->effect->image);
+        }
+        if ($this->resultIncident !== null) {
+            $res->addField($this->resultIncident->name, $this->resultIncident->description);
+            $res->setImage($this->resultIncident->image);
+        }
         return $res;
     }
 
-    protected function applyEffectsGetResults(Hero $hero) {
-        $res = new ActionResult($hero, $hero, '', $this->effect->getDescription());
+    protected function applyEffectsGetResults(Hero $hero): string {
+        $res = new ActionResult($hero, $hero, '', '');
+        $healthResult = 0;
+        $stressResult = 0;
         $this->effect->getApplicationResult($hero, $healthResult, $stressResult);
         $res->stressToTarget($stressResult);
         $res->healthToTarget($healthResult);
-        foreach ($this->statusEffects as $statusEffect) {
-            $res->addTimedEffect($statusEffect);
+        if ($this->statusEffects !== null) {
+            foreach ($this->statusEffects as $statusEffect) {
+                $res->addTimedEffect($statusEffect);
+            }
         }
-        foreach ($this->statModifiers as $statModifier) {
-            $res->addTimedEffect($statModifier);
+        if ($this->statModifiers !== null) {
+            foreach ($this->statModifiers as $statModifier) {
+                $res->addTimedEffect($statModifier);
+            }
         }
         $res->removeBlightBleedStealthFromTarget($this->effect->removesBlight, $this->effect->removesBleed, false, $this->effect->removesDebuff);
         return $res->__toString();

@@ -9,6 +9,7 @@ use Ancestor\Interaction\Fight\FightManager;
 use Ancestor\Interaction\Fight\EncounterCollectionInterface;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
+use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
 use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
@@ -56,6 +57,14 @@ class Fight extends Command implements EncounterCollectionInterface {
      */
     private $elitesMaxIndex;
 
+    /**
+     * @var Incident[]
+     */
+    private $incidents;
+    /**
+     * @var int
+     */
+    private $incidentsMaxIndex;
 
     const ABORT_MESSAGE = 'is now forever lost in space and time.';
 
@@ -72,7 +81,6 @@ class Fight extends Command implements EncounterCollectionInterface {
 
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
-
         foreach (glob(dirname(__DIR__, 2) . '/data/heroes/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
@@ -97,6 +105,15 @@ class Fight extends Command implements EncounterCollectionInterface {
                 throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
             }
         }
+        foreach (glob(dirname(__DIR__, 2) . '/data/incidents/*.json') as $path) {
+            $json = json_decode(file_get_contents($path));
+            try {
+                $this->incidents[] = $mapper->map($json, new Incident());
+            } catch (\Exception $e) {
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+            }
+        }
+        $this->incidentsMaxIndex = count($this->incidents) - 1;
         $this->classesMaxIndex = count($this->classes) - 1;
         $this->regularsMaxIndex = count($this->regMonsterTypes) - 1;
         $this->elitesMaxIndex = count($this->eliteMonsterTypes) - 1;
@@ -233,6 +250,10 @@ class Fight extends Command implements EncounterCollectionInterface {
 
     public function randEliteMonsterType(): MonsterType {
         return $this->eliteMonsterTypes[mt_rand(0, $this->elitesMaxIndex)];
+    }
+
+    public function randIncident(): Incident {
+        return $this->incidents[mt_rand(0, $this->incidentsMaxIndex)];
     }
 
     function getFight(Message $message): FightManager {

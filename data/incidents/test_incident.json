@@ -1,0 +1,43 @@
+{
+  "name": "You encounter a wild Muscle Wizard",
+  "description": "You tremble as you observe a bald man descending from the skies and standing before you menacingly.",
+  "image": "https://i.imgur.com/lA72RZ9.png",
+  "actions": [
+    {
+      "name": "Ask him to cast a spell",
+      "effect": {
+        "description": "This was a mistake.",
+        "image": "https://i.imgur.com/f6BcThP.png",
+        "health_value": -9999,
+        "healthDeviation": 998
+      }
+    },
+    {
+      "name": "Tell him a joke",
+      "effect": {
+        "description": "He is not amused."
+      },
+      "exclusiveClasses": [
+        "Jester",
+        "antiquarian"
+      ],
+      "resultIncident": {
+        "name": "The muscle wizard is getting ready to cast fist.",
+        "image": "https://i.imgur.com/5psJY0h.png",
+        "description": "You can feel his power level is quite a bit over nine thousands.",
+        "actions": [
+          {
+            "name": "stay and witness",
+            "effect": {
+              "description": "You bath in the glory of the fist.",
+              "image":"https://i.imgur.com/f6BcThP.png",
+              "health_value": -9999,
+              "healthDeviation": 998
+            }
+          }
+        ]
+      }
+    }
+  ],
+  "int": 100
+}

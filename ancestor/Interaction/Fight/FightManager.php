@@ -132,27 +132,26 @@ class FightManager {
     const ENDSCREEN_THRESHOLD = 15;
 
     const TRINKET_KILLS_THRESHOLD = 2;
-
     const SKIP_TRINKET_ACTION = -13505622;
-
     const SKIP_HEAL_PERCENTAGE = 0.1;
-    const TRANSFORM_TURNS_CD = 4;
+
     const CORRUPTED_HERO_THRESHOLD = 10;
     const CORRUPTED_HERO_CHANCE = 25;
-
-    const ELITE_MONSTER_THRESHOLD = 15;
-    const ELITE_MONSTER_CHANCE = 25;
     const CORRUPTED_NAME_MAXLENGTH = 6;
     const CORRUPTED_NAME_MINLENGTH = 3;
     const CORRUPTED_NAME_ZALGOCHARS = 4;
+    const ELITE_MONSTER_THRESHOLD = 15;
+    const ELITE_MONSTER_CHANCE = 25;
+    const INCIDENT_THRESHOLD = 2; //15 for life
+    const INCIDENT_CHANCE = 100; //33 for life
 
     const UTF8_ALPHABET_START = 65;
-
     const UTF8_ALPHABET_END = 90;
 
     const CORRUPTED_DEATHBLOW_RESIST = 30;
+    const TRANSFORM_TURNS_CD = 4;
 
-    const INVALID_ACTION_ERROR_MSG = 'Try again. If error persists - contact the developer with issue on GitHub.';
+    const INVALID_ACTION_ERROR_MSG = 'Try again. If error persists - contact the developer with the issue on GitHub.';
 
     public function __construct(Hero $hero, string $heroPicUrl, EncounterCollectionInterface $monsterCollection, string $chatCommand, LoopInterface $loop, bool $endless = false) {
         $this->hero = $hero;
@@ -181,21 +180,27 @@ class FightManager {
             $additionalEmbed = $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
             Helper::mergeEmbed($embed, $additionalEmbed);
         }
-        $embed->setFooter($this->getCurrentFooter());
+        $this->setCurrentFooter($embed);
         return $embed;
     }
 
 
-    protected function getCurrentFooter(): string {
+    protected function setCurrentFooter(MessageEmbed $embed) {
+        if ($this->hero->isDead()) {
+            $embed->setFooter('R.I.P. ' . $this->hero->name, $this->heroPicUrl);
+            return;
+        }
         if ($this->newTrinket !== null) {
-            return 'Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
-                . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.';
+            $embed->setFooter('Respond with "' . $this->chatCommand . ' [NUMBER]" to equip trinket in the corresponding slot.' . PHP_EOL . 'Alternatively, "'
+                . $this->chatCommand . ' skip" will disregard the trinket. Skipping the trinket will provide you with time to quickly patch up and restore some HP.');
+            return;
         }
         if ($this->incident !== null) {
-            return $this->incident->getDefaultFooterText($this->chatCommand, $this->hero->type->name);
+            $embed->setFooter($this->incident->getDefaultFooterText($this->chatCommand, $this->hero->type->name));
+            return;
         }
-        return $this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed(), $this->noTransform())
-            . PHP_EOL . ($this->killCount > 0 ? 'Kills: ' . $this->killCount : '');
+        $embed->setFooter($this->hero->type->getDefaultFooterText($this->chatCommand, $this->monster->isStealthed(), $this->noTransform())
+            . PHP_EOL . ($this->killCount > 0 ? 'Kills: ' . $this->killCount : ''));
     }
 
     protected function resetTransformTimer() {
@@ -230,14 +235,34 @@ class FightManager {
     }
 
     protected function getIncidentTurn(IncidentAction $action): MessageEmbed {
-        $res = $action->getResult($this->hero);
-        $this->incident = $action->resultIncident;
+        $res = $action->getResult($this->hero, $this->newColoredEmbed());
+        $this->incident = $action->getResultIncident();
+        if ($this->incident === null) {
+            $this->newMonsterTurn($res);
+        }
+        $this->setCurrentFooter($res);
         return $res;
     }
+
+    protected function rollTrinketTurn(MessageEmbed $resultEmbed) {
+        $newTrinket = TrinketFactory::create($this->hero);
+        $this->newTrinket = $newTrinket;
+        $resultEmbed->setImage($newTrinket->image);
+        $trinketTitle = $newTrinket->name;
+        for ($i = 0; $i < $this->newTrinket->rarity; $i++) {
+            $trinketTitle .= '☆';
+        }
+        $resultEmbed->addField('You\'ve found a new trinket: ***' . $trinketTitle . '***',
+            '``' . $newTrinket->getDescription() . '``'
+            . PHP_EOL . $this->hero->getTrinketStatus());
+        $this->setCurrentFooter($resultEmbed);
+    }
+
 
     protected function getInvalidActionEmbed(): MessageEmbed {
         return (new MessageEmbed())->setTitle('Invalid action.')->setDescription(self::INVALID_ACTION_ERROR_MSG);
     }
+
 
     /**
      * @param DirectAction|int $action
@@ -382,7 +407,7 @@ class FightManager {
         }
         $this->newTrinket = null;
         $this->newMonsterTurn($res);
-        $res->setFooter($this->getCurrentFooter());
+        $this->setCurrentFooter($res);
         return $res;
     }
 
@@ -416,11 +441,7 @@ class FightManager {
                 return $embed;
             }
         }
-        if ($this->hero->isDead()) {
-            $embed->setFooter('R.I.P. ' . $this->hero->name, $this->heroPicUrl);
-            return $embed;
-        }
-        $embed->setFooter($this->getCurrentFooter());
+        $this->setCurrentFooter($embed);
         return $embed;
     }
 
@@ -442,10 +463,22 @@ class FightManager {
     }
 
     protected function rollNewEncounterIsFinal(MessageEmbed $embed): bool {
-        if ($this->rollTrinkets($embed)) {
+        if ($this->killCount >= self::TRINKET_KILLS_THRESHOLD) {
+            if ($this->killCount >= self::INCIDENT_THRESHOLD && mt_rand(1, 100) <= self::INCIDENT_CHANCE) {
+                $this->rollIncidentTurn($embed);
+            } else {
+                $this->rollTrinketTurn($embed);
+            }
             return true;
         }
         return $this->newMonsterTurn($embed);
+    }
+
+    protected function rollIncidentTurn(MessageEmbed $embed) {
+        $this->incident = $this->encounterCollection->randIncident();
+        $embed->addField('*' . $this->incident->name . '*', $this->incident->description);
+        $embed->setImage($this->incident->image);
+        $this->setCurrentFooter($embed);
     }
 
     protected function transformCdEmbed(): MessageEmbed {
@@ -502,7 +535,7 @@ class FightManager {
     }
 
     public function getHeroStats(): MessageEmbed {
-        return $this->hero->getStatsAndEffectsEmbed()->setFooter($this->getCurrentFooter());
+        return $this->hero->getStatsAndEffectsEmbed();
     }
 
     public function getHeroActionsDescriptions(): MessageEmbed {
@@ -515,26 +548,7 @@ class FightManager {
         $description .= '*' . $this->hero->type->defaultAction()->name . '*'
             . PHP_EOL . '``' . $this->hero->type->defaultAction()->effect->getDescription() . '``';
         $res->setDescription($description);
-        $res->setFooter($this->getCurrentFooter());
         return $res;
-    }
-
-    protected function rollTrinkets(MessageEmbed $resultEmbed): bool {
-        if ($this->killCount < self::TRINKET_KILLS_THRESHOLD) {
-            return false;
-        }
-        $newTrinket = TrinketFactory::create($this->hero);
-        $this->newTrinket = $newTrinket;
-        $resultEmbed->setImage($newTrinket->image);
-        $trinketTitle = $newTrinket->name;
-        for ($i = 0; $i < $this->newTrinket->rarity; $i++) {
-            $trinketTitle .= '☆';
-        }
-        $resultEmbed->addField('You\'ve found a new trinket: ***' . $trinketTitle . '***',
-            '``' . $newTrinket->getDescription() . '``'
-            . PHP_EOL . $this->hero->getTrinketStatus());
-        $resultEmbed->setFooter($this->getCurrentFooter());
-        return true;
     }
 
     public function isOver(): bool {
