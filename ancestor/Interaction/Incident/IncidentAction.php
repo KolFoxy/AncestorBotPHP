@@ -55,16 +55,21 @@ class IncidentAction extends AbstractAction {
         }
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
-        if (is_object($resultIncident)) {
-            $this->resultIncident = $mapper->map($resultIncident, new Incident());
-            return;
-        }
         if (is_string($resultIncident)) {
             $resultIncident = dirname(__DIR__, 3) . $resultIncident;
             if (!file_exists($resultIncident)) {
                 throw new \Exception('ERROR: File "' . $resultIncident . '" doesn\'t exist.)');
             }
+            if (mb_substr($resultIncident, -4) === '.php') {
+                $this->resultIncident = require($resultIncident);
+                return;
+            }
             $this->resultIncident = $mapper->map(json_decode(file_get_contents($resultIncident)), new Incident());
+            return;
+        }
+        if (is_object($resultIncident)) {
+            $this->resultIncident = $mapper->map($resultIncident, new Incident());
+            return;
         }
     }
 
@@ -106,14 +111,16 @@ class IncidentAction extends AbstractAction {
 
     public function getResult(Hero $hero, MessageEmbed $res): MessageEmbed {
         $res->setTitle('*' . $this->name . '*');
-        $res->setDescription('*``' . $this->effect->getDescription() . '``*' . PHP_EOL . $this->applyEffectsGetResults($hero));
+        $description = '*``' . $this->effect->getDescription() . '``*';
         if ($this->effect->image !== null) {
             $res->setThumbnail($this->effect->image);
         }
         if ($this->resultIncident !== null) {
-            $res->addField($this->resultIncident->name, $this->resultIncident->description);
             $res->setImage($this->resultIncident->image);
+            $description .= PHP_EOL . '*``' . $this->resultIncident->description . '*``';
         }
+        $description .= PHP_EOL . $this->applyEffectsGetResults($hero);
+        $res->setDescription($description);
         return $res;
     }
 

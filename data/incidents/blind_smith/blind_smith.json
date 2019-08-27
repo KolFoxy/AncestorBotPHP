@@ -1,16 +1,16 @@
 {
-  "name": "You encounter a wild Muscle Wizard",
-  "description": "You tremble as you observe a bald man descending from the skies and standing before you menacingly.",
-  "image": "https://i.imgur.com/lA72RZ9.png",
+  "name": "You see a man standing in the centre of ruins.",
+  "description": "It appears to be the ruins of an old blacksmithery, though only the anvil and forge survived the test of comet and time. The man stands behind the anvil and it doesn’t seem like he has noticed you. His hands are empty and his unblinking eyes are staring into nothingness and emit faint teal glow. His skin is as grey and lifeless as everything you’ve seen here before.",
+  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
-      "name": "Ask him to cast a spell",
+      "name": "Approach the man",
       "effect": {
-        "description": "This was a mistake.",
+        "description": "You got closer to the man.",
         "image": "https://i.imgur.com/f6BcThP.png",
-        "health_value": -9999,
-        "healthDeviation": 998
-      }
+        "stress_value": 3
+      },
+      "resultIncident": "/data/incidents/blind_smith/approach_the_man.json"
     },
     {
       "name": "Ask him to open a magical test portal.",

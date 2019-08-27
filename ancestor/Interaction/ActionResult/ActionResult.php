@@ -302,7 +302,7 @@ class ActionResult {
             return;
         }
 
-        if ($toAdd->getType() === StatModifier::TYPE_DEBUFF) {
+        if ($toAdd->getType() === StatModifier::TYPE_DEBUFF && !$toAdd->guaranteedApplication()) {
             if ($this->resistedDebuff === true) {
                 return;
             }
