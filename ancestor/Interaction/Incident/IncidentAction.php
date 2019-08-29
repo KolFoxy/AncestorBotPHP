@@ -60,15 +60,28 @@ class IncidentAction extends AbstractAction {
             if (!file_exists($resultIncident)) {
                 throw new \Exception('ERROR: File "' . $resultIncident . '" doesn\'t exist.)');
             }
+
             if (mb_substr($resultIncident, -4) === '.php') {
                 $this->resultIncident = require($resultIncident);
                 return;
             }
-            $this->resultIncident = $mapper->map(json_decode(file_get_contents($resultIncident)), new Incident());
+            try {
+                $this->resultIncident = $mapper->map(json_decode(file_get_contents($resultIncident)), new Incident());
+            } catch (\Exception $e) {
+                echo('Provided failed $resultIncident:');
+                var_dump($resultIncident);
+                throw $e;
+            }
             return;
         }
         if (is_object($resultIncident)) {
-            $this->resultIncident = $mapper->map($resultIncident, new Incident());
+            try {
+                $this->resultIncident = $mapper->map($resultIncident, new Incident());
+            } catch (\Exception $e) {
+                echo('Provided failed $resultIncident:');
+                var_dump($resultIncident);
+                throw $e;
+            }
             return;
         }
     }

@@ -1,14 +1,14 @@
 {
   "name": "You got closer to the man.",
-  "description": "He remains unnervingly still. You notice that his eyes lack pupils. As you approach him, you hear a faint whisper, but fail to make out words.",
+  "description": "The man stands unnervingly still. You notice that his eyes lack pupils. As you approach him, you hear a faint whisper, but fail to make out words.",
   "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
       "name": "Wave your hand in front of him",
       "effect": {
-        "description": ""
+        "description": "He either doesn't notice or doesn't care."
       },
-      "resultIncident": "/data/incidents/blind_smith/take_a_closer_look.php"
+      "resultIncident": "/data/incidents/blind_smith/approach_the_man.json"
     },
     {
       "name": "Poke him with your weapon",
@@ -26,7 +26,7 @@
     {
       "name": "Try to take a sample from him",
       "effect": {
-        "description": "As soon as you touch him, his body begins to fall to pieces. You’ve managed to collect some before they became too fine to be useful. In mere seconds, there is nothing left of him but dust, which is now floating everywhere. You leave the place, desperately trying not to inhale the remains.\nYou’ve discovered that his dust greatly improves the deadliness of your blight solution."
+        "description": "As soon as you touch him, his body begins to fall to pieces. You've managed to collect some before they became too fine to be useful. In mere seconds, there is nothing left of him but dust, which is now floating everywhere. You leave the place, desperately trying not to inhale the remains.\nYou've discovered that his dust greatly improves the deadliness of your blight solution."
       },
       "exclusiveClasses": [
         "Plague Doctor"
@@ -52,7 +52,7 @@
       "effect": {
         "description": "You decided to search the ruins first."
       },
-      "resultIncident": "/data/incidents/blind_smith/take_a_closer_look.php"
+      "resultIncident": "/data/incidents/blind_smith/search_the_smithery.json"
     }
   ]
 }

@@ -1,6 +1,6 @@
 {
   "name": "You see a man standing in the centre of ruins.",
-  "description": "It appears to be the ruins of an old blacksmithery, though only the anvil and forge survived the test of comet and time. The man stands behind the anvil and it doesn’t seem like he has noticed you. His hands are empty and his unblinking eyes are staring into nothingness and emit faint teal glow. His skin is as grey and lifeless as everything you’ve seen here before.",
+  "description": "It appears to be the ruins of an old blacksmithery, though only the anvil and forge survived the test of comet and time. The man stands behind the anvil and it doesn't seem like he has noticed you. His hands are empty and his unblinking eyes are staring into nothingness and emit faint teal glow. His skin is as grey and lifeless as everything you've seen here before.",
   "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
@@ -13,38 +13,13 @@
       "resultIncident": "/data/incidents/blind_smith/approach_the_man.json"
     },
     {
-      "name": "Ask him to open a magical test portal.",
+      "name": "Search the smithery",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "You decided to take your time and inspect the surroundings.",
+        "image": "https://i.imgur.com/f6BcThP.png",
+        "stress_value": 3
       },
-      "resultIncident": "/data/incidents/blind_smith/take_a_closer_look.php"
-    },
-    {
-      "name": "Tell him a joke",
-      "effect": {
-        "description": "He is not amused."
-      },
-      "exclusiveClasses": [
-        "Jester",
-        "antiquarian"
-      ],
-      "resultIncident": {
-        "name": "The muscle wizard is getting ready to cast fist.",
-        "image": "https://i.imgur.com/5psJY0h.png",
-        "description": "You can feel his power level is quite a bit over nine thousands.",
-        "actions": [
-          {
-            "name": "stay and witness",
-            "effect": {
-              "description": "You bath in the glory of the fist.",
-              "image": "https://i.imgur.com/f6BcThP.png",
-              "health_value": -9999,
-              "healthDeviation": 998
-            }
-          }
-        ]
-      }
+      "resultIncident": "/data/incidents/blind_smith/search_the_smithery.json"
     }
   ]
 }

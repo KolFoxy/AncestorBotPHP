@@ -14,7 +14,8 @@ class UseTheHammerAction extends IncidentAction {
     public function __construct() {
         $this->name = 'Use the hammer';
         $this->effect = new Effect();
-        $this->effect->setDescription('Test, change later');
+        $this->effect->setDescription('The hammer is heavy, but it is irrelevant. You are set to start and finish this. Ignoring the man, you go to the anvil, place your dagger on top of it and then you strike it. Unnaturally, it form begins to shift. You strike again, and again, and again, and soon you are out of breath. You drop the hammer, and fall on the ground yourself next. When you finally regain breath, you notice that the man, the anvil and the smithery itself have disappeared. The only thing that is left is a giant scythe, laying on the ground before you… How is it possible that your dagger hold enough substance to be reshaped into that thing? Or was it? Does the blade of the scythe shrink when you look at it at a different angle?'
+            . PHP_EOL . 'You take the scythe. It is heavy, unnaturally cold and you feel the daunting vibrations emitting from it.');
         $this->statModifiers = [];
 
         $statMod = new StatModifier();

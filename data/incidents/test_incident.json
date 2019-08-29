@@ -13,12 +13,12 @@
       }
     },
     {
-      "name": "Ask him to open a magical test portal.",
+      "name": "Ask him to open a portal to blind smith",
       "effect": {
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/blind_smith/take_a_closer_look.php"
+      "resultIncident": "/data/incidents/blind_smith/blind_smith.json"
     },
     {
       "name": "Tell him a joke",

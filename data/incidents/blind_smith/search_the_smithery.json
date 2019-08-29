@@ -1,0 +1,30 @@
+{
+  "name": "Smithery.",
+  "description": "You look at the surroundings. Pieces of wooden roof are flying above the place, ignoring the concept of gravity. Underneath them there is not much left but the building foundation, anvil, an empty crate and a blacksmith hammer lying on the floor behind the man.",
+  "image": "https://i.imgur.com/f6BcThP.png",
+  "actions": [
+    {
+      "name": "Offer the hammer to the man",
+      "effect": {
+        "description": "He doesn\'t seem to notice you and doesn\'t care when you pick the tool up. He is still immobile when you go to the opposite side of the anvil and present it to him. After a minute or so of waiting for something to happen, the weight of the hammer forces you to put it down on the anvil. And as soon as you release your grasp from the handle, the man suddenly animates, takes the hammer and strikes the anvil with such force that the sound almost deafens you. He looks at the hammer and the anvil, breathing rapidly and hunching, as if he was holding his breath all this time. You notice the teal glow from his eyes disappearing, and with it, his image becomes blurry and less transparent and soon enough it disappears, leaving you to question if it was just a mirage.\nFor whatever reason, you feel a sense of relief.",
+        "stress_value": -30
+      }
+    },
+    {
+      "name": "Take the hammer and leave",
+      "effect": {
+        "description": "The hammer is a lot heavier than the size might suggest. It may not even be worth it to drag it along with you. However, as soon as you cross the edge of the smithery foundation, you feel the weight of the hammer disappearing, as the hammer itself crumbles and falls into pieces of wood, metal and rust. You turn around, and see the same thing happening to the man and the whole place. Soon enough, you\'re standing in front of nothing."
+      }
+    },
+    {
+      "exclusiveClasses": [
+        "antiquarian"
+      ],
+      "name": "Take a closer look at the hammer",
+      "effect": {
+        "description": "As you inspect the hammer, you learn the unremarkable history of the thing, you see the wear on the handle and some old flinders used to hold the hammerhead in place."
+      },
+      "resultIncident": "/data/incidents/blind_smith/take_a_closer_look.php"
+    }
+  ]
+}

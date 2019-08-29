@@ -86,7 +86,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             try {
                 $this->classes[] = $mapper->map($json, new HeroClass());
             } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/*.json') as $path) {
@@ -94,7 +94,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             try {
                 $this->regMonsterTypes[] = $mapper->map($json, new MonsterType());
             } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/elite/*.json') as $path) {
@@ -102,7 +102,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             try {
                 $this->eliteMonsterTypes[] = $mapper->map($json, new MonsterType());
             } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         foreach (glob(dirname(__DIR__, 2) . '/data/incidents/*.json') as $path) {
@@ -110,7 +110,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             try {
                 $this->incidents[] = $mapper->map($json, new Incident());
             } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"');
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         $this->incidentsMaxIndex = count($this->incidents) - 1;
