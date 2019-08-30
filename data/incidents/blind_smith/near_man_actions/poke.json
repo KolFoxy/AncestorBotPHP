@@ -1,0 +1,13 @@
+{
+  "name": "Poke him with your weapon",
+  "effect": {
+    "description": "As soon as you touch him, he opens his mouth as if to start screaming, but instead he remains silent and his body begins to fall to pieces. In mere seconds, there is nothing left of him but dust, which is now floating everywhere. You leave the place, desperately trying not to inhale the remains."
+  },
+  "statusEffects": [
+    {
+      "chance": 150,
+      "value": -5,
+      "type": "blight"
+    }
+  ]
+}

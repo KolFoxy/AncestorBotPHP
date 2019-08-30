@@ -1,9 +1,5 @@
 <?php
 require(__DIR__ . '/vendor/autoload.php');
-
-var_dump(json_decode(file_get_contents(__DIR__ . '/data/incidents/blind_smith/approach_the_man.json'),false,512));
-var_dump(json_last_error_msg());
-
 $config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
 $loop = \React\EventLoop\Factory::create();
 

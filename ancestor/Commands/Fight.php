@@ -165,7 +165,7 @@ class Fight extends Command implements EncounterCollectionInterface {
         if (empty($args)) {
             return;
         }
-        $actionName = implode(' ', $args);
+        $actionName = mb_strtolower(implode(' ', $args));
         $fight = $this->getFight($message);
         if ($actionName === self::SURRENDER_COMMAND) {
             $this->sendEndscreen($message->channel, $fight, $message->author->__toString());

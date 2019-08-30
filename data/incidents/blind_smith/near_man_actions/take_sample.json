@@ -1,0 +1,24 @@
+{
+  "name": "Try to take a sample from him",
+  "effect": {
+    "description": "As soon as you touch him, his body begins to fall to pieces. You've managed to collect some before they became too fine to be useful. In mere seconds, there is nothing left of him but dust, which is now floating everywhere. You leave the place, desperately trying not to inhale the remains.\nYou've discovered that his dust greatly improves the deadliness of your blight solution."
+  },
+  "exclusiveClasses": [
+    "Plague Doctor"
+  ],
+  "statusEffects": [
+    {
+      "chance": 140,
+      "value": -5,
+      "type": "blight"
+    }
+  ],
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 70,
+      "duration": 20
+    }
+  ]
+}

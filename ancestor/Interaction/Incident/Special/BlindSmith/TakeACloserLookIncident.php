@@ -5,11 +5,12 @@ namespace Ancestor\Interaction\Incident\Special\BlindSmith;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
+use Ancestor\Interaction\Incident\IncidentSingletonInterface;
 
-class TakeACloserLookIncident extends Incident {
+class TakeACloserLookIncident extends Incident implements IncidentSingletonInterface {
+
     protected static $instance = null;
-
-    public static function getInstance() {
+    public static function getInstance() : Incident {
         if (self::$instance === null) {
             self::$instance = new TakeACloserLookIncident();
         }

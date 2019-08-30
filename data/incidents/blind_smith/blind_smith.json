@@ -7,17 +7,14 @@
       "name": "Approach the man",
       "effect": {
         "description": "You got closer to the man.",
-        "image": "https://i.imgur.com/f6BcThP.png",
         "stress_value": 3
       },
-      "resultIncident": "/data/incidents/blind_smith/approach_the_man.json"
+      "resultIncident": "/data/incidents/blind_smith/approach_the_man.php"
     },
     {
       "name": "Search the smithery",
       "effect": {
-        "description": "You decided to take your time and inspect the surroundings.",
-        "image": "https://i.imgur.com/f6BcThP.png",
-        "stress_value": 3
+        "description": "You decided to take your time and inspect the surroundings."
       },
       "resultIncident": "/data/incidents/blind_smith/search_the_smithery.json"
     }
