@@ -20,7 +20,7 @@ class ApproachTheManIncident extends Incident implements IncidentSingletonInterf
 
     protected function __construct() {
         $this->name = 'You got closer to the man.';
-        $this->description = 'The man stands unnervingly still. You notice that his eyes lack pupils. As you approach him, you hear a faint whisper, but fail to make out words.';
+        $this->description = 'The man stands unnervingly still. You notice that his glowing teal eyes lack pupils. You hear faint whispers, but fail to make out words.';
         $this->image = 'https://i.imgur.com/f6BcThP.png';
 
         $action = new IncidentAction();
