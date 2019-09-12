@@ -1,0 +1,23 @@
+{
+  "name": "Wait",
+  "effect": {
+    "description": "Still nothing changes. At this point it doesn’t even matter if you close your eyes or not: the image of wheat and sky seems forever engraved in your mind. The place is exceedingly boring and uneventful and it doesn’t take you long to fall into the arms of Morpheus.\nWhen you finally wake up, it is from sounds of an approaching monster. You are still sluggish from sleep, but there is no time for indolence.",
+    "health_value": 30,
+    "healthDeviation": -15,
+    "stress_value": 12
+  },
+  "statModifiers":[
+    {
+      "stat": "accMod",
+      "value": -10,
+      "duration": 6,
+      "chance": -1
+    },
+    {
+      "stat": "healReceivedMod",
+      "value": 10,
+      "duration": 6,
+      "chance": -1
+    }
+  ]
+}

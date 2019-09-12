@@ -13,6 +13,11 @@ class Incident extends AbstractInteraction {
     public $actions;
 
     /**
+     * @var bool
+     */
+    public $disableDefAction = false;
+
+    /**
      * @var IncidentAction|null
      */
     static private $defAction = null;
@@ -79,6 +84,9 @@ class Incident extends AbstractInteraction {
 
     public function getActionIfValid(string $actionName, ?string $class = null): ?IncidentAction {
         $action = parent::getActionIfValid($actionName);
+        if ($this->disableDefAction && ($action === $this->defaultAction())) {
+            return null;
+        }
         if (!is_null($action) && $action->isAvailableForClass($class)) {
             return $action;
         }
@@ -99,6 +107,9 @@ class Incident extends AbstractInteraction {
             if ($action->isAvailableForClass($class)) {
                 $footerText .= mb_strtolower($action->name) . ', ';
             }
+        }
+        if ($this->disableDefAction) {
+            return mb_substr($footerText, 0, mb_strlen($footerText) - 2);
         }
         $footerText .= $this->defaultAction()->name;
         return $footerText;

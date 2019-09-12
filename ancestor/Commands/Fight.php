@@ -113,6 +113,13 @@ class Fight extends Command implements EncounterCollectionInterface {
                 throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
+        foreach (glob(dirname(__DIR__, 2) . '/data/incidents/*.php') as $path) {
+            try {
+                $this->incidents[] = require($path);
+            } catch (\Exception $e) {
+                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
+            }
+        }
         $this->incidentsMaxIndex = count($this->incidents) - 1;
         $this->classesMaxIndex = count($this->classes) - 1;
         $this->regularsMaxIndex = count($this->regMonsterTypes) - 1;

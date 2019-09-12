@@ -4,12 +4,13 @@ namespace Ancestor\Interaction\Incident\Special\Dog;
 
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
+use Ancestor\Interaction\Incident\IActionSingletonInterface;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
-class FollowTheDogAction extends IncidentAction {
+class FollowTheDogAction extends IncidentAction implements IActionSingletonInterface {
 
     protected static $instance = null;
 
@@ -18,10 +19,7 @@ class FollowTheDogAction extends IncidentAction {
      */
     protected $alternativeAction;
 
-    /**
-     * @return IncidentAction
-     */
-    public static function getInstance() {
+    public static function getInstance(): IncidentAction {
         if (self::$instance === null) {
             self::$instance = new FollowTheDogAction();
         }

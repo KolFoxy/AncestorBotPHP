@@ -1,0 +1,12 @@
+{
+  "name": "Destroy the illusion",
+  "exclusiveClasses": [
+    "antiquarian"
+  ],
+  "effect": {
+    "description": "There is no doubt that this is an illusion: it just takes a trained eye to spot one. Now it’s just a matter of destroying it.\nIt takes just a few sparks from flint to set the wheat on fire and flames spread uncannily fast. Moments later, the whole landscape is covered in flames and smoke. Fire is destroying everything in sight while unable to do anything to you. Soon enough, you are standing again in the middle of dead tealish nowhere, completely unharmed.",
+    "health_value": 50,
+    "healthDeviation": -20,
+    "stress_value": -10
+  }
+}
