@@ -21,6 +21,14 @@
       "resultIncident": "/data/incidents/blind_smith/blind_smith.json"
     },
     {
+      "name": "Ask him to summon a dog",
+      "effect": {
+        "description": "Wooosh *opening portal sounds*",
+        "image": "https://i.imgur.com/f6BcThP.png"
+      },
+      "resultIncident": "/data/incidents/dog/dog.json"
+    },
+    {
       "name": "Tell him a joke",
       "effect": {
         "description": "He is not amused."

@@ -1,0 +1,54 @@
+{
+  "name": "You notice a dog running towards you.",
+  "description": "You can make out that the thing is not just an another husk. But how could a normal dog survive in this place?",
+  "image": "https://i.imgur.com/f6BcThP.png",
+  "actions": [
+    {
+      "name": "Wait for the dog",
+      "effect": {
+        "description": "The poor thing is completely mad. Starvation and loneliness change even the closest friends into savage beasts.\nYou manage to shake the beast off, but it still manages to bite you.",
+        "health_value": -1,
+        "healthDeviation": -3
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "value": -2,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Shoot it",
+      "effect": {
+        "description": "The beast instantly drops dead. After inspecting the corpse, you can see that he was ill, starving and with foam around his lips. Putting the poor thing to rest was only for the better.",
+        "stress_value": -3,
+        "stressDeviation": -4
+      },
+      "exclusiveClasses": [
+        "highwayman",
+        "musketeer",
+        "arbalest"
+      ]
+    },
+    {
+      "name": "Offer a snack",
+      "effect": {
+        "description": "Dog eagerly devours the offer. After some pets and tenderness, the dog tugs you to follow.",
+        "stress_value": -5,
+        "stressDeviation": -10
+      },
+      "exclusiveClasses": [
+        "houndmaster"
+      ],
+      "resultIncident": {
+        "name": "Dog is sated enough to offer some gratitude",
+        "description": "",
+        "image": "https://i.imgur.com/lA72RZ9.png",
+        "actions": [
+          "/data/incidents/dog/follow_the_dog.php"
+        ]
+      }
+    }
+  ]
+}

@@ -17,6 +17,55 @@ class Incident extends AbstractInteraction {
      */
     static private $defAction = null;
 
+    /**
+     * @param mixed $actions
+     */
+    public function setActions($actions): void {
+        if ($actions === null) {
+            return;
+        }
+        if ($actions instanceof IncidentAction) {
+            $this->actions = [$actions];
+            return;
+        }
+
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+        $mapper->bExceptionOnUndefinedProperty = true;
+        if (is_array($actions)) {
+            $this->actions = [];
+            foreach ($actions as $action) {
+                if ($action instanceof IncidentAction) {
+                    $this->actions[] = $action;
+                    continue;
+                }
+                if (is_string($action)) {
+                    $path = dirname(__DIR__, 3) . $action;
+                    if (!file_exists($path)) {
+                        throw new \Exception('ERROR: File "' . $path . '" doesn\'t exist.)');
+                    }
+                    if (mb_substr($path, -4) === '.php') {
+                        $this->actions[] = require($path);
+                        return;
+                    }
+                    $this->actions[] = $mapper->map(json_decode(file_get_contents($path)), new IncidentAction());
+                    continue;
+                }
+                if (is_object($action)) {
+                    $this->actions[] = $mapper->map($action, new IncidentAction());
+                    continue;
+                }
+            }
+        }
+    }
+
+    /**
+     * @return IncidentAction[]
+     */
+    public function getActions(): array {
+        return $this->actions;
+    }
+
     public function defaultAction(): IncidentAction {
         if (self::$defAction === null) {
             self::$defAction = new IncidentAction();
@@ -30,7 +79,7 @@ class Incident extends AbstractInteraction {
 
     public function getActionIfValid(string $actionName, ?string $class = null): ?IncidentAction {
         $action = parent::getActionIfValid($actionName);
-        if ($action->isAvailableForClass($class)) {
+        if (!is_null($action) && $action->isAvailableForClass($class)) {
             return $action;
         }
         return null;
