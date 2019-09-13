@@ -1,0 +1,63 @@
+{
+  "name": "You find yourself in a Penance Hall cell.",
+  "description": "The sharp pain pierces through your whole body. The whips and flails strike methodically your naked body from all directions, while a man in the corner mutters his chants. You can hear bloodletting tools getting ready. You didn’t agree to this! What kind of a monster would lock a person in such a place?!",
+  "image": "https://i.imgur.com/f6BcThP.png",
+  "actions": [
+    {
+      "name": "Endure",
+      "effect": {
+        "description": "The pain is an insignificant price for the clarity of the mind.",
+        "stress_value": -50
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "value": -1,
+          "duration": 12,
+          "chance": 150
+        }
+      ]
+    },
+    {
+      "name": "Fight back",
+      "effect": {
+        "description": "How dare they lock you up in this place, how dare they mutilate your flesh, how dare they assume that the pain know better for you. Do they themselves indulge in self-flagellation? No! So show them how painful it is! These people are mad, not you!\nPriests have little to no chance against your rage. One by one the fall, and when the chanting man with a book no longer moves, you are again standing in the middle of nowhere; fists clenching and your vision turned red.",
+        "stress_value": 20,
+        "stressDeviation": 7
+      },
+      "statModifiers": [
+        {
+          "stat": "stressMod",
+          "duration": 15,
+          "value": 10
+        },
+        {
+          "stat": "damageMod",
+          "duration": 15,
+          "value": 20
+        }
+      ]
+    },
+    {
+      "exclusiveClasses": [
+        "vestal",
+        "crusader",
+        "leper"
+      ],
+      "name": "Endure and prey",
+      "effect": {
+        "stress_value": -50,
+        "health_value": 10,
+        "healthDeviation": -10,
+        "description": "The pain is an insignificant price for the clarity of the mind. And your chants harmonize with the priest’s. After what feels like days of cycles of praying, flagellation and sleep; priests tend your wounds and release you into the Hamlet… Except that you are still in endless Miller’s fields and colours are still screaming of abnormality."
+      },
+      "statModifiers": [
+        {
+          "stat": "stressMod",
+          "duration": 15,
+          "value": -10
+        }
+      ]
+    }
+  ]
+}
