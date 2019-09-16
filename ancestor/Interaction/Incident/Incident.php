@@ -51,7 +51,7 @@ class Incident extends AbstractInteraction {
                     }
                     if (mb_substr($path, -4) === '.php') {
                         $this->actions[] = require($path);
-                        return;
+                        continue;
                     }
                     $this->actions[] = $mapper->map(json_decode(file_get_contents($path)), new IncidentAction());
                     continue;

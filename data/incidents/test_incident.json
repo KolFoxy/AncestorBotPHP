@@ -45,6 +45,22 @@
       "resultIncident": "/data/incidents/penance_hall/penance_hall.json"
     },
     {
+      "name": "miller swiller",
+      "effect": {
+        "description": "Wooosh *opening portal sounds*",
+        "image": "https://i.imgur.com/f6BcThP.png"
+      },
+      "resultIncident": "/data/incidents/miller/miller.json"
+    },
+    {
+      "name": "summon angery mob",
+      "effect": {
+        "description": "Wooosh *opening portal sounds*",
+        "image": "https://i.imgur.com/f6BcThP.png"
+      },
+      "resultIncident": "/data/incidents/swarm_of_peasants/swarm_of_peasants.json"
+    },
+    {
       "name": "Tell him a joke",
       "effect": {
         "description": "He is not amused."

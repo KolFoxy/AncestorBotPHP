@@ -1,0 +1,106 @@
+{
+  "name": "An angry mob forms around you.",
+  "description": "Where have these peasants came from? What have you done to provoke such full-hearted aggression? No time to think: the circle of torches and pitchforks slowly closes.",
+  "image": "https://i.imgur.com/f6BcThP.png",
+  "disableDefAction": true,
+  "actions": [
+    "/data/incidents/swarm_of_peasants/throw_trinket.php",
+    {
+      "exclusiveClasses": [
+        "jester"
+      ],
+      "name": "Fascinate them with your performance",
+      "effect": {
+        "description": "The quick solo makes the crowd stop. Twain acrobatic tricks force them to drop their weapons and applaud. And after the dramatic ballad, people couldn’t help but burst into tears. After an elegant bow, no one dares to cross your path on your way out."
+      },
+      "statModifiers": [
+        {
+          "stat": "finaleDamage",
+          "chance": -1,
+          "value": 30,
+          "duration": 10
+        },
+        {
+          "stat": "stressMod",
+          "chance": -1,
+          "value": -10,
+          "duration": 10
+        }
+      ]
+    },
+    {
+      "exclusiveClasses": [
+        "antiquarian",
+        "grave robber"
+      ],
+      "name": "Hide",
+      "effect": {
+        "description": "The crowd looks for a villain to impale; but the search is hot-headed, erratic. It is child’s play to merge with the mob and let them pass by."
+      }
+    },
+    {
+      "exclusiveClasses": [
+        "bounty hunter"
+      ],
+      "name": "Ready your flashbangs",
+      "effect": {
+        "description": "These people don’t know who they’re dealing with. But you know how to deal with them.\nBefore they get too close together, you throw several flashbangs into the crowd. Blinded and panicking, they’re are less threatening than a pack of wild dogs: cutting a path through them seems well-nigh methodical. Almost without a scratch, you manage to get out of the maddened mob. Looking back, it looks like they started to fight each other. You snort and leave them to their savagery."
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 135,
+          "value": -1,
+          "duration": 6
+        }
+      ],
+      "statModifiers": [
+        {
+          "stat": "stressMod",
+          "chance": -1,
+          "value": -10,
+          "duration": 20
+        },
+        {
+          "stat": "accMod",
+          "chance": -1,
+          "value": 10,
+          "duration": 20
+        }
+      ]
+    },
+    {
+      "exclusiveClasses": [
+        "leper",
+        "Grave Robber"
+      ],
+      "name": "Show them their place",
+      "effect": {
+        "description": "How dare these lowly creatures try to threaten you? Do they really think that they are better off without a proper master? Fools! Look at yourselves! You don’t deserve a land, you wouldn’t survive on your pathetic own.\nYour voice is loud and confident. The power of the word quickly cools the mob: peasants lower their heads and hunch pathetically, many are quick to leave. Unshakeable, you march through them into the dead, endless Farmstead."
+      },
+      "statModifiers": [
+        {
+          "stat": "stressMod",
+          "chance": -1,
+          "value": -10,
+          "duration": 15
+        }
+      ]
+    },
+    {
+      "name": "Run",
+      "effect": {
+        "description": "Some try to stab you, some try to slash you. One wild being even tries to bite you! But at last, you manage to get out alive.",
+        "health_value": -1,
+        "healthDeviation": -7
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "value": -3,
+          "chance": 140
+        }
+      ]
+    }
+  ]
+}

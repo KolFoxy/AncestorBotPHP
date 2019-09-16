@@ -308,6 +308,25 @@ class Hero extends AbstractLivingBeing {
     }
 
     /**
+     * @param int $slot `1` for the first trinket, `2` for the second one.
+     */
+    public function removeTrinketFromSlot(int $slot) {
+        if (!isset($this->trinkets[$slot])) {
+            return;
+        }
+        $this->trinkets[$slot]->remove();
+        $this->trinkets[$slot] = null;
+    }
+
+    public function removeTrinket(string $trinketName) {
+        foreach ($this->trinkets as $slot => $trinket) {
+            if ($trinket !== null && $trinket->name === $trinketName) {
+                $this->removeTrinketFromSlot($slot);
+            }
+        }
+    }
+
+    /**
      * @param string $commandName
      * @return \CharlotteDunois\Yasmin\Models\MessageEmbed
      */
