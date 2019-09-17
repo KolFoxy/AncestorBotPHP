@@ -1,0 +1,40 @@
+{
+  "name": "Colors shift, right before your eyes a giant mirror appears out of nowhere.",
+  "description": "It’s about four meters tall and a metre wide. You can’t remember approaching it, but a thick layer of dust on it suggests that it was here for a long time. The frame is dark jade with images of sun and multi-pupiled eyes intertwining with unknown symbols engraved on it.",
+  "image": "https://i.imgur.com/f6BcThP.png",
+  "actions": [
+    {
+      "name": "Smash the mirror",
+      "effect": {
+        "description": "The artefact exudes unholy and evil. Destroying the thing is the singular right venture.",
+        "stress_value": -50,
+        "stressDeviation": 30
+      }
+    },
+    "/data/incidents/mirror/gaze_into_it.php",
+    {
+      "exclusiveClasses": [
+        "leper"
+      ],
+      "name": "Take off your mask",
+      "effect": {
+        "stress_value": -25,
+        "description": "The layer of dust prevents seeing the clear image, so you wipe it off. You remove your mask, and as soon as your gaze touches the cleared surface of the mirror, you see yourself from a long time ago. Your skin is smooth and clean, and you see the blurry gold patterns in the background. The image lasts for a moment and then disappears along with the surface of the mirror, leaving only the frame, which is now golden and bearing the patterns of flowers."
+      },
+      "statModifiers": [
+        {
+          "stat": "stressMod",
+          "duration": 20,
+          "value": -15,
+          "chance": -1
+        },
+        {
+          "stat": "blightResist",
+          "duration": 20,
+          "value": 10,
+          "chance": -1
+        }
+      ]
+    }
+  ]
+}

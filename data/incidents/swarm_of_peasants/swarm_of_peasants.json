@@ -25,6 +25,18 @@
           "chance": -1,
           "value": -10,
           "duration": 10
+        },
+        {
+          "stat": "accMod",
+          "chance": -1,
+          "value": 8,
+          "duration": 10
+        },
+        {
+          "stat": "dodge",
+          "chance": -1,
+          "value": 10,
+          "duration": 10
         }
       ]
     },

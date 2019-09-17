@@ -53,6 +53,14 @@
       "resultIncident": "/data/incidents/miller/miller.json"
     },
     {
+      "name": "mirror idk",
+      "effect": {
+        "description": "Wooosh *opening portal sounds*",
+        "image": "https://i.imgur.com/f6BcThP.png"
+      },
+      "resultIncident": "/data/incidents/mirror/mirror.json"
+    },
+    {
       "name": "summon angery mob",
       "effect": {
         "description": "Wooosh *opening portal sounds*",

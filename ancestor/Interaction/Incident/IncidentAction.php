@@ -146,18 +146,22 @@ class IncidentAction extends AbstractAction {
         $this->effect->getApplicationResult($hero, $healthResult, $stressResult);
         $res->stressToTarget($stressResult);
         $res->healthToTarget($healthResult);
+        $this->addTimedEffectsToResult($res);
+        $res->removeBlightBleedStealthFromTarget($this->effect->removesBlight, $this->effect->removesBleed, false, $this->effect->removesDebuff);
+        return $res->__toString();
+    }
+
+    protected function addTimedEffectsToResult(ActionResult $result) {
         if ($this->statusEffects !== null) {
             foreach ($this->statusEffects as $statusEffect) {
-                $res->addTimedEffect($statusEffect);
+                $result->addTimedEffect($statusEffect);
             }
         }
         if ($this->statModifiers !== null) {
             foreach ($this->statModifiers as $statModifier) {
-                $res->addTimedEffect($statModifier);
+                $result->addTimedEffect($statModifier);
             }
         }
-        $res->removeBlightBleedStealthFromTarget($this->effect->removesBlight, $this->effect->removesBleed, false, $this->effect->removesDebuff);
-        return $res->__toString();
     }
 
     public function isFinal(): bool {
