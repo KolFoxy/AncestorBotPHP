@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction\Incident\Special\BlindSmith;
 
-use Ancestor\Interaction\Effect;
+
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Incident\IncidentSingletonInterface;

@@ -1,16 +1,21 @@
-[
-  {
-    "chance": -1,
-    "stat": "critChance",
-    "value": 8,
-    "duration": -1,
-    "targetSelf": true
-  },
-  {
-    "chance": -1,
-    "stat": "accMod",
-    "value": 10,
-    "duration": -1,
-    "targetSelf": true
-  }
-]
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 8,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 10,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Focused",
+  "quote": "A moment of clarity in the eye of the storm...",
+  "isVirtue": true
+}

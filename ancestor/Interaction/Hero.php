@@ -183,8 +183,8 @@ class Hero extends AbstractLivingBeing {
         if ($this->stressState !== null) {
             return $this->stressState;
         }
-        $this->stressState = StressStateFactory::create($this);
-        $this->stressState->apply();
+        $this->stressState = StressStateFactory::create($this->statManager->getStatValue(Stats::VIRTUE_CHANCE));
+        $this->stressState->apply($this);
         return $this->stressState;
     }
 
@@ -199,7 +199,7 @@ class Hero extends AbstractLivingBeing {
         if ($this->stressState === null) {
             return;
         }
-        $this->stressState->remove();
+        $this->stressState->remove($this);
         $this->stressState = null;
     }
 
@@ -298,12 +298,12 @@ class Hero extends AbstractLivingBeing {
         $res .= $slot;
         if ($this->trinkets[$slot] !== null) {
             $res .= ', replacing ' . $this->trinkets[$slot]->name;
-            $this->trinkets[$slot]->remove();
-            unset($this->trinkets[$slot]);
+            $this->trinkets[$slot]->remove($this);
+            $this->trinkets[$slot] = null;
         }
         $res .= '.';
         $this->trinkets[$slot] = $trinket;
-        $trinket->apply();
+        $trinket->apply($this);
         return $res;
     }
 
@@ -314,7 +314,7 @@ class Hero extends AbstractLivingBeing {
         if (!isset($this->trinkets[$slot])) {
             return;
         }
-        $this->trinkets[$slot]->remove();
+        $this->trinkets[$slot]->remove($this);
         $this->trinkets[$slot] = null;
     }
 
@@ -324,14 +324,6 @@ class Hero extends AbstractLivingBeing {
                 $this->removeTrinketFromSlot($slot);
             }
         }
-    }
-
-    /**
-     * @param string $commandName
-     * @return \CharlotteDunois\Yasmin\Models\MessageEmbed
-     */
-    public function getEmbedResponse(string $commandName = null): MessageEmbed {
-        return $this->type->getEmbedResponse($commandName, $this->getStatus());
     }
 
     private function getBonusMessage(string &$bonusString): string {
@@ -389,7 +381,7 @@ class Hero extends AbstractLivingBeing {
         if (!$this->isDead()) {
             $fields = array_merge($fields, parent::getTurn($target, $action));
             if ($heroStressStateChecker && !is_null($target->getStressState())) {
-                $fields[] = $target->getStressState()->toField();
+                $fields[] = $target->getStressState()->toField($target);
             }
         }
         if ($target !== $this) {
@@ -401,7 +393,7 @@ class Hero extends AbstractLivingBeing {
                 }
             }
             if ($thisStressChecker && !$this->isDead() && !is_null($this->getStressState())) {
-                $fields[] = $this->getStressState()->toField();
+                $fields[] = $this->getStressState()->toField($this);
             }
         }
         if ($action->name === DirectAction::TRANSFORM_ACTION) {

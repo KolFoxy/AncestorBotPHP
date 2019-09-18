@@ -2,10 +2,6 @@
 
 namespace Ancestor\Interaction;
 
-use Ancestor\Interaction\SpontaneousAction\SpontaneousAction;
-use CharlotteDunois\Yasmin\Models\Message;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
-
 class HeroClass extends AbstractLivingInteraction {
 
     /**

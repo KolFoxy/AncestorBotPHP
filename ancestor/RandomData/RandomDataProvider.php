@@ -3,8 +3,6 @@
 namespace Ancestor\RandomData;
 
 class RandomDataProvider {
-    private $afflictions;
-    private $virtues;
     private $NSFWquotes;
     private $gold;
     private $trinkets;
@@ -15,17 +13,13 @@ class RandomDataProvider {
     private $monsterDiesQuotes;
 
     private static $instance = null;
-
-    const virtueChance = 25;
     const rewardTrinketChance = 30;
 
     private function __construct() {
         $this->PopulateArray($this->rewardsQuotes, '/data/rewards/rewardsQuotes');
         $this->PopulateArray($this->gold, '/data/gold');
         $this->PopulateArray($this->trinkets, '/data/trinkets');
-        $this->PopulateArray($this->virtues, '/data/virtues.json', true);
         $this->PopulateArray($this->NSFWquotes, '/data/NSFWquotes');
-        $this->PopulateArray($this->afflictions, '/data/afflictions.json', true);
         $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
         $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
         $this->PopulateArray($this->heroDiesQuotes, '/data/heroDiesQuotes');
@@ -47,37 +41,12 @@ class RandomDataProvider {
     }
 
 
-    /**
-     * @return array
-     */
-    private function GetRandomAffliction(): array {
-        $affliction = $this->GetRandomData($this->afflictions['afflictions']);
-        if (mt_rand(1, 100) <= 50) {
-            $affliction['quote'] = $this->GetRandomData($this->afflictions['quotes']);
-        }
-        return $affliction;
-    }
-
     public function GetRandomHeroDeathQuote(): string {
         return $this->GetRandomData($this->heroDiesQuotes);
     }
 
     public function GetRandomMonsterDeathQuote(): string {
         return $this->GetRandomData($this->monsterDiesQuotes);
-    }
-
-    public function GetRandomResolve($virtueChance = null) {
-        if ($virtueChance === null) {
-            $virtueChance = self::virtueChance;
-        }
-        if (mt_rand(1, 100) <= $virtueChance) {
-            $res = $this->GetRandomData($this->virtues['virtues']);
-            $res['isVirtue'] = true;
-        } else {
-            $res = $this->GetRandomAffliction();
-            $res['isVirtue'] = false;
-        }
-        return $res;
     }
 
     public function GetRandomNSFWQuote() {

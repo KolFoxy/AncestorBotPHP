@@ -12,8 +12,9 @@ use Ancestor\Commands\Reveal;
 use Ancestor\Commands\Roll;
 use Ancestor\Commands\Spin;
 use Ancestor\Commands\Stress;
-use Ancestor\Commands\Suicide;
+
 use Ancestor\Commands\Zalgo;
+use Ancestor\Interaction\Stats\StressStateFactory;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Client as Client;
 use CharlotteDunois\Yasmin\Models\Message;
@@ -78,7 +79,7 @@ class AncestorBot {
             new Zalgo($this->commandHandler),
             new Read($this->commandHandler),
             new Reveal($this->commandHandler),
-            new Fight($this->commandHandler)
+            new Fight($this->commandHandler),
         ];
     }
 
@@ -112,24 +113,24 @@ class AncestorBot {
     }
 
     private function checkResolveResponse(Message $message, int $index, string $msgLowered) {
-        $response = RandomDataProvider::GetInstance()->GetRandomResolve();
+        $stressState = StressStateFactory::create();
         $embedResponse = new MessageEmbed();
         $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
-        $embedResponse->setDescription('***' . $response['quote'] . '***');
+        $embedResponse->setDescription('***' . $stressState->getQuote() . '***');
         if ($index != 0) {
             if (!empty($message->mentions->users) && count($message->mentions->users) > 0) {
                 $message->channel->send('**' . '<@' . $message->mentions->users->last()->id . '>' .
-                    ' is ' . $response['name'] . '**', array('embed' => $embedResponse));
+                    ' is ' . $stressState->name . '**', ['embed' => $embedResponse]);
                 return;
             }
             $index = strpos($msgLowered, 'my resolve is tested');
             if ($index !== false) {
                 $message->channel->send('**' . '<@' . $message->author->id . '>' .
-                    ' is ' . $response['name'] . '**', array('embed' => $embedResponse));
+                    ' is ' . $stressState->name . '**', ['embed' => $embedResponse]);
                 return;
             }
         }
-        $message->channel->send('**' . $response['name'] . '**', array('embed' => $embedResponse));
+        $message->channel->send('**' . $stressState->name . '**', ['embed' => $embedResponse]);
     }
 
     private function nsfwResponse(Message $message) {
@@ -138,7 +139,7 @@ class AncestorBot {
             $embedResponse = new MessageEmbed();
             $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
             $embedResponse->setDescription(RandomDataProvider::GetInstance()->GetRandomNSFWQuote());
-            $message->channel->send('', array('embed' => $embedResponse));
+            $message->channel->send('', ['embed' => $embedResponse]);
         }
     }
 

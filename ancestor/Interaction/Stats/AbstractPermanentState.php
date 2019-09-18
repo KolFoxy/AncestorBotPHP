@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction\Stats;
 
-use Ancestor\Interaction\Hero;
+use Ancestor\Interaction\AbstractLivingBeing;
 
 abstract class AbstractPermanentState {
 
@@ -17,20 +17,15 @@ abstract class AbstractPermanentState {
      */
     protected $statModifiers = [];
 
-    /**
-     * @var Hero
-     */
-    public $host;
-
-    public function apply() {
+    public function apply(AbstractLivingBeing $host) {
         foreach ($this->statModifiers as $key => $statModifier) {
-            $this->host->statManager->modifiers[$key] = $statModifier;
+            $host->statManager->modifiers[$key] = $statModifier;
         }
     }
 
-    public function remove() {
+    public function remove(AbstractLivingBeing $host) {
         foreach ($this->statModifiers as $key => $statModifier) {
-            unset($this->host->statManager->modifiers[$key]);
+            unset($host->statManager->modifiers[$key]);
         }
     }
 

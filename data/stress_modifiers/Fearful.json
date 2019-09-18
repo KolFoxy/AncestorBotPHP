@@ -1,16 +1,20 @@
-[
-  {
-    "chance": -1,
-    "stat": "dodge",
-    "value": 10,
-    "duration": -1,
-    "targetSelf": true
-  },
-  {
-    "chance": -1,
-    "stat": "damageMod",
-    "value": -25,
-    "duration": -1,
-    "targetSelf": true
-  }
-]
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": -25,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Fearful",
+  "quote": "Fear and frailty finally claim their due."
+}

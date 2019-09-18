@@ -1,9 +1,14 @@
-[
-  {
-    "chance": -1,
-    "stat": "stressMod",
-    "value": -33,
-    "duration": -1,
-    "targetSelf": true
-  }
-]
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -33,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Courageous",
+  "quote": "A moment of valor shines brightest against a backdrop of despair.",
+  "isVirtue": true
+}

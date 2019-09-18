@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction;
 
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+
 
 abstract class AbstractInteraction {
 

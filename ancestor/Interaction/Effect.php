@@ -2,11 +2,10 @@
 
 namespace Ancestor\Interaction;
 
-use Ancestor\ImageTemplate\ImageTemplate;
+
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\RandomData\RandomDataProvider;
 use CharlotteDunois\Yasmin\Models\MessageEmbed;
-use function GuzzleHttp\Psr7\str;
 
 class Effect extends AbstractEffect {
 

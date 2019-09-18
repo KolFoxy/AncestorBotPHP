@@ -1,16 +1,21 @@
-[
-  {
-    "chance": -1,
-    "stat": "accMod",
-    "value": -5,
-    "duration": -1,
-    "targetSelf": true
-  },
-  {
-    "chance": -1,
-    "stat": "dodge",
-    "value": -5,
-    "duration": -1,
-    "targetSelf": true
-  }
-]
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": -5,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": -5,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Hopeless",
+  "quote": "There can be no hope in this hell, no hope at all."
+}
+

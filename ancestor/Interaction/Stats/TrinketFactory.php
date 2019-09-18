@@ -6,6 +6,8 @@ use Ancestor\Interaction\Hero;
 
 final class TrinketFactory {
 
+    //TODO: REFACTOR THIS SH17 TO MINIMISE ACCESS TO DISK AND SUPPORT NEW AbstractPermanentState CLASS WITHOUT HOST PROPERTY
+
     const SHARED_KEY = 'shared';
     const GROUP_FIRST = 0;
     const GROUP_SECOND = 1;

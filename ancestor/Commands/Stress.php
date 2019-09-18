@@ -15,8 +15,6 @@ use Ancestor\ImageTemplate\ImageTemplateApplier;
 class Stress extends Command {
     private $stressURL;
     private $stressPicPath;
-    private $CSPicX = 226;
-    private $CSPicY = 223;
     /**
      * @var ImageTemplate
      */

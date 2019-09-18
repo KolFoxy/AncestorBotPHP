@@ -2,6 +2,8 @@
 
 namespace Ancestor\Interaction\Stats;
 
+use Ancestor\Interaction\AbstractLivingBeing;
+
 class Trinket extends AbstractPermanentState {
 
     const RARITY_VERY_COMMON = 0;
@@ -39,17 +41,17 @@ class Trinket extends AbstractPermanentState {
      */
     public $text = null;
 
-    public function apply() {
-        parent::apply();
+    public function apply(AbstractLivingBeing $host) {
+        parent::apply($host);
         foreach ($this->typeBonuses as $key => $bonus) {
-            $this->host->statManager->typeBonuses[$key] = $bonus;
+            $host->statManager->typeBonuses[$key] = $bonus;
         }
     }
 
-    public function remove() {
-        parent::remove();
+    public function remove(AbstractLivingBeing $host) {
+        parent::remove($host);
         foreach ($this->typeBonuses as $key => $bonus) {
-            unset($this->host->statManager->typeBonuses[$key]);
+            unset($host->statManager->typeBonuses[$key]);
         }
     }
 

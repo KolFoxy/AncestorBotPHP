@@ -6,7 +6,6 @@ use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Incident\IncidentSingletonInterface;
-use Ancestor\Interaction\Stats\StatModifier;
 
 class FieldIncident extends Incident implements IncidentSingletonInterface {
     protected static $instance = null;

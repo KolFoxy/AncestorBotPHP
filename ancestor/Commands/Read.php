@@ -9,10 +9,11 @@ use Ancestor\CommandHandler\TimedCommandManager;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
-use Ancestor\Interaction\Action;
+
 use Ancestor\Interaction\Curio;
 use Ancestor\Interaction\Effect;
-use Ancestor\RandomData\RandomDataProvider;
+use Ancestor\Interaction\Stats\StressStateFactory;
+
 use CharlotteDunois\Yasmin\Models\Message;
 
 class Read extends Command {
@@ -67,11 +68,11 @@ class Read extends Command {
             $effect = $action->getRandomEffect();
             $extraEmbedFields = null;
             if ($effect->isNegativeStressEffect() && $effect->stress_value >= 100) {
-                $resolve = RandomDataProvider::GetInstance()->GetRandomResolve();
+                $stressState = StressStateFactory::create();
                 $extraEmbedFields = [
                     [
-                        'title' => $message->author->username . '\'s resolve is tested... **' . $resolve['name'] . '**',
-                        'value' => '***' . $resolve['quote'] . '***',
+                        'title' => $message->author->username . '\'s resolve is tested... **' . $stressState->name . '**',
+                        'value' => '***' . $stressState->quote . '***',
                     ],
                 ];
             }

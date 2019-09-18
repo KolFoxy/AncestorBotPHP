@@ -3,7 +3,6 @@
 namespace Ancestor\Interaction;
 
 use Ancestor\RandomData\RandomDataProvider;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Monster extends AbstractLivingBeing {
 
@@ -20,15 +19,6 @@ class Monster extends AbstractLivingBeing {
         foreach ($monsterType->startingStatusEffects as $effect) {
             $this->statManager->addStatusEffect($effect->clone());
         }
-    }
-
-    /**
-     * @param string $commandName
-     * @param Action[]|null $userActions
-     * @return MessageEmbed
-     */
-    public function getEmbedResponse(string $commandName, array $userActions = null): MessageEmbed {
-        return $this->type->getEmbedResponse($commandName, $userActions, $this->getHealthStatus());
     }
 
     public function getDeathQuote(): string {
@@ -61,7 +51,7 @@ class Monster extends AbstractLivingBeing {
         $heroStressStateChecker = is_a($target, Hero::class) && is_null($target->getStressState());
         $res = parent::getTurn($target, $action);
         if ($heroStressStateChecker && !is_null($target->getStressState())) {
-            $res[] = $target->getStressState()->toField();
+            $res[] = $target->getStressState()->toField($target);
         }
         return $res;
     }

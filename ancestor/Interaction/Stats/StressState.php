@@ -8,21 +8,19 @@ class StressState extends AbstractPermanentState {
 
     /**
      * @var string
+     * @required
      */
     public $quote;
 
+    /**
+     * @var bool
+     */
     public $isVirtue = false;
 
-    public function __construct(Hero $host, string $name, string $quote) {
-        $this->host = $host;
-        $this->name = $name;
-        $this->quote = $quote;
-    }
-
-    public function toField(): array {
+    public function toField(Hero $host): array {
         return [
-            'name' => '**' . $this->host->name . '\'s resolve is tested...** ***' . $this->name . '***',
-            'value' => '***' . $this->quote . '***' . PHP_EOL . $this->getStatModsString(),
+            'name' => '**' . $host->name . '\'s resolve is tested...** ***' . $this->name . '***',
+            'value' => '***' . $this->getQuote() . '***' . PHP_EOL . $this->getStatModsString(),
             'inline' => false,
         ];
     }
@@ -33,6 +31,10 @@ class StressState extends AbstractPermanentState {
             $statMods .= '*``' . $statModifier->__toString() . '``*' . PHP_EOL;
         }
         return $statMods;
+    }
+
+    public function getQuote(): string {
+        return $this->isVirtue || (mt_rand(1, 100) <= 50) ? $this->quote : StressStateFactory::getRandomAfflictionQuote();
     }
 
 
