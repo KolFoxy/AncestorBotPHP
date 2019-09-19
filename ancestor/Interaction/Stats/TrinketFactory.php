@@ -6,8 +6,6 @@ use Ancestor\Interaction\Hero;
 
 final class TrinketFactory {
 
-    //TODO: REFACTOR THIS SH17 TO MINIMISE ACCESS TO DISK AND SUPPORT NEW AbstractPermanentState CLASS WITHOUT HOST PROPERTY
-
     const SHARED_KEY = 'shared';
     const GROUP_FIRST = 0;
     const GROUP_SECOND = 1;
@@ -16,51 +14,41 @@ final class TrinketFactory {
     /**
      * @var array|null
      */
-    private static $trinketPaths = null;
+    private static $trinkets = null;
 
-    const DEFAULT_TRINKET_PATH = '/data/rewards/trinkets/shared/book_of_sanity.json';
+    /**
+     * @var Trinket|null
+     */
+    private static $defaultTrinket = null;
 
-    private static function setTrinketPaths() {
+    private static function setTrinkets() {
+        if (self::$trinkets !== null) {
+            return;
+        }
+        self::$trinkets = [];
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
+        $mapper->bExceptionOnUndefinedProperty = true;
         foreach (glob(dirname(__DIR__, 3) . '/data/rewards/trinkets/*', GLOB_ONLYDIR) as $dir) {
-            $rootKey = mb_strtolower(basename($dir));
-            self::$trinketPaths[$rootKey] = [
+            $className = str_replace('_', ' ', mb_strtolower(basename($dir)));
+            self::$trinkets[$className] = [
                 self::GROUP_FIRST => [],
                 self::GROUP_SECOND => [],
                 self::GROUP_THIRD => [],
             ];
             foreach (glob($dir . '/*.json') as $path) {
-                $json = json_decode(file_get_contents($path), true);
-                self::$trinketPaths[$rootKey][self::numToGroupId($json['rarity'])][] = $path;
+                $json = json_decode(file_get_contents($path));
+                $trinket = new Trinket();
+                $mapper->map($json, $trinket);
+                self::$trinkets[$className][self::numToGroupId($trinket->rarity)][] = $trinket;
             }
         }
-    }
-
-    public static function test() {
-        if (self::$trinketPaths === null) {
-            self::setTrinketPaths();
-        }
-        foreach (self::$trinketPaths as $item) {
-            foreach ($item as $group) {
-                foreach ($group as $trinket) {
-                    $json = json_decode(file_get_contents($trinket));
-                    $mapper = new \JsonMapper();
-                    $mapper->bExceptionOnMissingData = true;
-                    $res = new Trinket();
-                    echo 'Testing: ' . $trinket . '......';
-                    $mapper->map($json, $res);
-                    echo $res->name . ' - OK' . PHP_EOL;
-                }
-            }
-        }
-
+        $path = dirname(__DIR__, 3) . '/data/rewards/trinkets/shared/book_of_sanity.json';
+        self::$defaultTrinket = $mapper->map(json_decode(file_get_contents($path)), new Trinket());
     }
 
     public static function create(Hero $host): Trinket {
-        if (self::$trinketPaths === null) {
-            self::setTrinketPaths();
-        }
+        self::setTrinkets();
 
         $group = mt_rand(1, 100);
         if ($group <= 50) {
@@ -71,22 +59,15 @@ final class TrinketFactory {
             $group = self::GROUP_SECOND;
         }
 
-        $heroTypeFolder = str_replace(' ', '_', mb_strtolower($host->type->name));
+        $className = mb_strtolower($host->type->name);
         $possibleTrinkets = array_merge(
-            self::$trinketPaths[self::SHARED_KEY][$group] ?? [],
-            self::$trinketPaths[$heroTypeFolder][$group] ?? []);
+            self::$trinkets[self::SHARED_KEY][$group] ?? [],
+            self::$trinkets[$className][$group] ?? []);
 
         $size = count($possibleTrinkets);
-        $json = $size === 0
-            ? json_decode(file_get_contents(dirname(__DIR__, 3) . self::DEFAULT_TRINKET_PATH))
-            : json_decode(file_get_contents($possibleTrinkets[mt_rand(0, $size - 1)]));
-
-        $mapper = new \JsonMapper();
-        $mapper->bExceptionOnMissingData = true;
-        $res = new Trinket();
-        $mapper->map($json, $res);
-        $res->host = $host;
-        return $res;
+        return $size === 0
+            ? self::$defaultTrinket
+            : $possibleTrinkets[mt_rand(0, $size - 1)];
     }
 
     private static function numToGroupId(int $num): int {
@@ -98,5 +79,5 @@ final class TrinketFactory {
         }
         return self::GROUP_SECOND;
     }
-    
+
 }

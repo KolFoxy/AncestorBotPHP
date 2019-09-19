@@ -142,8 +142,8 @@ class FightManager {
     const CORRUPTED_NAME_ZALGOCHARS = 4;
     const ELITE_MONSTER_THRESHOLD = 15;
     const ELITE_MONSTER_CHANCE = 25;
-    const INCIDENT_THRESHOLD = 3; //15 for live
-    const INCIDENT_CHANCE = 100; //33 for live
+    const INCIDENT_THRESHOLD = 5; //20 for live
+    const INCIDENT_CHANCE = 100; //20 for live
 
     const UTF8_ALPHABET_START = 65;
     const UTF8_ALPHABET_END = 90;
