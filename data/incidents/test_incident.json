@@ -69,6 +69,14 @@
       "resultIncident": "/data/incidents/swarm_of_peasants/swarm_of_peasants.json"
     },
     {
+      "name": "comet boom",
+      "effect": {
+        "description": "Wooosh *opening portal sounds*",
+        "image": "https://i.imgur.com/f6BcThP.png"
+      },
+      "resultIncident": "/data/incidents/the_comet_lands/the_comet_lands.json"
+    },
+    {
       "name": "Tell him a joke",
       "effect": {
         "description": "He is not amused."

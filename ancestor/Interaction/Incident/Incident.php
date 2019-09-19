@@ -24,6 +24,7 @@ class Incident extends AbstractInteraction {
 
     /**
      * @param mixed $actions
+     * @throws \JsonMapper_Exception
      */
     public function setActions($actions): void {
         if ($actions === null) {

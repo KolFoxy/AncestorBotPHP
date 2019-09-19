@@ -84,7 +84,7 @@
       "statusEffects": [
         {
           "type": "marked",
-          "hitChance": -1
+          "chance": -1
         }
       ]
     },
@@ -93,7 +93,6 @@
       "requiresTarget": true,
       "effect": {
         "description": "Bandage there, and there, and now we can move on.\nHeals the target and increases their incoming healing.",
-        "requiresTarget": true,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/8c/Battlefield_Bandage.png",
         "hitChance": -1,
         "health_value": 4,

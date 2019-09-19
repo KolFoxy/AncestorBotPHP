@@ -43,7 +43,7 @@ class IncidentAction extends AbstractAction {
 
     /**
      * @param mixed|null $resultIncident
-     * @throws \JsonMapper_Exception
+     * @throws \Exception
      */
     public function setResultIncident($resultIncident): void {
         if ($resultIncident === null) {
@@ -122,21 +122,27 @@ class IncidentAction extends AbstractAction {
         }
     }
 
-    public function getResult(Hero $hero, MessageEmbed $res): MessageEmbed {
+    /**
+     * @param Hero $hero
+     * @param MessageEmbed $res
+     * @return Incident|null Result Incident
+     */
+    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
         $res->setTitle('*' . $this->name . '*');
         $description = '*``' . $this->effect->getDescription() . '``*';
         if ($this->effect->image !== null) {
             $res->setThumbnail($this->effect->image);
         }
-        if ($this->resultIncident !== null) {
-            $res->setImage($this->resultIncident->image);
-            if ($this->resultIncident->description !== "") {
-                $description .= PHP_EOL . '*``' . $this->resultIncident->description . '``*';
+        $resultIncident = $this->getResultIncident();
+        if ($resultIncident !== null) {
+            $res->setImage($resultIncident->image);
+            if ($resultIncident->description !== "") {
+                $description .= PHP_EOL . '*``' . $resultIncident->description . '``*';
             }
         }
         $description .= PHP_EOL . $this->applyEffectsGetResults($hero);
         $res->setDescription($description);
-        return $res;
+        return $resultIncident;
     }
 
     protected function applyEffectsGetResults(Hero $hero): string {

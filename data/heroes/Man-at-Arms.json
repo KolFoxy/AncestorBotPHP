@@ -115,9 +115,9 @@
     },
     {
       "name": "Command",
-      "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/94/Command.png",
       "requiresTarget": true,
       "effect": {
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/94/Command.png",
         "description": "Strategy, order, survival!",
         "hitChance": -1,
         "critChance": -1
@@ -140,8 +140,8 @@
     {
       "name": "Bolster",
       "requiresTarget": true,
-      "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ef/Bolster.png",
       "effect": {
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ef/Bolster.png",
         "description": "Do not give in, do not give up!",
         "hitChance": -1,
         "critChance": -1

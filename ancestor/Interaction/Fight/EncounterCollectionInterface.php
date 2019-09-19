@@ -3,10 +3,10 @@
 namespace Ancestor\Interaction\Fight;
 
 use Ancestor\Interaction\HeroClass;
-use Ancestor\Interaction\Incident\Incident;
+use Ancestor\Interaction\Incident\IncidentCollection\IncidentCollectionInterface;
 use Ancestor\Interaction\MonsterType;
 
-interface EncounterCollectionInterface {
+interface EncounterCollectionInterface extends IncidentCollectionInterface {
 
     /**
      * @return MonsterType
@@ -23,8 +23,4 @@ interface EncounterCollectionInterface {
      */
     public function randHeroClass(): HeroClass;
 
-    /**
-     * @return Incident
-     */
-    public function randIncident(): Incident;
 }

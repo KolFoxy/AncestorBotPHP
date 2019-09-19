@@ -10,6 +10,7 @@ use Ancestor\Interaction\Fight\EncounterCollectionInterface;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Incident\Incident;
+use Ancestor\Interaction\Incident\IncidentCollection\IncidentCollection;
 use Ancestor\Interaction\MonsterType;
 use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
 use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
@@ -58,13 +59,10 @@ class Fight extends Command implements EncounterCollectionInterface {
     private $elitesMaxIndex;
 
     /**
-     * @var Incident[]
+     * @var IncidentCollection
      */
-    private $incidents;
-    /**
-     * @var int
-     */
-    private $incidentsMaxIndex;
+    private $incidentCollection;
+
 
     const ABORT_MESSAGE = 'is now forever lost in space and time.';
 
@@ -81,6 +79,7 @@ class Fight extends Command implements EncounterCollectionInterface {
 
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
+        $mapper->bExceptionOnUndefinedProperty = true;
         foreach (glob(dirname(__DIR__, 2) . '/data/heroes/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
@@ -105,25 +104,10 @@ class Fight extends Command implements EncounterCollectionInterface {
                 throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
-        foreach (glob(dirname(__DIR__, 2) . '/data/incidents/*.json') as $path) {
-            $json = json_decode(file_get_contents($path));
-            try {
-                $this->incidents[] = $mapper->map($json, new Incident());
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
-            }
-        }
-        foreach (glob(dirname(__DIR__, 2) . '/data/incidents/*.php') as $path) {
-            try {
-                $this->incidents[] = require($path);
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
-            }
-        }
-        $this->incidentsMaxIndex = count($this->incidents) - 1;
         $this->classesMaxIndex = count($this->classes) - 1;
         $this->regularsMaxIndex = count($this->regMonsterTypes) - 1;
         $this->elitesMaxIndex = count($this->eliteMonsterTypes) - 1;
+        $this->incidentCollection = IncidentCollection::getInstance();
     }
 
     public function run(Message $message, array $args) {
@@ -260,7 +244,7 @@ class Fight extends Command implements EncounterCollectionInterface {
     }
 
     public function randIncident(): Incident {
-        return $this->incidents[mt_rand(0, $this->incidentsMaxIndex)];
+        return $this->incidentCollection->randIncident();
     }
 
     function getFight(Message $message): FightManager {

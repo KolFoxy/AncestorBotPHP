@@ -5,6 +5,7 @@ namespace Ancestor\Interaction\Incident\Special\SwarmOfPeasants;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Incident\IActionSingletonInterface;
+use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
@@ -47,18 +48,18 @@ class ThrowTrinketAction extends IncidentAction implements IActionSingletonInter
         $this->statModifiers = [$stressModBuff, $dodgeBuff];
     }
 
-    public function getResult(Hero $hero, MessageEmbed $res): MessageEmbed {
+    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
         $altTitle = null;
         if ($this->heroIsAntiquarian($hero)) {
             $altTitle = self::ANTIQUARIAN_NAME;
         } elseif (!$this->heroHasTrinkets($hero)) {
             $altTitle = self::NO_TRINKET_NAME;
         }
-        $res = parent::getResult($hero, $res);
+        parent::getResult($hero, $res);
         if ($altTitle !== null) {
             $res->setTitle($altTitle);
         }
-        return $res;
+        return $this->getResultIncident();
     }
 
     protected function heroHasTrinkets(Hero $hero): bool {

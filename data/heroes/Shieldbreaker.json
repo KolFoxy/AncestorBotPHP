@@ -74,7 +74,6 @@
       "requiresTarget": true,
       "effect": {
         "description": "Aegis blocks incoming damage.",
-        "requiresTarget": true,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2a/Shieldbreaker.ability.seven.png",
         "hitChance": -1,
         "critChance": -1
@@ -84,7 +83,7 @@
           "targetSelf": true,
           "type": "block",
           "value": 2,
-          "hitChance": -1,
+          "chance": -1,
           "duration": -1
         }
       ]

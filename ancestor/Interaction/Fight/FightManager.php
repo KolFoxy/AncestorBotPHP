@@ -235,8 +235,8 @@ class FightManager {
     }
 
     protected function getIncidentTurn(IncidentAction $action): MessageEmbed {
-        $res = $action->getResult($this->hero, $this->newColoredEmbed());
-        $this->incident = $action->getResultIncident();
+        $res = $this->newColoredEmbed();
+        $this->incident = $action->getResult($this->hero, $res);
         if ($this->incident === null) {
             $this->newMonsterTurn($res);
         }
