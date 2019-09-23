@@ -17,8 +17,13 @@ class IncidentCollection implements IncidentCollectionInterface {
      */
     private $incidentsMaxIndex;
 
-    public static function getInstance() : IncidentCollection {
-        if (self::$instance === null){
+    /**
+     * @var Incident
+     */
+    private $testIncident;
+
+    public static function getInstance(): IncidentCollection {
+        if (self::$instance === null) {
             self::$instance = new IncidentCollection();
         }
         return self::$instance;
@@ -44,6 +49,16 @@ class IncidentCollection implements IncidentCollectionInterface {
             }
         }
         $this->incidentsMaxIndex = count($this->incidents) - 1;
+    }
+
+    public function getTestIncident(): Incident {
+        if (!isset($this->testIncident)) {
+            $mapper = new \JsonMapper();
+            $mapper->bExceptionOnMissingData = true;
+            $mapper->bExceptionOnUndefinedProperty = true;
+            $this->testIncident = $mapper->map(json_decode(file_get_contents(dirname(__DIR__, 4) . '/data/incidents/test_incident/test_incident.json')), new Incident());
+        }
+        return $this->testIncident;
     }
 
     public function randIncident(): Incident {

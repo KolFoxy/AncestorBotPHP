@@ -142,8 +142,8 @@ class FightManager {
     const CORRUPTED_NAME_ZALGOCHARS = 4;
     const ELITE_MONSTER_THRESHOLD = 15;
     const ELITE_MONSTER_CHANCE = 25;
-    const INCIDENT_THRESHOLD = 2; //20 for live
-    const INCIDENT_CHANCE = 100; //20 for live
+    const INCIDENT_THRESHOLD = 20;
+    const INCIDENT_CHANCE = 20;
 
     const UTF8_ALPHABET_START = 65;
     const UTF8_ALPHABET_END = 90;
@@ -476,7 +476,7 @@ class FightManager {
 
     protected function rollIncidentTurn(MessageEmbed $embed) {
         $this->incident = $this->encounterCollection->randIncident();
-        $embed->addField('*' . $this->incident->name . '*', $this->incident->description);
+        $embed->addField('*' . $this->incident->name . '*', '*``' . $this->incident->description . '``*');
         $embed->setImage($this->incident->image);
         $this->setCurrentFooter($embed);
     }

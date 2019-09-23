@@ -18,7 +18,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/blind_smith/blind_smith.json"
+      "resultIncident": "/data/incidents/blind_smith.json"
     },
     {
       "name": "Ask him to summon a dog",
@@ -26,7 +26,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/dog/dog.json"
+      "resultIncident": "/data/incidents/dog.json"
     },
     {
       "name": "tp to field",
@@ -34,7 +34,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/field/field.php"
+      "resultIncident": "/data/incidents/field.php"
     },
     {
       "name": "tp to phall",
@@ -42,7 +42,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/penance_hall/penance_hall.json"
+      "resultIncident": "/data/incidents/penance_hall.json"
     },
     {
       "name": "miller swiller",
@@ -50,7 +50,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/miller/miller.json"
+      "resultIncident": "/data/incidents/miller.json"
     },
     {
       "name": "mirror idk",
@@ -58,7 +58,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/mirror/mirror.json"
+      "resultIncident": "/data/incidents/mirror.json"
     },
     {
       "name": "summon angery mob",
@@ -66,7 +66,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/swarm_of_peasants/swarm_of_peasants.json"
+      "resultIncident": "/data/incidents/swarm_of_peasants.json"
     },
     {
       "name": "comet boom",
@@ -74,7 +74,7 @@
         "description": "Wooosh *opening portal sounds*",
         "image": "https://i.imgur.com/f6BcThP.png"
       },
-      "resultIncident": "/data/incidents/the_comet_lands/the_comet_lands.json"
+      "resultIncident": "/data/incidents/the_comet_lands.json"
     },
     {
       "name": "Tell him a joke",

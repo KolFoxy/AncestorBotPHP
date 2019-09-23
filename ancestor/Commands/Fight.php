@@ -176,6 +176,11 @@ class Fight extends Command implements EncounterCollectionInterface {
             $this->sendEndscreen($message->channel, $fight, $message->author->__toString());
             return;
         }
+        if ($actionName === 'testevent') { //for testing only, delete later
+            $fight->incident = $this->incidentCollection->getTestIncident();
+            $message->reply($fight->incident->getDefaultFooterText('!f', $fight->hero->type->name));
+            return;
+        }
         $this->manager->refreshTimer($message, self::TIMEOUT);
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {
