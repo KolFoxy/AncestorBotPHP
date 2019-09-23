@@ -183,14 +183,14 @@ class ActionResult {
                 $freeVal += $value;
                 continue;
             }
+            if ($i !== 0) {
+                $res .= ', ';
+            }
             $res .= '**``'
                 . ($value === 0 ? $value : sprintf(self::SIGNED_DECIMAL_FORMAT, $value))
                 . $valueName
                 . '(' . $arr[$i]['source']
                 . ')``**';
-            if ($i !== $maxIndex) {
-                $res .= ', ';
-            }
         }
         if ($freeVal !== 0) {
             $freeValStr = '**``' . sprintf(self::SIGNED_DECIMAL_FORMAT, $freeVal) . $valueName . '``**';

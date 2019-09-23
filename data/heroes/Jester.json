@@ -82,6 +82,7 @@
       "effect": {
         "description": "Show off your lute skills.",
         "hitChance": 145,
+        "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/10/Solo.png"
       },
       "statModifiers": [
