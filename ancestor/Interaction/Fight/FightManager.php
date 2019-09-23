@@ -459,6 +459,10 @@ class FightManager {
                 return true;
             }
         }
+        if ($this->hero->isStunned()) {
+            Helper::mergeEmbed($embed, $this->hero->getTurn($this->hero));
+            return $this->monsterTurnIsFinal($embed);
+        }
         return false;
     }
 

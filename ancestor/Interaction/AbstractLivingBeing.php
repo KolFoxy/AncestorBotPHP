@@ -132,7 +132,7 @@ abstract class AbstractLivingBeing {
         if ($res === null) {
             $res = [];
         }
-        array_push($res,
+        array_unshift($res,
             [
                 'name' => '**' . $this->name . '** was stunned!',
                 'value' => '...and did nothing.',
@@ -299,6 +299,10 @@ abstract class AbstractLivingBeing {
      */
     public function getAllTypes() {
         return array_merge($this->type->types, $this->statManager->getStatusesNames());
+    }
+
+    public function isStunned(): bool {
+        return $this->statManager->isStunned();
     }
 
 
