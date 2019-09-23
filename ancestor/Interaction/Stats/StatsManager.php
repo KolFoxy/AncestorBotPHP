@@ -11,7 +11,7 @@ class StatsManager {
     /**
      * @var array
      */
-    private $stats;
+    protected $stats;
 
     /**
      * @var StatModifier[]
@@ -47,6 +47,12 @@ class StatsManager {
         }
     }
 
+    /**
+     * @return array
+     */
+    public function getStats(): array {
+        return $this->stats;
+    }
 
     /**
      * @param string $statName

@@ -5,14 +5,14 @@
   "actions": [
     "/data/incidents/the_comet_lands/pick_up_stone.php",
     {
-      "name": "Descent into the crater",
+      "name": "Descend into the crater",
       "effect": {
         "description": "The slope is steep, but rocks and debris afford good enough footing to proceed safely."
       },
       "resultIncident": {
         "name": "The ground is shaking.",
         "image": "https://i.imgur.com/f6BcThP.png",
-        "description": "The first few steps go without incident, but soon you begin to notice that glowing stones under your foot vibrate slightly. The further your go, the more noticable vibrations become. Soon it feels like the whole ground is shaking and maintaining balance becomes a challenge.",
+        "description": "The first few steps go without incident, but soon you begin to notice that glowing stones under your feet are vibrating slightly. The further your go, the more noticeable are the vibrations. Soon it feels like the whole ground is shaking and maintaining balance becomes a challenge.",
         "actions": [
           {
             "name": "Proceed further",

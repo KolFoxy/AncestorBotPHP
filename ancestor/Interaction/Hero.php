@@ -6,6 +6,7 @@ use Ancestor\CommandHandler\CommandHelper;
 use Ancestor\Interaction\ActionResult\ActionResult;
 use Ancestor\Interaction\SpontaneousAction\SpontaneousActionsManager;
 use Ancestor\Interaction\Stats\Stats;
+use Ancestor\Interaction\Stats\StatsManager;
 use Ancestor\Interaction\Stats\StressState;
 use Ancestor\Interaction\Stats\StressStateFactory;
 use Ancestor\Interaction\Stats\Trinket;
@@ -423,6 +424,21 @@ class Hero extends AbstractLivingBeing {
     public function kill() {
         $this->currentHealth = -1;
         $this->isActuallyDead = true;
+    }
+
+    /**
+     * Resets health, stress, stat manager, removes trinkets, removes stress state.
+     */
+    public function reset() : void {
+        $this->currentHealth = $this->healthMax;
+        $this->stress = 0;
+        $this->removeTrinketFromSlot(1);
+        $this->removeTrinketFromSlot(2);
+        $this->statManager = new StatsManager($this, $this->statManager->getStats());
+        $this->isActuallyDead = false;
+        $this->removeStressState();
+        $this->bonusStressMessage = '';
+        $this->bonusHealthMessage = '';
     }
 
 }

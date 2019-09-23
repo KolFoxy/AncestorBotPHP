@@ -28,11 +28,9 @@ class CryForHelpAction extends IncidentAction implements IActionSingletonInterfa
 
     public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
         $res->setTitle('*' . $this->name . '*');
-        if ($this->effect->image !== null) {
-            $res->setThumbnail($this->effect->image);
-        }
         $heroName = $hero->name;
-        $hero = new Hero($hero->type, '');
+        $hero->reset();
+        $res->setThumbnail($hero->type->image);
         $hero->name = $heroName;
         $res->setDescription('*``' . $this->effect->getDescription() . '``*' . PHP_EOL
             . $heroName . ': **``HP at max``**, **``Stress at 0``**, **``Trinkets are lost``**');
