@@ -69,6 +69,14 @@
       "resultIncident": "/data/incidents/swarm_of_peasants.json"
     },
     {
+      "name": "crook",
+      "effect": {
+        "description": "Wooosh *opening portal sounds*",
+        "image": "https://i.imgur.com/f6BcThP.png"
+      },
+      "resultIncident": "/data/incidents/crooked_stranger.json"
+    },
+    {
       "name": "comet boom",
       "effect": {
         "description": "Wooosh *opening portal sounds*",
