@@ -24,7 +24,7 @@ class OfferTrinketAction extends IncidentAction {
         $this->name = $this->trinketSlot === 1 ? 'First' : 'Second';
         $this->effect = new Effect();
         $this->effect->setDescription('With a nod of its head, the figure takes what is offered. Hands lie on your form, cleaning the skin with something that smells like ethanol. Then they apply bandages and stitch the wounds with their pointy fingers. A true professional: works quick, with passion. You feel yourself renewed as the figure takes its leave, waving a hand.');
-        $this->effect->health_value = 10;
+        $this->effect->health_value = 15;
         $this->effect->healthDeviation = 20;
     }
 

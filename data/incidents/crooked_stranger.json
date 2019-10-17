@@ -46,7 +46,7 @@
                   "name": "Makeshift one",
                   "effect": {
                     "description": "The weird figure does not figure out about your trickery. It takes the fake trinket, and starts to work on your health condition. Clean bandages, herbal extracts and a doctor's touch is enough to extend your life, at least for now. Waving its hand, the figure leaves you alone.",
-                    "health_value": 10,
+                    "health_value": 15,
                     "healthDeviation": 20
                   },
                   "exclusiveClasses": [
