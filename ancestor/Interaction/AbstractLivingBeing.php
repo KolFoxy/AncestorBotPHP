@@ -194,7 +194,7 @@ abstract class AbstractLivingBeing {
         $this->applyTimedEffectsGetResults($action->statusEffects, $actRes, $hit);
         $this->applyTimedEffectsGetResults($action->statModifiers, $actRes, $hit);
         $extra = $riposteRes === null ? '' : '**' . $target->name . ' counter-attacks!**' . PHP_EOL . $riposteRes->__toString();
-        if ($hit && $action->selfEffect !== null && !$this->isDead()) {
+        if (!$this->isDead() && $action->selfEffect !== null && ($action->selfEffect->removesStealth || $hit)) {
             $selfEffectRes = new ActionResult($this, $this, $action->selfEffect->getDescription(), $action->selfEffect->getDescription());
             $this->getDAEffectResult($action->selfEffect, $this, $selfEffectRes);
             if ($riposteRes !== null) {

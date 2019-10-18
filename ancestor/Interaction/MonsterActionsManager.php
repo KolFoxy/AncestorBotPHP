@@ -5,38 +5,37 @@ namespace Ancestor\Interaction;
 class MonsterActionsManager {
 
     /**
-     * @var array ['status1' => 'actionName1', ...]
+     * @var MonsterType
      */
-    public $statusActionsRelations = [];
+    protected $monsterType;
 
     /**
-     * @var null|DirectAction[]
+     * @var DirectAction[] ['status1' => DirectAction, ...]
      */
-    protected $freeActions = null;
+    protected $statusActionsRelations = [];
 
-    public function getDirectAction(Monster $monster): DirectAction {
-        foreach ($this->statusActionsRelations as $status => $actionName) {
+    /**
+     * MonsterActionsManager constructor.
+     * @param array $statusActionsRelations ['status1' => 'actionName', ...]
+     * @param MonsterType $type
+     */
+    public function __construct(array $statusActionsRelations, MonsterType $type) {
+        $this->monsterType = $type;
+        foreach ($statusActionsRelations as $status => $actionName) {
+            $action = $type->getActionIfValid($actionName);
+            if ($action !== null) {
+                $this->statusActionsRelations[$status] = $action;
+            }
+        }
+        $type->actions = array_values(array_diff($type->actions, $this->statusActionsRelations));
+    }
+
+    public function getDirectAction(Monster $monster, bool $targetIsStealthed = false): DirectAction {
+        foreach ($this->statusActionsRelations as $status => $action) {
             if ($monster->statManager->has($status)) {
-                return $monster->type->getActionIfValid($actionName) ?? $monster->type->getRandomAction();
+                return $action;
             }
         }
-        return $this->getFreeAction($monster->type);
+        return $this->monsterType->getRandomAction($targetIsStealthed);
     }
-
-    protected function getFreeAction(MonsterType $monsterType): DirectAction {
-        if ($this->freeActions === null) {
-            $this->setFreeActions($monsterType);
-        }
-        return $this->freeActions[mt_rand(0, count($this->freeActions) - 1)];
-    }
-
-    protected function setFreeActions(MonsterType $monsterType) {
-        $this->freeActions = [];
-        foreach ($monsterType->actions as $directAction) {
-            if (!in_array($directAction->name, $this->statusActionsRelations)) {
-                $this->freeActions[] = $directAction;
-            }
-        }
-    }
-
 }

@@ -177,7 +177,7 @@ class FightManager {
         );
         $embed->setImage($this->monster->type->image);
         if ((bool)mt_rand(0, 1)) {
-            $additionalEmbed = $this->monster->getTurn($this->hero, $this->monster->getProgrammableAction());
+            $additionalEmbed = $this->monster->getTurn($this->hero);
             Helper::mergeEmbed($embed, $additionalEmbed);
         }
         $this->setCurrentFooter($embed);

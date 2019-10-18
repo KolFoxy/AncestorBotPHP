@@ -62,7 +62,7 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
         if ($this->actionRatings !== null) {
             return $this->getRatedAction();
         }
-        return $this->actions[mt_rand(0, sizeof($this->actions) - 1)];
+        return $this->actions[mt_rand(0, count($this->actions) - 1)];
     }
 
     public function getActionVsStealthed() {

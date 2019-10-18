@@ -39,11 +39,7 @@ class Monster extends AbstractLivingBeing {
      */
     public function getTurn(AbstractLivingBeing $target, ?DirectAction $action = null): array {
         if ($action === null) {
-            if ($target->isStealthed()) {
-                $action = $this->type->getActionVsStealthed();
-            } else {
-                $action = $this->getProgrammableAction();
-            }
+            $action = $this->getProgrammableAction($target->isStealthed());
         }
         if ($action->requiresTarget) {
             $target = $this;
@@ -56,11 +52,11 @@ class Monster extends AbstractLivingBeing {
         return $res;
     }
 
-    public function getProgrammableAction(): DirectAction {
+    public function getProgrammableAction(bool $targetIsStealthed): DirectAction {
         if (!is_null($this->type->actionsManager)) {
-            return $this->type->actionsManager->getDirectAction($this);
+            return $this->type->actionsManager->getDirectAction($this, $targetIsStealthed);
         }
-        return $this->type->getRandomAction();
+        return $this->type->getRandomAction($targetIsStealthed);
     }
 
 }

@@ -79,8 +79,6 @@
     }
   ],
   "actionsManager": {
-    "statusActionsRelations": {
-      "stealth": "Trample"
-    }
+    "stealth": "Trample"
   }
 }

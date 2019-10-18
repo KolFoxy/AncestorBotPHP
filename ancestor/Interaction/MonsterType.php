@@ -26,7 +26,7 @@ class MonsterType extends AbstractLivingInteraction {
             $action->requiresTarget = true;
             $effect = new DirectActionEffect();
             /** @noinspection PhpUnhandledExceptionInspection */
-            $effect->setDescription($this->name.' passed the turn.');
+            $effect->setDescription($this->name . ' passed the turn.');
             $effect->hitChance = -1;
             $effect->critChance = -1;
             $action->effect = $effect;
@@ -37,5 +37,15 @@ class MonsterType extends AbstractLivingInteraction {
 
     public function getActionIfValid(string $actionName): ?DirectAction {
         return parent::getActionIfValid($actionName);
+    }
+
+    /**
+     * @param array|null $statusActionsRelations ['status1' => 'actionName', ...]
+     */
+    public function setActionsManager(?array $statusActionsRelations): void {
+        if ($statusActionsRelations === null) {
+            return;
+        }
+        $this->actionsManager = new MonsterActionsManager($statusActionsRelations, $this);
     }
 }
