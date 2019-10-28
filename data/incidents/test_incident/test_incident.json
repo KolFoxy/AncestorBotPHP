@@ -85,6 +85,14 @@
       "resultIncident": "/data/incidents/the_comet_lands.json"
     },
     {
+      "name": "cometIsComing",
+      "effect": {
+        "description": "Wooosh *opening portal sounds*",
+        "image": "https://i.imgur.com/f6BcThP.png"
+      },
+      "resultIncident": "/data/incidents/the_comet_is_coming.json"
+    },
+    {
       "name": "Tell him a joke",
       "effect": {
         "description": "He is not amused."

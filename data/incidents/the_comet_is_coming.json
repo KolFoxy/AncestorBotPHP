@@ -1,0 +1,34 @@
+{
+  "name": "You are in a crowd. Everyone’s attention is focused on the man on the pedestal.",
+  "description": "You don’t know him, but his gaze and arms are directed towards the clouded sky. “The falling star is coming onto us!” he yells. “We must abandon this doomed place or die in the sky’s wrath!” People in the crowd unsurely look at each other, but the man gives them little attention and continues talking about how there will be nothing left, how the crazy man in the castle is at fault– all while regularly repeating his opening grim words.",
+  "image": "https://i.imgur.com/f6BcThP.png",
+  "actions": [
+    {
+      "name": "Stay and listen",
+      "effect": {
+        "description": "He repeats and repeats the same speech over and over again. It becomes tiresome really fast, as no one in the crowd is grabbed enough by the speaker's words to express any reaction. Do they simply not believe him? Is he that incompetent in oratory? Whatever the reason, the crowd diffuses in mere minutes, leaving the hapless prophet alone.",
+        "stress_value": 3,
+        "stressDeviation": 2
+      }
+    },
+    "/data/incidents/the_comet_is_coming/support_the_orator.php",
+    {
+      "exclusiveClasses": [
+        "jester"
+      ],
+      "name": "Make fun of him",
+      "effect": {
+        "description": "Look at his posture! Look at his gestures! The poor forecaster is completely lost in his visions.You can bet that he will ignore anything in this state.\nYou get up on stage and wave your hand in front of the speaker– no reaction. Then you put a jester’s cap on him– now that makes someone in the crowd giggle. Even though he is now looking absolutely ridiculous, the prophet is still focused on repeating his words of doom. Let’s make the message a little bit less serious: a cheerful melody will lie perfectly on top of such vocals!\nAfter minutes of the solid duet, the crowd is left amused and you leave the unlucky prophet alone to his ineffectual attempts.",
+        "stress_value": -10
+      },
+      "statModifiers": [
+        {
+          "stat": "finaleDamage",
+          "chance": -1,
+          "value": 30,
+          "duration": 10
+        }
+      ]
+    }
+  ]
+}
