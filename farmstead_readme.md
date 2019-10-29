@@ -25,10 +25,16 @@
 
 After sending the command, AncestorBot will send a message, which will contain:
 1. Your hero\`s description and icon.
-2. Image and description of the first monster that you will fight.
+2. Description of the first monster that you will fight.
 3. Monster statuses such as ``stealth`` or ``riposte`` (Optionally, if they start with one).
 4. Monster\`s turn (Optionally, if the monster won the coin flip of who goes first).
-5. Your available actions in the *footer* , which is the very bottom part of the message.
+5. Monster\'s image.
+6. Your available actions in the *footer* , which is the very bottom part of the message.
+
+##### Example of a started game:
+![Example of a started game](data/images/help/farmstead_start.png "Example of a started game")
+Numbers indicate parts of the message from the list above.
+
 
 After that, you can do following:
 
@@ -49,6 +55,9 @@ After that, you are free again to use any of commands listed above.
 >Example: your hero\`s available actions are: `aimed shot`, `smokescreen`, `call the shot`, `patch up`, `skeet shot`, `pass turn`. You want your hero to use `call the shot`. Instead of typing the full ``!f call the shot``, you can simply type ``!f ca`` and it will return the same result, since `call the shot` is the first action in the list containing \`\`ca\`\`.
 >The same also applies to event actions.
 
+## Timeout
+The game will be automatically terminated after 10 minutes of inactivity. 
+
 ## Trinkets
 After dealing with your first monster, you\`ll find a trinket after killing each subsequent opponent. The bot will show you the image and the description of the new trinket, and your options will be:
 
@@ -56,7 +65,7 @@ After dealing with your first monster, you\`ll find a trinket after killing each
 | :------------: | :------------: |
 |  **``!f 1``**  |  Your hero will equip trinket in the first trinket slot, possibly replacing already equipped one there |
 |  **``!f 2``**  |  Your hero will equip trinket in the second trinket slot, possibly replacing already equipped one there |
-| **``!f skip``**  |  Your hero will ignore the trinket and instead will use the available time to heal themselves. The healing amount is random, though the maximum healing amount is dependent on the trinket\`s rarity |
+| **``!f skip``**  |  Your hero will ignore the trinket and instead will use the available time to heal themselves. The healing amount is random, though the maximum is dependent on the trinket\`s rarity |
 
 Trinkets provide permanent boosts to your hero\`s stats, until they are either replaced by another trinket, or lost during an event.
 
@@ -69,4 +78,4 @@ As you proceed further and further, after a certain threshold you will start to 
 ##Events
 After dealing with a substantial amount of monsters, you will begin to encounter non-combat events, in which all kinds of things could happen! You may be granted a long-lasting status effect, or lose all your trinkets, or get beaten up, or...
 There is a number of pre-written events, though outcomes of some can vary drastically depending on chance or on class of your hero.
-Actions in events are different from your usual hero\`s actions, but are selected and performed in the similar fashion by typing **`!f [action_name]`**. Available actions are almost always in the footer of the latest game message from bot.
+Actions in events are different from your usual hero\`s actions, but are selected and performed in the similar fashion by typing **`!f [action name]`**. Available actions are almost always in the footer of the latest game message from bot.

@@ -18,7 +18,7 @@ use CharlotteDunois\Yasmin\Models\Message;
 
 class Fight extends Command implements EncounterCollectionInterface {
     const CHANNEL_SWITCH_REMINDER = 'Remember to switch to the original channel of the fight before continuing.';
-    const TIMEOUT = 300.0;
+    const TIMEOUT = 600.0;
     const SURRENDER_COMMAND = 'ff';
     const CHAR_INFO_COMMAND = 'stats';
     const CHAR_ACTIONS_COMMAND = 'actions';

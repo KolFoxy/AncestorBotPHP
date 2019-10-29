@@ -1,17 +1,17 @@
 # AncestorBotPHP
 > Discord bot that mimics Ancestor's (from the game Darkest Dungeon) behavior and humour. Tests resolve.
 
-
 ### Commands:
-- help `Lists all commands, or shows command's description if used as "help [COMMAND]"`
-- gold `Gives a random reward.`
-- remind `Teaches you or a [@user] the important lesson about life.`
-- roll `"roll" or "roll [MIN] [MAX]" or "roll [MAX]" - rolls a random integer (default roll is from 1 to 6)`
-- spin `Spins a [@user] inside of Tide™` 
-- stress `Forces you or a [@user] to drink wine.`
-- zalgo `Transforms given sentence into something ̝̺̋l̃̊̕i͈͌͡k̛͉̕e̟̩ͥ ͆̄͐ẗ̥́̓ḧ̸͝i̷͚͘s. Aliases: cursed`
-- read `Interact with writing curios. Aliases: 'book', 'heckbooks', 'knowledge'`
-- reveal `Add tentacles to your avatar or image. Aliases: 'tentacles''` 
+- `help` — Lists all commands, or shows command's description if used as "help [COMMAND]"
+- `gold` — Gives a random reward.
+- `remind` — Teaches you or a `@user` the important lesson about life.
+- `roll`, `roll [MIN] [MAX]` or `roll [MAX]` — rolls a random integer (default roll is from 1 to 6).
+- `spin` Spins a [@user] inside of Tide™.
+- `stress` Forces you or a [@user] to drink wine.
+- `zalgo` Transforms given sentence into something ̝̺̋l̃̊̕i͈͌͡k̛͉̕e̟̩ͥ ͆̄͐ẗ̥́̓ḧ̸͝i̷͚͘s. Aliases: `cursed`
+- `read` Interact with writing curios. Aliases: `book`, `heckbooks`, `knowledge`
+- `reveal` Add tentacles to your avatar or image. Aliases: `tentacles`
+- `fight` Play the Farmstead minigame. [More information and instructions.](farmstead_readme.md "More information and instructions.") 
 
 ### Chat reactions:
 - `My resolve is tested`  or  `@user resolve is tested`  or  `...resolve is tested...`  — tests one's resolve, with a 25% chance of virtue. Case insensitve.
