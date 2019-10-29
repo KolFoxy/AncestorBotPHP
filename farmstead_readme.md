@@ -1,4 +1,4 @@
-#AncestorBot Farmstead Minigame
+# AncestorBot Farmstead Minigame
 > Discord Chatroom Minigame, in which you go into the Farmstead solo as a randomly selected Hero. You will fight endless battles against Husks and **Lost in Time** heroes, collect trinkets and encounter random events. At your inevitable end, you`ll be rewarded with title and with showcase of your deadly accomplishments.
 
 
@@ -33,10 +33,11 @@ After sending the command, AncestorBot will send a message, which will contain:
 
 ##### Example of a started game:
 ![Example of a started game](data/images/help/farmstead_start.png "Example of a started game")
+
 Numbers indicate parts of the message from the list above.
 
 
-After that, you can do following:
+### Available commands while playing:
 
 | Command  | Result  | Will end your turn?  |
 | :------------: | :------------: | :------------: |
@@ -75,7 +76,8 @@ Trinkets provide permanent boosts to your hero\`s stats, until they are either r
 ## *Lost in Time*
 As you proceed further and further, after a certain threshold you will start to encounter *Lost in Time* versions of heroes. Those are always hostile and fights with them proceed as with usual monsters, with the only exception being that *Lost in Time* heroes have deathblow resistance (though much lower than yours), and may not die as soon as their HP reaches 0.
 
-##Events
+## Events
 After dealing with a substantial amount of monsters, you will begin to encounter non-combat events, in which all kinds of things could happen! You may be granted a long-lasting status effect, or lose all your trinkets, or get beaten up, or...
 There is a number of pre-written events, though outcomes of some can vary drastically depending on chance or on class of your hero.
 Actions in events are different from your usual hero\`s actions, but are selected and performed in the similar fashion by typing **`!f [action name]`**. Available actions are almost always in the footer of the latest game message from bot.
+    
