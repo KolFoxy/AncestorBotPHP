@@ -80,6 +80,11 @@ class FightManager {
     protected $transformTimer = self::TRANSFORM_TURNS_CD;
 
     /**
+     * @var ImageTemplate
+     */
+    protected $loserTombstoneImageTemplate;
+
+    /**
      * @var string
      */
     public $heroPicUrl;
@@ -95,6 +100,8 @@ class FightManager {
     const TITLE_Y = 220;
     const CORPSES_PATH = '/data/images/corpses/';
     const DEFAULT_CORPSE_PATH = '/data/images/corpses/default.png';
+    const LOSER_TOMBSTONE_PATH = '/data/images/endscreen/loser/tombstone.png';
+    const LOSER_TEXT_OFFSET = 20;
     const CORPSE_Y_POSITIONS = [
         0 => [
             'max' => 410,
@@ -160,6 +167,14 @@ class FightManager {
         $this->encounterCollection = $monsterCollection;
         $this->endless = $endless;
         $this->chatCommand = $chatCommand;
+
+        $this->loserTombstoneImageTemplate = new ImageTemplate();
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+        $json = json_decode(file_get_contents(
+            dirname(__DIR__, 3) . str_replace('.png', '.json', self::LOSER_TOMBSTONE_PATH)
+        ));
+        $mapper->map($json, $this->loserTombstoneImageTemplate);
     }
 
     public function start(): MessageEmbed {
@@ -272,18 +287,14 @@ class FightManager {
         $deferred = new Deferred();
         $turn = $this->getTurn($action);
         if ($this->isOver()) {
-            if ($this->killCount < self::ENDSCREEN_THRESHOLD) {
-                $deferred->reject(['embed' => $turn]);
-            } else {
-                $this->createEndscreen()->done(
-                    function ($data) use ($deferred, $turn) {
-                        $deferred->reject(['embed' => $turn, 'files' => [['data' => $data, 'name' => 'end.png']]]);
-                    },
-                    function () use ($deferred, $turn) {
-                        $deferred->reject(['embed' => $turn]);
-                    }
-                );
-            }
+            $this->createEndscreen()->done(
+                function ($data) use ($deferred, $turn) {
+                    $deferred->reject(['embed' => $turn, 'files' => [['data' => $data, 'name' => 'end.png']]]);
+                },
+                function () use ($deferred, $turn) {
+                    $deferred->reject(['embed' => $turn]);
+                }
+            );
         } else {
             $deferred->resolve(['embed' => $turn]);
         }
@@ -294,28 +305,50 @@ class FightManager {
         $fdl = new FileDownloader($this->loop);
         return $fdl->getDownloadAsyncImagePromise($this->heroPicUrl)->then(
             function ($imageFile) {
-                $endPath = dirname(__DIR__, 3) . self::ENDSCREEN_PATH
-                    . mb_strtolower(str_replace(' ', '_', $this->hero->type->name));
-                $mapper = new \JsonMapper();
-                $mapper->bExceptionOnMissingData = true;
-                $template = new ImageTemplate();
-                $json = json_decode(file_get_contents($endPath . '.json'));
-                $mapper->map($json, $template);
-
-                $applier = new ImageTemplateApplier($template);
-                $canvas = imagecreatefrompng($endPath . '.png');
-                $applier->slapTemplate($imageFile, $canvas, true);
-                $this->addKillCountToImage($canvas);
-                $this->addCorpsesToImage($canvas);
-
-                ob_start();
-                imagepng($canvas);
-                $result = ob_get_clean();
-                imagedestroy($canvas);
-
-                return $result;
+                return $this->killCount >= self::ENDSCREEN_THRESHOLD ? $this->composeBigEndscreen($imageFile) : $this->composeLoserEndscreen($imageFile);
             }
         );
+    }
+
+
+    protected function composeBigEndscreen($heroImageResource) {
+        $endPath = dirname(__DIR__, 3) . self::ENDSCREEN_PATH
+            . mb_strtolower(str_replace(' ', '_', $this->hero->type->name));
+        $mapper = new \JsonMapper();
+        $mapper->bExceptionOnMissingData = true;
+        $template = new ImageTemplate();
+        $json = json_decode(file_get_contents($endPath . '.json'));
+        $mapper->map($json, $template);
+
+        $applier = new ImageTemplateApplier($template);
+        $canvas = imagecreatefrompng($endPath . '.png');
+        $applier->slapTemplate($heroImageResource, $canvas, true);
+        $this->addKillCountToImage($canvas);
+        $this->addCorpsesToImage($canvas);
+
+        ob_start();
+        imagepng($canvas);
+        $result = ob_get_clean();
+        imagedestroy($canvas);
+
+        return $result;
+    }
+
+    protected function composeLoserEndscreen($heroImageResource) {
+        $canvas = imagecreatefrompng(dirname(__DIR__, 3) . self::LOSER_TOMBSTONE_PATH);
+        imagealphablending($canvas,true);
+        imagesavealpha($canvas,true);
+
+        $applier = new ImageTemplateApplier($this->loserTombstoneImageTemplate);
+        $applier->slapTemplate($heroImageResource, $canvas, true);
+        $this->addLoserTextToImage($canvas);
+
+        ob_start();
+        imagepng($canvas);
+        $result = ob_get_clean();
+        imagedestroy($canvas);
+
+        return $result;
     }
 
     protected function addKillCountToImage($image) {
@@ -333,6 +366,34 @@ class FightManager {
             }
         }
         imagettftext($image, self::SMALL_FONT_SIZE, 0, self::TITLE_X, self::TITLE_Y, $cyan, $ttfPath, $title);
+    }
+
+    protected function addLoserTextToImage($image) {
+        $red = imagecolorallocate($image, 255, 0, 0);
+        $ttfPath = dirname(__DIR__, 3) . self::FONT_PATH;
+
+        $textBoundingBox = imagettfbbox(self::FONT_SIZE, 0, $ttfPath, 'R.I.P.');
+        $textCentre = ($this->loserTombstoneImageTemplate->templateW) / 2 - ($textBoundingBox[2] - $textBoundingBox[0]) / 2;
+        imagettftext($image,
+            self::FONT_SIZE,
+            0,
+            $textCentre,
+            self::LOSER_TEXT_OFFSET+30,
+            $red,
+            $ttfPath,
+            'R.I.P.');
+
+        $textDate = date('M d, Y');
+        $textBoundingBox = imagettfbbox(self::FONT_SIZE, 0, $ttfPath, $textDate);
+        $textCentre = ($this->loserTombstoneImageTemplate->templateW) / 2 - ($textBoundingBox[2] - $textBoundingBox[0]) / 2;
+        imagettftext($image,
+            self::FONT_SIZE,
+            0,
+            $textCentre,
+            $this->loserTombstoneImageTemplate->templateH - self::LOSER_TEXT_OFFSET - $textBoundingBox[1],
+            $red,
+            $ttfPath,
+            $textDate);
     }
 
     protected function addCorpsesToImage($image) {

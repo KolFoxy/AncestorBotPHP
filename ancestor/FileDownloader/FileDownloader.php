@@ -65,6 +65,10 @@ class FileDownloader implements AsyncFileDownloaderInterface {
         $request->end();
     }
 
+    /**
+     * @param string $url
+     * @return Promise Resolves with image resource
+     */
     public function getDownloadAsyncImagePromise(string $url): Promise {
         $deferred = new Deferred();
         $callback = function ($file) use ($deferred) {

@@ -381,9 +381,8 @@ class Hero extends AbstractLivingBeing {
         $fields = $this->getSpontaneousActionsResults($isStunned);
         if (!$this->isDead()) {
             $fields = array_merge($fields, parent::getTurn($target, $action));
-            if ($heroStressStateChecker && !is_null($target->getStressState())) {
-                $fields[] = $target->getStressState()->toField($target);
-            }
+        } else {
+            $fields[] = CommandHelper::getEmbedField('**'.$this->name.'is dead.**','*``Dead people make no actions.``*');
         }
         if ($target !== $this) {
             if ($target->isDead()) {
@@ -393,9 +392,12 @@ class Hero extends AbstractLivingBeing {
                         $this->getStressStatus());
                 }
             }
-            if ($thisStressChecker && !$this->isDead() && !is_null($this->getStressState())) {
-                $fields[] = $this->getStressState()->toField($this);
+            if ($heroStressStateChecker && !is_null($target->getStressState())) {
+                $fields[] = $target->getStressState()->toField($target);
             }
+        }
+        if ($thisStressChecker && !$this->isDead() && !is_null($this->getStressState())) {
+            $fields[] = $this->getStressState()->toField($this);
         }
         if ($action->name === DirectAction::TRANSFORM_ACTION) {
             $this->transform();
@@ -429,7 +431,7 @@ class Hero extends AbstractLivingBeing {
     /**
      * Resets health, stress, stat manager, removes trinkets, removes stress state.
      */
-    public function reset() : void {
+    public function reset(): void {
         $this->currentHealth = $this->healthMax;
         $this->stress = 0;
         $this->removeTrinketFromSlot(1);
