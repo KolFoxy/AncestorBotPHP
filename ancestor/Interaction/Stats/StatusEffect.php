@@ -17,6 +17,9 @@ class StatusEffect implements TimedEffectInterface {
     const MARKED_DEF_DURATION = 4;
     const STUN_DEF_DURATION = 1;
 
+    const BLEED_CAUSE_OF_DEATH = 'Bled to death';
+    const BLIGHT_CAUSE_OF_DEATH = 'Died of blight';
+
     /**
      * @var string
      */

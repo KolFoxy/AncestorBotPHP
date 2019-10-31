@@ -90,6 +90,8 @@ class FightManager {
     public $heroPicUrl;
 
     const ENDSCREEN_PATH = '/data/images/endscreen/';
+    const ENDSCREEN_WIDTH = 246;
+    const ENDSCREEN_HEIGHT = 500;
     const FONT_PATH = '/data/the_font/DwarvenAxeDynamic.ttf';
     const FONT_SIZE = 48;
     const SMALL_FONT_SIZE = 24;
@@ -102,6 +104,7 @@ class FightManager {
     const DEFAULT_CORPSE_PATH = '/data/images/corpses/default.png';
     const LOSER_TOMBSTONE_PATH = '/data/images/endscreen/loser/tombstone.png';
     const LOSER_TEXT_OFFSET = 20;
+    const CAUSE_OF_DEATH_Y = 440;
     const CORPSE_Y_POSITIONS = [
         0 => [
             'max' => 410,
@@ -159,6 +162,8 @@ class FightManager {
     const TRANSFORM_TURNS_CD = 4;
 
     const INVALID_ACTION_ERROR_MSG = 'Try again. If error persists - contact the developer with the issue on GitHub.';
+
+    const RIP = 'R.I.P.';
 
     public function __construct(Hero $hero, string $heroPicUrl, EncounterCollectionInterface $monsterCollection, string $chatCommand, LoopInterface $loop, bool $endless = false) {
         $this->hero = $hero;
@@ -323,8 +328,8 @@ class FightManager {
         $applier = new ImageTemplateApplier($template);
         $canvas = imagecreatefrompng($endPath . '.png');
         $applier->slapTemplate($heroImageResource, $canvas, true);
-        $this->addKillCountToImage($canvas);
         $this->addCorpsesToImage($canvas);
+        $this->addEndscreenTextToImage($canvas);
 
         ob_start();
         imagepng($canvas);
@@ -336,8 +341,8 @@ class FightManager {
 
     protected function composeLoserEndscreen($heroImageResource) {
         $canvas = imagecreatefrompng(dirname(__DIR__, 3) . self::LOSER_TOMBSTONE_PATH);
-        imagealphablending($canvas,true);
-        imagesavealpha($canvas,true);
+        imagealphablending($canvas, true);
+        imagesavealpha($canvas, true);
 
         $applier = new ImageTemplateApplier($this->loserTombstoneImageTemplate);
         $applier->slapTemplate($heroImageResource, $canvas, true);
@@ -351,9 +356,10 @@ class FightManager {
         return $result;
     }
 
-    protected function addKillCountToImage($image) {
+    protected function addEndscreenTextToImage($image) {
         $cyan = imagecolorallocate($image, 0, 255, 255);
         $red = imagecolorallocate($image, 255, 0, 0);
+        $black = imagecolorallocate($image, 0, 0, 0);
         $ttfPath = dirname(__DIR__, 3) . self::FONT_PATH;
         $numSize = $this->killCount >= 10000 ? self::SMALL_FONT_SIZE : self::FONT_SIZE;
         imagettftext($image, self::FONT_SIZE, 0, self::KILLCOUNT_X, self::KILLCOUNT_Y, $cyan, $ttfPath, 'Kills:');
@@ -365,35 +371,90 @@ class FightManager {
                 break;
             }
         }
-        imagettftext($image, self::SMALL_FONT_SIZE, 0, self::TITLE_X, self::TITLE_Y, $cyan, $ttfPath, $title);
+        imagettftext($image,
+            self::SMALL_FONT_SIZE,
+            0,
+            $this->getDefaultTextCenteredX(self::ENDSCREEN_WIDTH, self::SMALL_FONT_SIZE, $title),
+            self::TITLE_Y,
+            $cyan,
+            $ttfPath,
+            $title);
+
+        if ($this->hero->causeOfDeath === null) {
+            return;
+        }
+        if (mb_strpos($this->hero->causeOfDeath, AbstractLivingBeing::KILLER_CAUSE_OF_DEATH) !== false) {
+            $killer = str_replace(AbstractLivingBeing::KILLER_CAUSE_OF_DEATH, '', $this->hero->causeOfDeath);
+            $killerOffset = $this->getDefaultTtfBoundingBox(self::SMALL_FONT_SIZE, $killer)[1] + 24;
+            $this->hero->causeOfDeath = AbstractLivingBeing::KILLER_CAUSE_OF_DEATH;
+            imagettftext($image,
+                self::SMALL_FONT_SIZE,
+                0,
+                1 + $this->getDefaultTextCenteredX(self::ENDSCREEN_WIDTH, self::SMALL_FONT_SIZE, $killer),
+                1 + self::CAUSE_OF_DEATH_Y + $killerOffset,
+                $black,
+                $ttfPath,
+                $killer);
+            imagettftext($image,
+                self::SMALL_FONT_SIZE,
+                0,
+                $this->getDefaultTextCenteredX(self::ENDSCREEN_WIDTH, self::SMALL_FONT_SIZE, $killer),
+                self::CAUSE_OF_DEATH_Y + $killerOffset,
+                $red,
+                $ttfPath,
+                $killer);
+        }
+        imagettftext($image,
+            self::SMALL_FONT_SIZE,
+            0,
+            1 + $this->getDefaultTextCenteredX(self::ENDSCREEN_WIDTH, self::SMALL_FONT_SIZE, $this->hero->causeOfDeath),
+            1 + self::CAUSE_OF_DEATH_Y,
+            $black,
+            $ttfPath,
+            $this->hero->causeOfDeath);
+        imagettftext($image,
+            self::SMALL_FONT_SIZE,
+            0,
+            $this->getDefaultTextCenteredX(self::ENDSCREEN_WIDTH, self::SMALL_FONT_SIZE, $this->hero->causeOfDeath),
+            self::CAUSE_OF_DEATH_Y,
+            $red,
+            $ttfPath,
+            $this->hero->causeOfDeath);
+
     }
 
     protected function addLoserTextToImage($image) {
-        $red = imagecolorallocate($image, 255, 0, 0);
         $ttfPath = dirname(__DIR__, 3) . self::FONT_PATH;
-
-        $textBoundingBox = imagettfbbox(self::FONT_SIZE, 0, $ttfPath, 'R.I.P.');
-        $textCentre = ($this->loserTombstoneImageTemplate->templateW) / 2 - ($textBoundingBox[2] - $textBoundingBox[0]) / 2;
+        $red = imagecolorallocate($image, 255, 0, 0);
         imagettftext($image,
             self::FONT_SIZE,
             0,
-            $textCentre,
-            self::LOSER_TEXT_OFFSET+30,
+            $this->getDefaultTextCenteredX($this->loserTombstoneImageTemplate->templateW, self::FONT_SIZE, self::RIP),
+            self::LOSER_TEXT_OFFSET + 30,
             $red,
             $ttfPath,
-            'R.I.P.');
+            self::RIP);
 
         $textDate = date('M d, Y');
-        $textBoundingBox = imagettfbbox(self::FONT_SIZE, 0, $ttfPath, $textDate);
-        $textCentre = ($this->loserTombstoneImageTemplate->templateW) / 2 - ($textBoundingBox[2] - $textBoundingBox[0]) / 2;
+        $textBoundingBox = $this->getDefaultTtfBoundingBox(self::FONT_SIZE, $textDate);
         imagettftext($image,
             self::FONT_SIZE,
             0,
-            $textCentre,
+            $this->getDefaultTextCenteredX($this->loserTombstoneImageTemplate->templateW, self::FONT_SIZE, $textDate),
             $this->loserTombstoneImageTemplate->templateH - self::LOSER_TEXT_OFFSET - $textBoundingBox[1],
             $red,
             $ttfPath,
             $textDate);
+    }
+
+    protected function getDefaultTtfBoundingBox(int $fontSize, string $text): array {
+        $ttfPath = dirname(__DIR__, 3) . self::FONT_PATH;
+        return imagettfbbox($fontSize, 0, $ttfPath, $text);
+    }
+
+    protected function getDefaultTextCenteredX(int $imageWidth, int $fontSize, string $text): int {
+        $boundingBox = $this->getDefaultTtfBoundingBox($fontSize, $text);
+        return $imageWidth / 2 - ($boundingBox[2] - $boundingBox[0]) / 2;
     }
 
     protected function addCorpsesToImage($image) {

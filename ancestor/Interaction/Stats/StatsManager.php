@@ -115,14 +115,14 @@ class StatsManager {
                 unset($this->modifiers[$key]);
             }
         }
-        return $this->valuesToFields($values);
+        return $this->applyValuesGetFields($values);
     }
 
     /**
      * @param array $values
      * @return array|null
      */
-    function valuesToFields(array &$values) {
+    function applyValuesGetFields(array &$values): ?array {
         $res = [];
         $valueBleed = $values[StatusEffect::TYPE_BLEED] ?? 0;
         $valueBlight = $values[StatusEffect::TYPE_BLIGHT] ?? 0;
@@ -130,6 +130,7 @@ class StatsManager {
         $value = $valueRestoration + $valueBleed + $valueBlight;
         if ($value !== 0) {
             $this->host->addHealth($value);
+            $hostDied = $this->host->isDead();
             $effect = $value < 0 ? 'suffered' : 'restored';
             $body = '``' . $this->host->getHealthStatus() . PHP_EOL;
             if ($valueBleed !== 0) {
@@ -137,11 +138,17 @@ class StatsManager {
                 if ($valueBlight !== 0 || $valueRestoration !== 0) {
                     $body .= PHP_EOL;
                 }
+                if ($hostDied){
+                    $this->host->causeOfDeath = StatusEffect::BLEED_CAUSE_OF_DEATH;
+                }
             }
             if ($valueBlight !== 0) {
                 $body .= 'Blight: ' . $valueBlight;
                 if ($valueRestoration !== 0) {
                     $body .= PHP_EOL;
+                }
+                if ($hostDied){
+                    $this->host->causeOfDeath = StatusEffect::BLIGHT_CAUSE_OF_DEATH;
                 }
             }
             if ($valueRestoration !== 0) {

@@ -48,10 +48,17 @@ abstract class AbstractLivingBeing {
      */
     public $stress = null;
 
+    /**
+     * @var string|null
+     */
+    public $causeOfDeath = null;
+
 
     /**
      * @return string Format: "Health: currentHealth/healthMax"
      */
+
+    const KILLER_CAUSE_OF_DEATH = 'Killed by a deadly ';
 
     public function getHealthStatus(): string {
         return 'Health: ' . $this->currentHealth . '/' . $this->healthMax;
@@ -189,7 +196,12 @@ abstract class AbstractLivingBeing {
                 $riposteHit = $target->getDAEffectResult($target->type->riposteAction->effect, $this, $riposteRes);
                 $target->applyTimedEffectsGetResults($target->type->riposteAction->statusEffects, $riposteRes, $riposteHit);
                 $target->applyTimedEffectsGetResults($target->type->riposteAction->statModifiers, $riposteRes, $riposteHit);
+                if ($this->isDead()) {
+                    $this->causeOfDeath = $target->killedByMessage();
+                }
             }
+        } else {
+            $target->causeOfDeath = $this->killedByMessage();
         }
         $this->applyTimedEffectsGetResults($action->statusEffects, $actRes, $hit);
         $this->applyTimedEffectsGetResults($action->statModifiers, $actRes, $hit);
@@ -303,6 +315,10 @@ abstract class AbstractLivingBeing {
 
     public function isStunned(): bool {
         return $this->statManager->isStunned();
+    }
+
+    public function killedByMessage(): string {
+        return self::KILLER_CAUSE_OF_DEATH . $this->type->name;
     }
 
 

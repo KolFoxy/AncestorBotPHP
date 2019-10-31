@@ -24,7 +24,11 @@ class Hero extends AbstractLivingBeing {
 
     const AT_DEATH_S_DOOR_MESSAGE = ' AT DEATH\'S DOOR!';
 
-    protected $transformationCooldown = 0;
+    const VIRTUE_STRESS_ROLLBACK = 45;
+
+    const STRESS_STATE_THRESHOLD = 100;
+
+    const HEART_ATTACK_CAUSE_OF_DEATH = 'Died of a heart attack';
 
     /**
      * @var string
@@ -73,13 +77,6 @@ class Hero extends AbstractLivingBeing {
      * @var SpontaneousActionsManager
      */
     protected $saManager;
-
-    /**
-     * @noinspection PhpDocMissingThrowsInspection
-     */
-    const VIRTUE_STRESS_ROLLBACK = 45;
-
-    const STRESS_STATE_THRESHOLD = 100;
 
     protected function transform() {
         $this->saManager->removeSpontaneousAction($this->type->spontaneousActions);
@@ -149,6 +146,7 @@ class Hero extends AbstractLivingBeing {
                 if ($this->currentHealth === 0) {
                     $this->isActuallyDead = true;
                     $this->bonusHealthMessage = '';
+                    $this->causeOfDeath = self::HEART_ATTACK_CAUSE_OF_DEATH;
                     return;
                 }
                 $this->currentHealth = 0;
@@ -382,7 +380,7 @@ class Hero extends AbstractLivingBeing {
         if (!$this->isDead()) {
             $fields = array_merge($fields, parent::getTurn($target, $action));
         } else {
-            $fields[] = CommandHelper::getEmbedField('**'.$this->name.'is dead.**','*``Dead people make no actions.``*');
+            $fields[] = CommandHelper::getEmbedField('**'.$this->name.' is dead.**','*``Dead people make no actions.``*');
         }
         if ($target !== $this) {
             if ($target->isDead()) {
