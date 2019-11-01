@@ -1,0 +1,35 @@
+{
+  "name": "Haunting",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 15,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "monsterStatModifiers": [
+    {
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 15,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ]
+}

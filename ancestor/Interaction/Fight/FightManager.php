@@ -13,6 +13,8 @@ use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Monster;
+use Ancestor\Interaction\Stats\LightingEffect;
+use Ancestor\Interaction\Stats\LightingEffectFactory;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
@@ -89,6 +91,11 @@ class FightManager {
      */
     public $heroPicUrl;
 
+    /**
+     * @var LightingEffect|null
+     */
+    public $currentLight = null;
+
     const ENDSCREEN_PATH = '/data/images/endscreen/';
     const ENDSCREEN_WIDTH = 246;
     const ENDSCREEN_HEIGHT = 500;
@@ -164,6 +171,8 @@ class FightManager {
     const INVALID_ACTION_ERROR_MSG = 'Try again. If error persists - contact the developer with the issue on GitHub.';
 
     const RIP = 'R.I.P.';
+
+    const LIGHT_CHANGE_INTERVAL = 24;
 
     public function __construct(Hero $hero, string $heroPicUrl, EncounterCollectionInterface $monsterCollection, string $chatCommand, LoopInterface $loop, bool $endless = false) {
         $this->hero = $hero;
@@ -620,6 +629,7 @@ class FightManager {
      */
     public function newMonsterTurn(MessageEmbed $resultEmbed): bool {
         $this->monster = $this->rollNewMonster();
+        $this->manageLight($resultEmbed);
         $resultEmbed->addField('***' . $this->monster->name . ' emerges from the darkness!***'
             , '*``' . $this->monster->type->description . '``*'
             . PHP_EOL . '*``' . $this->monster->getHealthStatus() . '``*'
@@ -630,6 +640,26 @@ class FightManager {
             return $this->monsterTurnIsFinal($resultEmbed);
         }
         return false;
+    }
+
+
+    public function manageLight(MessageEmbed $resultEmbed) {
+        if ($this->killCount % self::LIGHT_CHANGE_INTERVAL !== 0) {
+            if ($this->currentLight !== null) {
+                $this->currentLight->apply($this->monster);
+            }
+            return;
+        }
+        if ($this->currentLight !== null) {
+            $resultEmbed->addField('***Light is no longer ' . $this->currentLight->name . '***', '*``Lighting effects removed.``*');
+            $this->currentLight->remove($this->hero);
+            $this->currentLight = null;
+            return;
+        }
+        $this->currentLight = LightingEffectFactory::create();
+        $this->currentLight->apply($this->hero);
+        $this->currentLight->apply($this->monster);
+        $resultEmbed->addField($this->currentLight->getTitle(), $this->currentLight->getDescription());
     }
 
     /**

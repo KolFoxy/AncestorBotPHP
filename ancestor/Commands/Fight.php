@@ -163,6 +163,12 @@ class Fight extends Command implements EncounterCollectionInterface {
             $this->manager->deleteInteraction($message);
             return;
         }
+
+        if ($actionName === 'setlight'){ //for testing only, delete later
+            $fight->killCount = 23;
+            return;
+        }
+
         if ($actionName === 'endscreen') { //for testing only, delete later
             $fight->killCount = 56;
             $fight->killedMonsters = [];
