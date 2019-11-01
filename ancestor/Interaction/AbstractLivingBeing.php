@@ -200,7 +200,7 @@ abstract class AbstractLivingBeing {
                     $this->causeOfDeath = $target->killedByMessage();
                 }
             }
-        } else {
+        } elseif ($target->causeOfDeath === null) {
             $target->causeOfDeath = $this->killedByMessage();
         }
         $this->applyTimedEffectsGetResults($action->statusEffects, $actRes, $hit);
