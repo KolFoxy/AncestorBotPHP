@@ -22,7 +22,7 @@ class Incident extends AbstractInteraction {
      */
     static private $defAction = null;
 
-    const DEFAULT_ACTION_DESCRIPTION = 'There is no way that what you are seeing is a reality. It must be just a mere vision, a glimpse of cosmic feverish hell of time and space. Shut your eyes, turn around and run: it\'s not like directions really matter here anyway.';
+    const DEFAULT_ACTION_DESCRIPTION = 'There is no way that what you are seeing is real. It must be just a mere vision, a glimpse of cosmic feverish hell. Shut your eyes, turn around and run: it\'s not like directions really matter here anyway.';
 
     /**
      * @param mixed $actions
