@@ -42,20 +42,20 @@
         "health_value": -1,
         "healthDeviation": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/36/Festering_Vapours.png",
-        "hitChance": 115,
+        "hitChance": 119,
         "critChance": 4
       },
       "statusEffects": [
         {
           "type": "blight",
-          "chance": 150,
+          "chance": 155,
           "targetSelf": false,
           "value": -6
         }
       ],
       "statModifiers": [
         {
-          "chance": 140,
+          "chance": 150,
           "stat": "blightResist",
           "value": -36
         }
@@ -96,10 +96,9 @@
       },
       "statModifiers": [
         {
-          "chance": 140,
+          "chance": 170,
           "stat": "accMod",
-          "value": -15,
-          "duration": 5
+          "value": -30
         }
       ]
     },
@@ -108,7 +107,8 @@
       "requiresTarget": true,
       "effect": {
         "description": "A peculiar set of vapours.",
-        "health_value": 3,
+        "health_value": 1,
+        "healthDeviation": 5,
         "hitChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6b/Fortifying_Vapours.png"
       },
@@ -117,13 +117,13 @@
           "chance": -1,
           "stat": "bleedResist",
           "value": 30,
-          "duration": 5
+          "duration": 6
         },
         {
           "chance": -1,
           "stat": "blightResist",
           "value": 30,
-          "duration": 5
+          "duration": 6
         }
       ]
     }
