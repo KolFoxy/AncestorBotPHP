@@ -29,8 +29,9 @@
         "description": "Quite an unethical stab.",
         "health_value": -7,
         "healthDeviation": -6,
-        "hitChance": 105,
+        "hitChance": 115,
         "critChance": 9,
+        "ignoresArmor": true,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/40/Dirk_Stab.png"
       },
       "statModifiers": [
@@ -57,16 +58,9 @@
         {
           "targetSelf": true,
           "chance": -1,
-          "stat": "dodge",
-          "duration": 4,
-          "value": -35
-        },
-        {
-          "targetSelf": true,
-          "chance": -1,
           "duration": 4,
           "stat": "stressMod",
-          "value": 100
+          "value": 120
         },
         {
           "stat": "finaleDamage",
@@ -123,7 +117,7 @@
       "statusEffects": [
         {
           "type": "bleed",
-          "chance": 140,
+          "chance": 150,
           "value": -5,
           "duration": 3
         }
@@ -142,7 +136,7 @@
       "name": "Battle Ballad",
       "requiresTarget": true,
       "effect": {
-        "description": "Increases accuracy, crit chance and Finale's damage.",
+        "description": "Increases accuracy, dodge, crit chance and Finale's damage.",
         "hitChance": -1,
         "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/64/Battle_Ballad.png"
@@ -159,6 +153,12 @@
           "targetSelf": true,
           "stat": "critChance",
           "value": 8
+        },
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "dodge",
+          "value": 10
         },
         {
           "stat": "finaleDamage",

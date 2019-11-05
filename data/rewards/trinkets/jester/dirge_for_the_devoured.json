@@ -13,13 +13,13 @@
 	{
       "chance": -1,
       "stat": "damageMod",
-      "value": 25,
+      "value": 50,
       "duration": -1
     },
 	{
       "chance": -1,
       "stat": "stressMod",
-      "value": 10,
+      "value": 15,
       "duration": -1
     }
   ]
