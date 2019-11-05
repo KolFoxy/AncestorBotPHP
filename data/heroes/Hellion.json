@@ -44,7 +44,7 @@
         {
           "type": "stun",
           "duration": 1,
-          "chance": 150
+          "chance": 145
         }
       ],
       "statModifiers": [
