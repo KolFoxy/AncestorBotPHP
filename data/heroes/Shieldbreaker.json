@@ -2,7 +2,7 @@
   "name": "Shieldbreaker",
   "description": "Shifting, swaying - she mesmerizes her prey before the final strike.",
   "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/a/a6/Shieldbreaker_portrait_roster.png/75px-Shieldbreaker_portrait_roster.png",
-  "healthMax": 36,
+  "healthMax": 30,
   "types": [
     "human"
   ],
@@ -10,7 +10,8 @@
     "dodge": 28,
     "critChance": 10,
     "stunResist": 100,
-    "blightResist": 70
+    "blightResist": 70,
+    "bleedResist": 70
   },
   "actionRatings": {
     "pierce": 30,
