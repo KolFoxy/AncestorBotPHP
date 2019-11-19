@@ -1,10 +1,15 @@
 # AncestorBot Farmstead Minigame
 > Discord Chatroom Minigame, in which you go into the Farmstead solo as a randomly selected Hero. You will fight endless battles against Husks and **Lost in Time** heroes, collect trinkets and encounter random events. At your inevitable end, you`ll be rewarded with title and with showcase of your deadly accomplishments.
 
-
 ------------
 
+# Disclaimer
+> This is a fan project, not aimed to bring the author any financial returns. All assets used are taken from the [Official Darkest Dungeon Wiki](https://darkestdungeon.gamepedia.com/Darkest_Dungeon_Wiki "Official Darkest Dungeon Wiki"), content of which is available under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/ "CC BY-NC-SA 3.0"). In no way this Discord Bot Minigame is aimed to replace "Darkest Dungeon" title by "Red Hook Studios" or provide a similar experience.
 
+> While most of mechanics, heroes and hero abilities are taken from the Darkest Dungeon game, a lot of values had to be changed to better suit solo "one-vs-one" style of the game. While some familiarity will occur, don't expect everything to work the same way as it works in the actual game. Again, this isn't meant to be a direct copy of the Red Hook game, nor can I ever even aim for it to be that.
+
+> With all that said, I hope you will have fun playing and exploring this fan minigame!
+------------
 ## Starting the game
  1. Add AncestorBot to your Discord server. Instructions on how to do it can be found [here.](README.md#invite-url "here.")
  2. Start the game by typing one of the following commands:
@@ -80,4 +85,6 @@ As you proceed further and further, after a certain threshold you will start to 
 After dealing with a substantial amount of monsters, you will begin to encounter non-combat events, in which all kinds of things could happen! You may be granted a long-lasting status effect, or lose all your trinkets, or get beaten up, or...
 There is a number of pre-written events, though outcomes of some can vary drastically depending on chance or on class of your hero.
 Actions in events are different from your usual hero\`s actions, but are selected and performed in the similar fashion by typing **`!f [action name]`**. Available actions are almost always in the footer of the latest game message from bot.
-    
+
+## Lighting Changes
+At certain kill intervals, colors of the surroundings will change. This change will affect all monsters' and heroes' stats up until the next interval.   
