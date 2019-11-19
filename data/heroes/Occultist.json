@@ -93,7 +93,7 @@
       "statusEffects": [
         {
           "type": "stun",
-          "chance": 150,
+          "chance": 160,
           "duration": 1
         }
       ]
