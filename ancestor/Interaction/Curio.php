@@ -47,7 +47,7 @@ class Curio extends AbstractInteraction {
         return $this->defAction;
     }
 
-    public function getActionIfValid(string $actionName): Action {
+    public function getActionIfValid(string $actionName): ?Action {
         return parent::getActionIfValid($actionName);
     }
 }
