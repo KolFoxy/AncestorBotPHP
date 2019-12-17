@@ -6,7 +6,7 @@
     {
       "name": "Endure",
       "effect": {
-        "description": "The pain is an insignificant price for the clarity of the mind.",
+        "description": "Pain is an insignificant price for the clarity of the mind.",
         "stress_value": -50
       },
       "statusEffects": [

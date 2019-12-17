@@ -23,12 +23,12 @@
         "health_value": -9,
         "healthDeviation": -7,
         "critChance": 9,
-        "hitChance": 100
+        "hitChance": 110
       },
       "statusEffects": [
         {
           "type": "bleed",
-          "chance": 140,
+          "chance": 150,
           "value": -4
         },
         {

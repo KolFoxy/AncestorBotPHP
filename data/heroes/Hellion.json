@@ -4,7 +4,7 @@
   "image": "https://i.imgur.com/MSVtQOS.png",
   "healthMax": 46,
   "stats": {
-    "dodge": 30,
+    "dodge": 25,
     "critChance": 9,
     "blightResist": 90,
     "bleedResist": 90
@@ -108,7 +108,7 @@
         "health_value": -12,
         "healthDeviation": -11,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/19/Bleed_Out.png",
-        "hitChance": 105,
+        "hitChance": 102,
         "critChance": 10
       },
       "statusEffects": [
@@ -123,8 +123,8 @@
           "targetSelf": true,
           "chance": -1,
           "stat": "damageMod",
-          "value": -20,
-          "duration": 2
+          "value": -33,
+          "duration": 5
         }
       ]
     }

@@ -25,15 +25,15 @@
       "name": "Shove in the Seeds",
       "effect": {
         "description": "You feel seeds shoving down your throat.\nInflicts high stress damage and applies blight.",
-        "health_value": -5,
-        "healthDeviation": -4,
+        "health_value": -6,
+        "healthDeviation": -5,
         "stress_value": 15,
         "hitChance": 108
       },
       "statusEffects": [
         {
           "type": "blight",
-          "chance": 150,
+          "chance": 155,
           "value": -4
         }
       ]
@@ -51,7 +51,7 @@
       "name": "Destroy the Elite",
       "effect": {
         "description": "Poke, poke, POKE!\nInflicts hight health damage.",
-        "health_value": -5,
+        "health_value": -8,
         "healthDeviation": -10,
         "critChance": 9,
         "hitChance": 110

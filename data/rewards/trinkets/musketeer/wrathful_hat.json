@@ -18,12 +18,6 @@
     },
 	{
       "chance": -1,
-      "stat": "healSkillMod",
-      "value": -30,
-      "duration": -1
-    },
-	{
-      "chance": -1,
       "stat": "healReceivedMod",
       "value": -30,
       "duration": -1
