@@ -4,7 +4,7 @@
   "image": "https://i.imgur.com/MSVtQOS.png",
   "healthMax": 46,
   "stats": {
-    "dodge": 25,
+    "dodge": 27,
     "critChance": 9,
     "blightResist": 90,
     "bleedResist": 90
