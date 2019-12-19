@@ -3,8 +3,24 @@
 
 ------------
 
+Table of Contents
+-----------------
+
+1. [Disclaimer](#Disclaimer)
+2. [Starting the game](#Starting the game)
+3. [Playing the game](#Playing the game)
+    * [Example](#Example of a started game:)
+    * [Table: Available commands while playing](#Available commands while playing:)
+4. [Timeout](#Timeout)
+5. [Trinkets](#Trinkets)
+6. [Lost in Time](#*Lost in Time*)
+7. [Events](#Events)
+8. [Lighting Changes](#Lighting Changes)
+9. [Credits](#Credits)
+
+
 # Disclaimer
-> This is a fan project, not aimed to bring the author any financial returns. All assets used are taken from the [Official Darkest Dungeon Wiki](https://darkestdungeon.gamepedia.com/Darkest_Dungeon_Wiki "Official Darkest Dungeon Wiki"), content of which is available under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/ "CC BY-NC-SA 3.0"). In no way this Discord Bot Minigame is aimed to replace "Darkest Dungeon" title by "Red Hook Studios" or provide a similar experience.
+> This is a fan project, not aimed to bring the author any financial returns. All assets used are taken from the [Official Darkest Dungeon Wiki](https://darkestdungeon.gamepedia.com/Darkest_Dungeon_Wiki "Official Darkest Dungeon Wiki"), content of which is available under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/ "CC BY-NC-SA 3.0"). In no way this Discord Bot Minigame is aimed to replace Darkest Dungeon title by Red Hook Studios or provide a similar experience.
 
 > While most of mechanics, heroes and hero abilities are taken from the Darkest Dungeon game, a lot of values had to be changed to better suit solo "one-vs-one" style of the game. While some familiarity will occur, don't expect everything to work the same way as it works in the actual game. Again, this isn't meant to be a direct copy of the Red Hook game, nor can I ever even aim for it to be that.
 
@@ -88,3 +104,8 @@ Actions in events are different from your usual hero\`s actions, but are selecte
 
 ## Lighting Changes
 At certain kill intervals, colors of the surroundings will change. This change will affect all monsters' and heroes' stats up until the next interval.   
+
+## Credits
+Darkest Dungeon is a game made by Red Hook Studios.
+
+AncestorBot is a Discord bot made by KolFoxy using [Yasmin](https://github.com/carchive/Yasmin "Yasmin") and other PHP libraries specified in [Composer file](composer.lock "composer.lock").
