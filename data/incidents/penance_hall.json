@@ -1,7 +1,6 @@
 {
   "name": "You find yourself in a Penance Hall cell.",
   "description": "The sharp pain pierces through your whole body. The whips and flails strike methodically your naked body from all directions, while a man in the corner mutters his chants. You can hear bloodletting tools getting ready. You didn’t agree to this! What kind of a monster would lock a person in such a place?!",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
       "name": "Endure",

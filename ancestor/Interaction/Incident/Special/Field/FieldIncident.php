@@ -20,7 +20,6 @@ class FieldIncident extends Incident implements IncidentSingletonInterface {
     protected function __construct() {
         $this->name = 'The sun suddenly blinds you.';
         $this->description = 'You find yourself standing in the middle of an open field. People on the horizon (or rather black dots shifting in the distance and contrasting with the yellowness of the field) are collecting crops. The whole scene feels endless and horizonless.';
-        $this->image = "https://i.imgur.com/f6BcThP.png";
         $this->disableDefAction = true;
 
         $this->actions = [];
@@ -57,7 +56,6 @@ class FieldIncident extends Incident implements IncidentSingletonInterface {
 
         $waitIncident->description = $this->description;
         $waitIncident->name = $this->name;
-        $waitIncident->image = $this->image;
         $waitIncident->disableDefAction = true;
         $runAction2 = new IncidentAction();
         $runAction2->name = "Run";

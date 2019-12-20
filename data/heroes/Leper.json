@@ -152,7 +152,7 @@
       "name": "Solemnity",
       "requiresTarget": true,
       "effect": {
-        "description": "Live to chop another day.",
+        "description": "Live to fight another day.",
         "health_value": 12,
         "stress_value": -7,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3f/Solemnity.png",

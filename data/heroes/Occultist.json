@@ -42,21 +42,21 @@
     {
       "name": "Weakening Curse",
       "effect": {
-        "description": "Weakling! Just lie down and die!",
+        "description": "Weakling!\nDeals minimum damage and decreases enemy`s PROT and damage.",
         "health_value": -1,
         "healthDeviation": -2,
-        "hitChance": 115,
+        "hitChance": 120,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0e/Weakening_Curse.png",
         "critChance": 9
       },
       "statModifiers": [
         {
-          "chance": 140,
+          "chance": 155,
           "stat": "damageMod",
           "value": -20
         },
         {
-          "chance": 140,
+          "chance": 155,
           "stat": "prot",
           "value": -20
         }
@@ -66,10 +66,10 @@
       "name": "Wyrd Reconstruction",
       "requiresTarget": true,
       "effect": {
-        "description": "Flesh is weak, but easy to mold.",
-        "health_value": 22,
+        "description": "Flesh is weak, but easy to mold.\nHeals a random amount of damage and has a low chance of bleed.",
+        "health_value": 30,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3a/Wyrd_Reconstruction.png",
-        "healthDeviation": -22,
+        "healthDeviation": -30,
         "hitChance": -1
       },
       "statusEffects": [

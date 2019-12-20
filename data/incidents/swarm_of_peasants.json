@@ -1,7 +1,6 @@
 {
   "name": "An angry mob forms around you.",
   "description": "Where have these peasants came from? What have you done to provoke such full-hearted aggression? No time to think: the circle of torches and pitchforks slowly closes.",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "disableDefAction": true,
   "actions": [
     "/data/incidents/swarm_of_peasants/throw_trinket.php",

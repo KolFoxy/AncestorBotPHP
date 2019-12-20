@@ -27,7 +27,7 @@
     {
       "name": "Nervous Stab",
       "effect": {
-        "description": "Clumsily stab the enemy.",
+        "description": "Clumsily stabs the enemy.",
         "health_value": -5,
         "healthDeviation": -4,
         "hitChance": 110,
@@ -89,7 +89,7 @@
     {
       "name": "Flashpowder",
       "effect": {
-        "description": "Blinds and reveals your opponent!",
+        "description": "Blinds and reveals your opponent.",
         "hitChance": 115,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/47/Flashpowder.png",
         "removesStealth": true

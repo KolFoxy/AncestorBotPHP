@@ -1,7 +1,6 @@
 {
   "name": "You find yourself in a barn and hear a man yelling",
   "description": "The man appears to be Miller himself and the crowd around him listens with lowered heads. You are about to engage him when you notice that he is in his normal form: his eyes are alive and his skin isn’t dead and grayish. It soon becomes clear that the man is talking tempestuously about a poor harvest.",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
       "name": "Stay and listen",

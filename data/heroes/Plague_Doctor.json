@@ -26,7 +26,7 @@
     {
       "name": "Noxious Blast",
       "effect": {
-        "description": "Sometimes, you fight fire with fire, and blight with blight.",
+        "description": "Sometimes, you fight fire with fire, and blight with blight.\nDeals minimum damage and inflicts blight.",
         "health_value": -1,
         "healthDeviation": -1,
         "hitChance": 115,
@@ -51,7 +51,7 @@
     {
       "name": "Incision",
       "effect": {
-        "description": "Even the monsters bleed, so make them!",
+        "description": "Even the monsters bleed, so make them!\nDeals medium damage and inflicts bleed.",
         "health_value": -7,
         "healthDeviation": -6,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d5/Incision.png",
@@ -83,7 +83,7 @@
       "name": "Emboldening Vapours",
       "requiresTarget": true,
       "effect": {
-        "description": "A simple extract, carries you on, makes you fight, makes you live.",
+        "description": "A simple extract: carries you on, makes you fight, makes you live.",
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/7a/Emboldening_Vapours.png",
         "hitChance": -1,
         "critChance": -1
@@ -101,7 +101,7 @@
     {
       "name": "Disorienting Blast",
       "effect": {
-        "description": "Monsters, ha! Even they have the same flaws as us.",
+        "description": "Stuns an enemy, decreases their resistances.",
         "health_value": 0,
         "healthDeviation": 0,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/49/Disorienting_Blast.png",

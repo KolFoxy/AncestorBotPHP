@@ -1,7 +1,6 @@
 {
   "name": "You are in a crowd. Everyone’s attention is focused on the man on the pedestal.",
   "description": "You don’t know him, but his gaze and arms are directed towards the clouded sky. “The falling star is coming onto us!” he yells. “We must abandon this doomed place or die in the sky’s wrath!” People in the crowd unsurely look at each other, but the man gives them little attention and continues talking about how there will be nothing left, how the crazy man in the castle is at fault– all while regularly repeating his opening grim words.",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
       "name": "Stay and listen",

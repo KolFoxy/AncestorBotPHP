@@ -25,7 +25,7 @@
     {
       "name": "Pick to the Face",
       "effect": {
-        "description": "Put your pick where it belongs.",
+        "description": "Pierces through armor and rock.",
         "health_value": -6,
         "healthDeviation": -6,
         "hitChance": 110,
@@ -95,11 +95,11 @@
     {
       "name": "Thrown Dagger",
       "effect": {
-        "description": "Throw the special blight-aimed dagger.",
+        "description": "Extra damage vs blighted and marked enemies. High crit chance.",
         "health_value": -6,
         "healthDeviation": -7,
         "hitChance": 110,
-        "critChance": 12,
+        "critChance": 20,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a7/Thrown_Dagger.png",
         "typeBonuses": [
           {

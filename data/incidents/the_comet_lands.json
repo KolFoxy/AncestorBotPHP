@@ -1,7 +1,6 @@
 {
   "name": "Sudden light blinds you.",
   "description": "Closing your eyes shut doesn’t help–only gives the light bloodish tint, so you’re forced to use arms. It is also painfully silent and only the sound of your own breath reassures you that you haven’t gone deaf.\nMinutes pass while the light slowly dies down until finally you are comfortable with opening your eyes. You find yourself standing before a giant crater; something in the centre of it emits daunting glow. Colors and light constantly change and paint the landscape in most unnatural ways. Rocks and debris are floating everywhere and you see tealish stones glowing in ground. You notice that the scenery is changing dramatically at the edge of your vision: land is sliding, structures move and crumble, scarecrows are being animated in the distance. Everything rapidly becomes a part of total chaos around.",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     "/data/incidents/the_comet_lands/pick_up_stone.php",
     {
@@ -11,7 +10,6 @@
       },
       "resultIncident": {
         "name": "The ground is shaking.",
-        "image": "https://i.imgur.com/f6BcThP.png",
         "description": "The first few steps go without incident, but soon you begin to notice that glowing stones under your feet are vibrating slightly. The further your go, the more noticeable are the vibrations. Soon it feels like the whole ground is shaking and maintaining balance becomes a challenge.",
         "actions": [
           {
@@ -32,7 +30,6 @@
             "resultIncident": {
               "name": "No hope.",
               "description": "You lie helplessly, unable to move.",
-              "image": "https://i.imgur.com/f6BcThP.png",
               "disableDefAction": true,
               "actions": [
                 "/data/incidents/the_comet_lands/cry_for_help.php"

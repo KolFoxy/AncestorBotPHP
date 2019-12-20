@@ -59,7 +59,7 @@
     {
       "name": "If It Bleeds",
       "effect": {
-        "description": "Yep, it bleeds.",
+        "description": "Then it can be killed. A precise strike that inflicts medium damage and applies bleed.",
         "health_value": -7,
         "healthDeviation": -5,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a9/If_It_Bleeds.png",
@@ -104,7 +104,7 @@
     {
       "name": "Bleed Out",
       "effect": {
-        "description": "Show the true barbaric might.",
+        "description": "The vital strike that deals high to very high damage and applies bleed. The Hellion will be exhausted after dealing it.",
         "health_value": -12,
         "healthDeviation": -11,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/19/Bleed_Out.png",

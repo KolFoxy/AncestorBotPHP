@@ -59,7 +59,7 @@
     {
       "name": "Dazzling Light",
       "effect": {
-        "description": "Stuns the opponent with a a ray of holy power!",
+        "description": "Stuns the opponent with a a ray of holy power.",
         "health_value": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e4/Dazzling_Light.png",
         "healthDeviation": -2,
@@ -78,7 +78,7 @@
       "name": "Divine Grace",
       "requiresTarget": true,
       "effect": {
-        "description": "Calls upon the higher forces to mend your wounds.",
+        "description": "Calls upon the higher forces to mend Vestal's wounds.",
         "health_value": 8,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a1/Divine_Grace.png",
         "healthDeviation": 1,
@@ -119,13 +119,15 @@
           "chance": -1,
           "targetSelf": true,
           "stat": "accMod",
-          "value": 10
+          "value": 12,
+          "duration": 4
         },
         {
           "chance": -1,
           "targetSelf": true,
           "stat": "damageMod",
-          "value": 35
+          "value": 35,
+          "duration": 4
         }
       ]
     }

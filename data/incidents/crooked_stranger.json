@@ -1,7 +1,6 @@
 {
   "name": "You see a crooked stranger.",
   "description": "A tall, thin figure appeared on the side of the road. It’s hidden beneath a coat of gray rags and old dusty bandages. It just stands there, menacingly, holding it's twig-like hands in front of itself, fingers crossed between each other. Beside it an old backpack resides, to the brim filled with bottles and bolts of cloth with a red cross stitched on the front side.",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
       "name": "Approach",
@@ -28,7 +27,6 @@
       "resultIncident": {
         "name": "Crooked stranger waits for your response.",
         "description": "",
-        "image": "https://i.imgur.com/f6BcThP.png",
         "actions": [
           {
             "name": "Offer a trinket",
@@ -38,7 +36,6 @@
             "resultIncident": {
               "name": "Crooked stranger will gladly accept your trinket.",
               "description": "",
-              "image": "https://i.imgur.com/f6BcThP.png",
               "actions": [
                 "/data/incidents/crooked_stranger/offer_first_trinket_action.php",
                 "/data/incidents/crooked_stranger/offer_second_trinket_action.php",

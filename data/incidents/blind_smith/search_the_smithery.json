@@ -1,7 +1,6 @@
 {
   "name": "Smithery.",
   "description": "You look at the surroundings. Pieces of wooden roof are flying above the place, ignoring the concept of gravity. Underneath them there is not much left but the building foundation, anvil, an empty wooden crate and a blacksmith hammer are lying on the floor behind the man.",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
       "name": "Offer the hammer to the man",

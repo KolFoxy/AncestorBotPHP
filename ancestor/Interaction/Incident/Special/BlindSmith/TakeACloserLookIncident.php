@@ -21,7 +21,6 @@ class TakeACloserLookIncident extends Incident implements IncidentSingletonInter
         $this->name = 'The hammer looks unremarkable.';
         $this->description = 'As you are about to leave in disappointment, you suddenly see a flash of memory. You can\'t describe what you just saw in words, but the motive was clear. You look at the hammer again and now you know just what kind of a tool had been made with it.';
         $this->actions = [new UseTheHammerAction()];
-        $this->image = 'https://i.imgur.com/f6BcThP.png';
 
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;

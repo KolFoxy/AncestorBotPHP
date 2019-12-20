@@ -52,13 +52,13 @@
       },
       "statModifiers": [
         {
-          "chance": 140,
+          "chance": 155,
           "stat": "accMod",
-          "value": -23,
+          "value": -25,
           "duration": 4
         },
         {
-          "chance": 140,
+          "chance": 155,
           "stat": "critChance",
           "value": -30,
           "duration": 4
@@ -75,7 +75,7 @@
       },
       "statModifiers": [
         {
-          "chance": 140,
+          "chance": 145,
           "stat": "dodge",
           "value": -30,
           "duration": 2
@@ -92,7 +92,7 @@
       "name": "Patch Up",
       "requiresTarget": true,
       "effect": {
-        "description": "Bandage there, and there, and now we can move on.\nHeals the target and increases their incoming healing.",
+        "description": "Bandage there, and there, and now we can move on.\nHeals and increases incoming healing.",
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/8c/Battlefield_Bandage.png",
         "hitChance": -1,
         "health_value": 4,

@@ -1,7 +1,6 @@
 {
   "name": "You see a man standing in the centre of ruins.",
   "description": "It appears to be ruins of an old blacksmithery, though only the anvil survived the test of comet and time. Man is standing still behind the anvil, it doesn't seem like he has noticed you. His hands are empty and his unblinking eyes are staring into the nothingness and emit faint teal glow. His skin is just as grey and lifeless as everything you've seen here before.",
-  "image": "https://i.imgur.com/f6BcThP.png",
   "actions": [
     {
       "name": "Approach the man",

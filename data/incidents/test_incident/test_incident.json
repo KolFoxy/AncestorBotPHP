@@ -1,13 +1,11 @@
 {
   "name": "You encounter a wild Muscle Wizard",
   "description": "You tremble as you observe a bald man descending from the skies and standing before you menacingly.",
-  "image": "https://i.imgur.com/lA72RZ9.png",
   "actions": [
     {
       "name": "Ask him to cast a spell",
       "effect": {
         "description": "This was a mistake.",
-        "image": "https://i.imgur.com/f6BcThP.png",
         "health_value": -9999,
         "healthDeviation": 998
       }
@@ -15,80 +13,70 @@
     {
       "name": "Ask him to open a portal to blind smith",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/blind_smith.json"
     },
     {
       "name": "Ask him to summon a dog",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/dog.json"
     },
     {
       "name": "tp to field",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/field.php"
     },
     {
       "name": "tp to phall",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/penance_hall.json"
     },
     {
       "name": "miller swiller",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/miller.json"
     },
     {
       "name": "mirror idk",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/mirror.json"
     },
     {
       "name": "summon angery mob",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/swarm_of_peasants.json"
     },
     {
       "name": "crook",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/crooked_stranger.json"
     },
     {
       "name": "comet boom",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/the_comet_lands.json"
     },
     {
       "name": "cometIsComing",
       "effect": {
-        "description": "Wooosh *opening portal sounds*",
-        "image": "https://i.imgur.com/f6BcThP.png"
+        "description": "Wooosh *opening portal sounds*"
       },
       "resultIncident": "/data/incidents/the_comet_is_coming.json"
     },
@@ -103,14 +91,12 @@
       ],
       "resultIncident": {
         "name": "The muscle wizard is getting ready to cast fist.",
-        "image": "https://i.imgur.com/5psJY0h.png",
         "description": "You can feel his power level is quite a bit over nine thousands.",
         "actions": [
           {
             "name": "stay and witness",
             "effect": {
               "description": "You bath in the glory of the fist.",
-              "image": "https://i.imgur.com/f6BcThP.png",
               "health_value": -9999,
               "healthDeviation": 998
             }

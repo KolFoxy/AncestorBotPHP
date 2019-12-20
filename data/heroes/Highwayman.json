@@ -22,7 +22,7 @@
     {
       "name": "Wicked Slice",
       "effect": {
-        "description": "Strike the enemy with wicked precision.",
+        "description": "Strike the enemy with a wicked precision.",
         "health_value": -10,
         "healthDeviation": -8,
         "hitChance": 105,
@@ -33,7 +33,7 @@
     {
       "name": "Pistol Shot",
       "effect": {
-        "description": "Inflicts medium-to-high damage with high CRIT chance. Bonus DMG vs Marked.",
+        "description": "Inflicts medium-to-high damage with a high CRIT chance. Bonus DMG vs Marked.",
         "health_value": -8,
         "healthDeviation": -6,
         "hitChance": 105,
@@ -50,7 +50,7 @@
     {
       "name": "Grapeshot Blast",
       "effect": {
-        "description": "In a case when enemy is a little more cunning.",
+        "description": "Reveals enemies and makes them more vulnerable.",
         "health_value": -5,
         "healthDeviation": -3,
         "hitChance": 95,
@@ -60,7 +60,7 @@
       },
       "statModifiers": [
         {
-          "chance": 140,
+          "chance": 155,
           "stat": "critReceivedChance",
           "value": 16
         }
@@ -69,7 +69,7 @@
     {
       "name": "Tracking Shot",
       "effect": {
-        "description": "Sharpen your senses by... sniffing gunpowder?",
+        "description": "Sharpen the senses. Deals minimum damage and increases Highwayman`s offensive stats.",
         "health_value": -2,
         "healthDeviation": -1,
         "hitChance": 115,
@@ -120,7 +120,7 @@
     {
       "name": "Open Vein",
       "effect": {
-        "description": "Make 'em bleed.",
+        "description": "A brutal slice that makes a target bleed. Deals medium damage.",
         "health_value": -8,
         "healthDeviation": -6,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Open_Vein.png",

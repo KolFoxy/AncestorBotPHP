@@ -135,7 +135,9 @@ class IncidentAction extends AbstractAction {
         }
         $resultIncident = $this->getResultIncident();
         if ($resultIncident !== null) {
-            $res->setImage($resultIncident->image);
+            if ($resultIncident->image !== null) {
+                $res->setImage($resultIncident->image);
+            }
             if ($resultIncident->description !== "") {
                 $description .= PHP_EOL . '*``' . $resultIncident->description . '``*';
             }

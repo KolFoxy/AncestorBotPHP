@@ -74,7 +74,7 @@
     {
       "name": "Solo",
       "effect": {
-        "description": "Show off your lute skills.",
+        "description": "Show off in front of an enemy.",
         "hitChance": 145,
         "critChance": -1,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/10/Solo.png"
@@ -107,7 +107,7 @@
     {
       "name": "Slice Off",
       "effect": {
-        "description": "An exsanguinating joke.",
+        "description": "An exsanguinating joke. Deals low-to-medium damage and applies bleed.",
         "health_value": -5,
         "healthDeviation": -4,
         "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/09/Slice_Off.png",

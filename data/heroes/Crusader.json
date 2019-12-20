@@ -51,7 +51,7 @@
       "name": "Inspiring Cry",
       "requiresTarget": true,
       "effect": {
-        "description": "Inspires the target and eases some of their stress.",
+        "description": "Inspires and eases some of the stress.",
         "health_value": 2,
         "stress_value": -8,
         "image": "https://i.imgur.com/P1cprP7.png",
