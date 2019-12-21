@@ -1,0 +1,14 @@
+{
+  "name": "Critical Dice",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/83/Inv_trinket-critical_dice.png",
+  "rarity": 2,
+  "classRestriction": "Jester",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 7,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Smoking Skull",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b0/Ant_smoking_skull.png",
+  "rarity": 6,
+  "classRestriction": "antiquarian",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 35,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "accMod",
+      "value": -20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightResist",
+      "value": -15,
+      "duration": -1
+    }
+  ]
+}

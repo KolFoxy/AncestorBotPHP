@@ -1,0 +1,35 @@
+{
+  "name": "Gleaming",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "bleedSkillChance",
+      "value": 15,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 15,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "monsterStatModifiers": [
+    {
+      "chance": -1,
+      "stat": "bleedSkillChance",
+      "value": 15,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 5,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ]
+}

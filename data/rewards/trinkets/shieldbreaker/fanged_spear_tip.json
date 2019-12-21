@@ -1,0 +1,20 @@
+{
+  "name": "Fanged Spear Tip",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/65/Inv_trinket-sb_4.png",
+  "rarity": 3,
+  "classRestriction": "Shieldbreaker",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": -10,
+      "duration": -1
+    }
+  ],
+  "typeBonuses": [
+	{
+	  "type": "marked",
+	  "damageMod": 35
+	}
+  ]
+}

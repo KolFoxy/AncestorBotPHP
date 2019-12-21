@@ -1,0 +1,20 @@
+{
+  "name": "Paralyzer's Crest",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6f/Inv_trinket-paralyzers_crest.png",
+  "rarity": 2,
+  "classRestriction": "crusader",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 20,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": -2,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Bright Tambourine",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/1c/Inv_trinket-bright_tambourine.png",
+  "rarity": 3,
+  "classRestriction": "Jester",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressSkillMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -25,
+      "duration": -1
+    }
+  ]
+}

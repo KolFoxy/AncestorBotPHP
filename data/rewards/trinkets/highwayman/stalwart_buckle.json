@@ -1,0 +1,26 @@
+{
+  "name": "Stalwart Buckle",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/43/Inv_trinket-cursed_buckle.png",
+  "rarity": 1,
+  "classRestriction": "Highwayman",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 5,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 5,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": -3,
+      "duration": -1
+    }
+  ]
+}

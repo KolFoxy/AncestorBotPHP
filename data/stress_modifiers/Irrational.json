@@ -1,0 +1,28 @@
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": -5,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": -10,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": -5,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Irrational",
+  "quote": "Reeling, gasping, taken over the edge into madness!"
+}
+

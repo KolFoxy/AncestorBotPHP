@@ -1,0 +1,13 @@
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": -15,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Masochistic",
+  "quote": "Those who covet injury find it in no short supply."
+}

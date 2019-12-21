@@ -4,6 +4,7 @@ namespace Ancestor\CommandHandler;
 
 use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
 use CharlotteDunois\Yasmin\Models\Message as Message;
+use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class CommandHelper {
 
@@ -33,7 +34,7 @@ class CommandHelper {
         if (isset($embedTitle)) {
             $embedResponse->setTitle($embedTitle);
         }
-        $this->message->channel->send('', array('embed' => $embedResponse));
+        $this->message->channel->send('', ['embed' => $embedResponse]);
     }
 
     public function RespondWithAttachedFile($fileData, string $fileName, $embed = null, $content = '') {
@@ -87,7 +88,7 @@ class CommandHelper {
      * @return bool
      */
     public static function StringContainsURLs(string $str) {
-        foreach (explode(' ', str_replace(array("\r", "\n"), ' ', $str)) as $item) {
+        foreach (explode(' ', str_replace(["\r", "\n"], ' ', $str)) as $item) {
             if (filter_var($item, FILTER_VALIDATE_URL)) {
                 return true;
             }
@@ -123,6 +124,38 @@ class CommandHelper {
             return $result;
         }
         return [''];
+    }
+
+    /**
+     * @param MessageEmbed $mergeInto
+     * @param MessageEmbed|array $mergeFrom
+     */
+    public static function mergeEmbed(MessageEmbed $mergeInto, $mergeFrom) {
+        if (is_a($mergeFrom, MessageEmbed::class)) {
+            if ($mergeFrom->title != null && $mergeFrom->description != null) {
+                $mergeInto->addField($mergeFrom->title, $mergeFrom->description);
+            }
+            $fields = $mergeFrom->fields;
+        } else {
+            $fields = $mergeFrom;
+        }
+        foreach ($fields as $field) {
+            $mergeInto->addField($field['name'], $field['value'], $field['inline']);
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @param bool $inline
+     * @return array ['name' => string, 'value' => string, 'inline' => bool]
+     */
+    public static function getEmbedField(string $name, string $value, bool $inline = false) {
+        return [
+            'name' => $name,
+            'value' => $value,
+            'inline' => $inline,
+        ];
     }
 
 

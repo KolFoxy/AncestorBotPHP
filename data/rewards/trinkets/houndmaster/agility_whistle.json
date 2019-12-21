@@ -1,0 +1,20 @@
+{
+  "name": "Agility Whistle",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d9/Inv_trinket-agility_whistle.png",
+  "rarity": 1,
+  "classRestriction": "Houndmaster",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 4,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "debuffResist",
+      "value": -20,
+      "duration": -1
+    }
+  ]
+}

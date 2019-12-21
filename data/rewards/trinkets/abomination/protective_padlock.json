@@ -1,0 +1,14 @@
+{
+  "name": "Protective Padlock",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Protectivepadlock.png",
+  "rarity": 2,
+  "classRestriction": "abomination",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 15,
+      "duration": -1
+    }
+  ]
+}

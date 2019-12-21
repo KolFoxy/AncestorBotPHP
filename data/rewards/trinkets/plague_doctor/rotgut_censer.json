@@ -1,0 +1,14 @@
+{
+  "name": "Rotgut Censer",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/84/Inv_trinket-rotgut_censer.png",
+  "rarity": 1,
+  "classRestriction": "Plague Doctor",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 8,
+      "duration": -1
+    }
+  ]
+}

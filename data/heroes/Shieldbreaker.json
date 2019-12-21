@@ -1,0 +1,93 @@
+{
+  "name": "Shieldbreaker",
+  "description": "Shifting, swaying - she mesmerizes her prey before the final strike.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/a/a6/Shieldbreaker_portrait_roster.png/75px-Shieldbreaker_portrait_roster.png",
+  "healthMax": 30,
+  "types": [
+    "human"
+  ],
+  "stats": {
+    "dodge": 25,
+    "critChance": 10,
+    "stunResist": 100,
+    "blightResist": 70,
+    "bleedResist": 70
+  },
+  "actionRatings": {
+    "pierce": 30,
+    "adder": 30,
+    "expose": 20,
+    "serpent": 15
+  },
+  "embedColor": 11318314,
+  "actions": [
+    {
+      "name": "Pierce",
+      "effect": {
+        "description": "There is no defense against a righteous blow!\nMedium damage, ignores armor.",
+        "health_value": -8,
+        "healthDeviation": -8,
+        "hitChance": 110,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/dc/Shieldbreaker.ability.one.png",
+        "critChance": 9,
+        "ignoresArmor": true
+      }
+    },
+    {
+      "name": "Adder's Kiss",
+      "effect": {
+        "description": "Medium-to-high damage with a chance of inflicting blight.",
+        "health_value": -9,
+        "healthDeviation": -9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ea/Shieldbreaker.ability.three.png",
+        "hitChance": 110,
+        "critChance": 9
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 140,
+          "value": -5
+        }
+      ]
+    },
+    {
+      "name": "Expose",
+      "effect": {
+        "description": "There are no shadows that you can hide in, monsters!",
+        "removesStealth": true,
+        "health_value": -5,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e9/Shieldbreaker.ability.five.png",
+        "healthDeviation": -5,
+        "hitChance": 110,
+        "critChance": 6.5
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "critReceivedChance",
+          "value": 10
+        }
+      ]
+    },
+    {
+      "name": "Serpent Sway",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Aegis blocks incoming damage.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2a/Shieldbreaker.ability.seven.png",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statusEffects": [
+        {
+          "targetSelf": true,
+          "type": "block",
+          "value": 2,
+          "chance": -1,
+          "duration": -1
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "name": "Snake Oil",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d1/Inv_trinket-snake_oil.png",
+  "rarity": 1,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -10,
+      "duration": -1
+    }
+  ]
+}

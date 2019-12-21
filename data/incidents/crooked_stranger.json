@@ -1,0 +1,89 @@
+{
+  "name": "You see a crooked stranger.",
+  "description": "A tall, thin figure appeared on the side of the road. It’s hidden beneath a coat of gray rags and old dusty bandages. It just stands there, menacingly, holding it's twig-like hands in front of itself, fingers crossed between each other. Beside it an old backpack resides, to the brim filled with bottles and bolts of cloth with a red cross stitched on the front side.",
+  "actions": [
+    {
+      "name": "Approach",
+      "exclusiveClasses": [
+        "antiquarian",
+        "bounty hunter",
+        "crusader",
+        "grave robber",
+        "hellion",
+        "highwayman",
+        "houndmaster",
+        "jester",
+        "man-at-arms",
+        "musketeer",
+        "occultist",
+        "plague doctor",
+        "shieldbreaker",
+        "vestal",
+        "arbalest"
+      ],
+      "effect": {
+        "description": "The figure towers above you, slowly spreading its arms in a welcoming manner. \"Questions, I do not ask and so shouldn't you. Possessions, in exchange for my services.\""
+      },
+      "resultIncident": {
+        "name": "Crooked stranger waits for your response.",
+        "description": "",
+        "actions": [
+          {
+            "name": "Offer a trinket",
+            "effect": {
+              "description": "Which one?"
+            },
+            "resultIncident": {
+              "name": "Crooked stranger will gladly accept your trinket.",
+              "description": "",
+              "actions": [
+                "/data/incidents/crooked_stranger/offer_first_trinket_action.php",
+                "/data/incidents/crooked_stranger/offer_second_trinket_action.php",
+                {
+                  "name": "Makeshift one",
+                  "effect": {
+                    "description": "The weird figure does not figure out about your trickery. It takes the fake trinket, and starts to work on your health condition. Clean bandages, herbal extracts and a doctor's touch is enough to extend your life, at least for now. Waving its hand, the figure leaves you alone.",
+                    "health_value": 15,
+                    "healthDeviation": 20
+                  },
+                  "exclusiveClasses": [
+                    "antiquarian"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "name": "Offer your own services instead",
+            "effect": {
+              "description": "Being a kind soul yourself, you reach out with you hand and put your palm on the stranger's chest. Channeling the divine gift, you use holy powers to heal this unknown doctor, mending their wounds, if there were any of them in the first place. This act leaves the stranger completely speechless. The figure blankly stares at you, then on it's own two twig-hands for the rest of your meeting. Was another soul just successfully rescued from the cold grips of darkness?",
+              "stress_value": -10,
+              "stressDeviation": -10
+            },
+            "exclusiveClasses": [
+              "vestal"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Meet with the stranger",
+      "effect": {
+        "description": "The figure crosses its hands, staring at you with pale glowing eyes. The stranger shakes head, gesturing you not to come any closer. “Leave. Broken you are. Beyond any repair. Nothing I can help with”, it said in a low tone, taking a small bottle from a backpack and giving it to you. A tag on its cork indicates that it's a simple painkiller."
+      },
+      "statModifiers": [
+        {
+          "stat": "damageTakenMod",
+          "value": -10,
+          "duration": 15,
+          "chance": -1
+        }
+      ],
+      "exclusiveClasses": [
+        "Leper",
+        "abomination"
+      ]
+    }
+  ]
+}

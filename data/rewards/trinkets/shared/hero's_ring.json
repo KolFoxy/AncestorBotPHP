@@ -1,0 +1,13 @@
+{
+  "name": "Hero's Ring",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/61/Inv_trinket-heros_ring.png",
+  "rarity": 4,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": 25,
+      "duration": -1
+    }
+  ]
+}

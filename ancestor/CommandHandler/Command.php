@@ -9,9 +9,6 @@ abstract class Command {
     /** @var CommandHandler */
     protected $handler;
 
-    /** @var string */
-    public $path;
-
     /** @var array */
     public $aliases;
 
@@ -29,7 +26,7 @@ abstract class Command {
         $this->handler = $handler;
         $this->name = $name;
         $this->description = $description;
-        if(!empty($aliases)){
+        if (!empty($aliases)) {
             $this->aliases = $aliases;
         }
     }
@@ -38,7 +35,7 @@ abstract class Command {
      * Returns the command name
      * @return string
      * */
-    function getName() : string {
+    function getName(): string {
         return $this->name;
     }
 
@@ -46,7 +43,7 @@ abstract class Command {
      * Returns the command description
      * @return string
      * */
-    function getDescription() : string {
+    function getDescription(): string {
         return $this->description;
     }
 
@@ -57,4 +54,12 @@ abstract class Command {
      * @param array $args
      */
     abstract function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args);
+
+    /**
+     * Returns prefixed command name.
+     * @return string
+     */
+    public function getPrefixedName(): string {
+        return $this->handler->prefix . $this->name;
+    }
 }

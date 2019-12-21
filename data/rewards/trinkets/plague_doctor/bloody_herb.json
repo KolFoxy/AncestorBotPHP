@@ -1,0 +1,26 @@
+{
+  "name": "Bloody Herb",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d3/Inv_trinket-bloody_herb.png",
+  "rarity": 3,
+  "classRestriction": "Plague Doctor",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "bleedSkillChance",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 20,
+      "duration": -1
+    }
+  ]
+}

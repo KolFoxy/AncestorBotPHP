@@ -1,0 +1,20 @@
+{
+  "name": "Shimmering Scale",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e2/Inv_trinket-sb_2.png",
+  "rarity": 2,
+  "classRestriction": "Shieldbreaker",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 5,
+      "duration": -1
+    }
+  ]
+}

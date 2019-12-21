@@ -1,0 +1,48 @@
+{
+  "name": "Foreman",
+  "description": "Make them work! Whip em hard!",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/8a/Foreman_Defend.png",
+  "healthMax": 47,
+  "types": [
+    "husk",
+    "human"
+  ],
+  "stats": {
+    "stunResist": 60,
+    "bleedResist": 60,
+    "blightResist": 90,
+    "debuffResist": 60,
+    "dodge": 20,
+    "prot": 15
+  },
+  "actions": [
+    {
+      "name": "No Trespassers",
+      "effect": {
+        "description": "Whip em hard!\nInflicts high health damage, marks target and applies nasty bleed.",
+        "health_value": -9,
+        "healthDeviation": -7,
+        "critChance": 9,
+        "hitChance": 110
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 150,
+          "value": -4
+        },
+        {
+          "type": "marked",
+          "chance": -1
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 125,
+          "stat": "stressMod",
+          "value": 20
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,5 @@
 <?php
 require(__DIR__ . '/vendor/autoload.php');
-
 $config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
 $loop = \React\EventLoop\Factory::create();
 

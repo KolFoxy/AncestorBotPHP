@@ -1,0 +1,80 @@
+{
+  "name": "You find yourself in a barn and hear a man yelling",
+  "description": "The man appears to be Miller himself and the crowd around him listens with lowered heads. You are about to engage him when you notice that he is in his normal form: his eyes are alive and his skin isn’t dead and grayish. It soon becomes clear that the man is talking tempestuously about a poor harvest.",
+  "actions": [
+    {
+      "name": "Stay and listen",
+      "effect": {
+        "description": "You can’t possibly care about Miller’s crops and Ancestor’s old machinations, but the man’s words pierce into your skull with frustration, desperation and anger. By the end of it, you feel as Miller’s hopelessness is now forever a part of you.",
+        "stress_value": 30,
+        "stressDeviation": 15
+      }
+    },
+    {
+      "name": "Wait and attack",
+      "effect": {
+        "description": "You know this man will become a monster. Why not try to prevent the inevitable?\nYou wait for the right moment and strike the unsuspecting man–only to be returned back into the endless dead fields of Farmstead as soon as your weapon touches the Miller. You can’t pretend you haven’t expecting something like that from this place, but at least you are no longer stuck in that barn.",
+        "stress_value": -4,
+        "stressDeviation": -3
+      }
+    },
+    {
+      "exclusiveClasses": [
+        "antiquarian"
+      ],
+      "name": "Hide and rob the place",
+      "effect": {
+        "description": "Let the poor man grieve and yell, you know that the future holds for him omens that are much worse than a failed harvest. Meanwhile, it would be a shame to leave useful herbs here lying around."
+      },
+      "statModifiers": [
+        {
+          "stat": "stunResist",
+          "duration": 20,
+          "chance": -1,
+          "value": 20
+        },
+        {
+          "stat": "bleedResist",
+          "duration": 20,
+          "chance": -1,
+          "value": 20
+        },
+        {
+          "stat": "blightResist",
+          "duration": 20,
+          "chance": -1,
+          "value": 20
+        },
+        {
+          "stat": "debuffResist",
+          "duration": 20,
+          "chance": -1,
+          "value": 20
+        },
+        {
+          "stat": "deathblowResist",
+          "duration": 20,
+          "chance": -1,
+          "value": 10
+        }
+      ]
+    },
+    {
+      "exclusiveClasses": [
+        "vestal"
+      ],
+      "name": "Offer to bless the crops",
+      "effect": {
+        "description": "He is shocked to see someone like you here, but straightway accepts your offer and hurries you out in the field.\nEven though your mind understands the utter meaningless of such action, you still feel like you did the right thing praying for him and for his field."
+      },
+      "statModifiers": [
+        {
+          "stat": "stressMod",
+          "duration": 20,
+          "chance": -1,
+          "value": -20
+        }
+      ]
+    }
+  ]
+}

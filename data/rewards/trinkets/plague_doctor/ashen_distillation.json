@@ -1,0 +1,26 @@
+{
+  "name": "Ashen Distillation",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/dc/Pd_ashen_distillation.png",
+  "rarity": 6,
+  "classRestriction": "Plague Doctor",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 25,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healReceivedMod",
+      "value": 20,
+      "duration": -1
+    }
+  ]
+}

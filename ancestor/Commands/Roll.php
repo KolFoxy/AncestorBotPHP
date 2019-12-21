@@ -1,8 +1,5 @@
 <?php
-/**
- * Roll random integer.
- * !roll or !roll [MIN] [MAX] or !roll [MAX]  — rolls a random integer (default !roll is from 1 to 6)
- */
+
 
 namespace Ancestor\Commands;
 
@@ -24,7 +21,11 @@ class Roll extends Command {
         if ($argsLen === 1 && ctype_digit($args[0])) {
             $result = mt_rand(1, intval($args[0]));
         } elseif ($argsLen >= 2 && ctype_digit($args[0] . $args[1])) {
-            $result = mt_rand(intval($args[0]), intval($args[1]));
+            $first = intval($args[0]);
+            $second = intval($args[1]);
+            if ($second >= $first) {
+                $result = mt_rand(intval($args[0]), intval($args[1]));
+            }
         } else {
             $result = mt_rand(1, 6);
         }
@@ -33,6 +34,6 @@ class Roll extends Command {
             return;
         }
         $embedResponse->addField($this->title, '🎲**' . $result . '**');
-        $message->channel->send('', array('embed' => $embedResponse));
+        $message->channel->send('', ['embed' => $embedResponse]);
     }
 }

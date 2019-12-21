@@ -1,0 +1,12 @@
+{
+  "name": "Sickening Satchel",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/36/Inv_trinket-stunning_satchel.png",
+  "rarity": 1,
+  "classRestriction": "Grave Robber",
+  "typeBonuses": [
+	{
+	  "type": "blight",
+	  "damageMod": 20
+	}
+  ]
+}

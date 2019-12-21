@@ -1,0 +1,112 @@
+{
+  "name": "Bounty Hunter",
+  "description": "The thrill of the hunt... The promise of payment...",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/d/d4/Bounty_hunter_portrait_roster.png/75px-Bounty_hunter_portrait_roster.png",
+  "healthMax": 45,
+  "stats": {
+    "dodge": 25,
+    "critChance": 8,
+    "stunResist": 90,
+    "bleedResist": 80,
+    "blightResist": 80,
+    "debuffResist": 80,
+    "healReceivedMod": 50
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "collect": 30,
+    "mark": 20,
+    "upper": 20,
+    "calt": 20
+  },
+  "embedColor": 13411721,
+  "actions": [
+    {
+      "name": "Collect Bounty",
+      "effect": {
+        "description": "The reward better be worth it.",
+        "health_value": -8,
+        "healthDeviation": -8,
+        "hitChance": 105,
+        "critChance": 11,
+        "typeBonuses": [
+          {
+            "type": "human",
+            "damageMod": 35
+          },
+          {
+            "type": "marked",
+            "damageMod": 90
+          }
+        ],
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/95/Collect_Bounty.png"
+      }
+    },
+    {
+      "name": "Mark for Death",
+      "effect": {
+        "description": "Marks the target and decreases their PROT.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ea/Mark_for_Death.png",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statusEffects": [
+        {
+          "type": "marked",
+          "chance": -1
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "prot",
+          "value": -20
+        }
+      ]
+    },
+    {
+      "name": "Uppercut",
+      "effect": {
+        "description": "Up close and personal.",
+        "health_value": -3,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/27/Uppercut.png",
+        "healthDeviation": -2,
+        "hitChance": 110,
+        "critChance": 4
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Caltrops",
+      "effect": {
+        "description": "Applies bleed, increases target's damage taken mod.",
+        "hitChance": 110,
+        "health_value": -1,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/31/Caltrops.png"
+      },
+      "statusEffects": [
+        {
+          "chance": 140,
+          "type": "bleed",
+          "value": -4
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "damageTakenMod",
+          "value": 20
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Super Cultist Witch",
+    "description": "Human servant of the eldritch powers, assaults opponents' minds with evil incantations.",
+    "image": "https://i.imgur.com/0agOsfn.png",
+    "healthMax": 50,
+    "startingStatusEffects": [
+      {
+        "type": "stealth",
+        "duration": 2,
+        "chance": -1
+      }
+    ],
+    "stats": {
+      "dodge": 33
+    },
+    "actions": [
+      {
+        "name": "Stressful Incantation",
+        "effect": {
+          "description": "Inflicts high stress damage to the opponent.",
+          "stress_value": 5,
+          "health_value": -1,
+          "healthDeviation": -2
+        },
+        "statusEffects": [
+          {
+            "type": "bleed",
+            "value": -1,
+            "chance": 90
+          }
+        ],
+        "statModifiers": [
+          {
+            "stat": "dodge",
+            "value": -55,
+            "chance": 10
+          },
+          {
+            "stat": "accMod",
+            "value": -10,
+            "chance": 100
+          }
+        ]
+      },
+      {
+        "name": "Eldritch Push",
+        "effect": {
+          "description": "Pushes the enemy and inflicts small stress damage.",
+          "stress_value": 5,
+          "health_value": -1,
+          "healthDeviation": -2,
+          "critChance": 20
+        },
+        "statusEffects": [
+          {
+            "type": "blight",
+            "value": -2,
+            "duration": 1
+          }
+        ]
+      }
+    ]
+  }
+]

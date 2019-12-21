@@ -3,33 +3,31 @@
 namespace Ancestor\RandomData;
 
 class RandomDataProvider {
-    private $afflictions;
-    private $virtues;
     private $NSFWquotes;
     private $gold;
     private $trinkets;
     private $rewardsQuotes;
     private $quirksPositive;
     private $quirksNegative;
+    private $heroDiesQuotes;
+    private $monsterDiesQuotes;
 
     private static $instance = null;
-
-    const virtueChance = 25;
     const rewardTrinketChance = 30;
 
     private function __construct() {
         $this->PopulateArray($this->rewardsQuotes, '/data/rewards/rewardsQuotes');
-        $this->PopulateArray($this->gold, '/data/rewards/gold');
-        $this->PopulateArray($this->trinkets, '/data/rewards/trinkets');
-        $this->PopulateArray($this->virtues, '/data/virtues.json', true);
+        $this->PopulateArray($this->gold, '/data/gold');
+        $this->PopulateArray($this->trinkets, '/data/trinkets');
         $this->PopulateArray($this->NSFWquotes, '/data/NSFWquotes');
-        $this->PopulateArray($this->afflictions, '/data/afflictions.json', true);
         $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
         $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
+        $this->PopulateArray($this->heroDiesQuotes, '/data/heroDiesQuotes');
+        $this->PopulateArray($this->monsterDiesQuotes, '/data/monsterDiesQuotes');
     }
 
     /**
-     * @return RandomDataProvider|null
+     * @return RandomDataProvider
      */
     public static function GetInstance() {
         if (!isset(self::$instance)) {
@@ -42,30 +40,24 @@ class RandomDataProvider {
         return $array[mt_rand(0, sizeof($array) - 1)];
     }
 
-    private function GetRandomAffliction() {
-        $affliction = $this->GetRandomData($this->afflictions['afflictions']);
-        if (mt_rand(1, 100) <= 50) {
-            $affliction['quote'] = $this->GetRandomData($this->afflictions['quotes']);
-        }
-        return $affliction;
+
+    public function GetRandomHeroDeathQuote(): string {
+        return $this->GetRandomData($this->heroDiesQuotes);
     }
 
-    public function GetRandomResolve() {
-        if (mt_rand(1, 100) <= self::virtueChance) {
-            return $this->GetRandomData($this->virtues['virtues']);
-        }
-        return $this->GetRandomAffliction();
+    public function GetRandomMonsterDeathQuote(): string {
+        return $this->GetRandomData($this->monsterDiesQuotes);
     }
 
     public function GetRandomNSFWQuote() {
         return $this->GetRandomData($this->NSFWquotes);
     }
 
-    public function GetRandomPositiveQuirk(){
+    public function GetRandomPositiveQuirk() {
         return $this->GetRandomData($this->quirksPositive);
     }
 
-    public function GetRandomNegativeQuirk(){
+    public function GetRandomNegativeQuirk() {
         return $this->GetRandomData($this->quirksNegative);
     }
 

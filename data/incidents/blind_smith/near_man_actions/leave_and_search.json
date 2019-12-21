@@ -1,0 +1,7 @@
+{
+  "name": "Leave him and search the ruins",
+  "effect": {
+    "description": "You decided to search the ruins first."
+  },
+  "resultIncident": "/data/incidents/blind_smith/search_the_smithery.json"
+}

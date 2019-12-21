@@ -1,0 +1,26 @@
+{
+  "name": "Topshelf Tonic",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/72/Grv_huskclaw_toxin.png",
+  "rarity": 6,
+  "classRestriction": "Grave Robber",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 70,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightResist",
+      "value": -20,
+      "duration": -1
+    }
+  ]
+}

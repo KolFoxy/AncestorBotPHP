@@ -1,0 +1,14 @@
+{
+  "name": "Bag of Marbles",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/dc/Bag_of_Marbles.png",
+  "rarity": 1,
+  "classRestriction": "antiquarian",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

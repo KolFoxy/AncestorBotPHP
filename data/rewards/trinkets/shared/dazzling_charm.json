@@ -1,0 +1,13 @@
+{
+  "name": "Dazzling Charm",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/72/Inv_trinket-dazzling_charm.png",
+  "rarity": 1,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

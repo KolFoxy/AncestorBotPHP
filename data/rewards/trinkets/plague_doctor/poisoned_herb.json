@@ -1,0 +1,14 @@
+{
+  "name": "Poisoned Herb",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/33/Inv_trinket-poisoned_herb.png",
+  "rarity": 2,
+  "classRestriction": "Plague Doctor",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 33,
+      "duration": -1
+    }
+  ]
+}

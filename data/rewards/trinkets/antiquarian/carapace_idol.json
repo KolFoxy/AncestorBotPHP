@@ -1,0 +1,14 @@
+{
+  "name": "Carapace Idol",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/27/Carapace_Idol.png",
+  "rarity": 2,
+  "classRestriction": "antiquarian",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 25,
+      "duration": -1
+    }
+  ]
+}

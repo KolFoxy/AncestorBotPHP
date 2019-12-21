@@ -1,0 +1,188 @@
+{
+  "name": "Leper",
+  "description": "A mighty sword arm anchored by holy purpose - a zealous warrior!",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/7/7d/Leper_portrait_roster.png/75px-Leper_portrait_roster.png",
+  "healthMax": 63,
+  "stats": {
+    "dodge": 20,
+    "critChance": 5,
+    "stunResist": 110,
+    "blightResist": 90,
+    "bleedResist": 60
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "chop": 90,
+    "purge": 15,
+    "revenge": 15,
+    "withstand": 15,
+    "solem": 15,
+    "intimidate": 15
+  },
+  "embedColor": 4555111,
+  "actions": [
+    {
+      "name": "Chop",
+      "effect": {
+        "description": "Deals high-to-very-high amounts of damage, but with low accuracy.",
+        "health_value": -13,
+        "healthDeviation": -13,
+        "hitChance": 95,
+        "critChance": 7,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e3/Chop.png"
+      }
+    },
+    {
+      "name": "Purge",
+      "effect": {
+        "description": "Deals medium damage and increases Leper's accuracy.",
+        "health_value": -7,
+        "healthDeviation": -8,
+        "hitChance": 105,
+        "critChance": 4,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/aa/Purge.png"
+      },
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 4,
+          "stat": "accMod",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "name": "Revenge",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Channel your anger.",
+        "hitChance": -1,
+        "critChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/5f/Revenge.png"
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "damageMod",
+          "duration": 5,
+          "value": 35
+        },
+        {
+          "duration": 5,
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "accMod",
+          "value": 15
+        },
+        {
+          "duration": 5,
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "critChance",
+          "value": 11
+        },
+        {
+          "duration": 5,
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "dodge",
+          "value": -10
+        },
+        {
+          "duration": 5,
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "damageTakenMod",
+          "value": 25
+        }
+      ]
+    },
+    {
+      "name": "Withstand",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Be prepared.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a5/Withstand.png",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statModifiers": [
+        {
+          "stat": "prot",
+          "targetSelf": true,
+          "chance": -1,
+          "duration": 5,
+          "value": 30
+        },
+        {
+          "duration": 5,
+          "stat": "bleedResist",
+          "targetSelf": true,
+          "chance": -1,
+          "value": 30
+        },
+        {
+          "duration": 5,
+          "stat": "blightResist",
+          "targetSelf": true,
+          "chance": -1,
+          "value": 30
+        },
+        {
+          "duration": 5,
+          "stat": "debuffResist",
+          "targetSelf": true,
+          "chance": -1,
+          "value": 30
+        }
+      ],
+      "statusEffects": [
+        {
+          "type": "marked",
+          "targetSelf": true,
+          "chance": -1
+        }
+      ]
+    },
+    {
+      "name": "Solemnity",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Live to fight another day.",
+        "health_value": 12,
+        "stress_value": -7,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3f/Solemnity.png",
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Intimidate",
+      "effect": {
+        "description": "Come at me!",
+        "health_value": -2,
+        "healthDeviation": -2,
+        "hitChance": 115,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/72/Intimidate.png",
+        "removesStealth": true
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "damageMod",
+          "value": -33
+        }
+      ],
+      "statusEffects": [
+        {
+          "type": "marked",
+          "targetSelf": true,
+          "chance": -1
+        }
+      ]
+    }
+  ]
+}

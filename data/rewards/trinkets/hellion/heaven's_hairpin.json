@@ -1,0 +1,20 @@
+{
+  "name": "Heaven's Hairpin",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/7d/Inv_trinket-heavens_hairpin.png",
+  "rarity": 3,
+  "classRestriction": "Hellion",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -25,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "accMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

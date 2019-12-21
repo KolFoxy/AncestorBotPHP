@@ -1,0 +1,131 @@
+{
+  "name": "Plague Doctor",
+  "description": "What better laboratory than the blood-soaked battlefield?",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/4/43/Plague_doctor_portrait_roster.png/75px-Plague_doctor_portrait_roster.png",
+  "healthMax": 38,
+  "stats": {
+    "dodge": 20,
+    "critChance": 6,
+    "stunResist": 70,
+    "bleedResist": 70,
+    "blightResist": 110,
+    "debuffResist": 100
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "noxious": 25,
+    "incision": 30,
+    "battle": 10,
+    "embold": 10,
+    "disorient": 20
+  },
+  "embedColor": 3858217,
+  "actions": [
+    {
+      "name": "Noxious Blast",
+      "effect": {
+        "description": "Sometimes, you fight fire with fire, and blight with blight.\nDeals minimum damage and inflicts blight.",
+        "health_value": -1,
+        "healthDeviation": -1,
+        "hitChance": 115,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/54/Noxious_Blast.png",
+        "critChance": 9
+      },
+      "statModifiers": [
+        {
+          "chance": 150,
+          "stat": "accMod",
+          "value": -10
+        }
+      ],
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 155,
+          "value": -7
+        }
+      ]
+    },
+    {
+      "name": "Incision",
+      "effect": {
+        "description": "Even the monsters bleed, so make them!\nDeals medium damage and inflicts bleed.",
+        "health_value": -7,
+        "healthDeviation": -6,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/d/d5/Incision.png",
+        "hitChance": 115,
+        "critChance": 9
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 155,
+          "value": -4
+        }
+      ]
+    },
+    {
+      "name": "Battlefield Medicine",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Bandages and tinctures: the only friends you can trust.",
+        "health_value": 6,
+        "healthDeviation": 0,
+        "hitChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/eb/Battlefield_Medicine.png",
+        "removesBlight": true,
+        "removesBleed": true
+      }
+    },
+    {
+      "name": "Emboldening Vapours",
+      "requiresTarget": true,
+      "effect": {
+        "description": "A simple extract: carries you on, makes you fight, makes you live.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/7a/Emboldening_Vapours.png",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "stat": "damageMod",
+          "value": 25,
+          "duration": 5,
+          "targetSelf": true
+        }
+      ]
+    },
+    {
+      "name": "Disorienting Blast",
+      "effect": {
+        "description": "Stuns an enemy, decreases their resistances.",
+        "health_value": 0,
+        "healthDeviation": 0,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/49/Disorienting_Blast.png",
+        "hitChance": 115
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 160
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 150,
+          "stat": "bleedResist",
+          "value": -15
+        },
+        {
+          "chance": 150,
+          "stat": "blightResist",
+          "value": -15
+        }
+      ]
+    }
+  ]
+}

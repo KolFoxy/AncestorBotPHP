@@ -1,0 +1,180 @@
+{
+  "name": "Man-at-Arms",
+  "description": "The raw strength of youth may be spent, but his eyes hold the secrets of a hundred campaigns.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/f/fa/Man-at-arms_portrait_roster.png/75px-Man-at-arms_portrait_roster.png",
+  "healthMax": 55,
+  "stats": {
+    "dodge": 25,
+    "critChance": 6,
+    "stunResist": 90,
+    "bleedResist": 90,
+    "blightResist": 80,
+    "debuffResist": 80
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "crush": 30,
+    "rampart": 20,
+    "bellow": 10,
+    "defender": 10,
+    "retribution": 20,
+    "command": 10,
+    "bolster": 10
+  },
+  "embedColor": 7762028,
+  "actions": [
+    {
+      "name": "Crush",
+      "effect": {
+        "description": "Shatter their bones! Deals medium damage.",
+        "health_value": -8,
+        "healthDeviation": -6,
+        "hitChance": 105,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/15/Crush.png",
+        "critChance": 9
+      }
+    },
+    {
+      "name": "Rampart",
+      "effect": {
+        "description": "Stuns the enemy. Deals low amounts of damage.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f2/Rampart.png",
+        "health_value": -3,
+        "healthDeviation": -2,
+        "hitChance": 110,
+        "critChance": 9
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Bellow",
+      "effect": {
+        "description": "Greatly decreases enemy`s DODGE.",
+        "health_value": 0,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/82/Bellow.png",
+        "hitChance": 115
+      },
+      "statModifiers": [
+        {
+          "stat": "dodge",
+          "chance": 160,
+          "value": -20,
+          "duration": 4
+        }
+      ]
+    },
+    {
+      "name": "Defender",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Increases PROT of Man-at-Arms.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0d/Defender.png",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statModifiers": [
+        {
+          "stat": "prot",
+          "targetSelf": true,
+          "chance": -1,
+          "value": 30
+        }
+      ]
+    },
+    {
+      "name": "Retribution",
+      "effect": {
+        "description": "Deals minimum damage. Activates riposte.",
+        "health_value": -2,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fb/Retribution.png",
+        "healthDeviation": -1,
+        "hitChance": 105,
+        "critChance": 7
+      },
+      "statusEffects": [
+        {
+          "type": "riposte",
+          "targetSelf": true,
+          "duration": 3,
+          "chance": -1
+        },
+        {
+          "type": "marked",
+          "targetSelf": true,
+          "duration": 2,
+          "chance": -1
+        }
+      ]
+    },
+    {
+      "name": "Command",
+      "requiresTarget": true,
+      "effect": {
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/94/Command.png",
+        "description": "Increases ACC and CRIT CHANCE of Man-at-Arms",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "accMod",
+          "value": 20,
+          "duration": 4
+        },
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "critChance",
+          "value": 20,
+          "duration": 4
+        }
+      ]
+    },
+    {
+      "name": "Bolster",
+      "requiresTarget": true,
+      "effect": {
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/ef/Bolster.png",
+        "description": "Increases dodge and decreases incoming stress damage.",
+        "hitChance": -1,
+        "critChance": -1
+      },
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "dodge",
+          "value": 12,
+          "duration": 4
+        },
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "stressMod",
+          "value": -25,
+          "duration": 5
+        }
+      ]
+    }
+  ],
+  "riposteAction": {
+    "name": "Riposte",
+    "effect": {
+      "description": "Taste your own medicine!",
+      "health_value": -6,
+      "healthDeviation": -5,
+      "hitChance": 110,
+      "critChance": 4
+    }
+  }
+}

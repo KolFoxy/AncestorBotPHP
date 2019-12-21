@@ -1,0 +1,14 @@
+{
+  "name": "Fleet Florin",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/56/Fleet_Florin.png",
+  "rarity": 3,
+  "classRestriction": "antiquarian",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "debuffSkillChance",
+      "value": 30,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "name": "Crystalline Aberration",
+  "description": "You feel the pressure growing inside.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/86/Crystalline_Aberration.png",
+  "healthMax": 7,
+  "types": [
+    "husk"
+  ],
+  "stats": {
+    "stunResist": 400,
+    "bleedResist": 100,
+    "blightResist": 0,
+    "debuffResist": 200,
+    "dodge": -20,
+    "prot": 0
+  },
+  "actions": [
+    {
+      "name": "Unstable Resonance",
+      "effect": {
+        "description": "Ka-boom!\nInflicts high health and stress damage, applies blight.",
+        "health_value": -20,
+        "healthDeviation": -5,
+        "stress_value": 8,
+        "hitChance": 103
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 120,
+          "value": -3
+        }
+      ],
+      "selfEffect": {
+        "description": "Self-destruction.",
+        "health_value": -100,
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Explosive Undoing",
+      "effect": {
+        "description": "Ka-boom!\nInflicts medium health and stress damage.",
+        "health_value": -5,
+        "healthDeviation": -3,
+        "stress_value": 3,
+        "hitChance": 103,
+        "critChance": 5
+      },
+      "selfEffect": {
+        "description": "Self-destruction.",
+        "health_value": -100,
+        "hitChance": -1
+      }
+    }
+  ]
+}

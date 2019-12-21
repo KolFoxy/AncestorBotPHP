@@ -1,0 +1,14 @@
+{
+  "name": "Candle of Life",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f3/Candle_of_Life.png",
+  "rarity": 4,
+  "classRestriction": "antiquarian",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 200,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Defender's Seal",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/53/Inv_trinket-defenders_seal.png",
+  "rarity": 1,
+  "classRestriction": "crusader",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 5,
+      "duration": -1
+    },
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": -3,
+      "duration": -1
+    }
+  ]
+}

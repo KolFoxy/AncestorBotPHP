@@ -2,10 +2,10 @@
 
 namespace Ancestor\FileDownloader;
 
-use Clue\React\Buzz\Browser;
-use GuzzleHttp\RequestOptions;
-use React\EventLoop\Factory;
+use Ancestor\CommandHandler\CommandHelper;
 use React\EventLoop\LoopInterface;
+use React\Promise\Deferred;
+use React\Promise\Promise;
 
 class FileDownloader implements AsyncFileDownloaderInterface {
     /**
@@ -65,4 +65,21 @@ class FileDownloader implements AsyncFileDownloaderInterface {
         $request->end();
     }
 
+    /**
+     * @param string $url
+     * @return Promise Resolves with image resource
+     */
+    public function getDownloadAsyncImagePromise(string $url): Promise {
+        $deferred = new Deferred();
+        $callback = function ($file) use ($deferred) {
+            $imageFile = CommandHelper::ImageFromFileHandler($file);
+            if ($imageFile === false){
+                $deferred->reject();
+                return;
+            }
+            $deferred->resolve($imageFile);
+        };
+        $this->DownloadUrlAsync($url, $callback);
+        return $deferred->promise();
+    }
 }

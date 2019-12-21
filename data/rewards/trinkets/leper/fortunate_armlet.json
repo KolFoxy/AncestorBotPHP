@@ -1,0 +1,26 @@
+{
+  "name": "Redemption Armlet",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a2/Inv_trinket-fortunate_armlet.png",
+  "rarity": 2,
+  "classRestriction": "Leper",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 8,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": 3,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

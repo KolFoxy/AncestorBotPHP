@@ -1,0 +1,19 @@
+{
+  "name": "Man Slayer's Ring",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/14/Inv_trinket-man_slayers_ring.png",
+  "rarity": 3,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": -8,
+      "duration": -1
+    }
+  ],
+  "typeBonuses": [
+	{
+	  "type": "human",
+	  "damageMod": 35
+	}
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Damage Stone",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/26/Inv_trinket-damage_stone.png",
+  "rarity": 1,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": -4,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}
