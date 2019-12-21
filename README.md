@@ -3,6 +3,7 @@
 
 ### Commands:
 - `help` — Lists all commands, or shows command's description if used as `help [COMMAND]`
+- `fight` Play the Farmstead minigame. [More information and instructions.](farmstead_readme.md "More information and instructions.") 
 - `gold` — Gives a random reward.
 - `remind` or `remind @user` — Teaches you or a user the important lesson about life.
 - `roll`, `roll [MIN] [MAX]` or `roll [MAX]` — rolls a random integer (default roll is from 1 to 6).
@@ -11,7 +12,6 @@
 - `zalgo` Transforms given sentence into something ̝̺̋l̃̊̕i͈͌͡k̛͉̕e̟̩ͥ ͆̄͐ẗ̥́̓ḧ̸͝i̷͚͘s. Aliases: `cursed`
 - `read` Interact with writing curios. Aliases: `book`, `heckbooks`, `knowledge`
 - `reveal` Add tentacles to your avatar or image. Aliases: `tentacles`
-- `fight` Play the Farmstead minigame. [More information and instructions.](farmstead_readme.md "More information and instructions.") 
 
 ### Chat reactions:
 - `My resolve is tested`  or  `@user resolve is tested`  or  `...resolve is tested...`  — tests one's resolve, with a 25% chance of virtue. Case insensitve.
@@ -22,8 +22,8 @@
 ## Invite URL
 https://discordapp.com/oauth2/authorize?client_id=406438624473907200&scope=bot&permissions=379904
 
-## DiscordBots Page
-https://discordbots.org/bot/406438624473907200
+## DiscordBots/Top.gg Page
+https://top.gg/bot/406438624473907200
 
 ------------
 
