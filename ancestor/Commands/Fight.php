@@ -73,7 +73,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_INFO_COMMAND . '`` while fighting will show all of your character\'s stats'
             . PHP_EOL . 'typing ``' . $handler->prefix . 'f ' . self::CHAR_ACTIONS_COMMAND . '`` while fighting will show descriptions of all of your character\'s actions'
             . PHP_EOL . 'typing  ``' . $handler->prefix . 'f ' . self::SURRENDER_COMMAND . '`` while fighting will cancel the fight'
-            . PHP_EOL . '``' . $handler->prefix . 'f test-[CLASS_NAME]`` will start a fight with selected class.'
+            . PHP_EOL . '``' . $handler->prefix . 'f play-[CLASS_NAME]`` will start a fight with selected class.'
             , ['f', 'df', 'dfight']);
         $this->manager = new TimedCommandManager($this->client);
 
@@ -163,31 +163,8 @@ class Fight extends Command implements EncounterCollectionInterface {
             $this->manager->deleteInteraction($message);
             return;
         }
-
-        if ($actionName === 'setlight'){ //for testing only, delete later
-            $fight->killCount = 23;
-            return;
-        }
-
-        if ($actionName === 'endscreen') { //for testing only, delete later
-            $fight->killCount = 56;
-            $fight->killedMonsters = [];
-            for ($i = 0; $i < $fight->killCount; $i++) {
-                if (mt_rand(0, 9) === 1) {
-                    $fight->killedMonsters[] = $this->randHeroClass()->name;
-                    continue;
-                }
-                $fight->killedMonsters[] = $this->randRegularMonsterType()->name;
-            }
-            $this->sendEndscreen($message->channel, $fight, $message->author->__toString());
-            return;
-        }
-        if ($actionName === 'testevent') { //for testing only, delete later
-            $fight->incident = $this->incidentCollection->getTestIncident();
-            $message->reply($fight->incident->getDefaultFooterText('!f', $fight->hero->type->name));
-            return;
-        }
         $this->manager->refreshTimer($message, self::TIMEOUT);
+
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {
                 $channel->send('', ['embed' => $fight->getHeroStats()->setFooter(self::CHANNEL_SWITCH_REMINDER)]);
@@ -239,7 +216,7 @@ class Fight extends Command implements EncounterCollectionInterface {
                 $endless = false;
                 continue;
             }
-            if (mb_strpos($str, 'test-') === 0) {
+            if (mb_strpos($str, 'play-') === 0) {
                 $heroClassName = str_replace('_', ' ', mb_strtolower(mb_substr($str, 5)));
                 continue;
             }

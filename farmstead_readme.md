@@ -28,7 +28,7 @@ Table of Contents
 ------------
 ## Starting the game
  1. Add AncestorBot to your Discord server. Instructions on how to do it can be found [here.](README.md#invite-url "here.")
- 2. Start the game by typing one of the following commands:
+ 2. Start the game by typing one of the following commands in chat:
  
 | Minigame commands  |
 | :------------ |
@@ -36,6 +36,8 @@ Table of Contents
 |  !f |
 |  !df |
 |  !dfight |
+
+Option: typing ``!f [CLASS_NAME]``(no brackets, use underscores instead of spaces) will start game with a specified class, instead of randomly selecting one.
 
 >###### Note:
 >All of the commands above provide identical function, since they are just aliases for the single *Fight* command.
