@@ -1,0 +1,32 @@
+{
+  "name": "Sacred Scroll",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e5/Inv_trinket-sacred_scroll.png",
+  "rarity": 4,
+  "classRestriction": "Vestal",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 33,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": -10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "damageMod",
+      "value": -25,
+      "duration": -1
+    }
+  ]
+}

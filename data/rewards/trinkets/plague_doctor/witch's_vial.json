@@ -1,0 +1,14 @@
+{
+  "name": "Witch's Vial",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0b/Inv_trinket-witchs_vial.png",
+  "rarity": 1,
+  "classRestriction": "Plague Doctor",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 15,
+      "duration": -1
+    }
+  ]
+}

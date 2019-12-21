@@ -1,0 +1,26 @@
+{
+  "name": "Dirge For The Devoured",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/eb/Jes_dirge_for_devoured.png",
+  "rarity": 6,
+  "classRestriction": "Jester",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressSkillMod",
+      "value": 25,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 50,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 15,
+      "duration": -1
+    }
+  ]
+}

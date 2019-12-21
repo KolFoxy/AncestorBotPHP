@@ -1,0 +1,35 @@
+{
+  "name": "Splendorous",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": 5,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "stressSkillMod",
+      "value": 20,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "monsterStatModifiers": [
+    {
+      "chance": -1,
+      "stat": "blightResist",
+      "value": -10,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": -10,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ]
+}

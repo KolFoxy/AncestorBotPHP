@@ -1,0 +1,14 @@
+{
+  "name": "Bleeding Pendant",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/8e/Inv_trinket-bleeding_pendant.png",
+  "rarity": 1,
+  "classRestriction": "Hellion",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "bleedSkillChance",
+      "value": 15,
+      "duration": -1
+    }
+  ]
+}

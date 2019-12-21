@@ -1,0 +1,14 @@
+{
+  "name": "Vengeful Boots",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f5/Vengeful_boots.png",
+  "rarity": 1,
+  "classRestriction": "Musketeer",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 3,
+      "duration": -1
+    }
+  ]
+}

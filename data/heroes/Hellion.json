@@ -1,0 +1,132 @@
+{
+  "name": "Hellion",
+  "description": "Barbaric rage and unrelenting savagery make for a powerful ally.",
+  "image": "https://i.imgur.com/MSVtQOS.png",
+  "healthMax": 46,
+  "stats": {
+    "dodge": 27,
+    "critChance": 9,
+    "blightResist": 90,
+    "bleedResist": 90
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "hack": 30,
+    "YAWP": 30,
+    "if": 30,
+    "rush": 15,
+    "out": 25
+  },
+  "embedColor": 13903384,
+  "actions": [
+    {
+      "name": "Wicked Hack",
+      "effect": {
+        "description": "Inflicts high damage.",
+        "health_value": -10,
+        "healthDeviation": -9,
+        "hitChance": 105,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/85/Wicked_Hack.png"
+      }
+    },
+    {
+      "name": "Barbaric YAWP!",
+      "effect": {
+        "description": "YAWP!",
+        "hitChance": 115,
+        "critChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6e/Barbaric_Yawp.png"
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 145
+        }
+      ],
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "damageMod",
+          "value": 33
+        }
+      ]
+    },
+    {
+      "name": "If It Bleeds",
+      "effect": {
+        "description": "Then it can be killed. A precise strike that inflicts medium damage and applies bleed.",
+        "health_value": -7,
+        "healthDeviation": -5,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a9/If_It_Bleeds.png",
+        "hitChance": 115,
+        "critChance": 4
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 140,
+          "value": -4
+        }
+      ]
+    },
+    {
+      "name": "Adrenaline Rush",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Heals the Hellion, removes blight and bleed, increases damage and accuracy modifiers.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a3/Adrenaline_Rush.png",
+        "hitChance": -1,
+        "critChance": -1,
+        "health_value": 4,
+        "removesBlight": true,
+        "removesBleed": true
+      },
+      "statModifiers": [
+        {
+          "stat": "damageMod",
+          "targetSelf": true,
+          "chance": -1,
+          "value": 30
+        },
+        {
+          "stat": "accMod",
+          "targetSelf": true,
+          "chance": -1,
+          "value": 10
+        }
+      ]
+    },
+    {
+      "name": "Bleed Out",
+      "effect": {
+        "description": "The vital strike that deals high to very high damage and applies bleed. The Hellion will be exhausted after dealing it.",
+        "health_value": -12,
+        "healthDeviation": -11,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/19/Bleed_Out.png",
+        "hitChance": 102,
+        "critChance": 10
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 140,
+          "value": -5
+        }
+      ],
+      "statModifiers": [
+        {
+          "targetSelf": true,
+          "chance": -1,
+          "stat": "damageMod",
+          "value": -33,
+          "duration": 5
+        }
+      ]
+    }
+  ]
+}

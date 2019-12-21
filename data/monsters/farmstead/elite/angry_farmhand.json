@@ -1,0 +1,61 @@
+{
+  "name": "Angry Farmhand",
+  "description": "He had enough.",
+  "image": "https://i.imgur.com/XwNd2Z0.png",
+  "healthMax": 50,
+  "types": [
+    "husk",
+    "human"
+  ],
+  "stats": {
+    "stunResist": 60,
+    "bleedResist": 60,
+    "blightResist": 90,
+    "debuffResist": 60,
+    "dodge": 28,
+    "prot": 0
+  },
+  "actionRatings": {
+    "shove": 4,
+    "pause": 1,
+    "destroy": 5
+  },
+  "actions": [
+    {
+      "name": "Shove in the Seeds",
+      "effect": {
+        "description": "You feel seeds shoving down your throat.\nInflicts high stress damage and applies blight.",
+        "health_value": -6,
+        "healthDeviation": -5,
+        "stress_value": 15,
+        "hitChance": 108
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 155,
+          "value": -4
+        }
+      ]
+    },
+    {
+      "name": "Pause from Rage",
+      "requiresTarget": true,
+      "effect": {
+        "description": "A quick rest before more work.\nHeals the Farmhand.",
+        "health_value": 12,
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Destroy the Elite",
+      "effect": {
+        "description": "Poke, poke, POKE!\nInflicts hight health damage.",
+        "health_value": -8,
+        "healthDeviation": -10,
+        "critChance": 9,
+        "hitChance": 110
+      }
+    }
+  ]
+}

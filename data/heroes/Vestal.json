@@ -1,0 +1,135 @@
+{
+  "name": "Vestal",
+  "description": "A sister of battle - pious and unrelenting!",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/a/a5/Vestal_portrait_roster.png/75px-Vestal_portrait_roster.png",
+  "healthMax": 44,
+  "types": [
+    "religious",
+    "human"
+  ],
+  "stats": {
+    "dodge": 20,
+    "critChance": 5,
+    "stunResist": 80,
+    "bleedResist": 90
+  },
+  "actionRatings": {
+    "mace": 20,
+    "judge": 20,
+    "dazzling": 20,
+    "grace": 20,
+    "illumination": 5,
+    "hand": 10
+  },
+  "embedColor": 16777215,
+  "actions": [
+    {
+      "name": "Mace Bash",
+      "effect": {
+        "description": "Purge the unholy!",
+        "health_value": -7,
+        "healthDeviation": -7,
+        "hitChance": 105,
+        "critChance": 4,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/fe/Mace_Bash.png",
+        "typeBonuses": [
+          {
+            "type": "unholy",
+            "damageMod": 35
+          }
+        ]
+      }
+    },
+    {
+      "name": "Judgement",
+      "effect": {
+        "description": "Strikes the enemy with holy powers and heals the Vestal.",
+        "health_value": -5,
+        "healthDeviation": -5,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b0/Judgement.png",
+        "hitChance": 105,
+        "critChance": 9
+      },
+      "selfEffect": {
+        "description": "Heal from Judgement.",
+        "health_value": 5,
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Dazzling Light",
+      "effect": {
+        "description": "Stuns the opponent with a a ray of holy power.",
+        "health_value": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/e/e4/Dazzling_Light.png",
+        "healthDeviation": -2,
+        "hitChance": 110,
+        "critChance": 9
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Divine Grace",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Calls upon the higher forces to mend Vestal's wounds.",
+        "health_value": 8,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a1/Divine_Grace.png",
+        "healthDeviation": 1,
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Illumination",
+      "effect": {
+        "description": "Reveal your foes' flaws, making them easier to hit.",
+        "health_value": -1,
+        "healthDeviation": -2,
+        "hitChance": 110,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/c/cd/Illumination.png",
+        "removesStealth": true
+      },
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "dodge",
+          "value": -30,
+          "duration": -1
+        }
+      ]
+    },
+    {
+      "name": "Hand of Light",
+      "effect": {
+        "description": "Inflicts small amounts of damage. Increases accuracy and damage of the Vestal.",
+        "health_value": -3,
+        "healthDeviation": -4,
+        "hitChance": 105,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Hand_of_Light.png",
+        "critChance": 5
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "accMod",
+          "value": 12,
+          "duration": 4
+        },
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "damageMod",
+          "value": 35,
+          "duration": 4
+        }
+      ]
+    }
+  ]
+}

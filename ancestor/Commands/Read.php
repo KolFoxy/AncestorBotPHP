@@ -5,16 +5,15 @@ namespace Ancestor\Commands;
 use Ancestor\CommandHandler\Command;
 use Ancestor\CommandHandler\CommandHandler;
 use Ancestor\CommandHandler\CommandHelper;
-use Ancestor\Curio\Action;
-use Ancestor\Curio\Curio;
-use const Ancestor\Curio\DEFAULT_EMBED_COLOR;
-use Ancestor\Curio\Effect;
+use Ancestor\CommandHandler\TimedCommandManager;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
-use Ancestor\RandomData\RandomDataProvider;
-use CharlotteDunois\Collect\Collection;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+
+use Ancestor\Interaction\Curio;
+use Ancestor\Interaction\Effect;
+use Ancestor\Interaction\Stats\StressStateFactory;
+
 use CharlotteDunois\Yasmin\Models\Message;
 
 class Read extends Command {
@@ -24,23 +23,16 @@ class Read extends Command {
      * @var Curio[]
      */
     private $curios;
-
     /**
-     * @var Effect
+     * @var TimedCommandManager
      */
-    private $defaultEffect;
-
-    /**
-     * @var Collection
-     */
-    private $interactingUsers;
-
+    private $manager;
     /**
      * @var FileDownloader
      */
     private $fileDl;
 
-    const INTERACT_TIMEOUT = 60.0;
+    const TIMEOUT = 60.0;
 
     function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'read',
@@ -50,49 +42,37 @@ class Read extends Command {
         $mapper = new \JsonMapper();
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/writings.json'));
         $mapper->bExceptionOnMissingData = true;
-        $this->curios = $mapper->mapArray(
-            $json, [], Curio::class
-        );
+        $this->curios = $mapper->mapArray($json, [], Curio::class);
 
-        $this->defaultEffect = new Effect();
-        $this->defaultEffect->name = "Nothing happened.";
-        $this->defaultEffect->setDescription("You choose to walk away in peace.");
-        $this->interactingUsers = new Collection();
+        $this->manager = new TimedCommandManager($this->client);
         $this->fileDl = new FileDownloader($this->client->getLoop());
     }
 
     function run(Message $message, array $args) {
-        if (empty($args) && !$this->interactingUsers->has($message->author->id)) {
+        if (empty($args) && !$this->manager->userIsInteracting($message)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
-            $this->addNewInteraction($curio, $message->author->id, $message->channel->getId());
+            $this->manager->addInteraction($message, self::TIMEOUT, $curio);
             $message->reply('', ['embed' => $curio->getEmbedResponse($this->handler->prefix . $this->name)]);
             return;
         }
-        if (!empty($args) && $this->interactingUsers->has($message->author->id)
-            && $message->channel->getId() === $this->getChannelIdFromUserId($message->author->id)) {
+        if (!empty($args) && $this->manager->userIsInteracting($message)) {
             $actionName = implode(' ', $args);
-            $curio = $this->getCurioFromUserId($message->author->id);
+            $curio = $this->getCurio($message);
             $action = $curio->getActionIfValid($actionName);
-            if ($action === false) {
-                return;
-            }
-            $this->client->cancelTimer($this->getTimerFromUserId($message->author->id));
-            $this->interactingUsers->delete($message->author->id);
-
-            if ($action === true) {
-                $message->reply('', ['embed' => $this->defaultEffect->getEmbedResponse()]);
+            if ($action === null) {
                 return;
             }
 
-            $effect = $this->getRandomEffectFromAction($action);
+            $this->manager->deleteInteraction($message);
+            $effect = $action->getRandomEffect();
             $extraEmbedFields = null;
             if ($effect->isNegativeStressEffect() && $effect->stress_value >= 100) {
-                $resolve = RandomDataProvider::GetInstance()->GetRandomResolve();
+                $stressState = StressStateFactory::create();
                 $extraEmbedFields = [
                     [
-                        'title' => $message->author->username . '\'s resolve is tested... **' . $resolve['name'] . '**',
-                        'value' => '***' . $resolve['quote'] . '***'
-                    ]
+                        'title' => $message->author->username . '\'s resolve is tested... **' . $stressState->name . '**',
+                        'value' => '***' . $stressState->quote . '***',
+                    ],
                 ];
             }
 
@@ -142,49 +122,20 @@ class Read extends Command {
 
     }
 
-    function getCurioFromUserId(int $userId): Curio {
-        return $this->interactingUsers->get($userId)['curio'];
-    }
-
-    function getChannelIdFromUserId(int $userId): string {
-        return $this->interactingUsers->get($userId)['channelId'];
-    }
-
-
-    /**
-     * @param int $userId
-     * @return \React\EventLoop\Timer\Timer
-     */
-    function getTimerFromUserId(int $userId) {
-        return $this->interactingUsers->get($userId)['timer'];
-    }
-
-    function getRandomEffectFromAction(Action $action): Effect {
-        return RandomDataProvider::GetInstance()->GetRandomData($action->effects);
-    }
-
-    function addNewInteraction(Curio $curio, int $userId, string $channelId) {
-        $this->interactingUsers->set($userId, [
-            'curio' => $curio,
-            'timer' => $this->client->addTimer(self::INTERACT_TIMEOUT,
-                function () use ($userId) {
-                    $this->interactingUsers->delete($userId);
-                }
-            ),
-            'channelId' => $channelId
-        ]);
+    function getCurio(Message $message): Curio {
+        return $this->manager->getUserData($message);
     }
 
 
     /**
      * @param resource $imageSrcFileHandler
-     * @param string $imageTemplatePath
+     * @param string $imageForTemplatePath
      * @param ImageTemplate $template
      * @return string
      */
-    function getImageOnTemplate($imageSrcFileHandler, string $imageTemplatePath, ImageTemplate $template): string {
+    function getImageOnTemplate($imageSrcFileHandler, string $imageForTemplatePath, ImageTemplate $template): string {
         $imageSrc = CommandHelper::ImageFromFileHandler($imageSrcFileHandler);
-        $imageTemplate = imagecreatefrompng($imageTemplatePath);
+        $imageTemplate = imagecreatefrompng($imageForTemplatePath);
         $tA = new ImageTemplateApplier($template);
         $canvas = $tA->applyTemplate($imageSrc, $imageTemplate, true);
 

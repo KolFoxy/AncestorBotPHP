@@ -160,10 +160,10 @@
         "effects": [
           {
             "name": "The sight is too much for the hero to bear.",
-            "description": "``You are not worthy of the superior tentacle waifu.``",
+            "description": "Hero suffers stress.",
             "stress_value": 25,
-            "image": "/data/images/effects/os_stress.png",
-            "imageTemplate": "/data/images/effects/os_stress.png.json"
+            "image": "/data/images/effects/iron_crown_stress.png",
+            "imageTemplate": "/data/images/effects/iron_crown_stress.png.json"
           },
           {
             "name": "New Positive Quirk",

@@ -1,0 +1,14 @@
+{
+  "name": "Cudgel Weight",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b9/Caudgel_weight.png",
+  "rarity": 2,
+  "classRestriction": "Houndmaster",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 25,
+      "duration": -1
+    }
+  ]
+}

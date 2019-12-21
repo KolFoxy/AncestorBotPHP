@@ -1,0 +1,26 @@
+{
+  "name": "Gunslinger's Buckle",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/66/Inv_trinket-poisoning_buckle.png",
+  "rarity": 4,
+  "classRestriction": "Highwayman",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "accMod",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": -5,
+      "duration": -1
+    }
+  ]
+}

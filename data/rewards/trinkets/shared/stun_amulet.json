@@ -1,0 +1,25 @@
+{
+  "name": "Stun Amulet",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a0/Inv_trinket-stun_amulet.png",
+  "rarity": 2,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stunResist",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "dodge",
+      "value": -4,
+      "duration": -1
+    }
+  ]
+}

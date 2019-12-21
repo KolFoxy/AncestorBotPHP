@@ -1,0 +1,32 @@
+{
+  "name": "Immunity Mask",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/9b/Inv_trinket-immunity_mask.png",
+  "rarity": 3,
+  "classRestriction": "Leper",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stunResist",
+      "value": 40,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightResist",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "dodge",
+      "value": -5,
+      "duration": -1
+    }
+  ]
+}

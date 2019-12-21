@@ -1,0 +1,20 @@
+{
+  "name": "Longevity Eyepatch",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f9/Inv_trinket_longevity_eyepatch.png",
+  "rarity": 2,
+  "classRestriction": "Man-at-Arms",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 8,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "damageMod",
+      "value": -5,
+      "duration": -1
+    }
+  ]
+}

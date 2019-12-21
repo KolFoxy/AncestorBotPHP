@@ -1,0 +1,181 @@
+{
+  "transformClass": {
+    "name": "Abomination",
+    "actionRatings": {
+      "rage": 30,
+      "slam": 30,
+      "transform": 10
+    },
+    "description": "The Beast, unleashed!",
+    "spontaneousActions": [
+      {
+        "chance": 101,
+        "ignoresStun": true,
+        "effect": {
+          "description": "Beast form stress.",
+          "health_value": 0,
+          "healthDeviation": 0,
+          "hitChance": -1,
+          "critChance": -1,
+          "stress_value": 6
+        }
+      }
+    ],
+    "image": "https://i.imgur.com/zvQK2FB.png",
+    "healthMax": 46,
+    "stats": {
+      "dodge": 28,
+      "critChance": 6,
+      "stunResist": 90,
+      "bleedResist": 80,
+      "blightResist": 110,
+      "debuffResist": 70
+    },
+    "embedColor": 16777215,
+    "actions": [
+      {
+        "name": "Rage",
+        "effect": {
+          "description": "Deals high amounts of damage.",
+          "health_value": -11,
+          "healthDeviation": -9,
+          "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/27/Rage.png",
+          "hitChance": 105,
+          "critChance": 12
+        }
+      },
+      {
+        "name": "Slam",
+        "effect": {
+          "description": "CHAAARGE",
+          "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Slam.png",
+          "hitChance": 100,
+          "critChance": 5,
+          "health_value": -8,
+          "healthDeviation": -7
+        },
+        "statModifiers": [
+          {
+            "chance": 140,
+            "stat": "dodge",
+            "value": -20,
+            "duration": 4
+          }
+        ]
+      },
+      {
+        "name": "Transform",
+        "requiresTarget": true,
+        "effect": {
+          "description": "Transforms back to the human form.",
+          "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/4a/Transform.png",
+          "hitChance": -1,
+          "critChance": -1
+        }
+      }
+    ]
+  },
+  "name": "Abomination",
+  "description": "Beaten, branded and imprisoned for untold decades, this furtive vagrant hides a terrible secret. The Eldritch poison coursing through his veins has given him unspeakable power, at a terrible cost.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/0/03/Abomination_portrait_roster.png/75px-Abomination_portrait_roster.png",
+  "types": [
+    "human"
+  ],
+  "healthMax": 46,
+  "stats": {
+    "dodge": 28,
+    "critChance": 6,
+    "stunResist": 90,
+    "bleedResist": 80,
+    "blightResist": 110,
+    "debuffResist": 70
+  },
+  "actionRatings": {
+    "manacles": 30,
+    "beast": 30,
+    "absolution": 20,
+    "transform": 10
+  },
+  "embedColor": 1118224,
+  "actions": [
+    {
+      "name": "Manacles",
+      "effect": {
+        "description": "Strikes the target with chains.",
+        "health_value": -4,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/00/Manacles.png",
+        "healthDeviation": -4,
+        "hitChance": 120,
+        "critChance": 5
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "duration": 1,
+          "chance": 140
+        }
+      ]
+    },
+    {
+      "name": "Beast's Bile",
+      "effect": {
+        "description": "Applies blight and reduces blight resist.",
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3f/Beast's_Bile.png",
+        "hitChance": 115,
+        "critChance": 6,
+        "health_value": -1,
+        "healthDeviation": -1
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 150,
+          "value": -5
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 150,
+          "stat": "blightResist",
+          "value": -33,
+          "duration": 5
+        }
+      ]
+    },
+    {
+      "name": "Absolution",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Heals health and stress damage.",
+        "health_value": 5,
+        "stress_value": -10,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/8/81/Absolution.png",
+        "hitChance": -1
+      }
+    },
+    {
+      "name": "Transform",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Transforms into the Beast:\nAll abilities are replaced with powerful damage-inflicting ones;\nAbomination suffers stress each round while transformed.",
+        "health_value": 10,
+        "hitChance": -1
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "stat": "damageMod",
+          "value": 25,
+          "targetSelf": true
+        },
+        {
+          "chance": -1,
+          "stat": "blightResist",
+          "value": 30,
+          "targetSelf": true,
+          "duration": 4
+        }
+      ]
+    }
+  ]
+}

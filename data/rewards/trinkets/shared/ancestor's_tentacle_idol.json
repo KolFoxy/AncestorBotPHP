@@ -1,0 +1,19 @@
+{
+  "name": "Ancestor's Tentacle Idol",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/03/Ancestor_Idol.png",
+  "rarity": 5,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "deathblowResist",
+      "value": 8,
+      "duration": -1
+    }
+  ]
+}

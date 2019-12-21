@@ -1,0 +1,20 @@
+{
+  "name": "Cleansing Eyepatch",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a2/Inv_trinket-cleansing_eyepatch.png",
+  "rarity": 1,
+  "classRestriction": "Man-at-Arms",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "blightResist",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "dodge",
+      "value": -2,
+      "duration": -1
+    }
+  ]
+}

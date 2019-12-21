@@ -1,0 +1,12 @@
+{
+  "name": "Ask gods to reveal the truth",
+  "exclusiveClasses": [
+    "occultist"
+  ],
+  "effect": {
+    "description": "You light up the candle, raise your hands into the air and ask the void itself to wipe away this illusion. As soon as you finish your exhortation, fire from the candle bursts in all directions and lights wheat around you on fire. Moments later, the whole landscape is covered in flames and smoke. Fire is destroying everything in sight while scorching your own flesh. Soon enough, you’re unable to perceive anything through the smoke and pain. You think you are finally done for, when the raging madness suddenly dies down and you are again standing in the middle of dead tealish nowhere, completely unharmed.",
+    "health_value": 50,
+    "healthDeviation": -40,
+    "stress_value": 10
+  }
+}

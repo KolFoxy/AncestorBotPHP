@@ -56,7 +56,7 @@ class CommandHandler {
             $this->commands->get($command)->run($message, $args);
         } catch (\Throwable $e) {
             $message->reply($this->FAILED_RESPONSE . PHP_EOL . "Message: " . $e->getMessage());
-            throw new \RuntimeException("Error with command->run: " . $e->getMessage());
+            throw new \RuntimeException("Error with command->run: " . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
         return true;
     }
@@ -115,7 +115,7 @@ class CommandHandler {
                 }
             }
         } catch (\Throwable $e) {
-            throw new \RuntimeException('Unable to load a command. Error: ' . $e->getMessage());
+            throw new \RuntimeException('Unable to load a command. Error: ' . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
     }
 

@@ -1,0 +1,13 @@
+{
+  "name": "Book of Sanity",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/59/Inv_trinket-book_of_sanity.png",
+  "rarity": 4,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -20,
+      "duration": -1
+    }
+  ]
+}

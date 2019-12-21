@@ -1,0 +1,34 @@
+{
+  "name": "Heretical Passage",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6d/Ves_heretical_passages.png",
+  "rarity": 6,
+  "classRestriction": "Vestal",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stressMod",
+      "value": 10,
+      "duration": -1
+    }
+  ],
+  "typeBonuses": [
+	{
+	  "type": "husk",
+	  "damageMod": 25
+	},
+	{
+	  "type": "human",
+	  "damageMod": 25
+	},
+	{
+	  "type": "eldritch",
+	  "damageMod": 25
+	}
+  ]
+}

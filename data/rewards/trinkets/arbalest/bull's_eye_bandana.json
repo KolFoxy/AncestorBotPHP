@@ -1,0 +1,26 @@
+{
+  "name": "Bull's Eye Bandana",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/14/One_eye_bandana.png",
+  "rarity": 3,
+  "classRestriction": "arbalest",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 8,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "critChance",
+      "value": 5,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "dodge",
+      "value": -4,
+      "duration": -1
+    }
+  ]
+}

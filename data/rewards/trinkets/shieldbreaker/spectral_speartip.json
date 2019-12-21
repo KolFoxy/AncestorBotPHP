@@ -1,0 +1,26 @@
+{
+  "name": "Spectral Speartip",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/28/Sb_spectral_speartip.png",
+  "rarity": 6,
+  "classRestriction": "Shieldbreaker",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 15,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightSkillChance",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "prot",
+      "value": 15,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,131 @@
+{
+  "name": "Antiquarian",
+  "description": "She searches where others will not go, and sees what others will not see.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/4/40/Antiquarian_portrait_roster.png/75px-Antiquarian_portrait_roster.png",
+  "healthMax": 29,
+  "types": [
+    "human"
+  ],
+  "stats": {
+    "dodge": 30,
+    "critChance": 5,
+    "stunResist": 90,
+    "bleedResist": 80,
+    "blightResist": 80,
+    "debuffResist": 80,
+    "healReceivedMod": 50
+  },
+  "actionRatings": {
+    "nervous": 25,
+    "festering": 25,
+    "get": 20,
+    "flash": 10,
+    "fortifying": 10
+  },
+  "embedColor": 3508141,
+  "actions": [
+    {
+      "name": "Nervous Stab",
+      "effect": {
+        "description": "Clumsily stabs the enemy.",
+        "health_value": -5,
+        "healthDeviation": -4,
+        "hitChance": 110,
+        "critChance": 7,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0b/Nervous_Stab.png"
+      }
+    },
+    {
+      "name": "Festering Vapours",
+      "effect": {
+        "description": "Applies blight and reduces blight resist of the target.",
+        "health_value": -1,
+        "healthDeviation": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/36/Festering_Vapours.png",
+        "hitChance": 119,
+        "critChance": 4
+      },
+      "statusEffects": [
+        {
+          "type": "blight",
+          "chance": 155,
+          "targetSelf": false,
+          "value": -6
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 150,
+          "stat": "blightResist",
+          "value": -36
+        }
+      ]
+    },
+    {
+      "name": "Get Down!",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Hide behind the nearest rock!",
+        "hitChance": -1,
+        "critChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/1/19/Get_Down.png"
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "dodge",
+          "value": 25
+        },
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "blightSkillChance",
+          "value": 20,
+          "duration": 4
+        }
+      ]
+    },
+    {
+      "name": "Flashpowder",
+      "effect": {
+        "description": "Blinds and reveals your opponent.",
+        "hitChance": 115,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/47/Flashpowder.png",
+        "removesStealth": true
+      },
+      "statModifiers": [
+        {
+          "chance": 170,
+          "stat": "accMod",
+          "value": -30
+        }
+      ]
+    },
+    {
+      "name": "Fortifying Vapours",
+      "requiresTarget": true,
+      "effect": {
+        "description": "A peculiar set of vapours.",
+        "health_value": 1,
+        "healthDeviation": 5,
+        "hitChance": -1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/6b/Fortifying_Vapours.png"
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "stat": "bleedResist",
+          "value": 30,
+          "duration": 6
+        },
+        {
+          "chance": -1,
+          "stat": "blightResist",
+          "value": 30,
+          "duration": 6
+        }
+      ]
+    }
+  ]
+}

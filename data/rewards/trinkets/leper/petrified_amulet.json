@@ -1,0 +1,26 @@
+{
+  "name": "Petrified Amulet",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/41/Lep_crystalized_amulet.png",
+  "rarity": 6,
+  "classRestriction": "Leper",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "prot",
+      "value": 8,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": -15,
+      "duration": -1
+    }
+  ]
+}

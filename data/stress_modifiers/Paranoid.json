@@ -1,0 +1,27 @@
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": -5,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": -25,
+      "duration": -1,
+      "targetSelf": true
+    },
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Paranoid",
+  "quote": "The walls close in, the shadows whisper of conspiracy!"
+}

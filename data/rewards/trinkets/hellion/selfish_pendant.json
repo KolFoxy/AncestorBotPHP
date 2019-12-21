@@ -1,0 +1,14 @@
+{
+  "name": "Selfish Pendant",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/a/a3/Inv_trinket-selfish_pendant.png",
+  "rarity": 1,
+  "classRestriction": "Hellion",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "stressMod",
+      "value": -15,
+      "duration": -1
+    }
+  ]
+}

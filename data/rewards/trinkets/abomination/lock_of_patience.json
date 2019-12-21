@@ -1,0 +1,14 @@
+{
+  "name": "Lock of Patience",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/7/75/Inv_trinket_padlock_patience.png",
+  "rarity": 1,
+  "classRestriction": "abomination",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

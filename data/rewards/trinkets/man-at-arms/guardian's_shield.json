@@ -1,0 +1,20 @@
+{
+  "name": "Guardian's Shield",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/5/52/Man_at_arms_Shield.png",
+  "rarity": 4,
+  "classRestriction": "Man-at-Arms",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1
+    }
+  ]
+}

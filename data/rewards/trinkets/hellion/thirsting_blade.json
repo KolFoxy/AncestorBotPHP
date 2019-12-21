@@ -1,0 +1,26 @@
+{
+  "name": "Thirsting Blade",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/49/Hel_thirsting_blade.png",
+  "rarity": 6,
+  "classRestriction": "Hellion",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "accMod",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": -25,
+      "duration": -1
+    }
+  ],
+  "typeBonuses": [
+	{
+	  "type": "bleed",
+	  "critChanceMod": 8
+	}
+  ]
+}

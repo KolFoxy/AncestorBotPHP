@@ -1,0 +1,25 @@
+{
+  "name": "Bleed Amulet",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/c/c0/Inv_trinket-bleed_amulet.png",
+  "rarity": 2,
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "bleedSkillChance",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "bleedResist",
+      "value": 20,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "blightResist",
+      "value": -20,
+      "duration": -1
+    }
+  ]
+}

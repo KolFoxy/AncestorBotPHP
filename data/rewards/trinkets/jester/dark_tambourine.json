@@ -1,0 +1,20 @@
+{
+  "name": "Dark Tambourine",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0d/Inv_trinket-dark_tambourine.png",
+  "rarity": 4,
+  "classRestriction": "Jester",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "deathblowResist",
+      "value": 12,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": 5,
+      "duration": -1
+    }
+  ]
+}

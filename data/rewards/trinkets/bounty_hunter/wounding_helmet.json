@@ -1,0 +1,20 @@
+{
+  "name": "Wounding Helmet",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0e/Inv_trinket-wounding_helmet.png",
+  "rarity": 4,
+  "classRestriction": "Bounty Hunter",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 25,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "stunSkillChance",
+      "value": -20,
+      "duration": -1
+    }
+  ]
+}

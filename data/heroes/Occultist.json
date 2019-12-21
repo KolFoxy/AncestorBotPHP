@@ -1,0 +1,102 @@
+{
+  "name": "Occultist",
+  "description": "To fight the abyss, one must know it.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/8/85/Occultist_portrait_roster.png/75px-Occultist_portrait_roster.png",
+  "healthMax": 35,
+  "stats": {
+    "dodge": 30,
+    "critChance": 10,
+    "stunResist": 70,
+    "bleedResist": 90,
+    "blightResist": 80,
+    "debuffResist": 110
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "stab": 30,
+    "weak": 10,
+    "wyrd": 10,
+    "hands": 20
+  },
+  "embedColor": 4995948,
+  "actions": [
+    {
+      "name": "Sacrifical Stab",
+      "effect": {
+        "description": "Inflicts medium amount of damage. Bonus damage vs Eldritch.",
+        "health_value": -7,
+        "healthDeviation": -6,
+        "hitChance": 100,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/4c/Sacrificial_Stab.png",
+        "critChance": 13,
+        "typeBonuses": [
+          {
+            "type": "eldritch",
+            "damageMod": 35
+          }
+        ]
+      }
+    },
+    {
+      "name": "Weakening Curse",
+      "effect": {
+        "description": "Weakling!\nDeals minimum damage and decreases enemy`s PROT and damage.",
+        "health_value": -1,
+        "healthDeviation": -2,
+        "hitChance": 120,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0e/Weakening_Curse.png",
+        "critChance": 9
+      },
+      "statModifiers": [
+        {
+          "chance": 155,
+          "stat": "damageMod",
+          "value": -20
+        },
+        {
+          "chance": 155,
+          "stat": "prot",
+          "value": -20
+        }
+      ]
+    },
+    {
+      "name": "Wyrd Reconstruction",
+      "requiresTarget": true,
+      "effect": {
+        "description": "Flesh is weak, but easy to mold.\nHeals a random amount of damage and has a low chance of bleed.",
+        "health_value": 30,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/3/3a/Wyrd_Reconstruction.png",
+        "healthDeviation": -30,
+        "hitChance": -1
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 85,
+          "value": -3
+        }
+      ]
+    },
+    {
+      "name": "Hands from the Abyss",
+      "effect": {
+        "description": "Inflicts low damage and stuns the target.",
+        "hitChance": 110,
+        "critChance": 13,
+        "health_value": -3,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/f/f0/Hands_from_the_Abyss.png",
+        "healthDeviation": -3
+      },
+      "statusEffects": [
+        {
+          "type": "stun",
+          "chance": 160,
+          "duration": 1
+        }
+      ]
+    }
+  ]
+}

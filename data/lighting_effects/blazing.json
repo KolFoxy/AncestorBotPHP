@@ -1,0 +1,27 @@
+{
+  "name": "Blazing",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "debuffSkillChance",
+      "value": 20,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "typeBonuses": [
+    {
+      "type": "marked",
+      "damageMod": 20
+    }
+  ],
+  "monsterStatModifiers": [
+    {
+      "chance": -1,
+      "stat": "prot",
+      "value": 10,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ]
+}

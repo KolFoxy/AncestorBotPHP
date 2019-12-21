@@ -1,0 +1,14 @@
+{
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 10,
+      "duration": -1,
+      "targetSelf": true
+    }
+  ],
+  "name": "Vigorous",
+  "quote": "Adversity can foster hope, and resilience.",
+  "isVirtue": true
+}

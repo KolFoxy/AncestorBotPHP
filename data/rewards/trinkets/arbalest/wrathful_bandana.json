@@ -1,0 +1,26 @@
+{
+  "name": "Wrathful Bandana",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/0d/Bandana.png",
+  "rarity": 4,
+  "classRestriction": "arbalest",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "damageMod",
+      "value": 25,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "debuffSkillChance",
+      "value": 30,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healSkillMod",
+      "value": -50,
+      "duration": -1
+    }
+  ]
+}

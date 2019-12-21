@@ -1,0 +1,26 @@
+{
+  "name": "Berserk Mask",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b4/Berserk_mask.png",
+  "rarity": 4,
+  "classRestriction": "Leper",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "critChance",
+      "value": 10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "virtueChance",
+      "value": -10,
+      "duration": -1
+    },
+	{
+      "chance": -1,
+      "stat": "healReceivedMod",
+      "value": -15,
+      "duration": -1
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Cursed Incense",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/62/Inv_trinket-cursed_incense.png",
+  "rarity": 2,
+  "classRestriction": "Occultist",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "debuffSkillChance",
+      "value": 40,
+      "duration": -1
+    }
+  ]
+}

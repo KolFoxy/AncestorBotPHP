@@ -1,0 +1,14 @@
+{
+  "name": "Agility Talon",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/c/ce/Inv_trinket-agile_talon.png",
+  "rarity": 1,
+  "classRestriction": "Bounty Hunter",
+  "statModifiers": [
+    {
+      "chance": -1,
+      "stat": "dodge",
+      "value": 5,
+      "duration": -1
+    }
+  ]
+}

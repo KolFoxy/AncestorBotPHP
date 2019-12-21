@@ -1,0 +1,156 @@
+{
+  "name": "Highwayman",
+  "description": "Elusive, evasive, persistent - righteous traits for a rogue.",
+  "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/thumb/9/9e/Highwayman_portrait_roster.png/75px-Highwayman_portrait_roster.png",
+  "healthMax": 43,
+  "stats": {
+    "dodge": 30,
+    "critChance": 9,
+    "stunResist": 80
+  },
+  "types": [
+    "human"
+  ],
+  "actionRatings": {
+    "wicked": 40,
+    "duelist": 35,
+    "pistol": 30,
+    "tracking": 15
+  },
+  "embedColor": 6641484,
+  "actions": [
+    {
+      "name": "Wicked Slice",
+      "effect": {
+        "description": "Strike the enemy with a wicked precision.",
+        "health_value": -10,
+        "healthDeviation": -8,
+        "hitChance": 105,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/4/4b/Wicked_Slice.png"
+      }
+    },
+    {
+      "name": "Pistol Shot",
+      "effect": {
+        "description": "Inflicts medium-to-high damage with a high CRIT chance. Bonus DMG vs Marked.",
+        "health_value": -8,
+        "healthDeviation": -6,
+        "hitChance": 105,
+        "critChance": 12,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/9/97/Pistol_Shot.png",
+        "typeBonuses": [
+          {
+            "type": "marked",
+            "damageMod": 50
+          }
+        ]
+      }
+    },
+    {
+      "name": "Grapeshot Blast",
+      "effect": {
+        "description": "Reveals enemies and makes them more vulnerable.",
+        "health_value": -5,
+        "healthDeviation": -3,
+        "hitChance": 95,
+        "critChance": -5,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/0/09/Grapeshot_Blast.png",
+        "removesStealth": true
+      },
+      "statModifiers": [
+        {
+          "chance": 155,
+          "stat": "critReceivedChance",
+          "value": 16
+        }
+      ]
+    },
+    {
+      "name": "Tracking Shot",
+      "effect": {
+        "description": "Sharpen the senses. Deals minimum damage and increases Highwayman`s offensive stats.",
+        "health_value": -2,
+        "healthDeviation": -1,
+        "hitChance": 115,
+        "critChance": 1,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/6/66/Tracking_Shot.png",
+        "removesStealth": true
+      },
+      "statModifiers": [
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "accMod",
+          "value": 10
+        },
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "damageMod",
+          "value": 20
+        },
+        {
+          "chance": -1,
+          "targetSelf": true,
+          "stat": "critChance",
+          "value": 8
+        }
+      ]
+    },
+    {
+      "name": "Duelist's Advance",
+      "effect": {
+        "description": "Deals medium-to-high damage. Activates riposte.",
+        "health_value": -7,
+        "healthDeviation": -6,
+        "hitChance": 110,
+        "critChance": 9,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/b/b5/Duelist's_Advance.png"
+      },
+      "statusEffects": [
+        {
+          "type": "riposte",
+          "targetSelf": true,
+          "duration": 3,
+          "chance": -1
+        }
+      ]
+    },
+    {
+      "name": "Open Vein",
+      "effect": {
+        "description": "A brutal slice that makes a target bleed. Deals medium damage.",
+        "health_value": -8,
+        "healthDeviation": -6,
+        "image": "https://gamepedia.cursecdn.com/darkestdungeon_gamepedia/2/2e/Open_Vein.png",
+        "hitChance": 115,
+        "critChance": 4
+      },
+      "statusEffects": [
+        {
+          "type": "bleed",
+          "chance": 140,
+          "value": -4
+        }
+      ],
+      "statModifiers": [
+        {
+          "chance": 140,
+          "stat": "bleedResist",
+          "value": -33
+        }
+      ]
+    }
+  ],
+  "riposteAction": {
+    "name": "Riposte",
+    "effect": {
+      "description": "Retaliation!",
+      "health_value": -8,
+      "healthDeviation": -6,
+      "hitChance": 105,
+      "critChance": 10
+    }
+  }
+}

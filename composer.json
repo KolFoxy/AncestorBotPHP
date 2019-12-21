@@ -3,8 +3,8 @@
   "description": "Ancestor Bot Php Edition",
   "type": "project",
   "require": {
-    "php" : "^7.0",
-    "charlottedunois/yasmin": "0.6.0",
+    "php" : "^7.2",
+    "charlottedunois/yasmin": "0.7.0",
     "ext-gd": "^7.2",
     "cakephp/utility" : "3.7.5",
     "ratchet/rfc6455" : "0.2.4",
