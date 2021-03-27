@@ -5,7 +5,7 @@ namespace Ancestor\Interaction\ActionResult;
 use Ancestor\Interaction\AbstractLivingBeing;
 use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
-use Ancestor\CommandHandler\CommandHelper as Helper;
+use Ancestor\Command\CommandHelper as Helper;
 use Ancestor\Interaction\Stats\StatusEffect;
 
 class ActionResult {

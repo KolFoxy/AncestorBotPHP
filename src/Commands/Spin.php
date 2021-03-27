@@ -6,32 +6,36 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command as Command;
-use Ancestor\CommandHandler\CommandHandler as CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command as Command;
+use Ancestor\Command\CommandHandler as CommandHandler;
+use Ancestor\Command\CommandHelper;
+use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
 use GifCreator;
 
+
 class Spin extends Command {
 
-    private $tidePath;
-    private $ancestorPath;
+    const HOW_QUICKLY_THE_TIDE_TURNS = 'How quickly the tide turns?';
+    private string $tidePath;
+    private string $ancestorPath;
     private $tideURL;
     const FRAME_TIME = 11;
     /**
-     * @var \Ancestor\FileDownloader\FileDownloader
+     * @var FileDownloader
      */
-    private $imageDl;
+    private FileDownloader $downloader;
 
     /**
      * @var ImageTemplate
      */
-    private $tideTemplate;
+    private ImageTemplate $tideTemplate;
     /**
      * @var ImageTemplateApplier
      */
-    private $tideTemplateApplier;
+    private ImageTemplateApplier $tideTemplateApplier;
 
 
     function __construct(CommandHandler $handler, $tideURL) {
@@ -40,7 +44,7 @@ class Spin extends Command {
         $this->tidePath = dirname(__DIR__, 2) . '/data/images/spin_gif/tide_empty.png';
         $this->ancestorPath = dirname(__DIR__, 2) . '/data/images/spin_gif/ancestor.png';
 
-        $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
+        $this->downloader = new FileDownloader($this->handler->client->getLoop());
 
         $mapper = new \JsonMapper();
         $mapper->bExceptionOnMissingData = true;
@@ -52,21 +56,20 @@ class Spin extends Command {
 
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        $commandHelper = new \Ancestor\CommandHandler\CommandHelper($message);
-        $callbackObj = function ($image) use ($commandHelper) {
-            $file = $this->SpinImage($image);
-            if ($file === false) {
-                $commandHelper->RespondWithEmbedImage($this->tideURL, 'How quickly the tide turns?');
+    function run(MessageInterface $message, array $args) {
+        $callbackObj = function ($image) use ($message) {
+            $spinnedImage = $this->spinImage($image);
+            if ($spinnedImage === false) {
+                $message->replyWithEmbedImage('',self::HOW_QUICKLY_THE_TIDE_TURNS,$this->tideURL);
                 return;
             }
-            $commandHelper->RespondWithAttachedFile($file, 'spin.gif');
+            $message->getChannel()->sendWithFile('','spin.gif', $spinnedImage);
         };
         try {
-            $this->imageDl->DownloadUrlAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+            $this->downloader->DownloadUrlAsync(CommandHelper::ImageUrlFromCommandArgs($args, $message), $callbackObj);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
-            $commandHelper->RespondWithEmbedImage($this->tideURL, 'How quickly the tide turns?');
+            $message->replyWithEmbedImage('',self::HOW_QUICKLY_THE_TIDE_TURNS,$this->tideURL);
         }
     }
 
@@ -74,14 +77,15 @@ class Spin extends Command {
      * Spins image from $imageFile handler
      * @param resource $imageFile
      * @return bool|string
+     * @throws \Exception
      */
-    function SpinImage($imageFile) {
+    function spinImage($imageFile) {
         if ($imageFile === false || ($imageToSpin = CommandHelper::ImageFromFileHandler($imageFile)) === false) {
             return false;
         }
 
         $imageToSpin = $this->tideTemplateApplier->applyTemplate($imageToSpin, imagecreatefrompng($this->tidePath), true);
-        $frames = $this->GetImageRotationsWithAncestor($imageToSpin);
+        $frames = $this->getImageRotationsWithAncestor($imageToSpin);
 
         $animation = new GifCreator\AnimGif();
         $animation->create($frames, [self::FRAME_TIME]);
@@ -97,7 +101,7 @@ class Spin extends Command {
 
     }
 
-    function GetImageRotationsWithAncestor($image, int $rotations = 4, float $rotationAngle = 90) {
+    function getImageRotationsWithAncestor($image, int $rotations = 4, float $rotationAngle = 90) {
         $res = [];
         $ancestorPng = imagecreatefrompng($this->ancestorPath);
         for ($i = 1; $i < $rotations; $i++) {

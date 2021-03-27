@@ -2,10 +2,10 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command;
-use Ancestor\CommandHandler\CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
-use Ancestor\CommandHandler\TimedCommandManager;
+use Ancestor\Command\Command;
+use Ancestor\Command\CommandHandler;
+use Ancestor\Command\CommandHelper;
+use Ancestor\Command\TimedCommandManager;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;

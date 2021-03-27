@@ -1,61 +1,63 @@
 <?php
 
-namespace Ancestor\CommandHandler;
+namespace Ancestor\Command;
+
+use Ancestor\BotIO\BotIoInterface;
+use Ancestor\BotIO\MessageInterface;
 
 class CommandHandler {
-    protected $FAILED_RESPONSE = "The abyss has finally got me, for I am unable to process your request. Or perhaps the futile experiments of my creators have finally shown the whole scope of their puniness.";
-    protected $HELP_COMMAND = 'help';
-    /** @var \CharlotteDunois\Yasmin\Client */
-    public $client;
+    protected static string $FAILED_RESPONSE = "The abyss has finally got me, for I am unable to process your request. Or perhaps the futile experiments of my creators have finally shown the whole scope of their puniness.";
+    protected static string $HELP_COMMAND = 'help';
+
+    public BotIoInterface $client;
 
     /**
-     * Holds all commands mapped by their name.
-     * @var \CharlotteDunois\Collect\Collection()
+     * @var Command[]
      */
-    protected $commands;
+    protected array $commands;
 
     /** @var string */
-    public $prefix;
+    public string $prefix;
 
     /**
      * Constructor.
-     * @param \CharlotteDunois\Yasmin\Client $client
+     * @param BotIoInterface $client
      * @param string $prefix
      */
-    function __construct(\CharlotteDunois\Yasmin\Client $client, string $prefix) {
+    function __construct(BotIoInterface $client, string $prefix) {
         $this->client = $client;
         $this->prefix = $prefix;
-        $this->commands = new \CharlotteDunois\Collect\Collection();
+        $this->commands = [];
     }
 
 
     /**
      * Message handler. Returns True if message was handled.
-     * @param \CharlotteDunois\Yasmin\Models\Message $message
+     * @param MessageInterface $message
      * @return bool
      */
-    function handleMessage(\CharlotteDunois\Yasmin\Models\Message $message): bool {
-        if ($message->author->bot) {
+    function handleMessage(MessageInterface $message): bool {
+        if ($message->isAuthorBot()) {
             return false;
         }
         $prefixLen = mb_strlen($this->prefix);
-        if (mb_substr($message->content, 0, $prefixLen) !== $this->prefix) {
+        if (mb_substr($message->getContent(), 0, $prefixLen) !== $this->prefix) {
             return false;
         }
 
-        $args = explode(' ', mb_substr($message->content, $prefixLen));
-        $command = mb_strtolower(array_shift($args));
-        if (!$this->commands->has($command)) {
-            if ($command === $this->HELP_COMMAND) {
+        $args = explode(' ', mb_substr($message->getContent(), $prefixLen));
+        $commandName = mb_strtolower(array_shift($args));
+        if (!array_key_exists($commandName,$this->commands)) {
+            if ($commandName === self::$HELP_COMMAND) {
                 $this->helpCommand($message, $args);
                 return true;
             }
             return false;
         }
         try {
-            $this->commands->get($command)->run($message, $args);
+            $this->commands[$commandName]->run($message, $args);
         } catch (\Throwable $e) {
-            $message->reply($this->FAILED_RESPONSE . PHP_EOL . "Message: " . $e->getMessage());
+            $message->reply(self::$FAILED_RESPONSE . PHP_EOL . "Message: " . $e->getMessage());
             throw new \RuntimeException("Error with command->run: " . $e->getMessage() . PHP_EOL . $e->getTraceAsString());
         }
         return true;
@@ -65,29 +67,29 @@ class CommandHandler {
     /**
      * Provides generic "help" command.
      * Can be overrode by creating specific "help" command
-     * @param \CharlotteDunois\Yasmin\Models\Message $message
+     * @param MessageInterface $message
      * @param array $args
      */
-    function helpCommand(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
+    function helpCommand(MessageInterface $message, array $args) {
         $answer = 'No such command';
         $title = 'Error';
         if (empty($args)) {
             $title = '**Commands. Use ' . $this->prefix . 'help [COMMAND] for more info.**';
             $commandsArray = array();
-            foreach ($this->commands->values() as $item) {
+            foreach ($this->commands as $item) {
                 if ($item->hidden) {
                     continue;
                 }
                 $commandsArray[$item->getName()] = '``' . $this->prefix . $item->getName() . '``' . PHP_EOL;
             }
             $answer = implode($commandsArray);
-        } elseif ($this->commands->has(mb_strtolower($args[0]))) {
-            $command = mb_strtolower($args[0]);
-            $comm = $this->commands->get($command);
+        } elseif (array_key_exists(mb_strtolower($args[0]), $this->commands)) {
+            $commandName = mb_strtolower($args[0]);
+            $comm = $this->commands[$commandName];
             if ($comm->hidden) {
                 return;
             }
-            $title = $this->prefix . $command;
+            $title = $this->prefix . $commandName;
             $answer = $comm->getDescription();
             if (!empty($comm->aliases)) {
                 $answer .= PHP_EOL . 'Aliases: ' . implode(', ', $comm->aliases);
@@ -96,22 +98,19 @@ class CommandHandler {
             $title = $this->prefix . 'help';
             $answer = 'Use "' . $this->prefix . 'help [COMMAND]" to get command`s description';
         }
-        $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-        $embedResponse->addField($title, $answer);
-        $message->channel->send('', array('embed' => $embedResponse));
+        $message->getChannel()->sendWithSimpleEmbed('', $title, $answer);
     }
 
     /**
      * Register a command.
-     * @param Command $commandClass
-     * @throws \RuntimeException
+     * @param Command $command
      */
     function registerCommand(Command $command) {
         try {
-            $this->commands->set(mb_strtolower($command->getName()), $command);
+            $this->commands[mb_strtolower($command->getName())] = $command;
             if (!empty($command->aliases)) {
                 foreach ($command->aliases as $alias) {
-                    $this->commands->set(mb_strtolower($alias), $command);
+                    $this->commands[mb_strtolower($alias)] = $command;
                 }
             }
         } catch (\Throwable $e) {
@@ -121,8 +120,7 @@ class CommandHandler {
 
     /**
      * Register multiple commands.
-     * @param array $commands
-     * @throws \RuntimeException
+     * @param Command[] $commands
      */
     function registerCommands(array $commands) {
         foreach ($commands as $command) {

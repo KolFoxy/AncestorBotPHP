@@ -2,9 +2,9 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command;
-use Ancestor\CommandHandler\CommandHandler;
-use Ancestor\CommandHandler\TimedCommandManager;
+use Ancestor\Command\Command;
+use Ancestor\Command\CommandHandler;
+use Ancestor\Command\TimedCommandManager;
 use Ancestor\Interaction\Fight\FightManager;
 use Ancestor\Interaction\Fight\EncounterCollectionInterface;
 use Ancestor\Interaction\Hero;

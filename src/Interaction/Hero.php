@@ -2,7 +2,7 @@
 
 namespace Ancestor\Interaction;
 
-use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\Command\CommandHelper;
 use Ancestor\Interaction\ActionResult\ActionResult;
 use Ancestor\Interaction\SpontaneousAction\SpontaneousActionsManager;
 use Ancestor\Interaction\Stats\Stats;

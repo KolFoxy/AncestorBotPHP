@@ -2,8 +2,8 @@
 
 namespace Ancestor;
 
-use Ancestor\CommandHandler\CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\Command\CommandHandler;
+use Ancestor\Command\CommandHelper;
 use Ancestor\Commands\Fight;
 use Ancestor\Commands\Gold;
 use Ancestor\Commands\Read;
@@ -51,7 +51,7 @@ class AncestorBot {
     const ARG_OWNER_ID = 'ownerId';
 
     /**
-     * @var \Ancestor\CommandHandler\CommandHandler
+     * @var \Ancestor\Command\CommandHandler
      */
     private $commandHandler = null;
 

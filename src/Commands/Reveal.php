@@ -2,9 +2,10 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command;
-use Ancestor\CommandHandler\CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command;
+use Ancestor\Command\CommandHandler;
+use Ancestor\Command\CommandHelper;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
@@ -23,12 +24,12 @@ class Reveal extends Command {
     /**
      * @var ImageTemplate
      */
-    private $defaultTemplate;
+    private ImageTemplate $defaultTemplate;
 
     /**
      * @var FileDownloader
      */
-    private $imageDl;
+    private FileDownloader $downloader;
 
 
     function __construct(CommandHandler $handler) {
@@ -39,23 +40,22 @@ class Reveal extends Command {
         $this->defaultTemplate = new ImageTemplate();
         $mapper->map($json, $this->defaultTemplate);
         $this->pathsToImages = glob(dirname(__DIR__, 2) . '/data/images/reveal/tentacles/*.png');
-        $this->imageDl = new FileDownloader($handler->client->getLoop());
+        $this->downloader = new FileDownloader($handler->client->getLoop());
     }
 
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        $commandHelper = new CommandHelper($message);
-        $callbackObj = function ($image) use ($commandHelper) {
-            $file = $this->reveal($image);
-            if ($file === false) {
-                $commandHelper->message->reply('***Your image is too powerful even for cosmic powers!***');
+    function run(MessageInterface $message, array $args) {
+        $callbackObj = function ($image) use ($message) {
+            $revealedImage = $this->reveal($image);
+            if ($revealedImage === false) {
+                $message->reply('***Your image is too powerful even for cosmic powers!***');
                 return;
             }
-            $commandHelper->RespondWithAttachedFile($file, 'revealed.png');
+            $message->getChannel()->sendWithFile('','revealed.png',$revealedImage);
         };
 
         try {
-            $this->imageDl->DownloadUrlAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+            $this->downloader->DownloadUrlAsync(CommandHelper::ImageUrlFromCommandArgs($args, $message), $callbackObj);
         } catch (\Throwable $e){
             echo $e->getMessage();
             $message->reply('***Not today***');

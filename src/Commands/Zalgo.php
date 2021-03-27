@@ -6,12 +6,13 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command as Command;
-use Ancestor\CommandHandler\CommandHandler as CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\BotIO\EmbedObject;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command as Command;
+use Ancestor\Command\CommandHandler as CommandHandler;
+use Ancestor\Command\CommandHelper;
 
-use CharlotteDunois\Yasmin\Utils\MessageHelpers;
-use Ancestor\Zalgo\Zalgo as Zalgorizer;
+use Ancestor\Zalgo\Zalgo as Zalgolizer;
 
 class Zalgo extends Command {
 
@@ -29,21 +30,22 @@ class Zalgo extends Command {
         $this->zalgoTitles = $array = file(dirname(__DIR__, 2) . '/data/zalgoTitles');
         $this->ztCount = count($this->zalgoTitles) - 1;
         parent::__construct($handler, 'zalgo', 'transforms given sentence into something ' .
-            Zalgorizer::zalgorizeString('like this', 3), ['cursed']);
+            Zalgolizer::zalgorizeString('like this', 3), ['cursed']);
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
+    function run(MessageInterface $message, array $args) {
         if (empty($args)) {
             return;
         }
-        $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-        $strArray = CommandHelper::mb_str_split(MessageHelpers::cleanContent($message, implode(' ', $args)), self::FIELD_MAX_LENGTH);
+        $embedResponse = new EmbedObject();
+        //Maybe replace trim with more extensive cleaning method, testing required
+        $strArray = CommandHelper::mb_str_split(trim($message, implode(' ', $args)), self::FIELD_MAX_LENGTH);
         foreach ($strArray as $str) {
-            $embedResponse->addField('``' . Zalgorizer::zalgorizeString($this->getRandomZalgoTitle(), self::ZALGO_PER_CHAR) . '``',
-                Zalgorizer::zalgorizeString($str, self::ZALGO_PER_CHAR));
-        };
-        $embedResponse->setFooter(Zalgorizer::zalgorizeString($message->author->username, 1), $message->author->getAvatarURL());
-        $message->channel->send('', ['embed' => $embedResponse]);
+            $embedResponse->addField('``' . Zalgolizer::zalgorizeString($this->getRandomZalgoTitle(), self::ZALGO_PER_CHAR) . '``',
+                Zalgolizer::zalgorizeString($str, self::ZALGO_PER_CHAR));
+        }
+        $embedResponse->setFooter(Zalgolizer::zalgorizeString($message->getAuthor()->getUsername(), 1), $message->getAuthor()->getAvatarURL());
+        $message->getChannel()->send('', $embedResponse);
     }
 
     function getRandomZalgoTitle(): string {

@@ -3,7 +3,7 @@
 
 namespace Ancestor\Interaction\Fight;
 
-use Ancestor\CommandHandler\CommandHelper as Helper;
+use Ancestor\Command\CommandHelper as Helper;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;

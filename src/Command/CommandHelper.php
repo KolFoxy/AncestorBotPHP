@@ -1,26 +1,26 @@
 <?php
 
-namespace Ancestor\CommandHandler;
+namespace Ancestor\Command;
 
-use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
-use CharlotteDunois\Yasmin\Models\Message as Message;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use Ancestor\BotIO\BotIoInterface;
+use Ancestor\BotIO\ChannelInterface;
+use Ancestor\BotIO\MessageInterface;
 
 class CommandHelper {
 
     const MAX_IMAGE_SIZE = 2800 * 2800;
 
     /**
-     * @var Message
+     * @var BotIoInterface
      */
-    public $message;
+    public $input;
 
     /**
      * CommandHelper constructor.
-     * @param Message $message
+     * @param BotIoInterface $input
      */
-    public function __construct(Message $message) {
-        $this->message = $message;
+    public function __construct(BotIoInterface $input) {
+        $this->input = $input;
     }
 
     /**
@@ -34,12 +34,12 @@ class CommandHelper {
         if (isset($embedTitle)) {
             $embedResponse->setTitle($embedTitle);
         }
-        $this->message->channel->send('', ['embed' => $embedResponse]);
+        $this->input->channel->send('', ['embed' => $embedResponse]);
     }
 
     public function RespondWithAttachedFile($fileData, string $fileName, $embed = null, $content = '') {
         //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data (0.5.1)
-        $this->message->channel->send($content, ['files' => [['data' => $fileData, 'name' => $fileName]],
+        $this->input->channel->send($content, ['files' => [['data' => $fileData, 'name' => $fileName]],
             'embed' => $embed]);
     }
 
@@ -48,16 +48,16 @@ class CommandHelper {
      * @param array $args
      * @return string
      */
-    public function ImageUrlFromCommandArgs(array $args): string {
+    public static function ImageUrlFromCommandArgs(array $args, MessageInterface $message): string {
         if (!empty($args)) {
             if (preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_USERS, $args[0]) === 1) {
-                return $this->message->mentions->users->first()->getDisplayAvatarURL(null, 'png');
+                return $this->input->mentions->users->first()->getDisplayAvatarURL(null, 'png');
             }
             if (filter_var($args[0], FILTER_VALIDATE_URL) && $this->HasImageExtension($args[0])) {
                 return $args[0];
             }
         }
-        return $this->message->author->getDisplayAvatarURL(null, 'png');
+        return $this->input->author->getDisplayAvatarURL(null, 'png');
     }
 
     /**
@@ -65,17 +65,17 @@ class CommandHelper {
      * @param string $path
      * @return bool
      */
-    public function HasImageExtension(string $path): bool {
+    public static function HasImageExtension(string $path): bool {
         return in_array(pathinfo($path, PATHINFO_EXTENSION),
             ['jpg', 'png', 'bmp', 'tif', 'gif', 'jpeg', 'webp']);
     }
 
     /**
      * Checks if channel has 'NSFW' in the channel's name, or if channel is marked as NSFW
-     * @param TextChannelInterface $channel
+     * @param ChannelInterface $channel
      * @return bool
      */
-    public static function ChannelIsNSFW(TextChannelInterface $channel): bool {
+    public static function ChannelIsNSFW(ChannelInterface $channel): bool {
         if ((!empty($channel->nsfw) && $channel->nsfw === true) ||
             (!empty($channel->name) && strpos(strtolower($channel->name), 'nsfw') !== false)) {
             return true;
@@ -142,6 +142,14 @@ class CommandHelper {
         foreach ($fields as $field) {
             $mergeInto->addField($field['name'], $field['value'], $field['inline']);
         }
+    }
+
+    public static function checkIfStringContainsRole(string $input) : bool {
+        //TODO: implement method
+    }
+
+    public static function checkIfStringContainsUserMention(string $input) : bool {
+        //TODO: implement method
     }
 
     /**

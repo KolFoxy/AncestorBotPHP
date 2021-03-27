@@ -1,6 +1,6 @@
 <?php
 
-namespace Ancestor\CommandHandler;
+namespace Ancestor\Command;
 
 use CharlotteDunois\Collect\Collection;
 use CharlotteDunois\Yasmin\Client;
