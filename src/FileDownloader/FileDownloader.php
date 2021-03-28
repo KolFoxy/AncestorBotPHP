@@ -27,18 +27,19 @@ class FileDownloader implements AsyncFileDownloaderInterface {
      * @param string $url
      * @param callable $callback
      */
-    public function DownloadUrlAsync(string $url, $callback) {
+    public function downloadUrlAsync(string $url, $callback) {
         $client = new Client($this->loop);
         $request = $client->request('GET', $url);
         $tempFile = null;
         $fileSize = 0;
+        $request->end();
         $request->on('response',
             function (Response $response) use ($callback, &$tempFile, &$fileSize) {
 
                 $response->on('error', function (Exception $e) use ($callback, $response) {
                     echo $e->getMessage() . PHP_EOL;
-                    $callback(false);
                     $response->close();
+                    $callback(false);
                 });
 
                 if ($response->getHeaders()['Content-Length'] > self::MAX_RESPONSE_SIZE) {
@@ -65,7 +66,6 @@ class FileDownloader implements AsyncFileDownloaderInterface {
                 });
 
             });
-        $request->end();
     }
 
     /**
@@ -75,14 +75,14 @@ class FileDownloader implements AsyncFileDownloaderInterface {
     public function getDownloadAsyncImagePromise(string $url): Promise {
         $deferred = new Deferred();
         $callback = function ($file) use ($deferred) {
-            $imageFile = CommandHelper::ImageFromFileHandler($file);
+            $imageFile = CommandHelper::imageFromFileHandler($file);
             if ($imageFile === false){
                 $deferred->reject();
                 return;
             }
             $deferred->resolve($imageFile);
         };
-        $this->DownloadUrlAsync($url, $callback);
+        $this->downloadUrlAsync($url, $callback);
         return $deferred->promise();
     }
 }

@@ -3,6 +3,7 @@
 namespace Ancestor\BotIO;
 
 class EmbedObject implements EmbedInterface {
+
     public ?string $title;
     public ?string $description;
     public ?string $url;
@@ -36,14 +37,29 @@ class EmbedObject implements EmbedInterface {
     public ?string $videoHeight;
     public ?string $videoWidth;
 
+    /**
+     * array:
+     *       [
+     *          [
+     *            'title' => string
+     *            'body' => string
+     *            'inline' => bool
+     *          ]
+     *       ]
+     * @var array|null
+     */
     public ?array $fields = null;
-
 
     public function addField(string $title, string $body, bool $inline = false) {
         if (is_null($this->fields)) {
             $this->fields = [];
         }
-        $this->fields[] = [$title, $body, $inline];
+
+        $this->fields[] = [
+            'title' => $title,
+            'body' => $body,
+            'inline' => $inline
+        ];
     }
 
     public function getFields(): array {

@@ -4,6 +4,7 @@ namespace Ancestor\Command;
 
 use Ancestor\BotIO\BotIoInterface;
 use Ancestor\BotIO\ChannelInterface;
+use Ancestor\BotIO\EmbedObject;
 use Ancestor\BotIO\MessageInterface;
 
 class CommandHelper {
@@ -13,51 +14,32 @@ class CommandHelper {
     /**
      * @var BotIoInterface
      */
-    public $input;
+    public BotIoInterface $client;
 
     /**
      * CommandHelper constructor.
-     * @param BotIoInterface $input
+     * @param BotIoInterface $client
      */
-    public function __construct(BotIoInterface $input) {
-        $this->input = $input;
-    }
-
-    /**
-     * Respond to the message with embed image with an option title.
-     * @param string $embedImageUrl
-     * @param string|null $embedTitle
-     */
-    public function RespondWithEmbedImage(string $embedImageUrl, string $embedTitle = null) {
-        $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-        $embedResponse->setImage($embedImageUrl);
-        if (isset($embedTitle)) {
-            $embedResponse->setTitle($embedTitle);
-        }
-        $this->input->channel->send('', ['embed' => $embedResponse]);
-    }
-
-    public function RespondWithAttachedFile($fileData, string $fileName, $embed = null, $content = '') {
-        //Had to double-array, due to bug in the Yasmin\DataHelpers spamming warnings when dealing with binary data (0.5.1)
-        $this->input->channel->send($content, ['files' => [['data' => $fileData, 'name' => $fileName]],
-            'embed' => $embed]);
+    public function __construct(BotIoInterface $client) {
+        $this->client = $client;
     }
 
     /**
      * Gets either a user's avatar URL from the command arguments or URL to a picture. If 'args' is empty, returns avatar of the author
      * @param array $args
+     * @param MessageInterface $message
      * @return string
      */
-    public static function ImageUrlFromCommandArgs(array $args, MessageInterface $message): string {
+    public static function imageUrlFromCommandArgs(array $args, MessageInterface $message): string {
         if (!empty($args)) {
-            if (preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_USERS, $args[0]) === 1) {
-                return $this->input->mentions->users->first()->getDisplayAvatarURL(null, 'png');
+            if (self::checkIfStringContainsUserMention($args[0])) {
+                return $message->getUserMentions()[0]->getAvatarUrl();
             }
-            if (filter_var($args[0], FILTER_VALIDATE_URL) && $this->HasImageExtension($args[0])) {
+            if (filter_var($args[0], FILTER_VALIDATE_URL) && self::hasImageExtension($args[0])) {
                 return $args[0];
             }
         }
-        return $this->input->author->getDisplayAvatarURL(null, 'png');
+        return  $message->getAuthor()->getAvatarUrl();
     }
 
     /**
@@ -65,29 +47,16 @@ class CommandHelper {
      * @param string $path
      * @return bool
      */
-    public static function HasImageExtension(string $path): bool {
+    public static function hasImageExtension(string $path): bool {
         return in_array(pathinfo($path, PATHINFO_EXTENSION),
             ['jpg', 'png', 'bmp', 'tif', 'gif', 'jpeg', 'webp']);
-    }
-
-    /**
-     * Checks if channel has 'NSFW' in the channel's name, or if channel is marked as NSFW
-     * @param ChannelInterface $channel
-     * @return bool
-     */
-    public static function ChannelIsNSFW(ChannelInterface $channel): bool {
-        if ((!empty($channel->nsfw) && $channel->nsfw === true) ||
-            (!empty($channel->name) && strpos(strtolower($channel->name), 'nsfw') !== false)) {
-            return true;
-        }
-        return false;
     }
 
     /**
      * @param string $str
      * @return bool
      */
-    public static function StringContainsURLs(string $str) {
+    public static function stringContainsURLs(string $str) {
         foreach (explode(' ', str_replace(["\r", "\n"], ' ', $str)) as $item) {
             if (filter_var($item, FILTER_VALIDATE_URL)) {
                 return true;
@@ -100,7 +69,7 @@ class CommandHelper {
      * @param $fileHandler
      * @return resource|false
      */
-    public static function ImageFromFileHandler($fileHandler) {
+    public static function imageFromFileHandler($fileHandler) {
         $imageSize = getimagesize(stream_get_meta_data($fileHandler)['uri']);
 
         if ($imageSize === false || $imageSize[0] * $imageSize[1] > self::MAX_IMAGE_SIZE) {
@@ -127,11 +96,11 @@ class CommandHelper {
     }
 
     /**
-     * @param MessageEmbed $mergeInto
-     * @param MessageEmbed|array $mergeFrom
+     * @param EmbedObject $mergeInto
+     * @param EmbedObject|array $mergeFrom
      */
-    public static function mergeEmbed(MessageEmbed $mergeInto, $mergeFrom) {
-        if (is_a($mergeFrom, MessageEmbed::class)) {
+    public static function mergeEmbed(EmbedObject $mergeInto, $mergeFrom) {
+        if (is_a($mergeFrom, EmbedObject::class)) {
             if ($mergeFrom->title != null && $mergeFrom->description != null) {
                 $mergeInto->addField($mergeFrom->title, $mergeFrom->description);
             }
@@ -140,7 +109,7 @@ class CommandHelper {
             $fields = $mergeFrom;
         }
         foreach ($fields as $field) {
-            $mergeInto->addField($field['name'], $field['value'], $field['inline']);
+            $mergeInto->addField($field['title'], $field['body'], $field['inline']);
         }
     }
 
@@ -153,15 +122,15 @@ class CommandHelper {
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * @param string $title
+     * @param string $body
      * @param bool $inline
-     * @return array ['name' => string, 'value' => string, 'inline' => bool]
+     * @return array ['title' => string, 'body' => string, 'inline' => bool]
      */
-    public static function getEmbedField(string $name, string $value, bool $inline = false) {
+    public static function getEmbedField(string $title, string $body, bool $inline = false) {
         return [
-            'name' => $name,
-            'value' => $value,
+            'title' => $title,
+            'body' => $body,
             'inline' => $inline,
         ];
     }

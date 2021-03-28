@@ -55,7 +55,7 @@ class Reveal extends Command {
         };
 
         try {
-            $this->downloader->DownloadUrlAsync(CommandHelper::ImageUrlFromCommandArgs($args, $message), $callbackObj);
+            $this->downloader->downloadUrlAsync(CommandHelper::imageUrlFromCommandArgs($args, $message), $callbackObj);
         } catch (\Throwable $e){
             echo $e->getMessage();
             $message->reply('***Not today***');
@@ -68,7 +68,7 @@ class Reveal extends Command {
      * @return bool|string
      */
     function reveal($imageFile) {
-        if ($imageFile === false || !($imageToReveal = CommandHelper::ImageFromFileHandler($imageFile))) {
+        if ($imageFile === false || !($imageToReveal = CommandHelper::imageFromFileHandler($imageFile))) {
             return false;
         }
 

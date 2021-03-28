@@ -60,7 +60,7 @@ class Stress extends Command {
         };
 
         try {
-            $this->fileDownloader->DownloadUrlAsync(CommandHelper::ImageUrlFromCommandArgs($args, $message), $callbackObj);
+            $this->fileDownloader->downloadUrlAsync(CommandHelper::imageUrlFromCommandArgs($args, $message), $callbackObj);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             $message->replyWithEmbedImage('','',$this->stressURL);
@@ -73,7 +73,7 @@ class Stress extends Command {
      * @return bool|string
      */
     function stressImage($imageFile) {
-        if ($imageFile === false || ($imageRes = CommandHelper::ImageFromFileHandler($imageFile)) === false) {
+        if ($imageFile === false || ($imageRes = CommandHelper::imageFromFileHandler($imageFile)) === false) {
             return false;
         }
 

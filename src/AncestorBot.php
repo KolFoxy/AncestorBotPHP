@@ -135,10 +135,10 @@ class AncestorBot {
 
     private function nsfwResponse(Message $message) {
         if ((!empty($message->attachments) && count($message->attachments) > 0) ||
-            (!empty($message->embeds) && count($message->embeds) > 0) || CommandHelper::StringContainsURLs($message->content)) {
+            (!empty($message->embeds) && count($message->embeds) > 0) || CommandHelper::stringContainsURLs($message->content)) {
             $embedResponse = new MessageEmbed();
             $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
-            $embedResponse->setDescription(RandomDataProvider::GetInstance()->GetRandomNSFWQuote());
+            $embedResponse->setDescription(RandomDataProvider::getInstance()->getRandomNSFWQuote());
             $message->channel->send('', ['embed' => $embedResponse]);
         }
     }

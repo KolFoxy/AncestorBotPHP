@@ -66,7 +66,7 @@ class Spin extends Command {
             $message->getChannel()->sendWithFile('','spin.gif', $spinnedImage);
         };
         try {
-            $this->downloader->DownloadUrlAsync(CommandHelper::ImageUrlFromCommandArgs($args, $message), $callbackObj);
+            $this->downloader->downloadUrlAsync(CommandHelper::imageUrlFromCommandArgs($args, $message), $callbackObj);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             $message->replyWithEmbedImage('',self::HOW_QUICKLY_THE_TIDE_TURNS,$this->tideURL);
@@ -80,7 +80,7 @@ class Spin extends Command {
      * @throws \Exception
      */
     function spinImage($imageFile) {
-        if ($imageFile === false || ($imageToSpin = CommandHelper::ImageFromFileHandler($imageFile)) === false) {
+        if ($imageFile === false || ($imageToSpin = CommandHelper::imageFromFileHandler($imageFile)) === false) {
             return false;
         }
 

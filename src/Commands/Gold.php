@@ -20,8 +20,8 @@ class Gold extends Command {
     }
 
     function run(MessageInterface $input, array $args) {
-        $rdp = RandomDataProvider::GetInstance();
-        $input->replyWithEmbedImage('',$rdp->GetRandomRewardQuote(),$rdp->GetRandomReward());
+        $rdp = RandomDataProvider::getInstance();
+        $input->replyWithEmbedImage('',$rdp->getRandomRewardQuote(),$rdp->getRandomReward());
 
     }
 }

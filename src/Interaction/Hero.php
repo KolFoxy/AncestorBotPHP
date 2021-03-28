@@ -404,7 +404,7 @@ class Hero extends AbstractLivingBeing {
     }
 
     public function getDeathQuote(): string {
-        return RandomDataProvider::GetInstance()->GetRandomHeroDeathQuote();
+        return RandomDataProvider::getInstance()->getRandomHeroDeathQuote();
     }
 
     public function debuffIsPermanent(string $debuffKey): bool {

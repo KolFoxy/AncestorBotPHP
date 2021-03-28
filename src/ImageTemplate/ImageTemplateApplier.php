@@ -6,7 +6,7 @@ class ImageTemplateApplier {
     /**
      * @var ImageTemplate
      */
-    public $imgTemplate;
+    public ImageTemplate $imgTemplate;
 
     public function __construct(ImageTemplate $imageTemplate) {
         $this->imgTemplate = $imageTemplate;

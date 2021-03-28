@@ -7,32 +7,32 @@ class ImageTemplate {
      * Width of the image that'll be put on the template.
      * @var int
      */
-    public $imgW;
+    public int $imgW;
     /**
      * Height of the image that'll be put on the template.
      * @var int
      */
-    public $imgH;
+    public int $imgH;
     /**
      * Height of the template.
      * @var int
      */
-    public $templateH;
+    public int $templateH;
     /**
      * Width of the template.
      * @var int
      */
-    public $templateW;
+    public int $templateW;
     /**
      * Where to put the image on template, X value
      * @var int
      */
-    public $imgPositionX;
+    public int $imgPositionX;
     /**
      * Where to put the image on template, Y value.
      * @var int
      */
-    public $imgPositionY;
+    public int $imgPositionY;
 
 
 }

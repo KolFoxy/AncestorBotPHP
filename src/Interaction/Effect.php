@@ -53,10 +53,10 @@ class Effect extends AbstractEffect {
 
     protected function getTitleExtra(): string {
         if ($this->isPositiveQuirkEffect()) {
-            return ': ' . RandomDataProvider::GetInstance()->GetRandomPositiveQuirk();
+            return ': ' . RandomDataProvider::getInstance()->getRandomPositiveQuirk();
         }
         if ($this->isNegativeQuirkEffect()) {
-            return ': ' . RandomDataProvider::GetInstance()->GetRandomNegativeQuirk();
+            return ': ' . RandomDataProvider::getInstance()->getRandomNegativeQuirk();
         }
         return '';
     }

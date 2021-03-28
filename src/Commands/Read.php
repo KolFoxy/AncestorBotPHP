@@ -85,7 +85,7 @@ class Read extends Command {
                 $this->onImageDownloadResponse($imageHandler, $effect, $message, $extraEmbedFields);
             };
 
-            $this->fileDl->DownloadUrlAsync($message->author->getDisplayAvatarURL(null, 'png'), $callbackObj);
+            $this->fileDl->downloadUrlAsync($message->author->getDisplayAvatarURL(null, 'png'), $callbackObj);
 
         }
     }
@@ -134,7 +134,7 @@ class Read extends Command {
      * @return string
      */
     function getImageOnTemplate($imageSrcFileHandler, string $imageForTemplatePath, ImageTemplate $template): string {
-        $imageSrc = CommandHelper::ImageFromFileHandler($imageSrcFileHandler);
+        $imageSrc = CommandHelper::imageFromFileHandler($imageSrcFileHandler);
         $imageTemplate = imagecreatefrompng($imageForTemplatePath);
         $tA = new ImageTemplateApplier($template);
         $canvas = $tA->applyTemplate($imageSrc, $imageTemplate, true);

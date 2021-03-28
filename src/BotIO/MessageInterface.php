@@ -14,4 +14,9 @@ interface MessageInterface {
     public function getChannel(): ChannelInterface;
 
     public function getAuthor() : UserInterface;
+
+    /**
+     * @return UserInterface[]
+     */
+    public function getUserMentions() : array;
 }
