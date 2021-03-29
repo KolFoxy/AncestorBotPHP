@@ -17,22 +17,22 @@ class Trinket extends AbstractTypedPermanentState {
      * @var string
      * @required
      */
-    public $image;
+    public string $image;
     /**
      * @var int
      * @required
      */
-    public $rarity;
+    public int $rarity;
 
     /**
      * @var string|null Name of the class that this trinket is restricted to. NULL for no restrictions.
      */
-    public $classRestriction = null;
+    public ?string $classRestriction = null;
 
     /**
      * @var string|null
      */
-    public $text = null;
+    public ?string $text = null;
 
 
     public function getDescription(): string {

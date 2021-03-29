@@ -4,34 +4,36 @@ namespace Ancestor\Interaction\Incident;
 
 use Ancestor\Interaction\AbstractInteraction;
 use Ancestor\Interaction\Effect;
+use JsonMapper;
+use JsonMapper_Exception;
 
 class Incident extends AbstractInteraction {
 
     /**
      * @var IncidentAction[]
      */
-    public $actions;
+    public array $actions;
 
     /**
      * @var bool
      */
-    public $disableDefAction = false;
+    public bool $disableDefAction = false;
 
     /**
      * @var IncidentAction|null
      */
-    static private $defAction = null;
+    private static ?IncidentAction $defAction = null;
 
     /**
      * @var string
      */
-    public $image;
+    public string $image;
 
     const DEFAULT_ACTION_DESCRIPTION = 'There is no way that what you are seeing is real. It must be just a mere vision, a glimpse of cosmic feverish hell. Shut your eyes, turn around and run: it\'s not like directions really matter here anyway.';
 
     /**
      * @param mixed $actions
-     * @throws \JsonMapper_Exception
+     * @throws JsonMapper_Exception
      */
     public function setActions($actions): void {
         if ($actions === null) {
@@ -42,7 +44,7 @@ class Incident extends AbstractInteraction {
             return;
         }
 
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $mapper->bExceptionOnUndefinedProperty = true;
         if (is_array($actions)) {

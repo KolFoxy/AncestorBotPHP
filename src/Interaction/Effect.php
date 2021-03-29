@@ -2,44 +2,44 @@
 
 namespace Ancestor\Interaction;
 
-
+use Ancestor\BotIO\EmbedInterface;
+use Ancestor\BotIO\EmbedObject;
 use Ancestor\Interaction\Stats\Stats;
 use Ancestor\RandomData\RandomDataProvider;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Effect extends AbstractEffect {
 
     /**
      * @var string|null
      */
-    public $name = null;
+    public ?string $name = null;
 
     /**
      * Indicates whether or not effect gives hero positive(TRUE) or negative(FALSE) quirk.
      * @var bool|null
      */
-    public $quirk_positive = null;
+    public ?bool $quirkIsPositive = null;
 
     /**
      * @return bool
      */
     public function isPositiveQuirkEffect(): bool {
-        return isset($this->quirk_positive) && $this->quirk_positive;
+        return isset($this->quirkIsPositive) && $this->quirkIsPositive;
     }
 
     /**
      * @return bool
      */
     public function isNegativeQuirkEffect(): bool {
-        return isset($this->quirk_positive) && !$this->quirk_positive;
+        return isset($this->quirkIsPositive) && !$this->quirkIsPositive;
     }
 
     /**
      * @param array|null $extraFields
-     * @return MessageEmbed
+     * @return EmbedInterface
      */
-    public function getEmbedResponse(array $extraFields = null): MessageEmbed {
-        $messageEmbed = new MessageEmbed();
+    public function getEmbedResponse(array $extraFields = null): EmbedInterface {
+        $messageEmbed = new EmbedObject();
         $messageEmbed->setColor(DEFAULT_EMBED_COLOR);
         $messageEmbed->setTitle('***' . $this->name . $this->getTitleExtra() . '***');
         $messageEmbed->setDescription(self::parseRandomNum($this->getDescription()));

@@ -50,7 +50,7 @@ class EmbedObject implements EmbedInterface {
      */
     public ?array $fields = null;
 
-    public function addField(string $title, string $body, bool $inline = false) {
+    public function addField(string $title, string $body, bool $inline = false): void {
         if (is_null($this->fields)) {
             $this->fields = [];
         }
@@ -66,10 +66,33 @@ class EmbedObject implements EmbedInterface {
         return $this->fields;
     }
 
-    public function setFooter(string $footerText, ?string $footerIconUrl = null, ?string $footerProxyIcon = null) {
+    public function setFooter(string $footerText, ?string $footerIconUrl = null, ?string $footerProxyIcon = null): void {
         $this->footerText = $footerText;
         $this->footerIconUrl = $footerIconUrl;
         $this->footerProxyIcon = $footerProxyIcon;
     }
 
+    public function setThumbnail(string $imageUrl, ?int $width = null, ?int $height = null, ?int $imageProxy = null): void {
+        $this->thumbnailUrl = $imageUrl;
+        $this->thumbnailWidth = $width;
+        $this->thumbnailHeight = $height;
+        $this->thumbnailProxy = $imageProxy;
+    }
+
+
+    public function setTitle(string $title): void {
+        $this->title = $title;
+    }
+
+    public function setColor(int $color): void {
+        $this->color = $color;
+    }
+
+    public function setDescription(string $description): void {
+        $this->description = $description;
+    }
+
+    public function setImage(string $imageUrl): void {
+        $this->imageUrl = $imageUrl;
+    }
 }

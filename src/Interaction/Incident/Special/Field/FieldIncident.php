@@ -6,9 +6,10 @@ use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Incident\IncidentSingletonInterface;
+use JsonMapper;
 
 class FieldIncident extends Incident implements IncidentSingletonInterface {
-    protected static $instance = null;
+    protected static ?Incident $instance = null;
     public static function getInstance(): Incident {
         if (self::$instance === null) {
             self::$instance = new FieldIncident();
@@ -30,7 +31,7 @@ class FieldIncident extends Incident implements IncidentSingletonInterface {
         $runAction->setResultIncident($this);
         $this->actions[] = $runAction;
 
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $mapper->bExceptionOnUndefinedProperty = true;
         $dir = dirname(__DIR__, 5);

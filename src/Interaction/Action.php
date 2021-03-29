@@ -9,7 +9,7 @@ class Action extends AbstractAction {
      * @var Effect[]
      * @required
      */
-    public $effects;
+    public array $effects;
 
     public function getRandomEffect(): Effect {
         return $this->effects[mt_rand(0, sizeof($this->effects) - 1)];

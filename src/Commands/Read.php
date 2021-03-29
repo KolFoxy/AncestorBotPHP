@@ -15,6 +15,7 @@ use Ancestor\Interaction\Curio;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Stats\StressStateFactory;
 use JsonMapper;
+use Throwable;
 
 class Read extends Command {
 
@@ -42,6 +43,7 @@ class Read extends Command {
         $mapper = new JsonMapper();
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/writings.json'));
         $mapper->bExceptionOnMissingData = true;
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->curios = $mapper->mapArray($json, [], Curio::class);
 
         $this->manager = new TimedCommandManager($this->handler->client);
@@ -102,7 +104,7 @@ class Read extends Command {
         try {
             $template = new ImageTemplate();
             $mapper->map($json, $template);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             return;
         }

@@ -2,12 +2,14 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\SpontaneousAction\SpontaneousAction;
+
 class HeroClass extends AbstractLivingInteraction {
 
     /**
      * @var DirectAction|null
      */
-    private $defAction = null;
+    private ?DirectAction $defAction = null;
 
     const EMBED_COLOR = 13294;
 
@@ -15,17 +17,17 @@ class HeroClass extends AbstractLivingInteraction {
      * Color of the embedResponse
      * @var integer
      */
-    public $embedColor = self::EMBED_COLOR;
+    public int $embedColor = self::EMBED_COLOR;
 
     /**
      * @var null|HeroClass
      */
-    protected $transformClass = null;
+    protected ?HeroClass $transformClass = null;
 
     /**
-     * @var null|\Ancestor\Interaction\SpontaneousAction\SpontaneousAction[]
+     * @var null|SpontaneousAction[]
      */
-    public $spontaneousActions = null;
+    public ?array $spontaneousActions = null;
 
     /**
      * @param HeroClass|null $transformClass

@@ -14,6 +14,7 @@ use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentCollection\IncidentCollection;
 use Ancestor\Interaction\MonsterType;
+use Exception;
 use JsonMapper;
 
 class Fight extends Command implements EncounterCollectionInterface {
@@ -66,6 +67,7 @@ class Fight extends Command implements EncounterCollectionInterface {
 
     const ABORT_MESSAGE = 'is now forever lost in space and time.';
 
+    /** @noinspection PhpUnhandledExceptionInspection */
     public function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'fight', 'Fight a random monster or type ``'
             . $handler->prefix
@@ -84,24 +86,24 @@ class Fight extends Command implements EncounterCollectionInterface {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->classes[] = $mapper->map($json, new HeroClass());
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->regMonsterTypes[] = $mapper->map($json, new MonsterType());
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/elite/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->eliteMonsterTypes[] = $mapper->map($json, new MonsterType());
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         $this->classesMaxIndex = count($this->classes) - 1;
@@ -167,14 +169,18 @@ class Fight extends Command implements EncounterCollectionInterface {
 
         if ($actionName === self::CHAR_INFO_COMMAND) {
             $message->getAuthor()->createDM()->done(function (ChannelInterface $channel) use ($fight) {
-                $channel->send('', $fight->getHeroStats()->setFooter(self::CHANNEL_SWITCH_REMINDER));
+                $embed = $fight->getHeroStats();
+                $embed->setFooter(self::CHANNEL_SWITCH_REMINDER);
+                $channel->send('', $embed);
             });
             $message->reply('Check DMs for your hero\'s stats.');
             return;
         }
         if ($actionName === self::CHAR_ACTIONS_COMMAND) {
             $message->getAuthor()->createDM()->done(function (ChannelInterface $channel) use ($fight) {
-                $channel->send('', $fight->getHeroActionsDescriptions()->setFooter(self::CHANNEL_SWITCH_REMINDER));
+                $embed = $fight->getHeroActionsDescriptions();
+                $embed->setFooter(self::CHANNEL_SWITCH_REMINDER);
+                $channel->send('', $embed);
             });
             $message->reply('Check DMs for the list of actions and their descriptions.');
             return;
@@ -184,12 +190,12 @@ class Fight extends Command implements EncounterCollectionInterface {
             return;
         }
         $fight->createTurnPromise($action)->done(
-            function ($messageData) use ($message) {
-                $message->reply('', $messageData);
+            function ($messageEmbed) use ($message) {
+                $message->reply('', $messageEmbed);
             },
             function ($messageData) use ($message) {
                 $this->manager->deleteInteraction($message);
-                $message->reply('', $messageData);
+                $message->getChannel()->sendWithFile($message->getAuthor()->getMention(), $messageData['fileName'], $messageData['fileData'], $messageData['embed']);
             }
         );
     }

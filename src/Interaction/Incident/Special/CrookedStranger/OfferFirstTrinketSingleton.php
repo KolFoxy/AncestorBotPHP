@@ -7,9 +7,9 @@ use Ancestor\Interaction\Incident\IncidentAction;
 
 class OfferFirstTrinketSingleton implements IActionSingletonInterface {
     /**
-     * @var IncidentAction
+     * @var IncidentAction|null
      */
-    protected static $instance = null;
+    protected static ?IncidentAction $instance = null;
 
     public static function getInstance(): IncidentAction {
         if (self::$instance === null) {

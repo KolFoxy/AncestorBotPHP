@@ -2,6 +2,8 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\BotIO\EmbedInterface;
+use Ancestor\BotIO\EmbedObject;
 use Ancestor\Command\CommandHelper;
 use Ancestor\Interaction\ActionResult\ActionResult;
 use Ancestor\Interaction\SpontaneousAction\SpontaneousActionsManager;
@@ -11,7 +13,6 @@ use Ancestor\Interaction\Stats\StressState;
 use Ancestor\Interaction\Stats\StressStateFactory;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\RandomData\RandomDataProvider;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class Hero extends AbstractLivingBeing {
     const DEAD_MESSAGE = ' DEAD';
@@ -33,37 +34,37 @@ class Hero extends AbstractLivingBeing {
     /**
      * @var string
      */
-    public $name;
+    public string $name;
 
     /**
-     * @var int
+     * @var int|null
      */
-    public $stress = 0;
+    public ?int $stress = 0;
 
     /**
-     * @var HeroClass
+     * @var HeroClass|AbstractLivingInteraction
      */
     public $type;
 
     /**
      * @var bool
      */
-    private $isActuallyDead = false;
+    private bool $isActuallyDead = false;
 
     /**
      * @var string
      */
-    private $bonusStressMessage = '';
+    private string $bonusStressMessage = '';
 
     /**
      * @var string
      */
-    private $bonusHealthMessage = '';
+    private string $bonusHealthMessage = '';
 
     /**
      * @var Trinket[]
      */
-    protected $trinkets = [
+    protected array $trinkets = [
         1 => null,
         2 => null,
     ];
@@ -71,12 +72,12 @@ class Hero extends AbstractLivingBeing {
     /**
      * @var null|StressState
      */
-    protected $stressState = null;
+    protected ?StressState $stressState = null;
 
     /**
      * @var SpontaneousActionsManager
      */
-    protected $saManager;
+    protected SpontaneousActionsManager $saManager;
 
     protected function transform() {
         $this->saManager->removeSpontaneousAction($this->type->spontaneousActions);
@@ -84,7 +85,7 @@ class Hero extends AbstractLivingBeing {
         $this->saManager->addSpontaneousAction($this->type->spontaneousActions);
     }
 
-    protected function setTransformEmbedImages(MessageEmbed $res): MessageEmbed {
+    protected function setTransformEmbedImages(EmbedInterface $res): EmbedInterface {
         $tEffect = $this->type->getTransformAction()->effect;
         if ($tEffect->hasImage()) {
             $res->setThumbnail($tEffect->image);
@@ -156,8 +157,9 @@ class Hero extends AbstractLivingBeing {
         }
     }
 
-    public function getStatsAndEffectsEmbed(): MessageEmbed {
-        $res = (new MessageEmbed())->setColor($this->type->embedColor);
+    public function getStatsAndEffectsEmbed(): EmbedInterface {
+        $res = new EmbedObject();
+        $res->setColor($this->type->embedColor);
         $res->setTitle('**' . $this->name . '**');
         $description = '*``' . $this->type->description . '``*'
             . PHP_EOL . '**``' . $this->getHealthStatus() . ' ' . $this->getStressStatus() . '``**'
@@ -335,13 +337,12 @@ class Hero extends AbstractLivingBeing {
     }
 
     /**
-     * @noinspection PhpDocMissingThrowsInspection
      * @param DirectAction $action
      * @param AbstractLivingBeing|Hero $target
-     * @return MessageEmbed
+     * @return EmbedInterface
      */
-    public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): MessageEmbed {
-        $res = new MessageEmbed();
+    public function getHeroTurn(DirectAction $action, AbstractLivingBeing $target): EmbedInterface {
+        $res = new EmbedObject();
         $res->setColor($this->type->embedColor);
         if ($action->name === DirectAction::TRANSFORM_ACTION) {
             $this->setTransformEmbedImages($res);
@@ -350,8 +351,8 @@ class Hero extends AbstractLivingBeing {
         }
         $fields = $this->getTurn($target, $action);
         $topField = array_shift($fields);
-        $res->setTitle($topField['name']);
-        $res->setDescription($topField['value']);
+        $res->setTitle($topField['title']);
+        $res->setDescription($topField['body']);
         CommandHelper::mergeEmbed($res, $fields);
         return $res;
     }

@@ -14,27 +14,27 @@ class DirectActionEffect extends AbstractEffect {
      * Chance of crit for the effect. negative - can't crit.
      * @var int
      */
-    public $critChance = 0;
+    public int $critChance = 0;
 
     /**
      * @var int Negative for guarantee hit
      */
-    public $hitChance = 100;
+    public int $hitChance = 100;
 
     /**
-     * @var \Ancestor\Interaction\Stats\TypeBonus[]|null
+     * @var TypeBonus[]|null
      */
-    public $typeBonuses = null;
-
-    /**
-     * @var bool
-     */
-    public $ignoresArmor = false;
+    public ?array $typeBonuses = null;
 
     /**
      * @var bool
      */
-    public $removesStealth = false;
+    public bool $ignoresArmor = false;
+
+    /**
+     * @var bool
+     */
+    public bool $removesStealth = false;
 
     public function canCrit(): bool {
         return $this->critChance >= 0;

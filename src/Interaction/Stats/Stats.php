@@ -118,7 +118,7 @@ final class Stats {
             return $value < 0 ? 0 : $value;
         }
         if ($statName === self::VIRTUE_CHANCE) {
-            return $value < 1 ? 1 : $value > 95 ? 95 : $value;
+            return $value < 1 ? 1 : ($value > 95 ? 95 : $value);
         }
         if ($statName === self::DEATHBLOW_RESIST) {
             return $value > 87 ? 87 : $value;

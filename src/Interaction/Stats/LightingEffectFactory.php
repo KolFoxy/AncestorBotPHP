@@ -7,13 +7,13 @@ final class LightingEffectFactory {
     /**
      * @var LightingEffect[]
      */
-    protected static $lightingEffects;
+    protected static array $lightingEffects;
     /**
      * @var int
      */
-    protected static $effectsMaxIndex;
+    protected static int $effectsMaxIndex;
 
-    protected static function populateLightingEffectsArray() {
+    protected static function populateLightingEffectsArray(): void {
         if (!isset(self::$lightingEffects)) {
             self::$lightingEffects = [];
 

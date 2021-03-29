@@ -2,6 +2,9 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\Stats\StatModifier;
+use Ancestor\Interaction\Stats\StatusEffect;
+
 class DirectAction extends AbstractAction {
 
 
@@ -10,28 +13,28 @@ class DirectAction extends AbstractAction {
     /**
      * @var bool Whether or not effect ISN'T used against an enemy, AKA: effect is positive
      */
-    public $requiresTarget = false;
+    public bool $requiresTarget = false;
 
     /**
      * @var DirectActionEffect
      * @required
      */
-    public $effect;
+    public DirectActionEffect $effect;
 
     /**
-     * @var \Ancestor\Interaction\Stats\StatusEffect[]|null
+     * @var StatusEffect[]|null
      */
-    public $statusEffects = null;
+    public ?array $statusEffects = null;
 
     /**
-     * @var \Ancestor\Interaction\Stats\StatModifier[]|null
+     * @var StatModifier[]|null
      */
-    public $statModifiers = null;
+    public ?array $statModifiers = null;
 
     /**
      * @var DirectActionEffect|null
      */
-    public $selfEffect = null;
+    public ?DirectActionEffect $selfEffect = null;
 
     public function isUsableVsStealth(): bool {
         return $this->effect->removesStealth || $this->requiresTarget;

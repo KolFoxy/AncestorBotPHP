@@ -2,15 +2,15 @@
 
 namespace Ancestor\Interaction\Incident\Special\TheCometLands;
 
+use Ancestor\BotIO\EmbedInterface;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Incident\IActionSingletonInterface;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class CryForHelpAction extends IncidentAction implements IActionSingletonInterface {
-    protected static $instance = null;
+    protected static ?IncidentAction $instance = null;
 
     public static function getInstance(): IncidentAction {
         if (self::$instance === null) {
@@ -26,7 +26,7 @@ class CryForHelpAction extends IncidentAction implements IActionSingletonInterfa
             'The Farmstead lies right before you. And you are going to uncover whatever secrets and treasure are hidden in this timeless chaos.');
     }
 
-    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
+    public function getResult(Hero $hero, EmbedInterface $res): ?Incident {
         $res->setTitle('*' . $this->name . '*');
         $heroName = $hero->name;
         $hero->reset();

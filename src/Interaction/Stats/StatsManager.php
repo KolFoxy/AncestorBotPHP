@@ -11,22 +11,22 @@ class StatsManager {
     /**
      * @var array
      */
-    protected $stats;
+    protected array $stats;
 
     /**
      * @var StatModifier[]
      */
-    public $modifiers = [];
+    public array $modifiers = [];
 
     /**
      * @var StatusEffect[]
      */
-    public $statusEffects = [];
+    public array $statusEffects = [];
 
     /**
      * @var TypeBonus[]
      */
-    public $typeBonuses = [];
+    public array $typeBonuses = [];
 
     /**
      * @var AbstractLivingBeing|Hero
@@ -58,7 +58,7 @@ class StatsManager {
      * @param string $statName
      * @return int|null Stat value or NULL if $statName doesn't exists;
      */
-    public function getStatValue(string $statName) {
+    public function getStatValue(string $statName): ?int {
         if (key_exists($statName, $this->stats)) {
             return Stats::validateStatValue($this->stats[$statName] + $this->getStatMod($statName), $statName);
         }
@@ -89,7 +89,7 @@ class StatsManager {
     /**
      * @return array|null
      */
-    public function getProcessTurn() {
+    public function getProcessTurn(): ?array {
         $values = [];
         foreach ($this->statusEffects as $key => $effect) {
             $type = $effect->getType();
@@ -138,7 +138,7 @@ class StatsManager {
                 if ($valueBlight !== 0 || $valueRestoration !== 0) {
                     $body .= PHP_EOL;
                 }
-                if ($hostDied){
+                if ($hostDied) {
                     $this->host->causeOfDeath = StatusEffect::BLEED_CAUSE_OF_DEATH;
                 }
             }
@@ -147,7 +147,7 @@ class StatsManager {
                 if ($valueRestoration !== 0) {
                     $body .= PHP_EOL;
                 }
-                if ($hostDied){
+                if ($hostDied) {
                     $this->host->causeOfDeath = StatusEffect::BLIGHT_CAUSE_OF_DEATH;
                 }
             }
@@ -255,7 +255,7 @@ class StatsManager {
      * @param string $statusEffectType
      * @return null|string
      */
-    public function getStatusEffectState(string $statusEffectType) {
+    public function getStatusEffectState(string $statusEffectType): ?string {
         $combinedEffect = new StatusEffect();
         $combinedEffect->value = 0;
         $combinedEffect->duration = 0;
@@ -410,7 +410,7 @@ class StatsManager {
         return $this->has(StatusEffect::TYPE_STEALTH);
     }
 
-    public function setStat(string $statName, int $value) {
+    public function setStat(string $statName, int $value): void {
         if (key_exists($statName, $this->stats)) {
             $this->stats[$statName] = $value;
         }

@@ -10,24 +10,24 @@ abstract class AbstractInteraction {
      * @var string
      * @required
      */
-    public $name;
+    public string $name;
     /**
      * @var string
      * @required
      */
-    public $description;
+    public string $description;
 
     /**
      * URL to the image of the interaction.
      * @var string
      * @required
      */
-    public $image;
+    public string $image;
 
     /**
      * @var AbstractAction[]
      */
-    public $actions;
+    public array $actions;
 
     /**
      * @param string $actionName

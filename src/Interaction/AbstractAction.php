@@ -7,5 +7,5 @@ class AbstractAction {
      * @var string
      * @required
      */
-    public $name;
+    public string $name;
 }

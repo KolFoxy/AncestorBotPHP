@@ -7,12 +7,12 @@ class MonsterActionsManager {
     /**
      * @var MonsterType
      */
-    protected $monsterType;
+    protected MonsterType $monsterType;
 
     /**
      * @var DirectAction[] ['status1' => DirectAction, ...]
      */
-    protected $statusActionsRelations = [];
+    protected array $statusActionsRelations = [];
 
     /**
      * MonsterActionsManager constructor.

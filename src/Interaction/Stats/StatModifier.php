@@ -2,6 +2,8 @@
 
 namespace Ancestor\Interaction\Stats;
 
+use Exception;
+
 class StatModifier implements TimedEffectInterface {
 
     const TYPE_DEBUFF = 'debuff';
@@ -16,36 +18,36 @@ class StatModifier implements TimedEffectInterface {
     /**
      * @var int Chance to hit. Negative value indicates guaranteed application.
      */
-    public $chance = 100;
+    public int $chance = 100;
 
     /**
      * @var string Stat that is being modified
      */
-    private $stat;
+    private string $stat;
 
     /**
      * @var int
      * @required
      */
-    public $value = 0;
+    public int $value = 0;
 
     /**
      * @var int 0 means it's done, negative value means it's eternal.
      */
-    public $duration = 3;
+    public int $duration = 3;
 
     /**
      * @var bool Indicates whether or not the modifier is applied to the caster no matter the target.
      */
-    public $targetSelf = false;
+    public bool $targetSelf = false;
 
     /**
      * @param string $stat Set the stat that is modified by this StatModifier
-     * @throws \Exception
+     * @throws Exception
      */
-    public function setStat(string $stat) {
+    public function setStat(string $stat): void {
         if (!Stats::statIsValid($stat)) {
-            throw new \Exception('Invalid stat name for a StatModifier. "' . $stat . '"');
+            throw new Exception('Invalid stat name for a StatModifier. "' . $stat . '"');
         }
         $this->stat = $stat;
     }

@@ -4,6 +4,7 @@ namespace Ancestor\Command;
 
 use Ancestor\BotIO\BotIoInterface;
 use Ancestor\BotIO\ChannelInterface;
+use Ancestor\BotIO\EmbedInterface;
 use Ancestor\BotIO\EmbedObject;
 use Ancestor\BotIO\MessageInterface;
 
@@ -96,10 +97,10 @@ class CommandHelper {
     }
 
     /**
-     * @param EmbedObject $mergeInto
+     * @param EmbedInterface $mergeInto
      * @param EmbedObject|array $mergeFrom
      */
-    public static function mergeEmbed(EmbedObject $mergeInto, $mergeFrom) {
+    public static function mergeEmbed(EmbedInterface $mergeInto, $mergeFrom) {
         if (is_a($mergeFrom, EmbedObject::class)) {
             if ($mergeFrom->title != null && $mergeFrom->description != null) {
                 $mergeInto->addField($mergeFrom->title, $mergeFrom->description);

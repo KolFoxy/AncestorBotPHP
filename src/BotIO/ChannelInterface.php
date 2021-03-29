@@ -11,7 +11,7 @@ interface ChannelInterface {
 
     public function sendWithFootedEmbed(string $text, string $embedTitle, string $embedBody, string $footerText, ?string $footerImage);
 
-    public function sendWithFile(string $text, string $fileName, $file, EmbedInterface $embed = null);
+    public function sendWithFile(string $text, ?string $fileName, $file, EmbedInterface $embed = null);
 
     public function isNSFW(): bool;
 

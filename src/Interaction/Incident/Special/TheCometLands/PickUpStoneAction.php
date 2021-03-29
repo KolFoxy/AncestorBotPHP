@@ -9,7 +9,7 @@ use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Incident\IncidentCollection\IncidentCollection;
 
 class PickUpStoneAction extends IncidentAction implements IActionSingletonInterface {
-    protected static $instance = null;
+    protected static ?IncidentAction $instance = null;
 
     public static function getInstance(): IncidentAction {
         if (self::$instance === null) {

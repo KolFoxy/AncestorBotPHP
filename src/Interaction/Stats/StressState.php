@@ -10,12 +10,12 @@ class StressState extends AbstractPermanentState {
      * @var string
      * @required
      */
-    public $quote;
+    public string $quote;
 
     /**
      * @var bool
      */
-    public $isVirtue = false;
+    public bool $isVirtue = false;
 
     public function toField(Hero $host): array {
         return [
