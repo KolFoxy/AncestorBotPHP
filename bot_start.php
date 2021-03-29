@@ -1,7 +1,10 @@
 <?php
+
+use React\EventLoop\Factory;
+
 require(__DIR__ . '/vendor/autoload.php');
 $config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
-$loop = \React\EventLoop\Factory::create();
+$loop = Factory::create();
 
 $ancestorBot = new \Ancestor\AncestorBot(
     new \CharlotteDunois\Yasmin\Client([

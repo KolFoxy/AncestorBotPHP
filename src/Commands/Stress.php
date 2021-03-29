@@ -14,6 +14,7 @@ use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
 use JsonMapper;
+use Throwable;
 
 class Stress extends Command {
     private string $stressURL;
@@ -44,6 +45,7 @@ class Stress extends Command {
         $mapper = new JsonMapper();
         $this->defaultTemplate = new ImageTemplate();
         $mapper->bExceptionOnMissingData = true;
+        /** @noinspection PhpUnhandledExceptionInspection */
         $mapper->map($json, $this->defaultTemplate);
         $this->templateApplier = new ImageTemplateApplier($this->defaultTemplate);
 
@@ -61,7 +63,7 @@ class Stress extends Command {
 
         try {
             $this->fileDownloader->downloadUrlAsync(CommandHelper::imageUrlFromCommandArgs($args, $message), $callbackObj);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             $message->replyWithEmbedImage('','',$this->stressURL);
         }

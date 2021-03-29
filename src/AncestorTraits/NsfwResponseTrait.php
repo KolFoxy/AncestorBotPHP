@@ -21,7 +21,7 @@ trait NsfwResponseTrait {
             return false;
         }
         if ((empty($message->getAttachments()) || count($message->getAttachments()) === 0)
-            || $message->getEmbed() === null
+            || !$message->hasEmbeds()
             || CommandHelper::stringContainsURLs($message->getContent())) {
             return false;
         }

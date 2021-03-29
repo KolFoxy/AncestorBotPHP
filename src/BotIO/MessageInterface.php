@@ -22,5 +22,5 @@ interface MessageInterface {
 
     public function getAttachments(): array;
 
-    public function getEmbed(): ?EmbedInterface;
+    public function hasEmbeds(): bool;
 }
