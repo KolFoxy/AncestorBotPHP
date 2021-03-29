@@ -2,8 +2,11 @@
 
 namespace Ancestor;
 
+use Ancestor\AncestorTraits\CheckResolveTrait;
+use Ancestor\AncestorTraits\NsfwResponseTrait;
+use Ancestor\BotIO\BotIoInterface;
+use Ancestor\BotIO\MessageInterface;
 use Ancestor\Command\CommandHandler;
-use Ancestor\Command\CommandHelper;
 use Ancestor\Commands\Fight;
 use Ancestor\Commands\Gold;
 use Ancestor\Commands\Read;
@@ -14,22 +17,23 @@ use Ancestor\Commands\Spin;
 use Ancestor\Commands\Stress;
 
 use Ancestor\Commands\Zalgo;
-use Ancestor\Interaction\Stats\StressStateFactory;
-use Ancestor\RandomData\RandomDataProvider;
-use CharlotteDunois\Yasmin\Client as Client;
-use CharlotteDunois\Yasmin\Models\Message;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use Discord\Discord;
+use Throwable;
 
 class AncestorBot {
+
+    use CheckResolveTrait;
+    use NsfwResponseTrait;
+
     /**
-     * @var Client
+     * @var BotIoInterface
      */
-    private $client;
+    private BotIoInterface $client;
 
     /**
      * @var array
      */
-    private $config;
+    private array $config;
 
     /**
      * Url to the default "spin" response.
@@ -51,11 +55,11 @@ class AncestorBot {
     const ARG_OWNER_ID = 'ownerId';
 
     /**
-     * @var \Ancestor\Command\CommandHandler
+     * @var CommandHandler
      */
-    private $commandHandler = null;
+    private CommandHandler $commandHandler;
 
-    public function __construct(Client $client, array $config, CommandHandler $commandHandler = null) {
+    public function __construct(BotIoInterface $client, array $config, CommandHandler $commandHandler = null) {
         $this->client = $client;
         $this->config = $config;
         if ($commandHandler != null) {
@@ -69,6 +73,7 @@ class AncestorBot {
 
     }
 
+    /** @noinspection PhpUnhandledExceptionInspection */
     private function getDefaultCommands(): array {
         return [
             new Gold($this->commandHandler),
@@ -84,63 +89,30 @@ class AncestorBot {
     }
 
     private function setupClient() {
-        $this->client->on('error', function (\Throwable $error) {
+
+        $discord = new Discord();
+
+        $this->client->on('error', function (Throwable $error) {
             echo $error->getMessage();
         });
 
         $this->client->on('ready', function () {
-            echo 'Successful login into ' . $this->client->user->tag . PHP_EOL;
+            echo 'Successful login into ' . $this->client->getUser()->getTag() . PHP_EOL;
         });
 
-        $this->client->on('message', function (Message $message) {
-            if ($message->author->bot) return;
+        $this->client->on('message', function (MessageInterface $message) {
+            if ($message->getAuthor()->isBot()) return;
             if ($this->commandHandler->handleMessage($message)) {
                 return;
             }
 
-            $msgLowered = mb_strtolower($message->content);
-            $index = mb_strpos($msgLowered, 'resolve is tested');
-            if ($index !== false) {
-                $this->checkResolveResponse($message, $index, $msgLowered);
+            if ($this->nsfwResponse($message,$this->client,$this->config[self::ARG_NSFW_CHANCE])) {
                 return;
             }
 
-            if (CommandHelper::ChannelIsNSFW($message->channel) && mt_rand(1, 100) <= $this->config[self::ARG_NSFW_CHANCE]) {
-                $this->nsfwResponse($message);
-            }
+            $this->checkResolveResponse($message, $this->client);
+
         });
-
-    }
-
-    private function checkResolveResponse(Message $message, int $index, string $msgLowered) {
-        $stressState = StressStateFactory::create();
-        $embedResponse = new MessageEmbed();
-        $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
-        $embedResponse->setDescription('***' . $stressState->getQuote() . '***');
-        if ($index != 0) {
-            if (!empty($message->mentions->users) && count($message->mentions->users) > 0) {
-                $message->channel->send('**' . '<@' . $message->mentions->users->last()->id . '>' .
-                    ' is ' . $stressState->name . '**', ['embed' => $embedResponse]);
-                return;
-            }
-            $index = strpos($msgLowered, 'my resolve is tested');
-            if ($index !== false) {
-                $message->channel->send('**' . '<@' . $message->author->id . '>' .
-                    ' is ' . $stressState->name . '**', ['embed' => $embedResponse]);
-                return;
-            }
-        }
-        $message->channel->send('**' . $stressState->name . '**', ['embed' => $embedResponse]);
-    }
-
-    private function nsfwResponse(Message $message) {
-        if ((!empty($message->attachments) && count($message->attachments) > 0) ||
-            (!empty($message->embeds) && count($message->embeds) > 0) || CommandHelper::stringContainsURLs($message->content)) {
-            $embedResponse = new MessageEmbed();
-            $embedResponse->setFooter($message->client->user->username, $message->client->user->getAvatarURL());
-            $embedResponse->setDescription(RandomDataProvider::getInstance()->getRandomNSFWQuote());
-            $message->channel->send('', ['embed' => $embedResponse]);
-        }
     }
 
     public function login(string $token) {

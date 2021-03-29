@@ -17,4 +17,8 @@ interface UserInterface {
      * @return PromiseInterface Resolves with ChannelInterface
      */
     public function createDM(): PromiseInterface;
+
+    public function isBot(): bool;
+
+    public function getTag(): string;
 }

@@ -13,10 +13,14 @@ interface MessageInterface {
 
     public function getChannel(): ChannelInterface;
 
-    public function getAuthor() : UserInterface;
+    public function getAuthor(): UserInterface;
 
     /**
      * @return UserInterface[]
      */
-    public function getUserMentions() : array;
+    public function getUserMentions(): array;
+
+    public function getAttachments(): array;
+
+    public function getEmbed(): ?EmbedInterface;
 }
