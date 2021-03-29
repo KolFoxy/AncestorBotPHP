@@ -7,7 +7,7 @@ interface MessageInterface {
 
     public function getContent(): string;
 
-    public function reply(string $text);
+    public function reply(string $text, EmbedObject $embed = null);
 
     public function replyWithEmbedImage(string $text, string $embedTitle, $embedImage);
 

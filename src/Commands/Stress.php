@@ -16,7 +16,7 @@ use Ancestor\ImageTemplate\ImageTemplateApplier;
 use JsonMapper;
 
 class Stress extends Command {
-    private $stressURL;
+    private string $stressURL;
     private string $stressPicPath;
     /**
      * @var ImageTemplate
@@ -34,7 +34,7 @@ class Stress extends Command {
 
     const STRESS_ROTATE_ANGLE = 22;
 
-    function __construct(CommandHandler $handler, $stressURL) {
+    function __construct(CommandHandler $handler, string $stressURL) {
         parent::__construct($handler, 'stress', 'Forces you or a [@user] to drink wine.');
         $this->stressURL = $stressURL;
         $this->stressPicPath = dirname(__DIR__,2).'/data/images/stress_cropped.png';

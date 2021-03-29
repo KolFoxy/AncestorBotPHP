@@ -21,7 +21,7 @@ class Spin extends Command {
     const HOW_QUICKLY_THE_TIDE_TURNS = 'How quickly the tide turns?';
     private string $tidePath;
     private string $ancestorPath;
-    private $tideURL;
+    private string $tideURL;
     const FRAME_TIME = 11;
     /**
      * @var FileDownloader
@@ -38,7 +38,7 @@ class Spin extends Command {
     private ImageTemplateApplier $tideTemplateApplier;
 
 
-    function __construct(CommandHandler $handler, $tideURL) {
+    function __construct(CommandHandler $handler, string $tideURL) {
         parent::__construct($handler, 'spin', 'Spins a [@user] inside of Tide™.');
         $this->tideURL = $tideURL;
         $this->tidePath = dirname(__DIR__, 2) . '/data/images/spin_gif/tide_empty.png';
