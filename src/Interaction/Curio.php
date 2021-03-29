@@ -2,30 +2,30 @@
 
 namespace Ancestor\Interaction;
 
-const DEFAULT_EMBED_COLOR = 13632027;
+use Ancestor\BotIO\EmbedInterface;
+use Ancestor\BotIO\EmbedObject;
 
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+const DEFAULT_EMBED_COLOR = 13632027;
 
 class Curio extends AbstractInteraction {
 
     /**
      * @var Action|null
      */
-    private $defAction = null;
+    private ?Action $defAction = null;
 
     /**
      * @var Action[]
      */
-    public $actions;
+    public array $actions;
 
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @param string $commandName
-     * @return MessageEmbed
+     * @return EmbedInterface
      */
-    public function getEmbedResponse(string $commandName): MessageEmbed {
-        $embedResponse = new MessageEmbed();
+    public function getEmbedResponse(string $commandName): EmbedInterface {
+        $embedResponse = new EmbedObject();
         $embedResponse->setThumbnail($this->image);
         $embedResponse->setTitle('**You encounter ' . $this->name . '**');
         $embedResponse->setColor(DEFAULT_EMBED_COLOR);

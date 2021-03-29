@@ -6,9 +6,10 @@ use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Incident\IncidentSingletonInterface;
+use JsonMapper;
 
 class ApproachTheManIncident extends Incident implements IncidentSingletonInterface {
-    protected static $instance = null;
+    protected static ?Incident $instance = null;
 
     public static function getInstance(): Incident {
         if (self::$instance === null) {
@@ -30,8 +31,8 @@ class ApproachTheManIncident extends Incident implements IncidentSingletonInterf
         $this->actions = [$action];
     }
 
-    protected function addActions(){
-        $mapper = new \JsonMapper();
+    protected function addActions(): void {
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         foreach (glob(dirname(__DIR__, 5) . '/data/incidents/blind_smith/near_man_actions/*.json') as $path) {
             $this->actions[] = $mapper->map(json_decode(file_get_contents($path)), new IncidentAction());

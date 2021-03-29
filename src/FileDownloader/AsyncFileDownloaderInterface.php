@@ -12,7 +12,7 @@ interface AsyncFileDownloaderInterface {
      * @param string $url
      * @param $callback
      */
-    public function DownloadUrlAsync(string $url, $callback);
+    public function downloadUrlAsync(string $url, $callback);
 
     public function getDownloadAsyncImagePromise(string $url): Promise;
 }

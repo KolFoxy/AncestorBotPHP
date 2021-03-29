@@ -2,37 +2,40 @@
 
 namespace Ancestor\Interaction\Incident;
 
+use Ancestor\BotIO\EmbedInterface;
 use Ancestor\Interaction\AbstractAction;
 use Ancestor\Interaction\ActionResult\ActionResult;
+use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use Ancestor\Interaction\Stats\StatModifier;
+use Ancestor\Interaction\Stats\StatusEffect;
 
 class IncidentAction extends AbstractAction {
 
     /**
-     * @var \Ancestor\Interaction\Effect
+     * @var Effect
      */
-    public $effect;
+    public Effect $effect;
 
     /**
      * @var Incident|null
      */
-    protected $resultIncident = null;
+    protected ?Incident $resultIncident = null;
 
     /**
      * @var string[]|null List of classes that this action is available for.
      */
-    protected $exclusiveClasses = null;
+    protected ?array $exclusiveClasses = null;
 
     /**
-     * @var \Ancestor\Interaction\Stats\StatusEffect[]|null
+     * @var StatusEffect[]|null
      */
-    public $statusEffects = null;
+    public ?array $statusEffects = null;
 
     /**
-     * @var \Ancestor\Interaction\Stats\StatModifier[]|null
+     * @var StatModifier[]|null
      */
-    public $statModifiers = null;
+    public ?array $statModifiers = null;
 
     /**
      * @return Incident|null
@@ -66,6 +69,7 @@ class IncidentAction extends AbstractAction {
                 return;
             }
             try {
+                /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
                 $this->resultIncident = $mapper->map(json_decode(file_get_contents($resultIncident)), new Incident());
             } catch (\Exception $e) {
                 echo('Provided failed $resultIncident:');
@@ -76,6 +80,7 @@ class IncidentAction extends AbstractAction {
         }
         if (is_object($resultIncident)) {
             try {
+                /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
                 $this->resultIncident = $mapper->map($resultIncident, new Incident());
             } catch (\Exception $e) {
                 echo('Provided failed $resultIncident:');
@@ -124,10 +129,10 @@ class IncidentAction extends AbstractAction {
 
     /**
      * @param Hero $hero
-     * @param MessageEmbed $res
+     * @param EmbedInterface $res
      * @return Incident|null Result Incident
      */
-    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
+    public function getResult(Hero $hero, EmbedInterface $res): ?Incident {
         $res->setTitle('*' . $this->name . '*');
         $description = '*``' . $this->effect->getDescription() . '``*';
         if ($this->effect->image !== null) {
@@ -159,7 +164,7 @@ class IncidentAction extends AbstractAction {
         return $res->__toString();
     }
 
-    protected function addTimedEffectsToResult(ActionResult $result) {
+    protected function addTimedEffectsToResult(ActionResult $result): void {
         if ($this->statusEffects !== null) {
             foreach ($this->statusEffects as $statusEffect) {
                 $result->addTimedEffect($statusEffect);

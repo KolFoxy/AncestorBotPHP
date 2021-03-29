@@ -1,21 +1,21 @@
 <?php
 
-
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command as Command;
-use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command as Command;
+use Ancestor\Command\CommandHandler as CommandHandler;
 
 class Roll extends Command {
-    private $title = '***The dice strikes the ground!***';
+    private string $title = '***The dice strikes the ground!***';
 
     function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'roll', '``roll`` or ``roll [MIN] [MAX]`` or ``roll [MAX]`` - rolls a random integer (default ``roll`` is from 1 to 6)');
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        $embedResponse = new \CharlotteDunois\Yasmin\Models\MessageEmbed();
-        $embedResponse->setFooter($this->handler->client->user->username, $this->handler->client->user->getAvatarURL());
+    function run(MessageInterface $message, array $args) {
+        $footerImage = $this->handler->client->getUser()->getAvatarUrl();
+        $footerText = $this->handler->client->getUser()->getUsername();
         $result = null;
         $argsLen = count($args);
         if ($argsLen === 1 && ctype_digit($args[0])) {
@@ -33,7 +33,6 @@ class Roll extends Command {
             $message->reply('Invalid input');
             return;
         }
-        $embedResponse->addField($this->title, '🎲**' . $result . '**');
-        $message->channel->send('', ['embed' => $embedResponse]);
+        $message->getChannel()->sendWithFootedEmbed('', $this->title, '🎲**' . $result . '**', $footerText, $footerImage);
     }
 }

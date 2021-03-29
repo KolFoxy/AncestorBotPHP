@@ -2,18 +2,18 @@
 
 namespace Ancestor\Interaction\Incident\Special\CrookedStranger;
 
+use Ancestor\BotIO\EmbedInterface;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class OfferTrinketAction extends IncidentAction {
 
     /**
      * @var int
      */
-    protected $trinketSlot;
+    protected int $trinketSlot;
 
     /** @noinspection PhpDocMissingThrowsInspection */
     /**
@@ -28,7 +28,7 @@ class OfferTrinketAction extends IncidentAction {
         $this->effect->healthDeviation = 20;
     }
 
-    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
+    public function getResult(Hero $hero, EmbedInterface $res): ?Incident {
         if ($this->trinketSlot === 1) {
             $hasTrinket = $hero->getFirstTrinket() !== null;
         } else {

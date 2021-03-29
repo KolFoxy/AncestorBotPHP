@@ -6,27 +6,27 @@ class ActionResultFeed {
     /**
      * @var string[]
      */
-    public $stress = [];
+    public array $stress = [];
 
     /**
      * @var string[]
      */
-    public $health = [];
+    public array $health = [];
 
     /**
      * @var string[]
      */
-    public $newEffects = [];
+    public array $newEffects = [];
 
     /**
      * @var string[]
      */
-    public $removedEffects = [];
+    public array $removedEffects = [];
 
     /**
      * @var string[]
      */
-    public $resisted = [];
+    public array $resisted = [];
 
     public function isEmpty(): bool {
         return $this->stress === []

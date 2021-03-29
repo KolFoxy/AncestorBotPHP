@@ -6,8 +6,11 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command as Command;
-use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use Ancestor\BotIO\BotIoInterface;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command as Command;
+use Ancestor\Command\CommandHandler as CommandHandler;
+use Ancestor\Command\CommandHelper;
 use Ancestor\RandomData\RandomDataProvider as RandomDataProvider;
 
 class Gold extends Command {
@@ -16,9 +19,9 @@ class Gold extends Command {
         parent::__construct($handler, 'gold', 'Gives a random reward.');
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        $RDP = RandomDataProvider::GetInstance();
-        $CH = new \Ancestor\CommandHandler\CommandHelper($message);
-        $CH->RespondWithEmbedImage($RDP->GetRandomReward(), $RDP->GetRandomRewardQuote());
+    function run(MessageInterface $input, array $args) {
+        $rdp = RandomDataProvider::getInstance();
+        $input->replyWithEmbedImage('',$rdp->getRandomRewardQuote(),$rdp->getRandomReward());
+
     }
 }

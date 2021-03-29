@@ -6,26 +6,28 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command as Command;
-use Ancestor\CommandHandler\CommandHandler as CommandHandler;
+use Ancestor\BotIO\BotIoInterface;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command as Command;
+use Ancestor\Command\CommandHandler as CommandHandler;
+use Ancestor\Command\CommandHelper;
 
-Class Remind extends Command {
+class Remind extends Command {
     private $response = '***Remind yourself that overconfidence is a slow and insidious killer.***';
 
     function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'remind', 'Teaches you or a *[@user]* the important lesson about life.');
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
+    function run(MessageInterface $message, array $args) {
         if (empty($args)) {
-            $message->channel->send($this->response);
+            $message->reply($this->response);
         }
         foreach ($args as $arg) {
 
-            if (preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_USERS, $arg) === 1 ||
-                preg_match(\CharlotteDunois\Yasmin\Models\MessageMentions::PATTERN_ROLES, $arg) === 1) {
-                $message->channel->send('***Remind yourself, ' . $arg
-                    . ' , that overconfidence is a slow and insidious killer.***');
+            if (CommandHelper::checkIfStringContainsUserMention($arg) || CommandHelper::checkIfStringContainsRole($arg) === 1) {
+                $message->getChannel()->send('***Remind yourself, ' . $arg
+                    . ' , that overconfidence is a slow and insidious killer.***', null);
                 return;
             }
         }

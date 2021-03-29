@@ -3,6 +3,7 @@
 namespace Ancestor\Interaction\Stats;
 
 use Ancestor\Interaction\Hero;
+use JsonMapper;
 
 final class TrinketFactory {
 
@@ -14,19 +15,19 @@ final class TrinketFactory {
     /**
      * @var array|null
      */
-    private static $trinkets = null;
+    private static ?array $trinkets = null;
 
     /**
      * @var Trinket|null
      */
-    private static $defaultTrinket = null;
+    private static ?Trinket $defaultTrinket = null;
 
-    private static function setTrinkets() {
+    private static function setTrinkets(): void {
         if (self::$trinkets !== null) {
             return;
         }
         self::$trinkets = [];
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $mapper->bExceptionOnUndefinedProperty = true;
         foreach (glob(dirname(__DIR__, 3) . '/data/rewards/trinkets/*', GLOB_ONLYDIR) as $dir) {
@@ -44,6 +45,7 @@ final class TrinketFactory {
             }
         }
         $path = dirname(__DIR__, 3) . '/data/rewards/trinkets/shared/book_of_sanity.json';
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         self::$defaultTrinket = $mapper->map(json_decode(file_get_contents($path)), new Trinket());
     }
 

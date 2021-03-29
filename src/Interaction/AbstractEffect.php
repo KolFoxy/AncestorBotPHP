@@ -2,6 +2,8 @@
 
 namespace Ancestor\Interaction;
 
+use Exception;
+
 abstract class AbstractEffect {
 
     const RAND_NUM_DESCRIPTION_NEEDLE = '{RAND_NUM}(';
@@ -12,23 +14,23 @@ abstract class AbstractEffect {
      * Indicates the amount of stress that effect gives hero.
      * @var int|null
      */
-    public $stress_value = 0;
+    public ?int $stress_value = 0;
 
     /**
      * @var int Indicates how much stress value should deviate UP from the base.
      */
-    public $stressDeviation = 0;
+    public int $stressDeviation = 0;
 
     /**
      * Indicates the amount of hp that effect gives or subtracts from hero.
      * @var int|null
      */
-    public $health_value = 0;
+    public ?int $health_value = 0;
 
     /**
      * @var int Indicates how much health value should deviate UP from the base.
      */
-    public $healthDeviation = 0;
+    public int $healthDeviation = 0;
 
     /**
      * @var string|string[]
@@ -39,27 +41,27 @@ abstract class AbstractEffect {
      * Path to the template.
      * @var string|null
      */
-    public $imageTemplate = null;
+    public ?string $imageTemplate = null;
 
     /**
      * Path to the image.
      * @var string|null
      */
-    public $image = null;
+    public ?string $image = null;
 
 
     /**
      * @var bool
      */
-    public $removesBlight = false;
+    public bool $removesBlight = false;
     /**
      * @var bool
      */
-    public $removesBleed = false;
+    public bool $removesBleed = false;
     /**
      * @var bool
      */
-    public $removesDebuff = false;
+    public bool $removesDebuff = false;
 
 
     /**
@@ -107,16 +109,16 @@ abstract class AbstractEffect {
 
     /**
      * @param mixed $description Accepts either an array or a string
-     * @throws \Exception
+     * @throws Exception
      */
     public function setDescription($description) {
         if (!is_string($description)) {
             if (!is_array($description)) {
-                throw new \Exception(self::INVALID_EFFECT_DESCRIPTION_MSG);
+                throw new Exception(self::INVALID_EFFECT_DESCRIPTION_MSG);
             }
             foreach ($description as $item) {
                 if (!is_string($item)) {
-                    throw new \Exception(self::INVALID_EFFECT_DESCRIPTION_MSG);
+                    throw new Exception(self::INVALID_EFFECT_DESCRIPTION_MSG);
                 }
             }
         }

@@ -2,8 +2,11 @@
 
 namespace Ancestor\FileDownloader;
 
-use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\Command\CommandHelper;
+use Exception;
 use React\EventLoop\LoopInterface;
+use React\HttpClient\Client;
+use React\HttpClient\Response;
 use React\Promise\Deferred;
 use React\Promise\Promise;
 
@@ -11,7 +14,7 @@ class FileDownloader implements AsyncFileDownloaderInterface {
     /**
      * @var LoopInterface
      */
-    public $loop;
+    public LoopInterface $loop;
 
     const MAX_RESPONSE_SIZE = 3355444;
 
@@ -24,22 +27,23 @@ class FileDownloader implements AsyncFileDownloaderInterface {
      * @param string $url
      * @param callable $callback
      */
-    public function DownloadUrlAsync(string $url, $callback) {
-        $client = new \React\HttpClient\Client($this->loop);
+    public function downloadUrlAsync(string $url, $callback) {
+        $client = new Client($this->loop);
         $request = $client->request('GET', $url);
         $tempFile = null;
         $fileSize = 0;
+        $request->end();
         $request->on('response',
-            function (\React\HttpClient\Response $response) use ($callback, &$tempFile, &$fileSize) {
+            function (Response $response) use ($callback, &$tempFile, &$fileSize) {
 
-                $response->on('error', function (\Exception $e) use ($callback, $response) {
+                $response->on('error', function (Exception $e) use ($callback, $response) {
                     echo $e->getMessage() . PHP_EOL;
-                    $callback(false);
                     $response->close();
+                    $callback(false);
                 });
 
                 if ($response->getHeaders()['Content-Length'] > self::MAX_RESPONSE_SIZE) {
-                    $response->emit('error', [new \Exception('File is too large!')]);
+                    $response->emit('error', [new Exception('File is too large!')]);
                 }
 
                 $response->on('data', function ($chunk) use (&$tempFile, $response, &$fileSize) {
@@ -49,7 +53,7 @@ class FileDownloader implements AsyncFileDownloaderInterface {
                     $fileSize += strlen($chunk);
                     if ($fileSize > self::MAX_RESPONSE_SIZE) {
                         fclose($tempFile);
-                        $response->emit('error', [new \Exception('File is too large!')]);
+                        $response->emit('error', [new Exception('File is too large!')]);
                     }
                     fwrite($tempFile, $chunk);
 
@@ -62,7 +66,6 @@ class FileDownloader implements AsyncFileDownloaderInterface {
                 });
 
             });
-        $request->end();
     }
 
     /**
@@ -72,14 +75,14 @@ class FileDownloader implements AsyncFileDownloaderInterface {
     public function getDownloadAsyncImagePromise(string $url): Promise {
         $deferred = new Deferred();
         $callback = function ($file) use ($deferred) {
-            $imageFile = CommandHelper::ImageFromFileHandler($file);
+            $imageFile = CommandHelper::imageFromFileHandler($file);
             if ($imageFile === false){
                 $deferred->reject();
                 return;
             }
             $deferred->resolve($imageFile);
         };
-        $this->DownloadUrlAsync($url, $callback);
+        $this->downloadUrlAsync($url, $callback);
         return $deferred->promise();
     }
 }

@@ -1,28 +1,26 @@
 <?php
 
-namespace Ancestor\CommandHandler;
+namespace Ancestor\Command;
+use Ancestor\BotIO\MessageInterface;
 
 abstract class Command {
-    /** @var \CharlotteDunois\Yasmin\Client */
-    protected $client;
 
     /** @var CommandHandler */
-    protected $handler;
+    protected CommandHandler $handler;
 
-    /** @var array */
-    public $aliases;
+    /** @var string[] */
+    public array $aliases;
 
     /**
      * @var bool Whether or not the command should be seen by other commands, such as Help.
      */
-    public $hidden = false;
+    public bool $hidden = false;
 
-    protected $name = null;
+    protected ?string $name = null;
 
-    protected $description = null;
+    protected ?string $description = null;
 
     function __construct(CommandHandler $handler, string $name, string $description, array $aliases = null) {
-        $this->client = $handler->client;
         $this->handler = $handler;
         $this->name = $name;
         $this->description = $description;
@@ -49,11 +47,13 @@ abstract class Command {
 
     /**
      * Runs the command.
-     * @throws \Throwable|\Exception|\Error
-     * @param \CharlotteDunois\Yasmin\Models\Message $message
+     * @param MessageInterface $input
      * @param array $args
+     * @throws \Throwable
+     * @throws \Exception
+     * @throws \Error
      */
-    abstract function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args);
+    abstract function run(MessageInterface $input, array $args);
 
     /**
      * Returns prefixed command name.
@@ -62,4 +62,5 @@ abstract class Command {
     public function getPrefixedName(): string {
         return $this->handler->prefix . $this->name;
     }
+
 }

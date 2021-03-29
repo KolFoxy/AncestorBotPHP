@@ -2,9 +2,11 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command;
-use Ancestor\CommandHandler\CommandHandler;
-use Ancestor\CommandHandler\TimedCommandManager;
+use Ancestor\BotIO\ChannelInterface;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command;
+use Ancestor\Command\CommandHandler;
+use Ancestor\Command\TimedCommandManager;
 use Ancestor\Interaction\Fight\FightManager;
 use Ancestor\Interaction\Fight\EncounterCollectionInterface;
 use Ancestor\Interaction\Hero;
@@ -12,9 +14,8 @@ use Ancestor\Interaction\HeroClass;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentCollection\IncidentCollection;
 use Ancestor\Interaction\MonsterType;
-use CharlotteDunois\Yasmin\Interfaces\DMChannelInterface;
-use CharlotteDunois\Yasmin\Interfaces\TextChannelInterface;
-use CharlotteDunois\Yasmin\Models\Message;
+use Exception;
+use JsonMapper;
 
 class Fight extends Command implements EncounterCollectionInterface {
     const CHANNEL_SWITCH_REMINDER = 'Remember to switch to the original channel of the fight before continuing.';
@@ -26,46 +27,47 @@ class Fight extends Command implements EncounterCollectionInterface {
     /**
      * @var HeroClass[]
      */
-    private $classes = [];
+    private array $classes = [];
 
     /**
      * @var TimedCommandManager
      */
-    private $manager;
+    private TimedCommandManager $manager;
 
     /**
      * @var MonsterType[]
      */
-    private $regMonsterTypes = [];
+    private array $regMonsterTypes = [];
 
     /**
      * @var MonsterType[]
      */
-    private $eliteMonsterTypes = [];
+    private array $eliteMonsterTypes = [];
 
     /**
      * @var int
      */
-    private $regularsMaxIndex;
+    private int $regularsMaxIndex;
 
     /**
      * @var int
      */
-    private $classesMaxIndex;
+    private int $classesMaxIndex;
 
     /**
      * @var int
      */
-    private $elitesMaxIndex;
+    private int $elitesMaxIndex;
 
     /**
      * @var IncidentCollection
      */
-    private $incidentCollection;
+    private IncidentCollection $incidentCollection;
 
 
     const ABORT_MESSAGE = 'is now forever lost in space and time.';
 
+    /** @noinspection PhpUnhandledExceptionInspection */
     public function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'fight', 'Fight a random monster or type ``'
             . $handler->prefix
@@ -75,33 +77,33 @@ class Fight extends Command implements EncounterCollectionInterface {
             . PHP_EOL . 'typing  ``' . $handler->prefix . 'f ' . self::SURRENDER_COMMAND . '`` while fighting will cancel the fight'
             . PHP_EOL . '``' . $handler->prefix . 'f play-[CLASS_NAME]`` will start a fight with selected class.'
             , ['f', 'df', 'dfight']);
-        $this->manager = new TimedCommandManager($this->client);
+        $this->manager = new TimedCommandManager($this->handler->client);
 
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $mapper->bExceptionOnUndefinedProperty = true;
         foreach (glob(dirname(__DIR__, 2) . '/data/heroes/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->classes[] = $mapper->map($json, new HeroClass());
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->regMonsterTypes[] = $mapper->map($json, new MonsterType());
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         foreach (glob(dirname(__DIR__, 2) . '/data/monsters/farmstead/elite/*.json') as $path) {
             $json = json_decode(file_get_contents($path));
             try {
                 $this->eliteMonsterTypes[] = $mapper->map($json, new MonsterType());
-            } catch (\Exception $e) {
-                throw new \Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
+            } catch (Exception $e) {
+                throw new Exception($e->getMessage() . ' IN PATH="' . $path . '"' . $e->getTraceAsString());
             }
         }
         $this->classesMaxIndex = count($this->classes) - 1;
@@ -110,7 +112,7 @@ class Fight extends Command implements EncounterCollectionInterface {
         $this->incidentCollection = IncidentCollection::getInstance();
     }
 
-    public function run(Message $message, array $args) {
+    public function run(MessageInterface $message, array $args) {
         if (isset($args[0]) && $args[0] === 'help') {
             $this->handler->helpCommand($message, [$this->name]);
             return;
@@ -119,13 +121,13 @@ class Fight extends Command implements EncounterCollectionInterface {
             $endless = true;
             $heroClassName = '';
             $this->processInitialArgs($args, $endless, $heroClassName);
-            $hero = $this->createHero($message->author->username, $heroClassName);
-            $fightManager = new FightManager($hero, $message->author->getAvatarURL()
-                , $this, $this->handler->prefix . 'f', $this->client->getLoop(), $endless);
-            $message->reply('', ['embed' => $fightManager->start()]);
+            $hero = $this->createHero($message->getAuthor()->getUsername(), $heroClassName);
+            $fightManager = new FightManager($hero, $message->getAuthor()->getAvatarURL()
+                , $this, $this->handler->prefix . 'f', $this->handler->client->getLoop(), $endless);
+            $message->reply('', $fightManager->start());
             $this->manager->addInteraction($message, self::TIMEOUT, $fightManager, null,
                 function () use ($fightManager, $message) {
-                    $this->sendEndscreen($message->channel, $fightManager, $message->author->__toString());
+                    $this->sendEndscreen($message->getChannel(), $fightManager, $message->getAuthor()->getMention());
                 }
             );
             return;
@@ -152,29 +154,33 @@ class Fight extends Command implements EncounterCollectionInterface {
         return $this->classes[mt_rand(0, $this->classesMaxIndex)];
     }
 
-    public function processActiveUserInput(Message $message, array $args) {
+    public function processActiveUserInput(MessageInterface $message, array $args) {
         if (empty($args)) {
             return;
         }
         $actionName = mb_strtolower(implode(' ', $args));
         $fight = $this->getFight($message);
         if ($actionName === self::SURRENDER_COMMAND) {
-            $this->sendEndscreen($message->channel, $fight, $message->author->__toString());
+            $this->sendEndscreen($message->getChannel(), $fight, $message->getAuthor()->getMention());
             $this->manager->deleteInteraction($message);
             return;
         }
         $this->manager->refreshTimer($message, self::TIMEOUT);
 
         if ($actionName === self::CHAR_INFO_COMMAND) {
-            $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {
-                $channel->send('', ['embed' => $fight->getHeroStats()->setFooter(self::CHANNEL_SWITCH_REMINDER)]);
+            $message->getAuthor()->createDM()->done(function (ChannelInterface $channel) use ($fight) {
+                $embed = $fight->getHeroStats();
+                $embed->setFooter(self::CHANNEL_SWITCH_REMINDER);
+                $channel->send('', $embed);
             });
             $message->reply('Check DMs for your hero\'s stats.');
             return;
         }
         if ($actionName === self::CHAR_ACTIONS_COMMAND) {
-            $message->author->createDM()->done(function (DMChannelInterface $channel) use ($fight) {
-                $channel->send('', ['embed' => $fight->getHeroActionsDescriptions()->setFooter(self::CHANNEL_SWITCH_REMINDER)]);
+            $message->getAuthor()->createDM()->done(function (ChannelInterface $channel) use ($fight) {
+                $embed = $fight->getHeroActionsDescriptions();
+                $embed->setFooter(self::CHANNEL_SWITCH_REMINDER);
+                $channel->send('', $embed);
             });
             $message->reply('Check DMs for the list of actions and their descriptions.');
             return;
@@ -184,22 +190,22 @@ class Fight extends Command implements EncounterCollectionInterface {
             return;
         }
         $fight->createTurnPromise($action)->done(
-            function ($messageData) use ($message) {
-                $message->reply('', $messageData);
+            function ($messageEmbed) use ($message) {
+                $message->reply('', $messageEmbed);
             },
             function ($messageData) use ($message) {
                 $this->manager->deleteInteraction($message);
-                $message->reply('', $messageData);
+                $message->getChannel()->sendWithFile($message->getAuthor()->getMention(), $messageData['fileName'], $messageData['fileData'], $messageData['embed']);
             }
         );
     }
 
-    function sendEndscreen(TextChannelInterface $channel, FightManager $fight, string $mention) {
+    function sendEndscreen(ChannelInterface $channel, FightManager $fight, string $mention) {
         if ($fight->killCount >= FightManager::ENDSCREEN_THRESHOLD) {
             $fight->createEndscreen()->done(
                 function ($imageData) use ($channel, $fight, $mention) {
-                    $channel->send($mention . ' **' . $fight->hero->name . '** ' . self::ABORT_MESSAGE
-                        , ['files' => [['data' => $imageData, 'name' => 'end.png']]]);
+                    $channel->sendWithFile($mention . ' **' . $fight->hero->name . '** ' . self::ABORT_MESSAGE,
+                        'end.png', $imageData);
                 },
                 function () use ($channel, $fight, $mention) {
                     $channel->send($mention . ' **' . $fight->hero->name . '** ' . self::ABORT_MESSAGE);
@@ -235,7 +241,7 @@ class Fight extends Command implements EncounterCollectionInterface {
         return $this->incidentCollection->randIncident();
     }
 
-    function getFight(Message $message): FightManager {
+    function getFight(MessageInterface $message): FightManager {
         return $this->manager->getUserData($message);
     }
 }

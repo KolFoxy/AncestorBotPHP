@@ -2,22 +2,24 @@
 
 namespace Ancestor\Interaction;
 
+use Ancestor\Interaction\Stats\StatusEffect;
+
 class MonsterType extends AbstractLivingInteraction {
 
     /**
      * @var DirectAction|null
      */
-    private $defAction = null;
+    private ?DirectAction $defAction = null;
 
     /**
-     * @var \Ancestor\Interaction\Stats\StatusEffect[]|null
+     * @var StatusEffect[]|null
      */
-    public $startingStatusEffects = null;
+    public ?array $startingStatusEffects = null;
 
     /**
      * @var null|MonsterActionsManager
      */
-    public $actionsManager = null;
+    public ?MonsterActionsManager $actionsManager = null;
 
     public function defaultAction(): DirectAction {
         if ($this->defAction === null) {

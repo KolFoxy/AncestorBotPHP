@@ -3,76 +3,76 @@
 namespace Ancestor\RandomData;
 
 class RandomDataProvider {
-    private $NSFWquotes;
-    private $gold;
-    private $trinkets;
-    private $rewardsQuotes;
-    private $quirksPositive;
-    private $quirksNegative;
-    private $heroDiesQuotes;
-    private $monsterDiesQuotes;
+    private array $NSFWquotes = [];
+    private array $gold = [];
+    private array $trinkets = [];
+    private array $rewardsQuotes = [];
+    private array $quirksPositive = [];
+    private array $quirksNegative = [];
+    private array $heroDiesQuotes = [];
+    private array $monsterDiesQuotes = [];
 
-    private static $instance = null;
+    private static ?RandomDataProvider $instance = null;
     const rewardTrinketChance = 30;
 
     private function __construct() {
-        $this->PopulateArray($this->rewardsQuotes, '/data/rewards/rewardsQuotes');
-        $this->PopulateArray($this->gold, '/data/gold');
-        $this->PopulateArray($this->trinkets, '/data/trinkets');
-        $this->PopulateArray($this->NSFWquotes, '/data/NSFWquotes');
-        $this->PopulateArray($this->quirksNegative, '/data/quirksNegative');
-        $this->PopulateArray($this->quirksPositive, '/data/quirksPositive');
-        $this->PopulateArray($this->heroDiesQuotes, '/data/heroDiesQuotes');
-        $this->PopulateArray($this->monsterDiesQuotes, '/data/monsterDiesQuotes');
+        $this->populateArray($this->rewardsQuotes, '/data/rewards/rewardsQuotes');
+        $this->populateArray($this->gold, '/data/gold');
+        $this->populateArray($this->trinkets, '/data/trinkets');
+        $this->populateArray($this->NSFWquotes, '/data/NSFWquotes');
+        $this->populateArray($this->quirksNegative, '/data/quirksNegative');
+        $this->populateArray($this->quirksPositive, '/data/quirksPositive');
+        $this->populateArray($this->heroDiesQuotes, '/data/heroDiesQuotes');
+        $this->populateArray($this->monsterDiesQuotes, '/data/monsterDiesQuotes');
     }
 
     /**
      * @return RandomDataProvider
      */
-    public static function GetInstance() {
+    public static function getInstance() {
         if (!isset(self::$instance)) {
             self::$instance = new RandomDataProvider();
         }
         return self::$instance;
     }
 
-    public function GetRandomData($array) {
+    public function getRandomData($array) {
         return $array[mt_rand(0, sizeof($array) - 1)];
     }
 
 
-    public function GetRandomHeroDeathQuote(): string {
-        return $this->GetRandomData($this->heroDiesQuotes);
+    public function getRandomHeroDeathQuote(): string {
+        return $this->getRandomData($this->heroDiesQuotes);
     }
 
-    public function GetRandomMonsterDeathQuote(): string {
-        return $this->GetRandomData($this->monsterDiesQuotes);
+    public function getRandomMonsterDeathQuote(): string {
+        return $this->getRandomData($this->monsterDiesQuotes);
     }
 
-    public function GetRandomNSFWQuote() {
-        return $this->GetRandomData($this->NSFWquotes);
+    public function getRandomNSFWQuote() {
+        return $this->getRandomData($this->NSFWquotes);
     }
 
-    public function GetRandomPositiveQuirk() {
-        return $this->GetRandomData($this->quirksPositive);
+    public function getRandomPositiveQuirk() {
+        return $this->getRandomData($this->quirksPositive);
     }
 
-    public function GetRandomNegativeQuirk() {
-        return $this->GetRandomData($this->quirksNegative);
+    public function getRandomNegativeQuirk() {
+        return $this->getRandomData($this->quirksNegative);
     }
 
-    public function GetRandomReward() {
+    public function getRandomReward() {
         if (mt_rand(1, 100) <= self::rewardTrinketChance) {
-            return $this->GetRandomData($this->trinkets);
+            return $this->getRandomData($this->trinkets);
         }
-        return $this->GetRandomData($this->gold);
+        return $this->getRandomData($this->gold);
     }
 
-    public function GetRandomRewardQuote() {
-        return $this->GetRandomData($this->rewardsQuotes);
+    public function getRandomRewardQuote() {
+        return $this->getRandomData($this->rewardsQuotes);
     }
 
-    private function PopulateArray(&$array, $file_path, $isJson = false) {
+    private function populateArray(&$array, $file_path, $isJson = false) {
         if (!empty($array)) {
             return;
         }

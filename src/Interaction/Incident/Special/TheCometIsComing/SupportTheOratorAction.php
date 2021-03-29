@@ -2,23 +2,21 @@
 
 namespace Ancestor\Interaction\Incident\Special\TheCometIsComing;
 
+use Ancestor\BotIO\EmbedInterface;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Incident\IActionSingletonInterface;
 use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class SupportTheOratorAction extends IncidentAction implements IActionSingletonInterface {
 
     /**
      * @var IncidentAction
      */
-    protected $alternativeAction;
-    /**
-     * @var IncidentAction
-     */
-    protected static $instance = null;
+    protected IncidentAction $alternativeAction;
+
+    protected static ?IncidentAction $instance = null;
 
     public static function getInstance(): IncidentAction {
         if (self::$instance === null) {
@@ -56,7 +54,7 @@ class SupportTheOratorAction extends IncidentAction implements IActionSingletonI
         $this->alternativeAction->effect->stressDeviation = -7;
     }
 
-    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
+    public function getResult(Hero $hero, EmbedInterface $res): ?Incident {
         if (mt_rand(1, 100) <= 50) {
             return $this->alternativeAction->getResult($hero, $res);
         }

@@ -9,9 +9,9 @@ class LightingEffect extends AbstractTypedPermanentState {
     /**
      * @var StatModifier[]
      */
-    public $monsterStatModifiers;
+    public array $monsterStatModifiers;
 
-    public function apply(AbstractLivingBeing $subject) {
+    public function apply(AbstractLivingBeing $subject): void {
         if ($subject instanceof Hero) {
             parent::apply($subject);
             return;
@@ -21,7 +21,7 @@ class LightingEffect extends AbstractTypedPermanentState {
         }
     }
 
-    public function getDescription() {
+    public function getDescription(): string {
         $res = 'Heroes:' . PHP_EOL;
         foreach ($this->statModifiers as $statModifier) {
             $res .= '*``' . $statModifier->__toString() . '``*' . PHP_EOL;
@@ -36,7 +36,7 @@ class LightingEffect extends AbstractTypedPermanentState {
         return $res;
     }
 
-    public function getTitle() {
+    public function getTitle(): string {
         return 'The lighting changes... ***' . $this->name . '!***';
     }
 }

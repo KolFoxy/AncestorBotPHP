@@ -2,19 +2,21 @@
 
 namespace Ancestor\Interaction\Stats;
 
+use JsonMapper;
+
 final class StressStateFactory {
 
     /**
      * @var null|string[]
      */
-    private static $afflictionQuotes = null;
+    private static ?array $afflictionQuotes = null;
 
-    private static $afflictionQuotesMaxIndex = 0;
+    private static int $afflictionQuotesMaxIndex = 0;
 
     /**
      * @var array
      */
-    private static $stressStates = [
+    private static array $stressStates = [
         'virtues' => [],
         'afflictions' => [],
     ];
@@ -22,10 +24,10 @@ final class StressStateFactory {
     /**
      * @var bool
      */
-    private static $arrayIsPopulated = false;
+    private static bool $arrayIsPopulated = false;
 
-    private static $virtuesMaxIndex = 0;
-    private static $afflictionsMaxIndex = 0;
+    private static int $virtuesMaxIndex = 0;
+    private static int $afflictionsMaxIndex = 0;
 
     public static function create(int $virtueChance = 25): StressState {
         self::populateStatesArray();
@@ -35,11 +37,11 @@ final class StressStateFactory {
         return self::$stressStates['afflictions'][mt_rand(0, self::$afflictionsMaxIndex)];
     }
 
-    private static function populateStatesArray() {
+    private static function populateStatesArray(): void {
         if (self::$arrayIsPopulated) {
             return;
         }
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $mapper->bExceptionOnUndefinedProperty = true;
         $paths = glob(dirname(__DIR__, 3) . '/data/stress_modifiers/*.json');

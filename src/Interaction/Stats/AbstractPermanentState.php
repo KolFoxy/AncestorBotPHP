@@ -10,20 +10,20 @@ abstract class AbstractPermanentState {
      * @var string
      * @required
      */
-    public $name;
+    public string $name;
 
     /**
      * @var StatModifier[]
      */
-    protected $statModifiers = [];
+    protected array $statModifiers = [];
 
-    public function apply(AbstractLivingBeing $host) {
+    public function apply(AbstractLivingBeing $host): void {
         foreach ($this->statModifiers as $key => $statModifier) {
             $host->statManager->modifiers[$key] = $statModifier;
         }
     }
 
-    public function remove(AbstractLivingBeing $host) {
+    public function remove(AbstractLivingBeing $host): void {
         foreach ($this->statModifiers as $key => $statModifier) {
             unset($host->statManager->modifiers[$key]);
         }
@@ -32,7 +32,7 @@ abstract class AbstractPermanentState {
     /**
      * @param StatModifier[] $statModifiers
      */
-    public function setStatModifiers(array $statModifiers) {
+    public function setStatModifiers(array $statModifiers): void {
         foreach ($statModifiers as $key => $statModifier) {
             $modKey = $this->name . $key;
             $this->statModifiers[$modKey] = $statModifier;

@@ -3,7 +3,9 @@
 
 namespace Ancestor\Interaction\Fight;
 
-use Ancestor\CommandHandler\CommandHelper as Helper;
+use Ancestor\BotIO\EmbedInterface;
+use Ancestor\BotIO\EmbedObject;
+use Ancestor\Command\CommandHelper as Helper;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
@@ -19,7 +21,7 @@ use Ancestor\Interaction\Stats\Stats;
 use Ancestor\Interaction\Stats\Trinket;
 use Ancestor\Interaction\Stats\TrinketFactory;
 use Ancestor\Zalgo\Zalgo;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
+use JsonMapper;
 use React\EventLoop\LoopInterface;
 use React\Promise\Deferred;
 use React\Promise\ExtendedPromiseInterface;
@@ -29,72 +31,72 @@ class FightManager {
     /**
      * @var Hero
      */
-    public $hero;
+    public Hero $hero;
 
     /**
      * @var AbstractLivingBeing
      */
-    public $monster;
+    public AbstractLivingBeing $monster;
 
     /**
      * @var LoopInterface
      */
-    public $loop;
+    public LoopInterface $loop;
 
     /**
      * @var int
      */
-    public $killCount = 0;
+    public int $killCount = 0;
 
     /**
      * @var EncounterCollectionInterface
      */
-    public $encounterCollection;
+    public EncounterCollectionInterface $encounterCollection;
 
     /**
      * @var bool
      */
-    public $endless;
+    public bool $endless;
 
     /**
      * @var string
      */
-    public $chatCommand;
+    public string $chatCommand;
 
     /**
      * @var Trinket|null
      */
-    public $newTrinket = null;
+    public ?Trinket $newTrinket = null;
 
     /**
      * @var Incident|null
      */
-    public $incident = null;
+    public ?Incident $incident = null;
 
     /**
      * @var string[]
      */
-    public $killedMonsters = [];
+    public array $killedMonsters = [];
 
     /**
      * @var int
      */
-    protected $transformTimer = self::TRANSFORM_TURNS_CD;
+    protected int $transformTimer = self::TRANSFORM_TURNS_CD;
 
     /**
      * @var ImageTemplate
      */
-    protected $loserTombstoneImageTemplate;
+    protected ImageTemplate $loserTombstoneImageTemplate;
 
     /**
      * @var string
      */
-    public $heroPicUrl;
+    public string $heroPicUrl;
 
     /**
      * @var LightingEffect|null
      */
-    public $currentLight = null;
+    public ?LightingEffect $currentLight = null;
 
     const ENDSCREEN_PATH = '/data/images/endscreen/';
     const ENDSCREEN_WIDTH = 246;
@@ -183,7 +185,7 @@ class FightManager {
         $this->chatCommand = $chatCommand;
 
         $this->loserTombstoneImageTemplate = new ImageTemplate();
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $json = json_decode(file_get_contents(
             dirname(__DIR__, 3) . str_replace('.png', '.json', self::LOSER_TOMBSTONE_PATH)
@@ -191,7 +193,7 @@ class FightManager {
         $mapper->map($json, $this->loserTombstoneImageTemplate);
     }
 
-    public function start(): MessageEmbed {
+    public function start(): EmbedInterface {
         if (!isset($this->monster)) {
             $this->monster = $this->rollNewMonster();
         }
@@ -214,7 +216,7 @@ class FightManager {
     }
 
 
-    protected function setCurrentFooter(MessageEmbed $embed) {
+    protected function setCurrentFooter(EmbedInterface $embed): void {
         if ($this->hero->isDead()) {
             $embed->setFooter('R.I.P. ' . $this->hero->name, $this->heroPicUrl);
             return;
@@ -232,22 +234,21 @@ class FightManager {
             . PHP_EOL . ($this->killCount > 0 ? 'Kills: ' . $this->killCount : ''));
     }
 
-    protected function resetTransformTimer() {
+    protected function resetTransformTimer(): void {
         $this->transformTimer = 0;
     }
 
-    protected function transformTimerTick() {
+    protected function transformTimerTick(): void {
         if ($this->transformTimer < self::TRANSFORM_TURNS_CD) {
             $this->transformTimer++;
         }
     }
 
     /**
-     * @noinspection PhpDocMissingThrowsInspection
      * @param IncidentAction|DirectAction|int $action
-     * @return MessageEmbed
+     * @return EmbedInterface
      */
-    public function getTurn($action): MessageEmbed {
+    public function getTurn($action): EmbedInterface {
         if ($this->newTrinket !== null) {
             if (is_int($action)) {
                 return $this->getEquipTrinketTurn($action);
@@ -263,7 +264,7 @@ class FightManager {
         return $this->getHeroTurn($action);
     }
 
-    protected function getIncidentTurn(IncidentAction $action): MessageEmbed {
+    protected function getIncidentTurn(IncidentAction $action): EmbedInterface {
         $res = $this->newColoredEmbed();
         $this->incident = $action->getResult($this->hero, $res);
         if ($this->incident === null) {
@@ -273,7 +274,7 @@ class FightManager {
         return $res;
     }
 
-    protected function rollTrinketTurn(MessageEmbed $resultEmbed) {
+    protected function rollTrinketTurn(EmbedInterface $resultEmbed): void {
         $newTrinket = TrinketFactory::create($this->hero);
         $this->newTrinket = $newTrinket;
         $resultEmbed->setImage($newTrinket->image);
@@ -288,8 +289,11 @@ class FightManager {
     }
 
 
-    protected function getInvalidActionEmbed(): MessageEmbed {
-        return (new MessageEmbed())->setTitle('Invalid action.')->setDescription(self::INVALID_ACTION_ERROR_MSG);
+    protected function getInvalidActionEmbed(): EmbedInterface {
+        $res = new EmbedObject();
+        $res->setTitle('Invalid action');
+        $res->setDescription(self::INVALID_ACTION_ERROR_MSG);
+        return $res;
     }
 
 
@@ -303,14 +307,14 @@ class FightManager {
         if ($this->isOver()) {
             $this->createEndscreen()->done(
                 function ($data) use ($deferred, $turn) {
-                    $deferred->reject(['embed' => $turn, 'files' => [['data' => $data, 'name' => 'end.png']]]);
+                    $deferred->reject(['embed' => $turn, 'fileData' => $data, 'fileName' => 'end.png']);
                 },
                 function () use ($deferred, $turn) {
-                    $deferred->reject(['embed' => $turn]);
+                    $deferred->reject(['embed' => $turn, 'fileData' => null, 'fileName' => null]);
                 }
             );
         } else {
-            $deferred->resolve(['embed' => $turn]);
+            $deferred->resolve($turn);
         }
         return $deferred->promise();
     }
@@ -328,7 +332,7 @@ class FightManager {
     protected function composeBigEndscreen($heroImageResource) {
         $endPath = dirname(__DIR__, 3) . self::ENDSCREEN_PATH
             . mb_strtolower(str_replace(' ', '_', $this->hero->type->name));
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $template = new ImageTemplate();
         $json = json_decode(file_get_contents($endPath . '.json'));
@@ -365,7 +369,7 @@ class FightManager {
         return $result;
     }
 
-    protected function addEndscreenTextToImage($image) {
+    protected function addEndscreenTextToImage($image): void {
         $cyan = imagecolorallocate($image, 0, 255, 255);
         $red = imagecolorallocate($image, 255, 0, 0);
         $black = imagecolorallocate($image, 0, 0, 0);
@@ -432,7 +436,7 @@ class FightManager {
 
     }
 
-    protected function addLoserTextToImage($image) {
+    protected function addLoserTextToImage($image): void {
         $ttfPath = dirname(__DIR__, 3) . self::FONT_PATH;
         $red = imagecolorallocate($image, 255, 0, 0);
         imagettftext($image,
@@ -466,9 +470,9 @@ class FightManager {
         return $imageWidth / 2 - ($boundingBox[2] - $boundingBox[0]) / 2;
     }
 
-    protected function addCorpsesToImage($image) {
+    protected function addCorpsesToImage($image): void {
         $distributions = $this->getCorpsesDistributionArray();
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $mapper->bExceptionOnMissingData = true;
         $applier = new ImageTemplateApplier($this->getDefaultCorpseTemplate());
         foreach ($distributions as $layer) {
@@ -525,7 +529,7 @@ class FightManager {
         return $res;
     }
 
-    protected function getEquipTrinketTurn(int $action): MessageEmbed {
+    protected function getEquipTrinketTurn(int $action): EmbedInterface {
         $res = $this->newColoredEmbed();
         if ($action === self::SKIP_TRINKET_ACTION) {
             $heal = mt_rand(1, (int)($this->hero->healthMax) * self::SKIP_HEAL_PERCENTAGE * $this->newTrinket->rarity);
@@ -549,12 +553,11 @@ class FightManager {
         return false;
     }
 
-    /** @noinspection PhpDocMissingThrowsInspection */
     /**
      * @param DirectAction $action
-     * @return MessageEmbed
+     * @return EmbedInterface
      */
-    protected function getHeroTurn(DirectAction $action): MessageEmbed {
+    protected function getHeroTurn(DirectAction $action): EmbedInterface {
         $isTransformAction = $action->isTransformAction();
         if ($isTransformAction) {
             if ($this->noTransform()) {
@@ -576,7 +579,7 @@ class FightManager {
         return $embed;
     }
 
-    protected function monsterTurnIsFinal(MessageEmbed $embed): bool {
+    protected function monsterTurnIsFinal(EmbedInterface $embed): bool {
         if (!$this->monster->isDead()) {
             $embed->addField($this->monster->type->name . '\'s turn!', '*``' . $this->monster->getHealthStatus() . '``*');
             Helper::mergeEmbed($embed, $this->monster->getTurn($this->hero));
@@ -597,7 +600,7 @@ class FightManager {
         return false;
     }
 
-    protected function rollNewEncounterIsFinal(MessageEmbed $embed): bool {
+    protected function rollNewEncounterIsFinal(EmbedInterface $embed): bool {
         if ($this->killCount >= self::TRINKET_KILLS_THRESHOLD) {
             if ($this->killCount >= self::INCIDENT_THRESHOLD && mt_rand(1, 100) <= self::INCIDENT_CHANCE) {
                 $this->rollIncidentTurn($embed);
@@ -609,14 +612,14 @@ class FightManager {
         return $this->newMonsterTurn($embed);
     }
 
-    protected function rollIncidentTurn(MessageEmbed $embed) {
+    protected function rollIncidentTurn(EmbedInterface $embed) {
         $this->incident = $this->encounterCollection->randIncident();
         $embed->addField('*' . $this->incident->name . '*', '*``' . $this->incident->description . '``*');
         $embed->setImage($this->incident->image);
         $this->setCurrentFooter($embed);
     }
 
-    protected function transformCdEmbed(): MessageEmbed {
+    protected function transformCdEmbed(): EmbedInterface {
         $embed = $this->newColoredEmbed();
         $embed->setTitle('Can\'t transform yet.');
         $embed->setDescription('Cooldown: ' . (self::TRANSFORM_TURNS_CD - $this->transformTimer) . ' turns.');
@@ -624,10 +627,10 @@ class FightManager {
     }
 
     /**
-     * @param MessageEmbed $resultEmbed
+     * @param EmbedInterface $resultEmbed
      * @return bool Whether or not the first turn of the new monster is final. AKA if Monsters dies on his first turn.
      */
-    public function newMonsterTurn(MessageEmbed $resultEmbed): bool {
+    public function newMonsterTurn(EmbedInterface $resultEmbed): bool {
         $this->monster = $this->rollNewMonster();
         $this->manageLight($resultEmbed);
         $resultEmbed->addField('***' . $this->monster->name . ' emerges from the darkness!***'
@@ -643,7 +646,7 @@ class FightManager {
     }
 
 
-    public function manageLight(MessageEmbed $resultEmbed) {
+    public function manageLight(EmbedInterface $resultEmbed) {
         if ($this->killCount % self::LIGHT_CHANGE_INTERVAL !== 0) {
             if ($this->currentLight !== null) {
                 $this->currentLight->apply($this->monster);
@@ -690,11 +693,11 @@ class FightManager {
         return Zalgo::zalgorizeString($res, self::CORRUPTED_NAME_ZALGOCHARS);
     }
 
-    public function getHeroStats(): MessageEmbed {
+    public function getHeroStats(): EmbedInterface {
         return $this->hero->getStatsAndEffectsEmbed();
     }
 
-    public function getHeroActionsDescriptions(): MessageEmbed {
+    public function getHeroActionsDescriptions(): EmbedInterface {
         $res = $this->newColoredEmbed();
         $res->setTitle($this->hero->name . '\'s abilities and actions:');
         $description = '';
@@ -737,7 +740,9 @@ class FightManager {
         return is_null($action) || (!$action->isUsableVsStealth() && $this->monster->statManager->isStealthed()) ? null : $action;
     }
 
-    protected function newColoredEmbed(): MessageEmbed {
-        return (new MessageEmbed())->setColor($this->hero->type->embedColor);
+    protected function newColoredEmbed(): EmbedInterface {
+        $res = new EmbedObject();
+        $res->setColor($this->hero->type->embedColor);
+        return $res;
     }
 }

@@ -8,22 +8,22 @@ class TypeBonus {
      * @var string
      * @required
      */
-    public $type;
+    public string $type;
 
     /**
      * @var int
      */
-    public $damageMod = 0;
+    public int $damageMod = 0;
 
     /**
      * @var int
      */
-    public $critChanceMod = 0;
+    public int $critChanceMod = 0;
 
     /**
      * @var int
      */
-    public $accMod = 0;
+    public int $accMod = 0;
 
     const SIGNED_DECIMAL_FORMAT = '%+d';
 

@@ -21,37 +21,37 @@ abstract class AbstractLivingBeing {
     /**
      * @var string
      */
-    public $name;
+    public string $name;
 
     /**
      * @var int
      */
-    public $healthMax;
+    public int $healthMax;
 
     /**
      * @var int
      */
-    protected $currentHealth;
+    protected int $currentHealth;
 
     /**
      * @var StatsManager;
      */
-    public $statManager;
+    public StatsManager $statManager;
 
     /**
      * @var AbstractLivingInteraction;
      */
-    public $type;
+    public AbstractLivingInteraction $type;
 
     /**
      * @var int|null
      */
-    public $stress = null;
+    public ?int $stress = null;
 
     /**
      * @var string|null
      */
-    public $causeOfDeath = null;
+    public ?string $causeOfDeath = null;
 
 
     /**
@@ -141,8 +141,8 @@ abstract class AbstractLivingBeing {
         }
         array_unshift($res,
             [
-                'name' => '**' . $this->name . '** was stunned!',
-                'value' => '...and did nothing.',
+                'title' => '**' . $this->name . '** was stunned!',
+                'body' => '...and did nothing.',
                 'inline' => false,
             ]
         );
@@ -155,8 +155,8 @@ abstract class AbstractLivingBeing {
 
     private function getDeathFromDotField(): array {
         return [
-            'name' => '***' . $this->name . ' has deceased.***',
-            'value' => '***' . $this->getDeathQuote() . '***',
+            'title' => '***' . $this->name . ' has deceased.***',
+            'body' => '***' . $this->getDeathQuote() . '***',
             'inline' => false,
         ];
     }
@@ -164,7 +164,7 @@ abstract class AbstractLivingBeing {
     /**
      * @param AbstractLivingBeing $target
      * @param DirectAction|null $action
-     * @return array Array of fields representing results of the turn Format: [['name' => string, 'value' => string, 'inline' => bool]]
+     * @return array Array of fields representing results of the turn Format: [['title' => string, 'body' => string, 'inline' => bool]]
      */
     public function getTurn(AbstractLivingBeing $target, ?DirectAction $action = null): array {
         if ($this->statManager->isStunned()) {
@@ -278,7 +278,7 @@ abstract class AbstractLivingBeing {
      * @param bool $hit
      * @param ActionResult $result
      */
-    protected function applyTimedEffectsGetResults($timedEffects, ActionResult $result, bool $hit) {
+    protected function applyTimedEffectsGetResults(?array $timedEffects, ActionResult $result, bool $hit) {
         if ($timedEffects === null) {
             return;
         }

@@ -2,6 +2,7 @@
 
 namespace Ancestor\Interaction\Incident\Special\SwarmOfPeasants;
 
+use Ancestor\BotIO\EmbedInterface;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Incident\IActionSingletonInterface;
@@ -9,14 +10,10 @@ use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class ThrowTrinketAction extends IncidentAction implements IActionSingletonInterface {
 
-    /**
-     * @var IncidentAction
-     */
-    protected static $instance = null;
+    protected static ?IncidentAction $instance = null;
     protected const NO_TRINKET_NAME = '*You fake-throw your weapon into the crowd.*';
     protected const ANTIQUARIAN_NAME = '*You throw a random bauble you found into the crowd.*';
 
@@ -48,7 +45,7 @@ class ThrowTrinketAction extends IncidentAction implements IActionSingletonInter
         $this->statModifiers = [$stressModBuff, $dodgeBuff];
     }
 
-    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
+    public function getResult(Hero $hero, EmbedInterface $res): ?Incident {
         $altTitle = null;
         if ($this->heroIsAntiquarian($hero)) {
             $altTitle = self::ANTIQUARIAN_NAME;

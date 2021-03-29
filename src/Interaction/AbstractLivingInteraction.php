@@ -17,7 +17,7 @@ abstract class AbstractLivingInteraction extends AbstractInteraction {
     /**
      * @var DirectAction[]
      */
-    public $actions;
+    public array $actions;
 
     /**
      * @var array|null

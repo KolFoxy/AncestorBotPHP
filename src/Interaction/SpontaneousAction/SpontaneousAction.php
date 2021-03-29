@@ -2,21 +2,23 @@
 
 namespace Ancestor\Interaction\SpontaneousAction;
 
+use Ancestor\Interaction\DirectActionEffect;
+
 class SpontaneousAction {
     /**
-     * @var \Ancestor\Interaction\DirectActionEffect
+     * @var DirectActionEffect
      * @required
      */
-    public $effect;
+    public DirectActionEffect $effect;
 
     /**
      * @var int
      * @required
      */
-    public $chance = 100;
+    public int $chance = 100;
 
     /**
      * @var bool
      */
-    public $ignoresStun = false;
+    public bool $ignoresStun = false;
 }

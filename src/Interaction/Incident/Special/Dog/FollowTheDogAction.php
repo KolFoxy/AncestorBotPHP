@@ -2,6 +2,7 @@
 
 namespace Ancestor\Interaction\Incident\Special\Dog;
 
+use Ancestor\BotIO\EmbedInterface;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Hero;
 use Ancestor\Interaction\Incident\IActionSingletonInterface;
@@ -9,16 +10,15 @@ use Ancestor\Interaction\Incident\Incident;
 use Ancestor\Interaction\Incident\IncidentAction;
 use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
-use CharlotteDunois\Yasmin\Models\MessageEmbed;
 
 class FollowTheDogAction extends IncidentAction implements IActionSingletonInterface {
 
-    protected static $instance = null;
+    protected static ?IncidentAction $instance = null;
 
     /**
      * @var IncidentAction;
      */
-    protected $alternativeAction;
+    protected IncidentAction $alternativeAction;
 
     public static function getInstance(): IncidentAction {
         if (self::$instance === null) {
@@ -49,7 +49,7 @@ class FollowTheDogAction extends IncidentAction implements IActionSingletonInter
         $this->alternativeAction->effect->healthDeviation = -9;
     }
 
-    public function getResult(Hero $hero, MessageEmbed $res): ?Incident {
+    public function getResult(Hero $hero, EmbedInterface $res): ?Incident {
         if (mt_rand(1, 100) <= 40) {
             return $this->alternativeAction->getResult($hero, $res);
         }

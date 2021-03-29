@@ -9,7 +9,7 @@ use Ancestor\Interaction\Incident\IncidentSingletonInterface;
 
 class TakeACloserLookIncident extends Incident implements IncidentSingletonInterface {
 
-    protected static $instance = null;
+    protected static ?Incident $instance = null;
     public static function getInstance() : Incident {
         if (self::$instance === null) {
             self::$instance = new TakeACloserLookIncident();

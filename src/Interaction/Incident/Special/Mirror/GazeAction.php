@@ -13,7 +13,7 @@ class GazeAction extends IncidentAction implements IActionSingletonInterface {
     /**
      * @var IncidentAction
      */
-    protected static $instance = null;
+    protected static ?IncidentAction $instance = null;
 
     public static function getInstance(): IncidentAction {
         if (self::$instance === null) {
@@ -29,7 +29,7 @@ class GazeAction extends IncidentAction implements IActionSingletonInterface {
         $this->effect->stress_value = 10;
     }
 
-    protected function addTimedEffectsToResult(ActionResult $result) {
+    protected function addTimedEffectsToResult(ActionResult $result): void {
         $stats = Stats::getStatNamesArray();
         $maxStatsIndex = count($stats) - 1;
         for ($i = 0; $i < 2; $i++) {

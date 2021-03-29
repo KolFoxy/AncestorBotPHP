@@ -6,39 +6,42 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command as Command;
-use Ancestor\CommandHandler\CommandHandler as CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command as Command;
+use Ancestor\Command\CommandHandler as CommandHandler;
+use Ancestor\Command\CommandHelper;
+use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
+use JsonMapper;
 
 class Stress extends Command {
-    private $stressURL;
-    private $stressPicPath;
+    private string $stressURL;
+    private string $stressPicPath;
     /**
      * @var ImageTemplate
      */
-    private $defaultTemplate;
+    private ImageTemplate $defaultTemplate;
 
     /**
      * @var ImageTemplateApplier
      */
-    private $templateApplier;
+    private ImageTemplateApplier $templateApplier;
     /**
-     * @var \Ancestor\FileDownloader\FileDownloader
+     * @var FileDownloader
      */
-    private $imageDl;
+    private FileDownloader $fileDownloader;
 
     const STRESS_ROTATE_ANGLE = 22;
 
-    function __construct(CommandHandler $handler, $stressURL) {
+    function __construct(CommandHandler $handler, string $stressURL) {
         parent::__construct($handler, 'stress', 'Forces you or a [@user] to drink wine.');
         $this->stressURL = $stressURL;
         $this->stressPicPath = dirname(__DIR__,2).'/data/images/stress_cropped.png';
-        $this->imageDl = new \Ancestor\FileDownloader\FileDownloader($this->client->getLoop());
+        $this->fileDownloader = new FileDownloader($this->handler->client->getLoop());
 
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/images/stress_template.json'));
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $this->defaultTemplate = new ImageTemplate();
         $mapper->bExceptionOnMissingData = true;
         $mapper->map($json, $this->defaultTemplate);
@@ -46,22 +49,21 @@ class Stress extends Command {
 
     }
 
-    function run(\CharlotteDunois\Yasmin\Models\Message $message, array $args) {
-        $commandHelper = new CommandHelper($message);
-        $callbackObj = function ($image) use ($commandHelper) {
-            $file = $this->addImageToStress($image);
-            if ($file === false) {
-                $commandHelper->RespondWithEmbedImage($this->stressURL);
+    function run(MessageInterface $message, array $args) {
+        $callbackObj = function ($image) use ($message) {
+            $stressedImage = $this->stressImage($image);
+            if ($stressedImage === false) {
+                $message->replyWithEmbedImage('','',$this->stressURL);
                 return;
             }
-            $commandHelper->RespondWithAttachedFile($file, 'stress.png');
+            $message->getChannel()->sendWithFile('','stress.png',$stressedImage);
         };
 
         try {
-            $this->imageDl->DownloadUrlAsync($commandHelper->ImageUrlFromCommandArgs($args), $callbackObj);
+            $this->fileDownloader->downloadUrlAsync(CommandHelper::imageUrlFromCommandArgs($args, $message), $callbackObj);
         } catch (\Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
-            $commandHelper->RespondWithEmbedImage($this->stressURL);
+            $message->replyWithEmbedImage('','',$this->stressURL);
         }
     }
 
@@ -70,8 +72,8 @@ class Stress extends Command {
      * @param resource $imageFile
      * @return bool|string
      */
-    function addImageToStress($imageFile) {
-        if ($imageFile === false || ($imageRes = CommandHelper::ImageFromFileHandler($imageFile)) === false) {
+    function stressImage($imageFile) {
+        if ($imageFile === false || ($imageRes = CommandHelper::imageFromFileHandler($imageFile)) === false) {
             return false;
         }
 

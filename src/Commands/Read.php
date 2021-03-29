@@ -2,10 +2,11 @@
 
 namespace Ancestor\Commands;
 
-use Ancestor\CommandHandler\Command;
-use Ancestor\CommandHandler\CommandHandler;
-use Ancestor\CommandHandler\CommandHelper;
-use Ancestor\CommandHandler\TimedCommandManager;
+use Ancestor\BotIO\MessageInterface;
+use Ancestor\Command\Command;
+use Ancestor\Command\CommandHandler;
+use Ancestor\Command\CommandHelper;
+use Ancestor\Command\TimedCommandManager;
 use Ancestor\FileDownloader\FileDownloader;
 use Ancestor\ImageTemplate\ImageTemplate;
 use Ancestor\ImageTemplate\ImageTemplateApplier;
@@ -13,8 +14,8 @@ use Ancestor\ImageTemplate\ImageTemplateApplier;
 use Ancestor\Interaction\Curio;
 use Ancestor\Interaction\Effect;
 use Ancestor\Interaction\Stats\StressStateFactory;
-
-use CharlotteDunois\Yasmin\Models\Message;
+use JsonMapper;
+use Throwable;
 
 class Read extends Command {
 
@@ -22,15 +23,15 @@ class Read extends Command {
      * Array of writing curios.
      * @var Curio[]
      */
-    private $curios;
+    private array $curios;
     /**
      * @var TimedCommandManager
      */
-    private $manager;
+    private TimedCommandManager $manager;
     /**
      * @var FileDownloader
      */
-    private $fileDl;
+    private FileDownloader $fileDl;
 
     const TIMEOUT = 60.0;
 
@@ -39,20 +40,21 @@ class Read extends Command {
             'Interact with writing curios.',
             ['book', 'heckbooks', 'knowledge']);
 
-        $mapper = new \JsonMapper();
+        $mapper = new JsonMapper();
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . '/data/writings.json'));
         $mapper->bExceptionOnMissingData = true;
+        /** @noinspection PhpUnhandledExceptionInspection */
         $this->curios = $mapper->mapArray($json, [], Curio::class);
 
-        $this->manager = new TimedCommandManager($this->client);
-        $this->fileDl = new FileDownloader($this->client->getLoop());
+        $this->manager = new TimedCommandManager($this->handler->client);
+        $this->fileDl = new FileDownloader($this->handler->client->getLoop());
     }
 
-    function run(Message $message, array $args) {
+    function run(MessageInterface $message, array $args) {
         if (empty($args) && !$this->manager->userIsInteracting($message)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
             $this->manager->addInteraction($message, self::TIMEOUT, $curio);
-            $message->reply('', ['embed' => $curio->getEmbedResponse($this->handler->prefix . $this->name)]);
+            $message->reply('', $curio->getEmbedResponse($this->handler->prefix . $this->name));
             return;
         }
         if (!empty($args) && $this->manager->userIsInteracting($message)) {
@@ -70,14 +72,14 @@ class Read extends Command {
                 $stressState = StressStateFactory::create();
                 $extraEmbedFields = [
                     [
-                        'title' => $message->author->username . '\'s resolve is tested... **' . $stressState->name . '**',
+                        'title' => $message->getAuthor()->getUsername() . '\'s resolve is tested... **' . $stressState->name . '**',
                         'value' => '***' . $stressState->quote . '***',
                     ],
                 ];
             }
 
             if (!$effect->hasImage()) {
-                $message->reply('', ['embed' => $effect->getEmbedResponse($extraEmbedFields)]);
+                $message->reply('', $effect->getEmbedResponse($extraEmbedFields));
                 return;
             }
 
@@ -85,7 +87,7 @@ class Read extends Command {
                 $this->onImageDownloadResponse($imageHandler, $effect, $message, $extraEmbedFields);
             };
 
-            $this->fileDl->DownloadUrlAsync($message->author->getDisplayAvatarURL(null, 'png'), $callbackObj);
+            $this->fileDl->downloadUrlAsync($message->getAuthor()->getAvatarUrl(), $callbackObj);
 
         }
     }
@@ -93,16 +95,16 @@ class Read extends Command {
     /**
      * @param $imageHandler
      * @param Effect $effect
-     * @param Message $message
+     * @param MessageInterface $message
      * @param array|null $extraEmbedFields
      */
-    function onImageDownloadResponse($imageHandler, Effect $effect, Message $message, array $extraEmbedFields = null) {
-        $mapper = new \JsonMapper();
+    function onImageDownloadResponse($imageHandler, Effect $effect, MessageInterface $message, array $extraEmbedFields = null) {
+        $mapper = new JsonMapper();
         $json = json_decode(file_get_contents(dirname(__DIR__, 2) . $effect->imageTemplate));
         try {
             $template = new ImageTemplate();
             $mapper->map($json, $template);
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             echo $e->getMessage() . PHP_EOL;
             return;
         }
@@ -112,17 +114,15 @@ class Read extends Command {
             $template);
 
         if ($file === false) {
-            $message->reply('', ['embed' => $effect->getEmbedResponse($extraEmbedFields)]);
+            $message->reply('', $effect->getEmbedResponse($extraEmbedFields));
             return;
         }
 
-        $ch = new CommandHelper($message);
-        $ch->RespondWithAttachedFile($file, 'book_effect.png', $effect->getEmbedResponse($extraEmbedFields),
-            $message->author->__toString());
+        $message->getChannel()->sendWithFile($message->getAuthor()->getMention(),'book_effect.png',$file, $effect->getEmbedResponse($extraEmbedFields));
 
     }
 
-    function getCurio(Message $message): Curio {
+    function getCurio(MessageInterface $message): Curio {
         return $this->manager->getUserData($message);
     }
 
@@ -134,7 +134,7 @@ class Read extends Command {
      * @return string
      */
     function getImageOnTemplate($imageSrcFileHandler, string $imageForTemplatePath, ImageTemplate $template): string {
-        $imageSrc = CommandHelper::ImageFromFileHandler($imageSrcFileHandler);
+        $imageSrc = CommandHelper::imageFromFileHandler($imageSrcFileHandler);
         $imageTemplate = imagecreatefrompng($imageForTemplatePath);
         $tA = new ImageTemplateApplier($template);
         $canvas = $tA->applyTemplate($imageSrc, $imageTemplate, true);

@@ -5,52 +5,52 @@ namespace Ancestor\Interaction\ActionResult;
 use Ancestor\Interaction\AbstractLivingBeing;
 use Ancestor\Interaction\Stats\StatModifier;
 use Ancestor\Interaction\Stats\Stats;
-use Ancestor\CommandHandler\CommandHelper as Helper;
+use Ancestor\Command\CommandHelper as Helper;
 use Ancestor\Interaction\Stats\StatusEffect;
 
 class ActionResult {
     /**
      * @var AbstractLivingBeing
      */
-    public $target;
+    public AbstractLivingBeing $target;
     /**
      * @var AbstractLivingBeing|null
      */
-    public $caster;
+    public ?AbstractLivingBeing $caster;
 
     /**
      * @var string
      */
-    public $actionName;
+    public string $actionName;
 
     /**
      * @var ActionResultFeed
      */
-    protected $targetFeed;
+    protected ActionResultFeed $targetFeed;
 
     /**
      * @var ActionResultFeed
      */
-    protected $casterFeed;
+    protected ActionResultFeed $casterFeed;
 
     /**
      * @var bool
      */
-    public $miss = false;
+    public bool $miss = false;
 
-    protected $message = '';
+    protected string $message = '';
 
     /**
      * @var null|bool
      */
-    protected $resistedDebuff = null;
+    protected ?bool $resistedDebuff = null;
 
-    protected $isCrit = false;
+    protected bool $isCrit = false;
 
     /**
      * @var string
      */
-    public $description;
+    public string $description;
 
     const MISS_MESSAGE = '``...and misses!``';
     const CRIT_MESSAGE = ' ***CRIT!***';

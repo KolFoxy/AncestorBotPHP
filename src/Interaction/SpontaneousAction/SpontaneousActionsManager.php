@@ -8,9 +8,9 @@ class SpontaneousActionsManager {
     /**
      * @var SpontaneousAction[]
      */
-    public $spontaneousActions = [];
+    public array $spontaneousActions = [];
 
-    public function isEmpty():bool {
+    public function isEmpty(): bool {
         return $this->spontaneousActions === [];
     }
 
@@ -18,7 +18,7 @@ class SpontaneousActionsManager {
      * @param bool $stunnedTurn
      * @return DirectActionEffect[]
      */
-    public function getTurnStartEffects(bool $stunnedTurn) {
+    public function getTurnStartEffects(bool $stunnedTurn): array {
         $res = [];
         foreach ($this->spontaneousActions as $spontaneousAction) {
             if ($stunnedTurn && !$spontaneousAction->ignoresStun) {
@@ -34,7 +34,7 @@ class SpontaneousActionsManager {
     /**
      * @param SpontaneousAction[]|SpontaneousAction|null $toAdd
      */
-    public function addSpontaneousAction($toAdd) {
+    public function addSpontaneousAction($toAdd): void {
         if ($toAdd === null) {
             return;
         }
@@ -48,7 +48,7 @@ class SpontaneousActionsManager {
     /**
      * @param SpontaneousAction[]|SpontaneousAction|null $toRemove
      */
-    public function removeSpontaneousAction($toRemove) {
+    public function removeSpontaneousAction($toRemove): void {
         if ($toRemove === null) {
             return;
         }
@@ -69,7 +69,7 @@ class SpontaneousActionsManager {
      * SpontaneousActionsManager constructor.
      * @param SpontaneousAction[]|null $spontaneousActions
      */
-    public function __construct($spontaneousActions) {
+    public function __construct(?array $spontaneousActions) {
         if ($spontaneousActions === null) {
             return;
         }

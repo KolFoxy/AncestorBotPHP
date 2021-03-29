@@ -22,7 +22,7 @@ class Monster extends AbstractLivingBeing {
     }
 
     public function getDeathQuote(): string {
-        return RandomDataProvider::GetInstance()->GetRandomMonsterDeathQuote();
+        return RandomDataProvider::getInstance()->getRandomMonsterDeathQuote();
     }
 
     public function addHealth(int $value) {

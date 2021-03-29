@@ -9,17 +9,17 @@ class AbstractTypedPermanentState extends AbstractPermanentState {
     /**
      * @var TypeBonus[]
      */
-    protected $typeBonuses = [];
+    protected array $typeBonuses = [];
 
 
-    public function apply(AbstractLivingBeing $host) {
+    public function apply(AbstractLivingBeing $host): void {
         parent::apply($host);
         foreach ($this->typeBonuses as $key => $bonus) {
             $host->statManager->typeBonuses[$key] = $bonus;
         }
     }
 
-    public function remove(AbstractLivingBeing $host) {
+    public function remove(AbstractLivingBeing $host): void {
         parent::remove($host);
         foreach ($this->typeBonuses as $key => $bonus) {
             unset($host->statManager->typeBonuses[$key]);
@@ -29,7 +29,7 @@ class AbstractTypedPermanentState extends AbstractPermanentState {
     /**
      * @param TypeBonus[] $typeBonuses
      */
-    public function setTypeBonuses($typeBonuses) {
+    public function setTypeBonuses(array $typeBonuses): void {
         foreach ($typeBonuses as $key => $bonus) {
             $this->typeBonuses[$this->name . $key . $bonus->type] = $bonus;
         }
@@ -38,7 +38,7 @@ class AbstractTypedPermanentState extends AbstractPermanentState {
     /**
      * @return TypeBonus[]
      */
-    public function getTypeBonuses() {
+    public function getTypeBonuses(): array {
         return $this->typeBonuses;
     }
 }

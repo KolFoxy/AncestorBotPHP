@@ -2,6 +2,8 @@
 
 namespace Ancestor\Interaction\Stats;
 
+use Exception;
+
 class StatusEffect implements TimedEffectInterface {
 
     const TYPE_BLEED = "bleed";
@@ -23,33 +25,33 @@ class StatusEffect implements TimedEffectInterface {
     /**
      * @var string
      */
-    private $type;
+    private string $type;
 
     /**
      * @var int Negative for permanent effect.
      */
-    public $duration = 3;
+    public int $duration = 3;
 
     /**
      * @var int Negative for guaranteed application.
      */
-    public $chance = 100;
+    public int $chance = 100;
 
     /**
      * @var int|null
      */
-    public $value = null;
+    public ?int $value = null;
 
     /**
      * @var bool Indicates whether or not the effect is applied to the caster no matter the target.
      */
-    public $targetSelf = false;
+    public bool $targetSelf = false;
 
     /**
      * @param string $type
-     * @throws \Exception
+     * @throws Exception
      */
-    public function setType(string $type) {
+    public function setType(string $type): void {
         $type = mb_strtolower($type);
         if ($type === self::TYPE_MARKED) {
             $this->type = $type;
@@ -73,7 +75,7 @@ class StatusEffect implements TimedEffectInterface {
             $this->type = $type;
             return;
         }
-        throw new \Exception('Invalid StatusEffect type');
+        throw new Exception('Invalid StatusEffect type');
     }
 
 
@@ -143,11 +145,11 @@ class StatusEffect implements TimedEffectInterface {
 
     }
 
-    public function getShortDescription() {
+    public function getShortDescription(): string {
         if ($this->type === self::TYPE_BLIGHT
             || $this->type === self::TYPE_BLEED
             || $this->type === self::TYPE_HORROR
-            || $this->type === self::TYPE_RIPOSTE){
+            || $this->type === self::TYPE_RIPOSTE) {
             return $this->__toString();
         }
         return $this->type;
