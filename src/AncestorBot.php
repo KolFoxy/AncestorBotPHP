@@ -5,6 +5,8 @@ namespace Ancestor;
 use Ancestor\AncestorTraits\CheckResolveTrait;
 use Ancestor\AncestorTraits\NsfwResponseTrait;
 use Ancestor\BotIO\BotIoInterface;
+use Ancestor\BotIO\DiscordPhpBot\DiscordPhpClient;
+use Ancestor\BotIO\DiscordPhpBot\DiscordPhpMessage;
 use Ancestor\BotIO\MessageInterface;
 use Ancestor\Command\CommandHandler;
 use Ancestor\Commands\Fight;
@@ -18,6 +20,8 @@ use Ancestor\Commands\Stress;
 
 use Ancestor\Commands\Zalgo;
 use Discord\Discord;
+use Discord\Parts\Channel\Message;
+use Discord\WebSockets\Event;
 use Throwable;
 
 class AncestorBot {
@@ -26,9 +30,11 @@ class AncestorBot {
     use NsfwResponseTrait;
 
     /**
-     * @var BotIoInterface
+     * @var Discord
      */
-    private BotIoInterface $client;
+    private Discord $discord;
+
+    private DiscordPhpClient $client;
 
     /**
      * @var array
@@ -59,14 +65,15 @@ class AncestorBot {
      */
     private CommandHandler $commandHandler;
 
-    public function __construct(BotIoInterface $client, array $config, CommandHandler $commandHandler = null) {
-        $this->client = $client;
+    public function __construct(Discord $discord, array $config, CommandHandler $commandHandler = null) {
+        $this->discord = $discord;
         $this->config = $config;
+        $this->client = new DiscordPhpClient($discord);
         if ($commandHandler != null) {
             $this->commandHandler = $commandHandler;
         } else {
 
-            $this->commandHandler = new CommandHandler($client, $config[self::ARG_PREFIX]);
+            $this->commandHandler = new CommandHandler($this->client, $config[self::ARG_PREFIX]);
             $this->commandHandler->registerCommands($this->getDefaultCommands());
         }
         $this->setupClient();
@@ -90,33 +97,24 @@ class AncestorBot {
 
     private function setupClient() {
 
-        $discord = new Discord();
-
-        $this->client->on('error', function (Throwable $error) {
-            echo $error->getMessage();
+        $this->discord->on(Event::READY, function () {
+            echo 'Successful login into ' . $this->discord->user->username . '#' . $this->discord->user->discriminator . PHP_EOL;
         });
 
-        $this->client->on('ready', function () {
-            echo 'Successful login into ' . $this->client->getUser()->getTag() . PHP_EOL;
-        });
-
-        $this->client->on('message', function (MessageInterface $message) {
+        $this->discord->on(Event::MESSAGE_CREATE, function (Message $discordMessage) {
+            $message = new DiscordPhpMessage($discordMessage,$this->discord);
             if ($message->getAuthor()->isBot()) return;
             if ($this->commandHandler->handleMessage($message)) {
                 return;
             }
 
-            if ($this->nsfwResponse($message,$this->client,$this->config[self::ARG_NSFW_CHANCE])) {
+            if ($this->nsfwResponse($message, $this->client, $this->config[self::ARG_NSFW_CHANCE])) {
                 return;
             }
 
             $this->checkResolveResponse($message, $this->client);
 
         });
-    }
-
-    public function login(string $token) {
-        $this->client->login($token);
     }
 
 }
