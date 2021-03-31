@@ -19,14 +19,9 @@ if ($token === false) {
 }
 $config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
 $loop = Factory::create();
-
-$logger = new \Monolog\Logger('Ancestor');
-
 $discord = new \Discord\Discord([
     'token' => $token,
-    'intents' => [
-        Intents::DIRECT_MESSAGES, Intents::GUILD_MESSAGES, Intents::GUILD_MEMBERS
-    ],
+
     'disabledEvents' => [
         Event::TYPING_START, Event::MESSAGE_REACTION_ADD, Event::MESSAGE_REACTION_REMOVE, Event::CHANNEL_PINS_UPDATE,
         Event::VOICE_STATE_UPDATE, Event::VOICE_SERVER_UPDATE, Event::MESSAGE_REACTION_REMOVE_ALL, Event::GUILD_BAN_ADD,
@@ -34,7 +29,7 @@ $discord = new \Discord\Discord([
     ],
     'loop' => $loop,
 
-    'logger' => $logger,
+    'logger' => new \Ancestor\BasicConsoleLogger\BasicConsoleLogger(),
 
     'loggerLevel' => \Monolog\Logger::DEBUG
 ]);

@@ -46,7 +46,7 @@ class DiscordPhpUser implements UserInterface {
     }
 
     public function isBot(): bool {
-        return $this->discordUser->bot;
+        return is_null($this->discordUser->bot) || $this->discordUser->bot === false  ? false : true ;
     }
 
     public function getTag(): string {

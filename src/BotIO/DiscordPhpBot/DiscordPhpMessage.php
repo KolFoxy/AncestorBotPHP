@@ -26,7 +26,7 @@ class DiscordPhpMessage implements MessageInterface {
     }
 
     public function isAuthorBot(): bool {
-        return $this->discordMessage->author->bot;
+        return $this->getAuthor()->isBot();
     }
 
     public function getContent(): string {

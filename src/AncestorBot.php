@@ -97,24 +97,27 @@ class AncestorBot {
 
     private function setupClient() {
 
-        $this->discord->on(Event::READY, function () {
+        $this->discord->on('ready', function () {
             echo 'Successful login into ' . $this->discord->user->username . '#' . $this->discord->user->discriminator . PHP_EOL;
+
+
+            $this->discord->on(Event::MESSAGE_CREATE, function (Message $discordMessage) {
+
+                $message = new DiscordPhpMessage($discordMessage,$this->discord);
+                if ($message->getAuthor()->isBot()) return;
+                if ($this->commandHandler->handleMessage($message)) {
+                    return;
+                }
+
+                if ($this->nsfwResponse($message, $this->client, $this->config[self::ARG_NSFW_CHANCE])) {
+                    return;
+                }
+
+                $this->checkResolveResponse($message, $this->client);
+
+            });
         });
 
-        $this->discord->on(Event::MESSAGE_CREATE, function (Message $discordMessage) {
-            $message = new DiscordPhpMessage($discordMessage,$this->discord);
-            if ($message->getAuthor()->isBot()) return;
-            if ($this->commandHandler->handleMessage($message)) {
-                return;
-            }
-
-            if ($this->nsfwResponse($message, $this->client, $this->config[self::ARG_NSFW_CHANCE])) {
-                return;
-            }
-
-            $this->checkResolveResponse($message, $this->client);
-
-        });
     }
 
 }
