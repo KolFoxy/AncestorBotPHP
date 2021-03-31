@@ -13,7 +13,7 @@ use Ancestor\Interaction\Stats\StatusEffect;
 class IncidentAction extends AbstractAction {
 
     /**
-     * @var Effect
+     * @var \Ancestor\Interaction\Effect
      */
     public Effect $effect;
 
@@ -28,12 +28,12 @@ class IncidentAction extends AbstractAction {
     protected ?array $exclusiveClasses = null;
 
     /**
-     * @var StatusEffect[]|null
+     * @var \Ancestor\Interaction\Stats\StatusEffect[]|null
      */
     public ?array $statusEffects = null;
 
     /**
-     * @var StatModifier[]|null
+     * @var \Ancestor\Interaction\Stats\StatModifier[]|null
      */
     public ?array $statModifiers = null;
 

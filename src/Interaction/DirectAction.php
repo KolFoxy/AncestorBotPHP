@@ -22,12 +22,12 @@ class DirectAction extends AbstractAction {
     public DirectActionEffect $effect;
 
     /**
-     * @var StatusEffect[]|null
+     * @var \Ancestor\Interaction\Stats\StatusEffect[]|null
      */
     public ?array $statusEffects = null;
 
     /**
-     * @var StatModifier[]|null
+     * @var \Ancestor\Interaction\Stats\StatModifier[]|null
      */
     public ?array $statModifiers = null;
 

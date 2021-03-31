@@ -6,7 +6,7 @@ use Ancestor\Interaction\DirectActionEffect;
 
 class SpontaneousAction {
     /**
-     * @var DirectActionEffect
+     * @var \Ancestor\Interaction\DirectActionEffect
      * @required
      */
     public DirectActionEffect $effect;

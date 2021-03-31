@@ -25,7 +25,7 @@ class HeroClass extends AbstractLivingInteraction {
     protected ?HeroClass $transformClass = null;
 
     /**
-     * @var null|SpontaneousAction[]
+     * @var null|\Ancestor\Interaction\SpontaneousAction\SpontaneousAction[]
      */
     public ?array $spontaneousActions = null;
 

@@ -12,7 +12,7 @@ class MonsterType extends AbstractLivingInteraction {
     private ?DirectAction $defAction = null;
 
     /**
-     * @var StatusEffect[]|null
+     * @var \Ancestor\Interaction\Stats\StatusEffect[]|null
      */
     public ?array $startingStatusEffects = null;
 

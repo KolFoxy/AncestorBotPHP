@@ -22,7 +22,7 @@ class DirectActionEffect extends AbstractEffect {
     public int $hitChance = 100;
 
     /**
-     * @var TypeBonus[]|null
+     * @var \Ancestor\Interaction\Stats\TypeBonus[]|null
      */
     public ?array $typeBonuses = null;
 
