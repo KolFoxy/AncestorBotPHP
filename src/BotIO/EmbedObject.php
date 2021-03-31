@@ -4,38 +4,38 @@ namespace Ancestor\BotIO;
 
 class EmbedObject implements EmbedInterface {
 
-    public ?string $title;
-    public ?string $description;
-    public ?string $url;
-    public ?string $timestamp;
-    public ?int $color;
+    public ?string $title = null;
+    public ?string $description = null;
+    public ?string $url = null;
+    public ?string $timestamp = null;
+    public ?int $color = null;
 
-    public ?string $footerIconUrl;
-    public ?string $footerProxyIcon;
-    public ?string $footerText;
+    public ?string $footerIconUrl = null;
+    public ?string $footerProxyIcon = null;
+    public ?string $footerText = null;
 
-    public ?string $imageUrl;
-    public ?string $imageHeight;
-    public ?string $imageWidth;
-    public ?string $imageProxy;
+    public ?string $imageUrl = null;
+    public ?string $imageHeight = null;
+    public ?string $imageWidth = null;
+    public ?string $imageProxy = null;
 
-    public ?string $thumbnailUrl;
-    public ?string $thumbnailHeight;
-    public ?string $thumbnailWidth;
-    public ?string $thumbnailProxy;
+    public ?string $thumbnailUrl = null;
+    public ?string $thumbnailHeight = null;
+    public ?string $thumbnailWidth = null;
+    public ?string $thumbnailProxy = null;
 
-    public ?string $providerName;
-    public ?string $providerUrl;
+    public ?string $providerName = null;
+    public ?string $providerUrl = null;
 
-    public ?string $authorName;
-    public ?string $authorUrl;
-    public ?string $authorIconUrl;
-    public ?string $authorIconProxy;
+    public ?string $authorName = null;
+    public ?string $authorUrl = null;
+    public ?string $authorIconUrl = null;
+    public ?string $authorIconProxy = null;
 
-    public ?string $videoUrl;
-    public ?string $videoProxy;
-    public ?string $videoHeight;
-    public ?string $videoWidth;
+    public ?string $videoUrl = null;
+    public ?string $videoProxy = null;
+    public ?string $videoHeight = null;
+    public ?string $videoWidth = null;
 
     /**
      * array:
@@ -62,7 +62,7 @@ class EmbedObject implements EmbedInterface {
         ];
     }
 
-    public function getFields(): array {
+    public function getFields(): ?array {
         return $this->fields;
     }
 

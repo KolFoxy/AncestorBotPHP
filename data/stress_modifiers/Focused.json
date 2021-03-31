@@ -1,4 +1,6 @@
-{
+{  "name": "Focused",
+  "quote": "A moment of clarity in the eye of the storm...",
+  "isVirtue": true,
   "statModifiers": [
     {
       "chance": -1,
@@ -14,8 +16,6 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Focused",
-  "quote": "A moment of clarity in the eye of the storm...",
-  "isVirtue": true
+  ]
+
 }

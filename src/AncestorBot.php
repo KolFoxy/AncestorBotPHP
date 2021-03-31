@@ -19,6 +19,11 @@ use Ancestor\Commands\Spin;
 use Ancestor\Commands\Stress;
 
 use Ancestor\Commands\Zalgo;
+use Ancestor\Interaction\Hero;
+use Ancestor\Interaction\HeroClass;
+use Ancestor\Interaction\Stats\LightingEffectFactory;
+use Ancestor\Interaction\Stats\StressStateFactory;
+use Ancestor\Interaction\Stats\TrinketFactory;
 use Discord\Discord;
 use Discord\Parts\Channel\Message;
 use Discord\WebSockets\Event;
@@ -95,7 +100,6 @@ class AncestorBot {
             $this->discord->on(Event::MESSAGE_CREATE, function (Message $discordMessage) {
 
                 $this->client = new DiscordPhpClient($this->discord);
-
                 $this->commandHandler = new CommandHandler($this->client, $this->config[self::ARG_PREFIX]);
                 $this->commandHandler->registerCommands($this->getDefaultCommands());
 

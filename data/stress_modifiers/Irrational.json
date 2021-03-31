@@ -1,4 +1,5 @@
-{
+{  "name": "Irrational",
+  "quote": "Reeling, gasping, taken over the edge into madness!",
   "statModifiers": [
     {
       "chance": -1,
@@ -21,8 +22,7 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Irrational",
-  "quote": "Reeling, gasping, taken over the edge into madness!"
+  ]
+
 }
 

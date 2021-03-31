@@ -5,7 +5,7 @@ namespace Ancestor\BotIO;
 interface EmbedInterface {
     public function addField(string $title, string $body, bool $inline = false): void;
 
-    public function getFields(): array;
+    public function getFields(): ?array;
 
     public function setFooter(string $footerText, ?string $footerIconUrl = null, ?string $footerProxyIcon = null): void;
 

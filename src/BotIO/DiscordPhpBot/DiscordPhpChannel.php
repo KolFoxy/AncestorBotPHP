@@ -21,7 +21,7 @@ class DiscordPhpChannel implements ChannelInterface {
     public function send(string $text, EmbedInterface $embed = null) {
         $de = null;
         if ($embed !== null) {
-            DiscordPhpHelper::embedInterfaceToDiscordEmbed($embed, $this->discord);
+            $de = DiscordPhpHelper::embedInterfaceToDiscordEmbed($embed, $this->discord);
         }
         $this->discordChannel->sendMessage($text, false, $de);
     }

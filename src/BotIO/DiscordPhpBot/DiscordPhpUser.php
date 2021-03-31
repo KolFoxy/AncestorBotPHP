@@ -38,7 +38,7 @@ class DiscordPhpUser implements UserInterface {
     }
 
     public function getMention(): string {
-        DiscordPhpHelper::idToMention($this->discordUser->id);
+        return DiscordPhpHelper::idToMention($this->discordUser->id);
     }
 
     public function createDM(): PromiseInterface {

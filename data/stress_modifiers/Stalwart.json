@@ -1,4 +1,7 @@
 {
+"name": "Stalwart",
+"quote": "Many fall in the face of chaos; but not this one, not today!",
+"isVirtue": true,
   "statModifiers": [
     {
       "chance": -1,
@@ -14,8 +17,5 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Stalwart",
-  "quote": "Many fall in the face of chaos; but not this one, not today!",
-  "isVirtue": true
+  ]
 }
