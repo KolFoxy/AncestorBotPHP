@@ -12,6 +12,21 @@ class CommandHelper {
 
     const MAX_IMAGE_SIZE = 2800 * 2800;
 
+
+    /**
+     * RegEx pattern to match role mentions.
+     * @var string
+     * @source
+     */
+    const PATTERN_ROLES = '/<@&(\d+)>/';
+
+    /**
+     * RegEx pattern to match user mentions.
+     * @var string
+     * @source
+     */
+    const PATTERN_USERS = '/<@!?(\d+)>/';
+
     /**
      * @var BotIoInterface
      */
@@ -40,7 +55,7 @@ class CommandHelper {
                 return $args[0];
             }
         }
-        return  $message->getAuthor()->getAvatarUrl();
+        return $message->getAuthor()->getAvatarUrl();
     }
 
     /**
@@ -114,12 +129,12 @@ class CommandHelper {
         }
     }
 
-    public static function checkIfStringContainsRole(string $input) : bool {
-        //TODO: implement method
+    public static function checkIfStringContainsRole(string $input): bool {
+        return preg_match(self::PATTERN_ROLES, $input) === 1;
     }
 
-    public static function checkIfStringContainsUserMention(string $input) : bool {
-        //TODO: implement method
+    public static function checkIfStringContainsUserMention(string $input): bool {
+        return preg_match(self::PATTERN_USERS, $input) === 1;
     }
 
     /**

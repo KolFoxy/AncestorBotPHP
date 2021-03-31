@@ -5,6 +5,7 @@ namespace Ancestor\BotIO\DiscordPhpBot;
 use Ancestor\BotIO\UserInterface;
 use Discord\Discord;
 use Discord\Parts\Channel\Channel;
+use Discord\Parts\User\Member;
 use Discord\Parts\User\User;
 use React\Promise\PromiseInterface;
 
@@ -13,8 +14,14 @@ class DiscordPhpUser implements UserInterface {
     protected User $discordUser;
     protected Discord $discord;
 
-    public function __construct(User $discordUser, Discord $discord) {
-        $this->discordUser = $discordUser;
+    /**
+     * DiscordPhpUser constructor.
+     * @param User|Member $discordUser
+     * @param Discord $discord
+     */
+    public function __construct($discordUser, Discord $discord) {
+        $user = is_a($discordUser, Member::class) ? $discordUser->user : $discordUser;
+        $this->discordUser = $user;
         $this->discord = $discord;
     }
 

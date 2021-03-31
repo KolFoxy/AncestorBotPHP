@@ -65,17 +65,9 @@ class AncestorBot {
      */
     private CommandHandler $commandHandler;
 
-    public function __construct(Discord $discord, array $config, CommandHandler $commandHandler = null) {
+    public function __construct(Discord $discord, array $config) {
         $this->discord = $discord;
         $this->config = $config;
-        $this->client = new DiscordPhpClient($discord);
-        if ($commandHandler != null) {
-            $this->commandHandler = $commandHandler;
-        } else {
-
-            $this->commandHandler = new CommandHandler($this->client, $config[self::ARG_PREFIX]);
-            $this->commandHandler->registerCommands($this->getDefaultCommands());
-        }
         $this->setupClient();
 
     }
@@ -100,10 +92,14 @@ class AncestorBot {
         $this->discord->on('ready', function () {
             echo 'Successful login into ' . $this->discord->user->username . '#' . $this->discord->user->discriminator . PHP_EOL;
 
-
             $this->discord->on(Event::MESSAGE_CREATE, function (Message $discordMessage) {
 
-                $message = new DiscordPhpMessage($discordMessage,$this->discord);
+                $this->client = new DiscordPhpClient($this->discord);
+
+                $this->commandHandler = new CommandHandler($this->client, $this->config[self::ARG_PREFIX]);
+                $this->commandHandler->registerCommands($this->getDefaultCommands());
+
+                $message = new DiscordPhpMessage($discordMessage, $this->discord);
                 if ($message->getAuthor()->isBot()) return;
                 if ($this->commandHandler->handleMessage($message)) {
                     return;

@@ -25,9 +25,9 @@ class Remind extends Command {
         }
         foreach ($args as $arg) {
 
-            if (CommandHelper::checkIfStringContainsUserMention($arg) || CommandHelper::checkIfStringContainsRole($arg) === 1) {
+            if (CommandHelper::checkIfStringContainsUserMention($arg) || CommandHelper::checkIfStringContainsRole($arg)) {
                 $message->getChannel()->send('***Remind yourself, ' . $arg
-                    . ' , that overconfidence is a slow and insidious killer.***', null);
+                    . ', that overconfidence is a slow and insidious killer.***', null);
                 return;
             }
         }
