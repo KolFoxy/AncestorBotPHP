@@ -44,7 +44,6 @@ class TimedCommandManager {
                 unset($this->interactingUsers[$id]);
             }
         );
-        //var_dump($this->interactingUsers);
     }
 
     /**

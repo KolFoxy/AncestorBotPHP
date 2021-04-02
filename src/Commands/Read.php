@@ -50,11 +50,9 @@ class Read extends Command {
     }
 
     function run(MessageInterface $message, array $args) {
-        echo 'A: '. $this->manager->userIsInteracting($message).PHP_EOL;
         if (empty($args) && !$this->manager->userIsInteracting($message)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
             $this->manager->addInteraction($message, self::TIMEOUT, $curio);
-            echo 'A: '. $this->manager->userIsInteracting($message).PHP_EOL;
             $message->reply('', $curio->getEmbedResponse($this->handler->prefix . $this->name));
             return;
         }
