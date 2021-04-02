@@ -1,4 +1,6 @@
 {
+  "name": "Abusive",
+  "quote": "Frustration and fury, more destructive than a hundred cannons.",
   "statModifiers": [
     {
       "chance": -1,
@@ -21,7 +23,5 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Abusive",
-  "quote": "Frustration and fury, more destructive than a hundred cannons."
+  ]
 }

@@ -1,4 +1,5 @@
-{
+{  "name": "Hopeless",
+  "quote": "There can be no hope in this hell, no hope at all.",
   "statModifiers": [
     {
       "chance": -1,
@@ -14,8 +15,7 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Hopeless",
-  "quote": "There can be no hope in this hell, no hope at all."
+  ]
+
 }
 

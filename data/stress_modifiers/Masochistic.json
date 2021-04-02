@@ -1,4 +1,5 @@
-{
+{  "name": "Masochistic",
+  "quote": "Those who covet injury find it in no short supply.",
   "statModifiers": [
     {
       "chance": -1,
@@ -7,7 +8,6 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Masochistic",
-  "quote": "Those who covet injury find it in no short supply."
+  ]
+
 }
