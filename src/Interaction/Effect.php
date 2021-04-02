@@ -45,7 +45,7 @@ class Effect extends AbstractEffect {
         $messageEmbed->setDescription(self::parseRandomNum($this->getDescription()));
         if (!empty($extraFields)) {
             foreach ($extraFields as $field) {
-                $messageEmbed->addField($field['title'], $field['value']);
+                $messageEmbed->addField($field['title'], $field['body']);
             }
         }
         return $messageEmbed;

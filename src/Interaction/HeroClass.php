@@ -20,9 +20,9 @@ class HeroClass extends AbstractLivingInteraction {
     public int $embedColor = self::EMBED_COLOR;
 
     /**
-     * @var null|HeroClass
+     * @var AbstractLivingInteraction|null|HeroClass
      */
-    protected ?HeroClass $transformClass = null;
+    protected $transformClass = null;
 
     /**
      * @var null|\Ancestor\Interaction\SpontaneousAction\SpontaneousAction[]
@@ -41,9 +41,9 @@ class HeroClass extends AbstractLivingInteraction {
     }
 
     /**
-     * @return HeroClass|null
+     * @return AbstractLivingInteraction|HeroClass|null
      */
-    public function getTransformClass(): ?HeroClass {
+    public function getTransformClass() {
         return $this->transformClass;
     }
 

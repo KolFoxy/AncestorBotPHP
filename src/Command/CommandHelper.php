@@ -125,6 +125,9 @@ class CommandHelper {
             $fields = $mergeFrom;
         }
         foreach ($fields as $field) {
+            if (!isset($field['title']) || !isset($field['body'])){
+                continue;
+            }
             $mergeInto->addField($field['title'], $field['body'], $field['inline']);
         }
     }

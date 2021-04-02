@@ -25,9 +25,9 @@ class Incident extends AbstractInteraction {
     private static ?IncidentAction $defAction = null;
 
     /**
-     * @var string
+     * @var string|null
      */
-    public string $image;
+    public ?string $image = null;
 
     const DEFAULT_ACTION_DESCRIPTION = 'There is no way that what you are seeing is real. It must be just a mere vision, a glimpse of cosmic feverish hell. Shut your eyes, turn around and run: it\'s not like directions really matter here anyway.';
 

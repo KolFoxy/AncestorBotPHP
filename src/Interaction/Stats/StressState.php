@@ -19,8 +19,8 @@ class StressState extends AbstractPermanentState {
 
     public function toField(Hero $host): array {
         return [
-            'name' => '**' . $host->name . '\'s resolve is tested...** ***' . $this->name . '***',
-            'value' => '***' . $this->getQuote() . '***' . PHP_EOL . $this->getStatModsString(),
+            'title' => '**' . $host->name . '\'s resolve is tested...** ***' . $this->name . '***',
+            'body' => '***' . $this->getQuote() . '***' . PHP_EOL . $this->getStatModsString(),
             'inline' => false,
         ];
     }

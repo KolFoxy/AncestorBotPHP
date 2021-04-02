@@ -33,14 +33,19 @@ class TimedCommandManager {
      * @param MessageInterface $message
      * @param int $timeout
      * @param $data
+     * @param callable|null $callback
      */
-    public function addInteraction(MessageInterface $message, int $timeout, $data) {
+    public function addInteraction(MessageInterface $message, int $timeout, $data, $callback = null) {
         $id = $this->generateId($message);
         $this->interactingUsers[$id] = [
             'data' => $data,
+            'callback' => $callback,
         ];
         $this->interactingUsers[$id]['timer'] = $this->client->addTimer($timeout,
-            function () use ($id) {
+            function () use ($id, $callback) {
+                if ($callback !== null) {
+                    $callback();
+                }
                 unset($this->interactingUsers[$id]);
             }
         );
@@ -85,8 +90,9 @@ class TimedCommandManager {
     public function refreshTimer(MessageInterface $message, int $timerTimeout) {
         $id = $this->generateId($message);
         $data = $this->interactingUsers[$id]['data'];
+        $callback = $this->interactingUsers[$id]['callback'];
         $this->deleteInteraction($message);
-        $this->addInteraction($message, $timerTimeout, $data);
+        $this->addInteraction($message, $timerTimeout, $data, $callback);
     }
 
     public function updateData(MessageInterface $message, $data) {

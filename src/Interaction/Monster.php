@@ -7,9 +7,9 @@ use Ancestor\RandomData\RandomDataProvider;
 class Monster extends AbstractLivingBeing {
 
     /**
-     * @var MonsterType
+     * @var AbstractLivingInteraction|MonsterType
      */
-    public $type;
+    public AbstractLivingInteraction $type;
 
     public function __construct(MonsterType $monsterType) {
         parent::__construct($monsterType);

@@ -42,9 +42,10 @@ class Hero extends AbstractLivingBeing {
     public ?int $stress = 0;
 
     /**
-     * @var HeroClass|AbstractLivingInteraction
+     * @var AbstractLivingInteraction|HeroClass
      */
-    public $type;
+    public AbstractLivingInteraction $type;
+
 
     /**
      * @var bool
@@ -80,7 +81,11 @@ class Hero extends AbstractLivingBeing {
     protected SpontaneousActionsManager $saManager;
 
     protected function transform() {
+        if ($this->type->getTransformClass() === null) {
+            return;
+        }
         $this->saManager->removeSpontaneousAction($this->type->spontaneousActions);
+        /** @noinspection PhpFieldAssignmentTypeMismatchInspection */
         $this->type = $this->type->getTransformClass();
         $this->saManager->addSpontaneousAction($this->type->spontaneousActions);
     }

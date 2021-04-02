@@ -70,13 +70,13 @@ class EmbedObject implements EmbedInterface {
         return $this->fields;
     }
 
-    public function setFooter(string $footerText, ?string $footerIconUrl = null, ?string $footerProxyIcon = null): void {
+    public function setFooter(?string $footerText, ?string $footerIconUrl = null, ?string $footerProxyIcon = null): void {
         $this->footerText = $footerText;
         $this->footerIconUrl = $footerIconUrl;
         $this->footerProxyIcon = $footerProxyIcon;
     }
 
-    public function setThumbnail(string $imageUrl, ?int $width = null, ?int $height = null, ?int $imageProxy = null): void {
+    public function setThumbnail(?string $imageUrl, ?int $width = null, ?int $height = null, ?int $imageProxy = null): void {
         $this->thumbnailUrl = $imageUrl;
         $this->thumbnailWidth = $width;
         $this->thumbnailHeight = $height;
@@ -84,19 +84,19 @@ class EmbedObject implements EmbedInterface {
     }
 
 
-    public function setTitle(string $title): void {
+    public function setTitle(?string $title): void {
         $this->title = $title;
     }
 
-    public function setColor(int $color): void {
+    public function setColor(?int $color): void {
         $this->color = $color;
     }
 
-    public function setDescription(string $description): void {
+    public function setDescription(?string $description): void {
         $this->description = $description;
     }
 
-    public function setImage(string $imageUrl): void {
+    public function setImage(?string $imageUrl): void {
         $this->imageUrl = $imageUrl;
     }
 

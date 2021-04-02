@@ -156,21 +156,21 @@ class StatsManager {
             }
             $body .= '``';
             $res[] = [
-                'name' => $this->host->name . ' has ' . $effect . ' ' . abs($value) . 'HP',
-                'value' => $body,
+                'title' => $this->host->name . ' has ' . $effect . ' ' . abs($value) . 'HP',
+                'body' => $body,
                 'inline' => true];
         }
         if (isset($values[StatusEffect::TYPE_STUN])) {
             $res[] = [
-                'name' => $this->host->name . ' is no longer stunned.',
-                'value' => 'Current stun resist: ' . $this->getStatValue(Stats::STUN_RESIST),
+                'title' => $this->host->name . ' is no longer stunned.',
+                'body' => 'Current stun resist: ' . $this->getStatValue(Stats::STUN_RESIST),
                 'inline' => true];
         }
         if (isset($values[StatusEffect::TYPE_HORROR])) {
             $this->host->addStress($values[StatusEffect::TYPE_HORROR]);
             $res[] = [
-                'name' => $this->host->name . ' has suffered ' . $values[StatusEffect::TYPE_HORROR] . ' stress',
-                'value' => '``' . $this->host->getStressStatus() . '``'
+                'title' => $this->host->name . ' has suffered ' . $values[StatusEffect::TYPE_HORROR] . ' stress',
+                'body' => '``' . $this->host->getStressStatus() . '``'
                     . PHP_EOL . '``' . $this->getStatusEffectState(StatusEffect::TYPE_HORROR) . '``',
                 'inline' => true];
         }

@@ -19,10 +19,10 @@ abstract class AbstractInteraction {
 
     /**
      * URL to the image of the interaction.
-     * @var string
+     * @var string|null
      * @required
      */
-    public string $image;
+    public ?string $image;
 
     /**
      * @var AbstractAction[]

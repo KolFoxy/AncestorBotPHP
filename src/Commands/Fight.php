@@ -19,7 +19,7 @@ use JsonMapper;
 
 class Fight extends Command implements EncounterCollectionInterface {
     const CHANNEL_SWITCH_REMINDER = 'Remember to switch to the original channel of the fight before continuing.';
-    const TIMEOUT = 600.0;
+    const TIMEOUT = 600;
     const SURRENDER_COMMAND = 'ff';
     const CHAR_INFO_COMMAND = 'stats';
     const CHAR_ACTIONS_COMMAND = 'actions';
@@ -125,7 +125,7 @@ class Fight extends Command implements EncounterCollectionInterface {
             $fightManager = new FightManager($hero, $message->getAuthor()->getAvatarURL()
                 , $this, $this->handler->prefix . 'f', $this->handler->client->getLoop(), $endless);
             $message->reply('', $fightManager->start());
-            $this->manager->addInteraction($message, self::TIMEOUT, $fightManager, null,
+            $this->manager->addInteraction($message, self::TIMEOUT, $fightManager,
                 function () use ($fightManager, $message) {
                     $this->sendEndscreen($message->getChannel(), $fightManager, $message->getAuthor()->getMention());
                 }
