@@ -33,7 +33,7 @@ class Read extends Command {
      */
     private FileDownloader $fileDl;
 
-    const TIMEOUT = 60.0;
+    const TIMEOUT = 60;
 
     function __construct(CommandHandler $handler) {
         parent::__construct($handler, 'read',
@@ -45,15 +45,16 @@ class Read extends Command {
         $mapper->bExceptionOnMissingData = true;
         /** @noinspection PhpUnhandledExceptionInspection */
         $this->curios = $mapper->mapArray($json, [], Curio::class);
-
         $this->manager = new TimedCommandManager($this->handler->client);
         $this->fileDl = new FileDownloader($this->handler->client->getLoop());
     }
 
     function run(MessageInterface $message, array $args) {
+        echo 'A: '. $this->manager->userIsInteracting($message).PHP_EOL;
         if (empty($args) && !$this->manager->userIsInteracting($message)) {
             $curio = $this->curios[mt_rand(0, sizeof($this->curios) - 1)];
             $this->manager->addInteraction($message, self::TIMEOUT, $curio);
+            echo 'A: '. $this->manager->userIsInteracting($message).PHP_EOL;
             $message->reply('', $curio->getEmbedResponse($this->handler->prefix . $this->name));
             return;
         }

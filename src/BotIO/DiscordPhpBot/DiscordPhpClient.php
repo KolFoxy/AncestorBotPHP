@@ -21,8 +21,8 @@ class DiscordPhpClient implements BotIoInterface {
         return $this->user;
     }
 
-    public function addTimer(int $timeout, $callback) {
-        $this->discordClient->getLoop()->addTimer($timeout, $callback);
+    public function addTimer(int $timeout, $callback): TimerInterface {
+        return $this->discordClient->getLoop()->addTimer($timeout, $callback);
     }
 
     public function cancelTimer(TimerInterface $timer): void {

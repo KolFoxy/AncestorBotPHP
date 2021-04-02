@@ -97,11 +97,13 @@ class AncestorBot {
         $this->discord->on('ready', function () {
             echo 'Successful login into ' . $this->discord->user->username . '#' . $this->discord->user->discriminator . PHP_EOL;
 
+            $this->client = new DiscordPhpClient($this->discord);
+            $this->commandHandler = new CommandHandler($this->client, $this->config[self::ARG_PREFIX]);
+            $this->commandHandler->registerCommands($this->getDefaultCommands());
+
             $this->discord->on(Event::MESSAGE_CREATE, function (Message $discordMessage) {
 
-                $this->client = new DiscordPhpClient($this->discord);
-                $this->commandHandler = new CommandHandler($this->client, $this->config[self::ARG_PREFIX]);
-                $this->commandHandler->registerCommands($this->getDefaultCommands());
+
 
                 $message = new DiscordPhpMessage($discordMessage, $this->discord);
                 if ($message->getAuthor()->isBot()) return;

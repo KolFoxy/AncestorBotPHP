@@ -39,7 +39,7 @@ class Zalgo extends Command {
         }
         $embedResponse = new EmbedObject();
         //Maybe replace trim with more extensive cleaning method, testing required
-        $strArray = CommandHelper::mb_str_split(trim($message, implode(' ', $args)), self::FIELD_MAX_LENGTH);
+        $strArray = CommandHelper::mb_str_split(trim(implode(' ', $args)), self::FIELD_MAX_LENGTH);
         foreach ($strArray as $str) {
             $embedResponse->addField('``' . Zalgolizer::zalgorizeString($this->getRandomZalgoTitle(), self::ZALGO_PER_CHAR) . '``',
                 Zalgolizer::zalgorizeString($str, self::ZALGO_PER_CHAR));

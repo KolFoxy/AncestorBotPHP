@@ -55,6 +55,10 @@ class EmbedObject implements EmbedInterface {
             $this->fields = [];
         }
 
+        if (count($this->fields) === 25) {
+            return;
+        }
+
         $this->fields[] = [
             'title' => $title,
             'body' => $body,

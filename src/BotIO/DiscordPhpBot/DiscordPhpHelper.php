@@ -27,7 +27,7 @@ class DiscordPhpHelper {
         $res->timestamp = $embed->getTimestamp();
 
         if ($embed->getFooterText() !== null)
-        $res->setFooter($embed->getFooterText(), $embed->getFooterIconUrl());
+        $res->setFooter($embed->getFooterText(), $embed->getFooterIconUrl() === null ? '' : $embed->getFooterIconUrl());
 
         if ($embed->getImageUrl() !== null)
         $res->setImage($embed->getImageUrl());

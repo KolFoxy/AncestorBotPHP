@@ -16,7 +16,7 @@ interface BotIoInterface {
      * @param int $timeout
      * @param callable $callback
      */
-    public function addTimer(int $timeout, $callback);
+    public function addTimer(int $timeout, $callback): TimerInterface;
 
     public function cancelTimer(TimerInterface $timer): void;
 

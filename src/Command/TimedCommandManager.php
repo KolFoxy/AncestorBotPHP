@@ -9,13 +9,13 @@ use React\EventLoop\TimerInterface;
 
 class TimedCommandManager {
     /**
-     * @var UserInterface[]
+     * @var array
      */
-    private array $interactingUsers = [];
+    protected array $interactingUsers = [];
     /**
      * @var BotIoInterface
      */
-    private BotIoInterface $client;
+    protected BotIoInterface $client;
 
     public function __construct(BotIoInterface $client) {
         $this->client = $client;
@@ -23,46 +23,40 @@ class TimedCommandManager {
 
     /**
      * @param MessageInterface $message
-     * @param int|null $userId
      * @return bool
      */
-    public function userIsInteracting(MessageInterface $message, int $userId = null): bool {
-        return array_key_exists($this->generateId($message, $userId), $this->interactingUsers);
+    public function userIsInteracting(MessageInterface $message): bool {
+        return array_key_exists($this->generateId($message), $this->interactingUsers);
     }
 
     /**
      * @param MessageInterface $message
      * @param int $timeout
      * @param $data
-     * @param int|null $userId
-     * @param callable|null $onTimeout
      */
-    public function addInteraction(MessageInterface $message, int $timeout, $data, int $userId = null, callable $onTimeout = null) {
-        $id = $this->generateId($message, $userId);
+    public function addInteraction(MessageInterface $message, int $timeout, $data) {
+        $id = $this->generateId($message);
         $this->interactingUsers[$id] = [
             'data' => $data,
-            'timer' => $this->client->addTimer($timeout,
-                function () use ($id, $onTimeout) {
-                    if ($onTimeout !== null) {
-                        $onTimeout();
-                    }
-                    unset($this->interactingUsers[$id]);
-                }
-            ),
         ];
+        $this->interactingUsers[$id]['timer'] = $this->client->addTimer($timeout,
+            function () use ($id) {
+                unset($this->interactingUsers[$id]);
+            }
+        );
+        //var_dump($this->interactingUsers);
     }
 
     /**
      * @param MessageInterface $message
-     * @param int|null $userId ;
      * @return mixed
      */
-    public function getUserData(MessageInterface $message, int $userId = null) {
-        return $this->interactingUsers[$this->generateId($message, $userId)]['data'];
+    public function getUserData(MessageInterface $message) {
+        return $this->interactingUsers[$this->generateId($message)]['data'];
     }
 
-    public function deleteInteraction(MessageInterface $message, int $userId = null) {
-        $id = $this->generateId($message, $userId);
+    public function deleteInteraction(MessageInterface $message) {
+        $id = $this->generateId($message);
         if (!array_key_exists($id, $this->interactingUsers)) {
             return;
         }
@@ -82,33 +76,22 @@ class TimedCommandManager {
     /**
      * Generates id string from channel id and user id.
      * @param MessageInterface $message
-     * @param int|null $userId
      * @return string
      */
-    private function generateId(MessageInterface $message, int $userId = null): string {
-        if ($userId === null) {
-            $userId = $message->getAuthor()->getId();
-        }
+    private function generateId(MessageInterface $message): string {
+        $userId = $message->getAuthor()->getId();
         return $message->getChannel()->getId() . $userId;
     }
 
     public function refreshTimer(MessageInterface $message, int $timerTimeout) {
         $id = $this->generateId($message);
-        $this->client->cancelTimer($this->getTimer($id));
-        $value = $this->interactingUsers[$id];
-        $value['timer'] = $this->client->addTimer($timerTimeout,
-            function () use ($id) {
-                unset($this->interactingUsers[$id]);
-            }
-        );
-        $this->interactingUsers[$id] = $value;
+        $data = $this->interactingUsers[$id]['data'];
+        $this->deleteInteraction($message);
+        $this->addInteraction($message, $timerTimeout, $data);
     }
 
     public function updateData(MessageInterface $message, $data) {
-        $id = $this->generateId($message);
-        $value = $this->interactingUsers[$id];
-        $value['data'] = $data;
-        $this->interactingUsers[$id] = $value;
+        $this->interactingUsers[$this->generateId($message)]['data'] = $data;
     }
 
 }
