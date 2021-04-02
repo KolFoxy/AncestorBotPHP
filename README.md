@@ -31,39 +31,39 @@ https://top.gg/bot/406438624473907200
 
 - **zalgo**
 
-![zalgo](https://i.imgur.com/MA7D38b.png "zalgo")
+![zalgo](readme/data/zalgo_example.png "zalgo")
 
 - **gold**
 
-![gold](https://i.imgur.com/lZcgiB0.png "gold")
+![gold](readme/data/gold_example.png "gold")
 
 - **remind** 
 
-![remind](https://i.imgur.com/h3ltKht.png "remind")
+![remind](readme/data/remind_example.png  "remind")
 
 - **stress**
 
-![stress](https://i.imgur.com/KtuTGof.png "stress")
+![stress](readme/data/stress_example.png "stress")
 
 - **roll**
 
-![roll](https://i.imgur.com/6knhVUK.png "roll")
+![roll](readme/data/roll_example.png "roll")
 
 - **spin**
 
-![spin](https://i.imgur.com/CWrfzS5.gif "spin")
+![spin](readme/data/spin_example.gif "spin")
 
 - **read** (initial action)
 
-![read1](https://i.imgur.com/FVMDYOY.png "read1")
+![read1](readme/data/read_example.png "read1")
 
 - **read** (subsequent action)
 
-![read2](https://i.imgur.com/8GRPJBH.png "read2")
+![read2](readme/data/read_example_2.png "read2")
 
 - **reveal**
 
-![reveal](https://i.imgur.com/18AjMff.png "reveal")
+![reveal](readme/data/reveal_example.png "reveal")
 
 
 ------------
@@ -71,8 +71,8 @@ https://top.gg/bot/406438624473907200
 
 - **Testing resolve**
 
-![Testing Resolve](https://i.imgur.com/vzOaejO.png "Testing Resolve")
+![Testing Resolve](readme/data/resolve_example.png "Testing Resolve")
 
 - **Responding to content in a NSFW channel**
 
-![NSFW response](https://i.imgur.com/20Yoq3H.png "NSFW response")
+![NSFW response](readme/data/nsfw_example.png "NSFW response")
