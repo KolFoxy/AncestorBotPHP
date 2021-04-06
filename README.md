@@ -7,7 +7,7 @@ Table of Contents
 
 1. [Public Bot Usage](#Public-Bot-Usage) 
     * [Invite URL](#Invite-URL)
-    * [Top.gg Page](#Top.gg-Page)
+    * [Top.gg Page](#Topgg-Page)
     * [Commands](#Commands)
     * [Chat Reactions](#Chat-Reactions)
     * [Command Examples](#Command-Examples)    
