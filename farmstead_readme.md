@@ -1,8 +1,6 @@
 # AncestorBot Farmstead Minigame
 > Discord Chatroom Minigame, in which you go into the Farmstead solo as a randomly selected Hero. You will fight endless battles against Husks and **Lost in Time** heroes, collect trinkets and encounter random events. At your inevitable end, you`ll be rewarded with title and with showcase of your deadly accomplishments.
 
-------------
-
 Table of Contents
 -----------------
 
