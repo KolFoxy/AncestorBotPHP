@@ -1,4 +1,5 @@
-{
+{  "name": "Paranoid",
+  "quote": "The walls close in, the shadows whisper of conspiracy!",
   "statModifiers": [
     {
       "chance": -1,
@@ -21,7 +22,5 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Paranoid",
-  "quote": "The walls close in, the shadows whisper of conspiracy!"
+  ]
 }

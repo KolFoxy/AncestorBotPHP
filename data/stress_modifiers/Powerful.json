@@ -1,4 +1,6 @@
-{
+{  "name": "Powerful",
+  "quote": "Anger is power - unleash it!",
+  "isVirtue": true,
   "statModifiers": [
     {
       "chance": -1,
@@ -7,8 +9,6 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Powerful",
-  "quote": "Anger is power - unleash it!",
-  "isVirtue": true
+  ]
+
 }

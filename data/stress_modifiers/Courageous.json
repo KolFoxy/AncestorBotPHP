@@ -1,4 +1,6 @@
-{
+{  "name": "Courageous",
+  "quote": "A moment of valor shines brightest against a backdrop of despair.",
+  "isVirtue": true,
   "statModifiers": [
     {
       "chance": -1,
@@ -7,8 +9,6 @@
       "duration": -1,
       "targetSelf": true
     }
-  ],
-  "name": "Courageous",
-  "quote": "A moment of valor shines brightest against a backdrop of despair.",
-  "isVirtue": true
+  ]
+
 }

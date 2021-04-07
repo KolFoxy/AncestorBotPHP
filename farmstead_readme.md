@@ -1,8 +1,6 @@
 # AncestorBot Farmstead Minigame
 > Discord Chatroom Minigame, in which you go into the Farmstead solo as a randomly selected Hero. You will fight endless battles against Husks and **Lost in Time** heroes, collect trinkets and encounter random events. At your inevitable end, you`ll be rewarded with title and with showcase of your deadly accomplishments.
 
-------------
-
 Table of Contents
 -----------------
 
@@ -55,7 +53,7 @@ After sending the command, AncestorBot will send a message, which will contain:
 6. Your available actions in the *footer* , which is the very bottom part of the message.
 
 ##### Example of a started game:
-![Example of a started game](data/images/help/farmstead_start.png "Example of a started game")
+![Example of a started game](readme/data/farmstead_start.png "Example of a started game")
 
 Numbers indicate parts of the message from the list above.
 
@@ -110,4 +108,4 @@ At certain kill intervals, colors of the surroundings will change. This change w
 ## Credits
 Darkest Dungeon is a game made by Red Hook Studios.
 
-AncestorBot is a Discord bot made by KolFoxy using [Yasmin](https://github.com/carchive/Yasmin "Yasmin") and other PHP libraries specified in [Composer file](composer.lock "composer.lock").
+AncestorBot is a Discord bot made by KolFoxy using [DiscordPHP](https://github.com/discord-php/DiscordPHP "DiscordPHP") and other PHP libraries specified in [Composer file](composer.lock "composer.lock").
