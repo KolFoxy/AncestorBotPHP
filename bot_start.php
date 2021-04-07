@@ -5,6 +5,8 @@ use React\EventLoop\Factory;
 
 require(__DIR__ . '/vendor/autoload.php');
 
+ini_set('memory_limit', '-1');
+
 $token = getenv('abot_token');
 if ($token === false) {
     echo 'No bot token in the environmental variable, attempting to load one from ".env"...' . PHP_EOL;
