@@ -1,7 +1,6 @@
 <?php
 
 use Discord\WebSockets\Event;
-use Discord\WebSockets\Intents;
 use React\EventLoop\Factory;
 
 require(__DIR__ . '/vendor/autoload.php');
@@ -31,7 +30,7 @@ $discord = new \Discord\Discord([
 
     'logger' => new \Ancestor\BasicConsoleLogger\BasicConsoleLogger(),
 
-    'loggerLevel' => \Monolog\Logger::DEBUG
+    'loggerLevel' => \Monolog\Logger::NOTICE
 ]);
 
 $ancestorBot = new \Ancestor\AncestorBot($discord, $config);
