@@ -12,7 +12,13 @@ Table of Contents
     * [Chat Reactions](#Chat-Reactions)
     * [Command Examples](#Command-Examples)    
     * [Chat Reactions Examples](#Chat-Reactions-Examples)
+1. [Running Your Own AncestorBotPHP](#Running-Your-Own-AncestorBotPHP)
+    * [Requirements](#Requirements)
+    * [Creating Discord Bot Application](#Creating-Discord-Bot-Application)
+    * [Running the Bot in CLI](#Running-the-Bot-in-CLI)
+    * [Running the Bot in Docker](#Running-the-Bot-in-Docker)    
 1. [Credits](#Credits)
+1. [Privacy Policy](#Privacy-Policy)
 
 
 ## Public Bot Usage
@@ -81,7 +87,54 @@ Currently AncestorBotPHP has following reactions to text messages:
 ![NSFW response](readme/data/nsfw_example.png "NSFW response")
 
 
-## Credits
-Darkest Dungeon is a game made by Red Hook Studios.
+## Running Your Own AncestorBotPHP
+You can either run the bot in Docker (Dockerfile and .dockerignore are provided), or as a service, or just directly from shell.
 
-AncestorBot is a Discord bot made by KolFoxy using [DiscordPHP](https://github.com/discord-php/DiscordPHP "DiscordPHP") and other PHP libraries specified in [Composer file](composer.lock "composer.lock").
+AncestorBotPHP should also be compatable with most cloud-based application hosting platforms, such as Heroku. Heroku Procfile is present in the repository's root. 
+
+### Requirements
+* PHP 7.4
+* Composer
+* PHP `gd` extension with the support of JPG, PNG, WebP, BMP and FreeType
+* PHP `zlip` extension
+* PHP `json` extension
+* DiscordPHP recommends these extensions:
+    * One of ext-uv (preferred), ext-libev or evt-event for a faster, and more performant event loop.
+    * `ext-mbstring` if handling non-english characters (which the bot will almost surely do).
+
+### Creating Discord Bot Application
+1. Sign in https://discord.com/
+1. Go to https://discord.com/developers/applications
+1. Click "New Application" and enter application name
+1. Go to "Bot" tab and create bot application
+    * You can now create invite URL in "OAuth2" tab
+    * You can get your bot token in "Bot" tab
+
+### Running the Bot in CLI
+
+1. Download and unpack the [latest release of AncestorBotPHP](https://github.com/KolFoxy/AncestorBotPHP/releases) in a directory of your choice.
+1. Run `composer update` in the directory
+    * If needed, install additional extensions requested by Composer
+1. Create `abot_token` environment variable and assign your bot's token to it.
+    * Alternatively, you can create `.env` file in the root directory of the project containing the following line: `abot_token="your_token_here"`  
+1. Run `php bot_start.php` in the project's directory
+
+### Running the Bot in Docker
+Ensure that you have Docker [installed and configured.](https://docs.docker.com/engine/install/)
+
+1. Download and unpack the [latest release of AncestorBotPHP](https://github.com/KolFoxy/AncestorBotPHP/releases) in a directory of your choice.
+1. In the project folder, run `docker build . -t ancestor:latest`
+    * You may want to create `.env` file containing `abot_token="your_token_here"` in the project's root directory prior to that.
+1. Run `docker run -d ancestor:latest`
+    * You may want to do an additional configuration in order to make container start automatically. See Docker ["Run your app in production"](https://docs.docker.com/config/containers/start-containers-automatically/) documentation.
+
+## Credits
+[Darkest Dungeon](https://www.darkestdungeon.com/) is a game made by Red Hook Studios.
+
+[Discord](https://discord.com/).
+
+AncestorBotPHP is a Discord bot made using [DiscordPHP](https://github.com/discord-php/DiscordPHP "DiscordPHP") and other PHP libraries specified in [Composer file](composer.lock "composer.lock").
+
+## Privacy Policy
+
+AncestorBotPHP is not made to collect data of any kind. It features no database and is without permanent storage of incoming via Discord API information. 
