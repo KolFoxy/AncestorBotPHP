@@ -29,7 +29,7 @@ To use AncestorBotPHP, simply invite him to your Discord server via invite URL (
 **BLANK FOR NOW**
 
 ### Top.gg Page
-https://top.gg/bot/406438624473907200
+**BLANK FOR NOW**
 
 -----
 
