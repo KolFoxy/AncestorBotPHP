@@ -1,4 +1,4 @@
-AncestorBotPHP
+BOT WAS STOLEN, PLEASE REMOVE IT FROM YOUR SERVER RIGHT NOW
 ====
 > Discord bot that mimics Ancestor's (from the game Darkest Dungeon) behavior and humour. Tests resolve.
 
@@ -25,7 +25,8 @@ Table of Contents
 To use AncestorBotPHP, simply invite him to your Discord server via invite URL (provided you are the server administrator or have permission to do so).
 
 ### Invite URL
-https://discordapp.com/oauth2/authorize?client_id=406438624473907200&scope=bot&permissions=379904
+
+**BLANK FOR NOW**
 
 ### Top.gg Page
 https://top.gg/bot/406438624473907200
